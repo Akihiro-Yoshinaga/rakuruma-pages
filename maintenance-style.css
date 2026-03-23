@@ -1,0 +1,377 @@
+/* maintenance-style.css - 整備サービス詳細ページ専用CSS */
+
+/* 基本設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background: #fff;
+}
+
+.maintenance-page {
+    width: 100%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ヒーローセクション */
+.hero {
+    background: linear-gradient(135deg, #003B8B 0%, #1E5A96 100%);
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+/* セクション共通 */
+section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #003B8B;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-description {
+    font-size: 18px;
+    line-height: 1.8;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #666;
+}
+
+/* サービス概要 */
+.service-overview {
+    background: #f8fafe;
+}
+
+/* 整備メニュー */
+.maintenance-menu {
+    background: white;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.menu-card {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 30px;
+    transition: all 0.3s;
+}
+
+.menu-card:hover {
+    border-color: #003B8B;
+    box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1);
+    transform: translateY(-5px);
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.menu-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #003B8B;
+}
+
+.menu-badge {
+    background: #5EBE86;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.menu-price {
+    color: #003B8B;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.menu-list {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.menu-list li {
+    padding: 10px 0;
+    padding-left: 25px;
+    position: relative;
+    font-size: 15px;
+}
+
+.menu-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #003B8B;
+    font-weight: bold;
+}
+
+.menu-note {
+    font-size: 13px;
+    color: #999;
+    font-style: italic;
+}
+
+/* サービスの特徴 */
+.features {
+    background: #f8fafe;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 16px;
+}
+
+.feature-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.feature-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #003B8B;
+    margin-bottom: 15px;
+}
+
+.feature-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* 整備の流れ */
+.flow {
+    background: white;
+}
+
+.flow-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.flow-step {
+    text-align: center;
+    position: relative;
+}
+
+.flow-step:not(:last-child):after {
+    content: "→";
+    position: absolute;
+    right: -20px;
+    top: 40px;
+    font-size: 24px;
+    color: #003B8B;
+}
+
+.step-number {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #003B8B 0%, #1E5A96 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 auto 20px;
+}
+
+.step-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #003B8B;
+    margin-bottom: 15px;
+}
+
+.step-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666;
+}
+
+/* FAQ */
+.faq {
+    background: #f8fafe;
+}
+
+.faq-list {
+    max-width: 900px;
+    margin: 50px auto 0;
+}
+
+.faq-item {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.faq-question {
+    font-size: 18px;
+    font-weight: bold;
+    color: #003B8B;
+    margin-bottom: 15px;
+}
+
+.faq-answer {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #666;
+}
+
+/* CTA */
+.cta {
+    background: linear-gradient(135deg, #003B8B 0%, #1E5A96 100%);
+    color: white;
+    text-align: center;
+}
+
+.cta-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.cta-description {
+    font-size: 18px;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 20px 60px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.cta-button-line {
+    background: #06C755;
+    color: white;
+}
+
+.cta-button-line:hover {
+    background: #05b04c;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(6, 199, 85, 0.3);
+}
+
+.cta-button-contact {
+    background: white;
+    color: #003B8B;
+}
+
+.cta-button-contact:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 1024px) {
+    .menu-grid,
+    .features-grid,
+    .flow-steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .flow-step:nth-child(2n):after {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 32px;
+    }
+
+    .hero-subtitle {
+        font-size: 16px;
+    }
+
+    .section-title {
+        font-size: 28px;
+    }
+
+    .menu-grid,
+    .features-grid,
+    .flow-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .flow-step:after {
+        display: none;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
+    }
+}
