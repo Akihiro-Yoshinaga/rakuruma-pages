@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラクルマ - 出張洗車・整備サービス | 世田谷区/目黒区/渋谷区</title>
+
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//calendar.google.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="stylesheet" href="rakuruma-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .price_list .header.flexbox {
+            display: none !important;
+        }
+
+        /* Calendar skeleton loading animations */
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="main">
+        <section class="top hero hero--wp">
+            <div class="hero__media">
+                <video id="hero-video" class="hero__video" autoplay muted loop playsinline preload="auto" poster="https://rakuruma.com/web/wp-content/uploads/2025/08/rakuruma-hero-video-poster.jpg">
+                    <source src="https://rakuruma.com/web/wp-content/uploads/2025/10/FV-movie1.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="hero__logo">
+                <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/0abf76b0235309b55979d1dcdca626cb.png" alt="ラクルマ ロゴ">
+            </div>
+
+            <div class="hero__copy">
+                <span class="hero__copy-line hero__copy-line--accent"><span class="hero__copy-highlight">国家１級整備士</span>が監修の出張洗車。</span>
+                <span class="hero__copy-line">洗車は行くから、<span class="hero__copy-highlight">来てもらう</span>時代へ。</span>
+            </div>
+
+            <div class="hero__badge hero__badge--area">
+                <span class="hero__badge-location">   世田谷｜目黒｜渋谷</span>
+                <span class="hero__badge-caption"> エリア口コミ<span class="hero__badge-note">※1</span></span>
+                <span class="hero__badge-rank">No.1</span>
+            </div>
+
+            <div class="hero__badge hero__badge--rank">
+                <span class="hero__badge-ring-logo">くらしのマーケット</span>
+                <span class="hero__badge-ring-rank">第<span class="hero__badge-ring-number">1</span>位</span>
+                <span class="hero__badge-ring-note-wrapper">
+                    <span class="hero__badge-ring-note">獲得</span>
+                    <span class="hero__badge-note hero__badge-note--absolute">※1</span>
+                </span>
+            </div>
+        </section>
+
+        <p class="hero__note">※1 2025年10月現在、くらしのマーケット出張洗車カテゴリーにおいてエリア内口コミ24件中すべて★5の評価を獲得。</p>
+        <!-- くらしのマーケット口コミヘッダー -->
+        <section class="reviews" style="padding: 60px 0; background-color: #f8fafe;">
+            <div class="area_s" style="max-width: 1600px;">
+                <div style="padding: 40px 40px; background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.08);">
+                    <!-- ヘッダー部分 -->
+                    <!-- くらしのマーケットで評価表示（横並び） -->
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <a href="https://curama.jp/" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center;">
+                            <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/logo.png" alt="くらしのマーケット" style="height: 40px; width: auto;">
+                        </a>
+                        <span style="color: #333; font-size: 16px; font-weight: 600;">で</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #FFD700; font-size: 20px; font-weight: 900;">★5.0</span>
+                            <span style="color: #666; font-size: 16px; font-weight: 600;">の最高評価（24件）</span>
+                        </div>
+                    </div>
+
+                    <!-- キャッチコピー -->
+                    <p style="font-size: 28px; font-weight: 900; color: #003B8B; margin: 15px 0; text-align: center; -webkit-text-stroke: 0.5px #003B8B;">
+                        「地域No.1の満足度」
+                    </p>
+
+                    <!-- サブテキスト -->
+                    <p style="font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 40px; text-align: center;">
+                        出張洗車サービスの口コミ24件すべてで最高評価をいただいています<br>
+                        <span style="font-size: 12px; color: #999;">※2025年10月時点</span>
+                    </p>
+
+                    <!-- お客様の声＆ビフォーアフター統合カード -->
+                <!-- 口コミ＋ビフォーアフター統合カード -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                    
+                    <!-- カード1 -->
+                    <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); border: 1px solid rgba(0, 59, 139, 0.05); display: flex; flex-direction: column;">
+                        <!-- 縦長動画 -->
+                        <div style="position: relative; width: 100%; padding: 0;">
+                            <div style="position: relative; width: 100%; margin: 0 auto;">
+                                <!-- 9:16の縦長動画コンテナ -->
+                                <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                    <video id="voice1-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
+                                        <source src="https://rakuruma.com/web/wp-content/uploads/2025/10/voice.-1.mp4" type="video/mp4">
+                                        <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
+                                        <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
+                                            <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
+                                        </div>
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 口コミ内容 -->
+                        <div style="padding: 30px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 18px;">
+                                <div style="width: 50px; height: 50px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+                                    <a href="https://curama.jp/car-wash/SER695652993/review/?sort=top-review" target="_blank" rel="noopener noreferrer" style="display: block; width: 100%; height: 100%;">
+                                        <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/logo_ora_square.jpg" alt="くらしのマーケット" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </a>
+                                </div>
+                                <div>
+                                    <p style="font-weight: 600; color: #003B8B; margin: 0; font-size: 15px;">40代・経営者</p>
+                                    <div style="display: flex;">
+                                        <span style="color: #FFD700; font-size: 15px;">★★★★★</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 18px;">「初めてご利用させていただきました。予想より綺麗にしてくださって感動しました、対応も丁寧で、また是非お願いしたいと思います。」</p>
+                            <div style="padding: 12px; background: #f8fafe; border-radius: 8px;">
+                                <p style="font-size: 13px; color: #666; margin: 0;"><strong>車種:</strong> マスタング　<strong>時間:</strong> 70分<br><strong>場所:</strong> マンション前空きスペース</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- カード2 -->
+                    <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); border: 1px solid rgba(0, 59, 139, 0.05); display: flex; flex-direction: column;">
+                        <!-- 縦長動画 -->
+                        <div style="position: relative; width: 100%; padding: 0;">
+                            <div style="position: relative; width: 100%; margin: 0 auto;">
+                                <!-- 9:16の縦長動画コンテナ -->
+                                <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                    <video id="voice2-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
+                                        <source src="https://rakuruma.com/web/wp-content/uploads/2025/10/voice-2.mp4" type="video/mp4">
+                                        <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
+                                        <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
+                                            <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
+                                        </div>
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 口コミ内容 -->
+                        <div style="padding: 30px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 18px;">
+                                <div style="width: 50px; height: 50px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/5edb8eac356b5a48b908e5a6b928991e.png" alt="Google" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <p style="font-weight: 600; color: #003B8B; margin: 0; font-size: 15px;">20代・フリーランス</p>
+                                    <div style="display: flex;">
+                                        <span style="color: #FFD700; font-size: 15px;">★★★★★</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="font-size: 15px; line-height: 1.7; color: #333; margin-bottom: 18px;">「3ヶ月放置していた車がピカピカに！バッテリー充電と空気圧点検もしていただき、翌日から安心して運転できました。妻も大満足で、継続利用決定です。」</p>
+                            <div style="padding: 12px; background: #f8fafe; border-radius: 8px;">
+                                <p style="font-size: 13px; color: #666; margin: 0;"><strong>車種:</strong> レヴォーグ　<strong>時間:</strong> 60分<br><strong>場所:</strong> 月極駐車場</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- レスポンシブ対応 -->
+                <style>
+                    @media (max-width: 768px) {
+                        .reviews div[style*="grid-template-columns"] {
+                            grid-template-columns: 1fr !important;
+                        }
+                    }
+                </style>
+                </div>
+            </div>
+        </section>
+
+        <section class="introduction" style="padding: 80px 0; background-color: #ffffff;">
+            <div class="area_s">
+                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 60px; color: #2c3e50;">あなたも<span class="colorfont_b">こんな経験</span>、ありませんか？</h2>
+                
+                <!-- お悩みと理由のセクション（3列グリッドレイアウト） -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px;">
+                    
+                    <!-- 悩み1 -->
+                    <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
+                        <!-- 悩み画像 -->
+                        <div style="margin: 0 auto 20px;">
+                            <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/4806d4f7c9f1a6a7f76f22b87ee35cf5.png" alt="時間がない" style="width: 100%; height: auto; border-radius: 12px;">
+                        </div>
+                        <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">洗車する時間がない</h3>
+                        <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">車の汚れが気になっても、週末は子どもとの予定でいっぱい...</p>
+                        <div style="padding: 12px; background: rgba(0, 59, 139, 0.05); border-radius: 8px;">
+                            <p class="fontss colorfont_b" style="margin: 0; font-weight: 500;">洗車は後回しになりがち</p>
+                        </div>
+                    </div>
+
+                    <!-- 悩み2 -->
+                    <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
+                        <!-- 悩み画像 -->
+                        <div style="margin: 0 auto 20px;">
+                            <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/f6cd1d34891c018219673427fbd04d56.png" alt="予約が取れない" style="width: 100%; height: auto; border-radius: 12px;">
+                        </div>
+                        <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">予約が取れない</h3>
+                        <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">洗車できる時に限って混雑している...</p>
+                        <div style="padding: 12px; background: rgba(0, 59, 139, 0.05); border-radius: 8px;">
+                            <p class="fontss colorfont_b" style="margin: 0; font-weight: 500;">スキマ時間でしか洗車する時間がない</p>
+                        </div>
+                    </div>
+
+                    <!-- 悩み3 -->
+                    <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
+                        <!-- 悩み画像 -->
+                        <div style="margin: 0 auto 20px;">
+                            <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/2cbc9d58c7099e251fc783685ce3f5fa.png" alt="手間がかかる" style="width: 100%; height: auto; border-radius: 12px;">
+                        </div>
+                        <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">待つのが面倒</h3>
+                        <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">待っている間、他のことができるわけでもなく中途半端...</p>
+                        <div style="padding: 12px; background: rgba(0, 59, 139, 0.05); border-radius: 8px;">
+                            <p class="fontss colorfont_b" style="margin: 0; font-weight: 500;">結局めんどくさくなって、汚れたまま乗り続けてしまう</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- レスポンシブ対応CSS -->
+                <style>
+                    @media (max-width: 768px) {
+                        .area_s > div[style*="grid-template-columns"] {
+                            grid-template-columns: 1fr !important;
+                            gap: 20px !important;
+                        }
+                    }
+                </style>
+
+                </div>
+                
+            </div>
+        </section>
+
+        <section class="solution" style="padding: 40px 0 60px; background-color: #f8fafe; border-radius: 0 80px 0 80px;">
+            <div class="area_s" style="text-align: center;">
+                <!-- 横並びのメッセージ -->
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <p style="font-size: 28px; color: #003B8B; margin: 0; font-weight: 600;">そんなお悩みを</p>
+                    <img src="https://rakuruma.com/web/wp-content/themes/rakuruma/images/logo.svg" alt="ラクルマ" style="max-width: 220px; height: auto;">
+                    <p style="font-size: 28px; color: #003B8B; margin: 0; font-weight: 600;">なら解決します。</p>
+                </div>
+                
+                <!-- 画像 -->
+                <div style="max-width: 400px; margin: 0 auto 25px; border-radius: 12px; overflow: hidden;">
+                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/YOSH0212.jpg" alt="プロの洗車作業" style="width: 100%; height: auto; display: block;">
+                </div>
+                
+                <!-- メッセージ -->
+                <div style="max-width: 500px; margin: 0 auto; padding: 0 20px; text-align: left;">
+                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 8px; font-weight: 400;">もう洗車場に行く必要はありません。</p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 8px; font-weight: 400;">仕事中や家でくつろいでいる間に、プロが愛車をピカピカに。</p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 8px; font-weight: 400;">Web予約はたった1分。定期プランなら予約も不要。</p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 0; font-weight: 400;">愛車の「使っていない時間」が、最高のメンテナンスタイムに。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="point area_l">
+            <h2 class="headline fontxl bold">ラクルマが選ばれる<span class="colorfont_b">3つのポイント</span></h2>
+            <ul class="content_container">
+                <li class="flexbox">
+                    <div class="image_frame">
+                        <div class="image_pic img_l" style="background-image: url(https://rakuruma.com/web/wp-content/uploads/2025/09/IMG_8034-scaled.jpg); background-size: cover; background-position: center;"></div>
+                    </div>
+                    <div class="textarea">
+                        <div class="subhead fontll bold">
+                            <div class="montserrat colorfont_b">POINT 1</div>
+                            <div class="smallhead">都心の限られたスペースでも<br>スマートに対応。</div>
+                        </div>
+                        <div class="fonts" style="margin-bottom: 16px;">バイクで伺うから、駐車場代はゼロ。</div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                追加の駐車料金は一切かかりません
+                            </li>
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                狭い住宅街でもアクセス可能
+                            </li>
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                床を汚さないので、月極駐車場でもOK
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="flexbox">
+                    <div class="textarea">
+                        <div class="subhead fontll bold">
+                            <div class="montserrat colorfont_b">POINT 2</div>
+                            <div class="smallhead">予約から完了まで、すべてオンラインで完結。</div>
+                        </div>
+                        <div class="fonts" style="margin-bottom: 16px;">ライフスタイルに合わせて、いつでもお気軽にご利用いただけます。</div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                普段のお出かけの前に
+                            </li>
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                帰宅中にサッと依頼
+                            </li>
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                大切な方とのドライブ前にもおすすめ
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="image_frame">
+                        <img src="https://rakuruma.com/web/wp-content/uploads/2025/08/479529b40188fb49868caf63883b5f8a.png" alt="簡単予約アイコン" class="image_pic img_r" style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;">
+                    </div>
+                </li>
+                <li class="flexbox">
+                    <div class="image_frame">
+                        <div class="image_pic img_l" style="background-image: url(https://rakuruma.com/web/wp-content/uploads/2025/09/IMG_4869.jpg); background-size: cover; background-position: center;"></div>
+                    </div>
+                    <div class="textarea">
+                        <div class="subhead fontll bold">
+                            <div class="montserrat colorfont_b">POINT 3</div>
+                            <div class="smallhead">ご希望に応じて整備士による無料点検も実施</div>
+                        </div>
+                        <div class="fonts" style="margin-bottom: 16px;">必要な情報のみお伝えし、無理な提案は一切いたしません。</div>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                タイヤの摩耗・空気圧チェック
+                            </li>
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                オイルやウォッシャー液の残量確認
+                            </li>
+                            <li style="margin-bottom: 8px; color: #003B8B; font-weight: 500; font-size: 14px;">
+                                <span style="color: #003B8B; margin-right: 8px;">•</span>
+                                ライトやワイパーの動作確認
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 料金・時間比較セクション -->
+        <section class="comparison" style="padding: 80px 0; background-color: #f8fafe;">
+            <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 50px;">本当にお得？<span class="colorfont_b">他社サービスと徹底比較</span></h2>
+                
+                <!-- レスポンシブ対応：デスクトップはテーブル、モバイルはカード形式 -->
+                <div style="background: white; border-radius: 16px; padding: 20px 0; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08);">
+                    
+                    <!-- デスクトップ版テーブル -->
+                    <div class="desktop-table" style="display: block;">
+                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 8px 5px; text-align: center; width: 20%; background: #F8F9FA; border-radius: 8px 0 0 0; vertical-align: middle;"></th>
+                                    <th style="padding: 8px 10px; text-align: center; width: 30%; background: #003B8B; vertical-align: middle; overflow: visible;">
+                                        <img src="https://rakuruma.com/web/wp-content/uploads/2025/09/0abf76b0235309b55979d1dcdca626cb.png" alt="ラクルマ" style="height: 45px; width: auto; display: block; margin: -8px auto;">
+                                    </th>
+                                    <th style="padding: 8px 10px; text-align: center; width: 25%; background: #F8F9FA; vertical-align: middle;">
+                                        <div style="font-size: 13px; color: #666; font-weight: 600; line-height: 1.3;">他社<br>出張洗車</div>
+                                    </th>
+                                    <th style="padding: 8px 10px; text-align: center; width: 25%; background: #F8F9FA; border-radius: 0 8px 0 0; vertical-align: middle;">
+                                        <div style="font-size: 13px; color: #666; font-weight: 600; line-height: 1.3;">ガソリンスタンド</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background: rgba(248, 249, 250, 0.5);">
+                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5;">料金</td>
+                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <polygon points="14,4 24,22 4,22" fill="#003B8B"/>
+                                                </svg>
+                                                <div style="font-size: 15px; color: #003B8B; font-weight: 700;">¥7,700〜</div>
+                                            </div>
+                                            <div style="font-size: 10px; color: rgba(0, 59, 139, 0.7); margin-top: 2px;">Mサイズ</div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
+                                                </svg>
+                                                <div style="font-size: 14px; color: #666; font-weight: 600;">¥9,500〜</div>
+                                            </div>
+                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">Mサイズ</div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
+                                                    <circle cx="14" cy="14" r="6" fill="white"/>
+                                                </svg>
+                                                <div style="font-size: 14px; color: #666; font-weight: 600;">¥3,000〜</div>
+                                            </div>
+                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">Mサイズ</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5; white-space: nowrap;">拘束時間</td>
+                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="14" cy="14" r="12" fill="#003B8B"/>
+                                                <circle cx="14" cy="14" r="6" fill="white"/>
+                                            </svg>
+                                            <div style="font-size: 15px; color: #003B8B; font-weight: 700;">0分</div>
+                                            <div style="font-size: 10px; color: rgba(0, 59, 139, 0.7); margin-top: 2px;">完全にお任せ</div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
+                                            </svg>
+                                            <div style="font-size: 14px; color: #666; font-weight: 600;">10分</div>
+                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">立会い必要</div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                                <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                            </svg>
+                                            <div style="font-size: 14px; color: #666; font-weight: 600;">100分</div>
+                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">移動＋待ち</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr style="background: rgba(248, 249, 250, 0.5);">
+                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5; white-space: nowrap;">駐車場代</td>
+                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
+                                                    <circle cx="14" cy="14" r="6" fill="white"/>
+                                                </svg>
+                                                <div style="font-size: 15px; color: #003B8B; font-weight: 700;">¥0</div>
+                                                <div style="font-size: 10px; color: rgba(0, 59, 139, 0.7); margin-top: 2px;">バイク訪問</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                                    <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                                </svg>
+                                                <div style="font-size: 14px; color: #666; font-weight: 600;">¥1,500</div>
+                                                <div style="font-size: 10px; color: #bbb; margin-top: 2px;">料金上乗せ</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="14" cy="14" r="12" fill="#003B8B"/>
+                                                <circle cx="14" cy="14" r="6" fill="white"/>
+                                            </svg>
+                                            <div style="font-size: 14px; color: #666; font-weight: 600;">¥0</div>
+                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">-</div>
+                                        </div>
+                                    </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5; white-space: nowrap;">サブスク</td>
+                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
+                                                    <circle cx="14" cy="14" r="6" fill="white"/>
+                                                </svg>
+                                                <div style="font-size: 15px; color: #003B8B; font-weight: 700;">¥6,900〜</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
+                                            </svg>
+                                            <div style="font-size: 14px; color: #666; font-weight: 600;">¥9,900〜</div>
+                                        </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                                <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                            </svg>
+                                            <div style="font-size: 14px; color: #666; font-weight: 600;">なし</div>
+                                        </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr style="background: rgba(248, 249, 250, 0.5);">
+                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5;">利便性</td>
+                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
+                                                    <circle cx="14" cy="14" r="6" fill="white"/>
+                                                </svg>
+                                                <div style="font-size: 14px; color: #003B8B; font-weight: 700;">どこでも可能</div>
+                                                <div style="font-size: 10px; color: rgba(0, 59, 139, 0.7); margin-top: 2px;">水なし洗車で場所を選ばない</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
+                                                </svg>
+                                                <div style="font-size: 14px; color: #666; font-weight: 600;">制限あり</div>
+                                                <div style="font-size: 10px; color: #bbb; margin-top: 2px;">水を使える場所など制限あり</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 12px 5px; text-align: center;">
+                                        <div style="text-align: center;">
+                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                                    <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+                                                </svg>
+                                                <div style="font-size: 14px; color: #666; font-weight: 600;">店舗へ移動</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                    
+                <!-- モバイル対応のメディアクエリ -->
+                    <style>
+                        @media (max-width: 768px) {
+                            .desktop-table {
+                                display: none;
+                            }
+                        }
+                    </style>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 水道不要！こんな場所でもセクション -->
+        <section class="locations" style="padding: 80px 0; background-color: #f8fafe;">
+            <div class="area_s">
+                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 20px;">水道がなくても大丈夫</h2>
+                <p style="text-align: center; font-size: 20px; color: #003B8B; font-weight: 600; margin-bottom: 50px;">あらゆる駐車場で施工可能</p>
+                
+                <!-- 3カラムレイアウト -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 50px;">
+                    <!-- 月極駐車場 -->
+                    <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
+                        <div style="width: 100%; height: 200px; overflow: hidden;">
+                            <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.jpg" alt="月極駐車場" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">月極駐車場</h3>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0 0 8px 0;">水や泡を使わないので、隣の車や床を汚さずに洗浄が可能</p>
+                            <p style="font-size: 11px; color: #999; line-height: 1.4; margin: 0;">※事前に許可を取る必要があります。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- マンション駐車場 -->
+                    <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
+                        <div style="width: 100%; height: 200px; overflow: hidden;">
+                            <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/85f972426cec875586f6f772211fcf7a.jpg" alt="マンション駐車場" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">マンション駐車場</h3>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0 0 8px 0;">機械式・地下駐車場もOK。狭い場所でも丁寧に施工</p>
+                            <p style="font-size: 11px; color: #999; line-height: 1.4; margin: 0;">※事前に許可を取る必要があります。</p>
+                        </div>
+                    </div>
+                    
+                    <!-- ご自宅の駐車場 -->
+                    <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
+                        <div style="width: 100%; height: 200px; overflow: hidden;">
+                            <img src="https://rakuruma.com/web/wp-content/uploads/2025/11/IMG_8600.jpg" alt="ご自宅の駐車場" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">ご自宅の駐車場</h3>
+                            <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0;">ご自宅で待ち時間ゼロ。家事をしながら安心お任せ</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 説明文と動画 -->
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    <!-- セクション見出し -->
+                    <h3 class="headline headline_br bold" style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
+                        <span style="display: block; font-size: 20px; color: #666; font-weight: normal; margin-bottom: 10px;">駐車場を汚さない秘密</span>
+                        <span class="fontxl colorfont_b" style="font-size: 32px;">水なし洗車の技術</span>
+                    </h3>
+
+                    <!-- 動画セクション（2つの動画を横並び） -->
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+                        <!-- 動画1: なぜ傷がつかないかの解説 -->
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">特殊な洗浄成分で水なし洗車を実現</h4>
+                            <div style="position: relative; width: 90%;">
+                            <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                <video id="reason-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
+                                    <source src="https://rakuruma.com/web/wp-content/uploads/2025/09/reason3.mp4" type="video/mp4">
+                                    <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
+                                    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
+                                        <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
+                                    </div>
+                                </video>
+                            </div>
+                            </div>
+                            <p style="font-size: 13px; color: #666; text-align: center; margin-top: 10px; line-height: 1.5;">
+                                潤滑成分が汚れを浮かせて<br>
+                                摩擦を最小限に抑える技術
+                            </p>
+                            <p style="font-size: 11px; color: #999; text-align: center; margin-top: 5px;">
+                                ※aguamirai professionalを採用
+                            </p>
+                        </div>
+
+                        <!-- 動画2: 傷がつかない実証動画 -->
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">1年間使い続けても傷ゼロ<span style="font-size: 8px; margin-left: 4px;">※1</span></h4>
+                            <div style="position: relative; width: 90%;">
+                            <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                <video id="why-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
+                                    <source src="https://rakuruma.com/web/wp-content/uploads/2025/09/why.mp4" type="video/mp4">
+                                    <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
+                                    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
+                                        <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
+                                    </div>
+                                </video>
+                            </div>
+                            </div>
+                            <p style="font-size: 13px; color: #666; text-align: center; margin-top: 10px; line-height: 1.5;">
+                                1年間毎月水なし洗車をしても<br>
+                                傷ついていない様子
+                            </p>
+                            <p style="font-size: 11px; color: #999; text-align: center; margin-top: 5px;">
+                                車種：Jeep ラングラー
+                            </p>
+                            <p style="font-size: 10px; color: #999; text-align: center; margin-top: 5px;">
+                                ※1 コーティングの状態によって変わる場合がございます
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- モバイル対応スタイル追加 -->
+                    <style>
+                        @media (max-width: 768px) {
+                            .locations div[style*="grid-template-columns: repeat(2, 1fr)"] {
+                                grid-template-columns: 1fr !important;
+                                gap: 20px !important;
+                            }
+                        }
+                    </style>
+                </div>
+                
+                <!-- レスポンシブ対応 -->
+                <style>
+                    @media (max-width: 768px) {
+                        .locations > div > div[style*="grid-template-columns"] {
+                            grid-template-columns: 1fr !important;
+                        }
+                    }
+                </style>
+            </div>
+        </section>
+
+        <!-- くらしのマーケット口コミ（写真・口コミカード） -->
+        <section class="reviews" style="padding: 60px 0; background-color: #f8fafe;">
+            <div style="max-width: 1600px; margin: 0 auto; padding: 0 20px;">
+                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 50px;">実際にご利用いただいた<span class="colorfont_b">お客様の声</span></h2>
+
+                <!-- 口コミスクロール -->
+                <div style="width: 100%; overflow: hidden; margin-top: 20px;">
+                        <!-- 上段：写真を左から右へスクロール -->
+                        <div style="overflow: hidden; margin-bottom: 20px;">
+                            <div class="scroll-left-to-right" style="display: flex; gap: 8px; animation: scrollLeftToRight 20s linear infinite;">
+                                <!-- 写真2 -->
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/85f972426cec875586f6f772211fcf7a.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                                <!-- 写真3 -->
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                                <!-- 写真4 -->
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/74f7d0941b02809f624ce02bd5ad3f9c.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                                <!-- 写真5 -->
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/3dc2184cbcdd4511563dd7bfa9ac1d77.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                                <!-- 複製写真セット1（無限ループ用） -->
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/85f972426cec875586f6f772211fcf7a.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/74f7d0941b02809f624ce02bd5ad3f9c.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                                <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/3dc2184cbcdd4511563dd7bfa9ac1d77.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- 下段：口コミスクロール -->
+                        <div id="review-scroll-container" style="overflow-x: auto; overflow-y: hidden; position: relative; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scroll-behavior: smooth;">
+                            <div style="display: flex; gap: 15px; padding-bottom: 10px;">
+                                <!-- 口コミカード1 -->
+                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
+                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年1月</span>
+                                    </div>
+                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">初回利用でしたが丁寧な対応で安心してお任せできました。仕上がりもとても綺麗で、ガソリンスタンドより確実に満足できるサービスです！</p>
+                                </div>
+
+                                <!-- 口コミカード2 -->
+                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
+                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年5月</span>
+                                    </div>
+                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">こまめに連絡をいただいてスムーズにお願いできました。洗車も、黄砂がタップリのっかったボディをピカピカにしていただきました。ありがとうございます。</p>
+                                </div>
+
+                                <!-- 口コミカード3 -->
+                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
+                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年3月</span>
+                                    </div>
+                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">事前のやりとりから丁寧かつスムーズで安心してお願いできました。マンションの狭い駐車場でも問題なく対応していただき、40分ほどでピカピカに。またぜひ利用したいと思います。</p>
+                                </div>
+
+                                <!-- 口コミカード4 -->
+                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
+                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年9月</span>
+                                    </div>
+                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">これまで利用した洗車サービスの中で1番綺麗にしてくれました。立ち会いできませんでしたが、妥協なくピカピカに！間違いなくリピートします。</p>
+                                </div>
+
+                                <!-- 口コミカード5 -->
+                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
+                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2025年2月</span>
+                                    </div>
+                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">対応もとても爽やかで、かなり綺麗に仕上げていただきました！ありがとうございます！</p>
+                                </div>
+
+                                <!-- 口コミカード6 -->
+                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
+                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年10月</span>
+                                    </div>
+                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">綺麗に車の内外をお掃除してくださいました。ありがとうございます。リピート確定です！よろしくお願い致します。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- インジケーター -->
+                        <div id="review-indicators" style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
+                            <span class="review-indicator" data-index="0" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; cursor: pointer; transition: opacity 0.3s;"></span>
+                            <span class="review-indicator" data-index="1" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
+                            <span class="review-indicator" data-index="2" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
+                            <span class="review-indicator" data-index="3" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
+                            <span class="review-indicator" data-index="4" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
+                            <span class="review-indicator" data-index="5" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
+                        </div>
+
+                        <!-- 自動スクロール制御 -->
+                        <script>
+                            (function() {
+                                const container = document.getElementById('review-scroll-container');
+                                const indicators = document.querySelectorAll('.review-indicator');
+                                let autoScrollInterval;
+                                let isUserInteracting = false;
+                                let interactionTimeout;
+                                let currentIndex = 0;
+
+                                function updateIndicators() {
+                                    const cardWidth = container.querySelector('div[style*="min-width: 100%"]').offsetWidth;
+                                    const gap = 15;
+                                    const scrollPosition = container.scrollLeft;
+                                    const index = Math.round(scrollPosition / (cardWidth + gap));
+
+                                    currentIndex = index;
+
+                                    indicators.forEach((indicator, i) => {
+                                        indicator.style.opacity = i === index ? '1' : '0.3';
+                                    });
+                                }
+
+                                function autoScroll() {
+                                    if (isUserInteracting) return;
+
+                                    const cardWidth = container.querySelector('div[style*="min-width: 100%"]').offsetWidth;
+                                    const gap = 15;
+                                    const scrollAmount = cardWidth + gap;
+                                    const maxScroll = container.scrollWidth - container.clientWidth;
+
+                                    // 次のカードにスクロール
+                                    let nextScroll = container.scrollLeft + scrollAmount;
+
+                                    // 最後まで行ったら最初に戻る
+                                    if (nextScroll >= maxScroll) {
+                                        container.scrollLeft = 0;
+                                    } else {
+                                        container.scrollLeft = nextScroll;
+                                    }
+                                }
+
+                                function startAutoScroll() {
+                                    autoScrollInterval = setInterval(autoScroll, 4000); // 4秒ごと
+                                }
+
+                                function stopAutoScroll() {
+                                    clearInterval(autoScrollInterval);
+                                }
+
+                                function resetAutoScroll() {
+                                    stopAutoScroll();
+                                    clearTimeout(interactionTimeout);
+                                    interactionTimeout = setTimeout(() => {
+                                        isUserInteracting = false;
+                                        startAutoScroll();
+                                    }, 3000); // 3秒後に自動スクロール再開
+                                }
+
+                                // スクロール時にインジケーター更新
+                                container.addEventListener('scroll', () => {
+                                    updateIndicators();
+                                    if (isUserInteracting) {
+                                        resetAutoScroll();
+                                    }
+                                }, { passive: true });
+
+                                // インジケーターのクリックイベント
+                                indicators.forEach(indicator => {
+                                    indicator.addEventListener('click', () => {
+                                        const index = parseInt(indicator.dataset.index);
+                                        const cardWidth = container.querySelector('div[style*="min-width: 100%"]').offsetWidth;
+                                        const gap = 15;
+
+                                        isUserInteracting = true;
+                                        stopAutoScroll();
+                                        container.scrollLeft = index * (cardWidth + gap);
+                                        resetAutoScroll();
+                                    });
+                                });
+
+                                // ユーザー操作を検知
+                                container.addEventListener('touchstart', () => {
+                                    isUserInteracting = true;
+                                    stopAutoScroll();
+                                });
+
+                                container.addEventListener('touchend', () => {
+                                    resetAutoScroll();
+                                });
+
+                                // マウス操作にも対応（PC用）
+                                container.addEventListener('mousedown', () => {
+                                    isUserInteracting = true;
+                                    stopAutoScroll();
+                                });
+
+                                container.addEventListener('mouseup', () => {
+                                    resetAutoScroll();
+                                });
+
+                                // 初期化
+                                updateIndicators();
+                                startAutoScroll();
+                            })();
+                        </script>
+                </div>
+
+                <!-- アニメーション定義 -->
+                    <style>
+                        @keyframes scrollLeftToRight {
+                            0% {
+                                transform: translateX(calc(-1400px - 24px));
+                            }
+                            100% {
+                                transform: translateX(0px);
+                            }
+                        }
+
+                        @keyframes scrollRightToLeft {
+                            0% {
+                                transform: translateX(0%);
+                            }
+                            100% {
+                                transform: translateX(-50%);
+                            }
+                        }
+
+                        @media (max-width: 768px) {
+                            .scroll-left-to-right,
+                            .scroll-right-to-left {
+                                animation-duration: 20s !important;
+                            }
+                        }
+                    </style>
+            </div>
+        </section>
+
+        <section class="service area_m">
+            <h2 class="headline headline_br bold"><span class="fontxl montserrat">BASIC PLAN</span><span class="colorfont_b fontm">サービス内容について</span></h2>
+            <ul class="service_list">
+                <li class="flexbox bk_lb">
+                    <div class="smallhead flexbox colorfont_b fontll bold">洗車<br><span><img src="/web/wp-content/themes/rakuruma/images/stopwatch.svg">30〜40分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 7,700円（Mサイズ）</span></div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_5.jpg);"></div>
+                        <p class="colorfont_w fontm bold">洗車</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_6.jpg);"></div>
+                        <p class="colorfont_w fontm bold">ステップ清掃</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_7.jpg);"></div>
+                        <p class="colorfont_w fontm bold">ホイール清掃</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_8.jpg);"></div>
+                        <p class="colorfont_w fontm bold">タイヤワックス</p>
+                    </div>
+                </li>
+                <li class="flexbox bk_lb">
+                    <div class="smallhead flexbox colorfont_b fontll bold">室内清掃<br><span><img src="/web/wp-content/themes/rakuruma/images/stopwatch.svg">20〜30分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 2,200円</span></div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_13.jpg);"></div>
+                        <p class="colorfont_w fontm bold">内窓清掃</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_10.jpg);"></div>
+                        <p class="colorfont_w fontm bold">掃除機</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_11.jpg);"></div>
+                        <p class="colorfont_w fontm bold">ハンドルまわり</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_15.jpg);"></div>
+                        <p class="colorfont_w fontm bold">ナビゲーション</p>
+                    </div>
+                </li>
+                <li class="flexbox bk_lb">
+                    <div class="smallhead flexbox colorfont_b fontll bold">安心点検（選択可）<br><span><img src="/web/wp-content/themes/rakuruma/images/stopwatch.svg">10〜20分</span></div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_1.jpg);"></div>
+                        <p class="colorfont_w fontm bold">バッテリー点検</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_2.jpg);"></div>
+                        <p class="colorfont_w fontm bold">ウォッシャー液補充</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_3.jpg);"></div>
+                        <p class="colorfont_w fontm bold">空気圧調整</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/service_img_4.jpg);"></div>
+                        <p class="colorfont_w fontm bold">ライトの点検</p>
+                    </div>
+                </li>
+            </ul>
+            <p class="fontss">※サービス内容・目安時間はお車の大きさ・特徴・汚れ具合によって変わります。</p>
+
+            <!-- 料金一覧と初回お試し価格の統合セクション -->
+            <div style="text-align: center; margin: 30px auto 50px auto; padding: 0; max-width: 1400px;">
+                <!-- 料金一覧 -->
+                <div style="padding: 35px 45px; background: white; border-radius: 16px; border: 2px solid #e0e0e0; display: inline-block;">
+                    <h3 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 20px;">通常料金</h3>
+                    <div style="margin: 0 auto;">
+                        <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>洗車（Mサイズ）</span>
+                                <span>7,700円</span>
+                            </div>
+                        </div>
+                        <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>室内清掃（全サイズ）</span>
+                                <span>2,200円</span>
+                            </div>
+                        </div>
+                        <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>安心点検（選択可）</span>
+                                <span>0円</span>
+                            </div>
+                        </div>
+                        <div style="text-align: center; padding-top: 15px; border-top: 2px solid #f0f0f0;">
+                            <div style="color: #999; font-size: 14px; margin-bottom: 8px;">通常価格</div>
+                            <div class="fontl bold" style="color: #999;">9,900円</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 矢印 -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <svg width="60" height="80" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 矢印の線 -->
+                        <line x1="30" y1="10" x2="30" y2="50" stroke="#003B8B" stroke-width="4" stroke-linecap="round"/>
+                        <!-- 矢印の先端 -->
+                        <path d="M30 70 L15 50 L45 50 Z" fill="#003B8B"/>
+                    </svg>
+                </div>
+
+                <h3 class="fontxl bold colorfont_b" style="margin-bottom: 30px;">初回お試し体験</h3>
+
+                <!-- 価格表示 -->
+                <div style="background: linear-gradient(135deg, #f8fafe 0%, #ffffff 100%); border: 2px solid #003B8B; border-radius: 16px; padding: 35px 45px; display: inline-block; margin-bottom: 30px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 16px; color: #666; margin-bottom: 12px;">初回限定価格</div>
+                        <div style="font-size: 56px; font-weight: bold; color: #003B8B; line-height: 1; margin-bottom: 12px;">6,000<span style="font-size: 32px;">円</span></div>
+                        <div style="font-size: 15px; color: #003B8B; font-weight: 600; border-top: 1px solid #e0e0e0; padding-top: 15px; margin-top: 10px;">
+                            ✓ 全サイズ均一価格<span style="color: #666; font-weight: normal; font-size: 13px; display: block; margin-top: 5px;">小型車からSUVまで迷わず予約</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 予約フォーム -->
+                <div style="background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.08); overflow: hidden;">
+                    <!-- 予約フォーム上部の案内 -->
+                    <div style="background: linear-gradient(135deg, #f8fafe 0%, #ffffff 100%); padding: 25px 30px; text-align: center; border-bottom: 2px solid #f0f0f0;">
+                        <h4 style="color: #003B8B; font-size: 20px; font-weight: bold; margin: 0 0 15px 0;">空き状況を確認・予約</h4>
+                        <p style="color: #666; margin: 0 0 12px 0; font-size: 14px; line-height: 1.6;">青い日付をタップして時間を選択</p>
+                        <div style="display: inline-block; background: rgba(0, 59, 139, 0.08); color: #003B8B; padding: 6px 14px; border-radius: 15px; font-size: 12px; font-weight: 600;">
+                            ⏱ たった30秒で予約完了
+                        </div>
+                    </div>
+                    
+                    <!-- カレンダーとスクロールガイドのコンテナ -->
+                    <div id="calendar-container" style="position: relative; overscroll-behavior: contain;">
+                        <!-- Loading skeleton -->
+                        <div id="calendar-skeleton" style="width: 100%; height: 1100px; background: white; border-radius: 12px; padding: 30px; box-sizing: border-box;">
+                            <!-- Header skeleton -->
+                            <div style="margin-bottom: 30px;">
+                                <div style="height: 28px; width: 60%; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px; margin-bottom: 15px;"></div>
+                                <div style="height: 20px; width: 40%; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 4px;"></div>
+                            </div>
+
+                            <!-- Calendar grid skeleton -->
+                            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 20px;">
+                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
+                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
+                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
+                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
+                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
+                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
+                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
+                            </div>
+
+                            <!-- Time slots skeleton -->
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
+                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
+                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
+                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
+                            </div>
+
+                            <!-- Loading text -->
+                            <div style="text-align: center; margin-top: 30px; color: #003B8B; font-size: 14px; font-weight: 600;">
+                                <div style="display: inline-block; width: 20px; height: 20px; border: 3px solid #f0f0f0; border-top-color: #003B8B; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; vertical-align: middle;"></div>
+                                カレンダーを読み込み中...
+                            </div>
+                        </div>
+
+                        <!-- Google Calendar Appointment Scheduling begin -->
+                        <iframe id="calendar-iframe" src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0-U5ieKvac0LHUZMHtF7H2-qoYR0MrzopxjXO_-FclFF16g9Ww9TRiIF6aUY42xcyDXXPDCVlp?gv=true" style="border: 0; overscroll-behavior: contain; display: none;" width="100%" height="1100" frameborder="0" loading="lazy"></iframe>
+                        <!-- end Google Calendar Appointment Scheduling -->
+                        
+                        <!-- LINEから予約可能の案内 -->
+                        <div style="margin: 20px 20px 0; padding: 20px 25px; background: linear-gradient(135deg, rgba(6, 199, 85, 0.05) 0%, rgba(6, 199, 85, 0.08) 100%); border-left: 4px solid #06C755; border-radius: 12px; text-align: center;">
+                            <!-- 上部の目立つメッセージ -->
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;">
+                                <svg width="16" height="20" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 2L9 14" stroke="#999" stroke-width="1" stroke-linecap="round"/>
+                                </svg>
+                                <span style="color: #333; font-size: 13px; font-weight: 600; letter-spacing: 0.3px;">今、洗車の予定がない方も</span>
+                                <svg width="16" height="20" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 2L3 14" stroke="#999" stroke-width="1" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+
+                            <p style="margin: 0 0 15px 0; color: #333; font-size: 16px; line-height: 1.5; font-weight: 600;">
+                                LINEより24時間いつでも予約可能<br>
+                                <span style="font-size: 13px; font-weight: normal; color: #666;">洗車したくなった時にすぐ予約できます</span>
+                            </p>
+
+                            <a href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 10px; margin: 0 auto; padding: 14px 60px; background: #06C755; color: white; text-decoration: none; border-radius: 30px; font-size: 14px; font-weight: bold; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
+                                <img src="https://rakuruma.com/web/wp-content/uploads/2025/10/LINE_APP_iOS.png" alt="LINE" width="24" height="24" style="display: block;">
+                                お友達追加
+                            </a>
+                        </div>
+
+                        <!-- 36時間以内の予約案内 -->
+                        <div style="margin: 15px 20px 0; padding: 15px 20px; background: rgba(255, 149, 0, 0.08); border-left: 4px solid #FF9500; border-radius: 8px; text-align: center;">
+                            <div style="display: inline-flex; align-items: center; gap: 10px; color: #FF9500; font-weight: bold; margin-bottom: 8px;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="#FF9500" stroke-width="2"/>
+                                    <path d="M12 6v6l4 2" stroke="#FF9500" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span style="font-size: 16px;">お急ぎの方へ</span>
+                            </div>
+                            <p style="margin: 0; color: #333; font-size: 13px; line-height: 1.6;">
+                                <strong>36時間以内のご予約</strong>は、上記公式LINEのメッセージにてお問い合わせください
+                            </p>
+                        </div>
+                        
+                        <!-- スクロールガイドアニメーション -->
+                        <div class="scroll-guide" style="position: absolute; right: 20px; top: 25%; transform: translateY(-50%); pointer-events: none; z-index: 10;">
+                            <div style="background: rgba(0, 59, 139, 0.9); color: white; padding: 10px 15px; border-radius: 25px; font-size: 13px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0, 59, 139, 0.3);">
+                                日にちをタップして時間を確認
+                            </div>
+                            <div class="scroll-arrow" style="text-align: center;">
+                                <svg width="20" height="30" viewBox="0 0 20 30" style="opacity: 0.8;">
+                                    <polyline points="2,10 10,18 18,10" stroke="#003B8B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <polyline points="2,18 10,26 18,18" stroke="#003B8B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- スクロールアニメーションCSS -->
+                    <style>
+                        @keyframes scrollBounce {
+                            0%, 100% {
+                                transform: translateY(-50%);
+                            }
+                            50% {
+                                transform: translateY(-40%);
+                            }
+                        }
+                        
+                        @keyframes arrowMove {
+                            0%, 100% {
+                                transform: translateY(0);
+                            }
+                            50% {
+                                transform: translateY(8px);
+                            }
+                        }
+                        
+                        .scroll-guide {
+                            animation: scrollBounce 2s ease-in-out infinite;
+                        }
+                        
+                        .scroll-arrow {
+                            animation: arrowMove 1.5s ease-in-out infinite;
+                        }
+                        
+                        /* 5秒後にフェードアウト */
+                        @keyframes fadeOut {
+                            0%, 80% {
+                                opacity: 1;
+                            }
+                            100% {
+                                opacity: 0;
+                                visibility: hidden;
+                            }
+                        }
+                        
+                        /* 初期状態は非表示 */
+                        .scroll-guide {
+                            opacity: 0;
+                            visibility: hidden;
+                        }
+                        
+                        /* アニメーション開始時 */
+                        .scroll-guide.active {
+                            animation: scrollBounce 2s ease-in-out infinite, fadeOut 8s forwards;
+                            opacity: 1;
+                            visibility: visible;
+                        }
+                        
+                        /* レスポンシブ対応 */
+                        @media (max-width: 768px) {
+                            .scroll-guide {
+                                right: 10px !important;
+                                font-size: 12px !important;
+                            }
+                            .scroll-guide > div:first-child {
+                                padding: 8px 12px !important;
+                                font-size: 12px !important;
+                            }
+                        }
+                    </style>
+                    
+                    <!-- スクロールガイドの表示制御JavaScript -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            console.log('DOM loaded, searching for elements...');
+                            
+                            // 少し遅延させて要素を取得
+                            setTimeout(() => {
+                                const scrollGuide = document.querySelector('.scroll-guide');
+                                const calendarContainer = document.querySelector('#calendar-container');
+                                
+                                console.log('ScrollGuide element:', scrollGuide);
+                                console.log('Calendar container:', calendarContainer);
+                                
+                                if (scrollGuide && calendarContainer) {
+                                    console.log('Both elements found, setting up observer...');
+                                    
+                                    // Intersection Observer の設定
+                                    const observerOptions = {
+                                        root: null,
+                                        rootMargin: '-50px 0px -50px 0px', // 上下50pxマージンを設定
+                                        threshold: 0.2 // 20% 見えたらトリガー
+                                    };
+                                    
+                                    const observer = new IntersectionObserver((entries) => {
+                                        entries.forEach(entry => {
+                                            console.log('Intersection detected:', entry.isIntersecting);
+                                            if (entry.isIntersecting) {
+                                                console.log('Adding active class to scroll guide');
+                                                // カレンダーが見えたらアニメーション開始
+                                                scrollGuide.classList.add('active');
+                                                
+                                                // 8秒後に非表示（フェードアウト効果と連動）
+                                                setTimeout(() => {
+                                                    scrollGuide.style.display = 'none';
+                                                }, 8000);
+                                            }
+                                        });
+                                    }, observerOptions);
+                                    
+                                    // カレンダーコンテナを監視
+                                    observer.observe(calendarContainer);
+                                    console.log('Observer set up successfully');
+                                } else {
+                                    console.error('Required elements not found');
+                                }
+                            }, 500); // 500ms遅延
+                        });
+                    </script>
+
+                    <!-- Calendar skeleton hide script -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const calendarIframe = document.getElementById('calendar-iframe');
+                            const calendarSkeleton = document.getElementById('calendar-skeleton');
+
+                            if (calendarIframe && calendarSkeleton) {
+                                let hasLoaded = false;
+
+                                // iframe読み込み完了時にスケルトンを非表示
+                                calendarIframe.addEventListener('load', function() {
+                                    if (!hasLoaded) {
+                                        hasLoaded = true;
+                                        setTimeout(() => {
+                                            calendarSkeleton.style.display = 'none';
+                                            calendarIframe.style.display = 'block';
+                                        }, 300);
+                                    }
+                                });
+
+                                // 安全策: 5秒経ってもloadイベントが発火しない場合は強制的に切り替え
+                                setTimeout(() => {
+                                    if (!hasLoaded) {
+                                        hasLoaded = true;
+                                        calendarSkeleton.style.display = 'none';
+                                        calendarIframe.style.display = 'block';
+                                    }
+                                }, 5000);
+                            }
+                        });
+                    </script>
+
+                    <!-- 予約フォーム下部の補足 -->
+                    <div style="background: #f8fafe; padding: 20px 30px; text-align: center; border-top: 1px solid #f0f0f0;">
+                        <p style="color: #666; margin: 0; font-size: 14px; line-height: 1.8;">
+                            <span style="color: #003B8B; font-weight: bold;">• リアルタイムで空き状況を確認</span><br>
+                            <span style="color: #003B8B; font-weight: bold;">• 即座に予約確定</span><br>
+                            <span style="color: #003B8B; font-weight: bold;">• 自動でメール通知</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="howtouse area_l">
+            <h2 class="headline headline_br bold"><span class="fontxl montserrat">HOW TO USE</span><span class="colorfont_b fontm">ご利用の流れ</span></h2>
+            <p class="discription fonts">まずは手軽にお試しできるので安心。<br class="sp">Webから簡単にお申込みが可能です。</p>
+            <ol class="step_list colorfont_w">
+                <li class="flexbox">
+                    <div class="subhead fontll"><span class="montserrat fontm">STEP 1</span><br>初回お申込み</div>
+                    <p class="fonts"><a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0-U5ieKvac0LHUZMHtF7H2-qoYR0MrzopxjXO_-FclFF16g9Ww9TRiIF6aUY42xcyDXXPDCVlp" target="_blank" rel="noopener noreferrer" style="color: #F4D110; font-weight: bold;">カレンダー</a>より日付→時間をタップし、詳細をご入力いただければ予約が完了します。</p>
+                </li>
+                <li class="flexbox">
+                    <div class="subhead fontll"><span class="montserrat fontm">STEP 2</span><br>訪問</div>
+                    <p class="fonts">ご訪問時、鍵の受け渡しをお願いします。お車の駐車場にて作業を行います。<br class="pc">※鍵はポストなどでも受け渡しも可能です</p>
+                </li>
+                <li class="flexbox">
+                    <div class="subhead fontll"><span class="montserrat fontm">STEP 3</span><br>作業終了</div>
+                    <p class="fonts">作業等のご説明をさせていただき完了となります。<br class="pc">※非対面の場合はLINEでご説明して完了となります。</p>
+                </li>
+                <li class="flexbox">
+                    <div class="subhead fontll"><span class="montserrat fontm">STEP 4</span><br>決済</div>
+                    <p class="fonts">現金、PayPay、各種カード、タッチ決済をご使用いただけます。<br class="pc">※非対面の場合はオンラインカード決済をご利用いただけます。</p>
+                </li>
+            </ol>
+        </section>
+
+        <section class="map area_s">
+            <h2 class="headline headline_br bold"><span class="fontxl montserrat">AREA</span><span class="colorfont_b fontm">サービス提供エリア</span></h2>
+            <p class="discription fonts"><span class="bold">世田谷区/目黒区/渋谷区</span><br>サービス提供エリアは順次拡大中です。利用時間・日時によっては対応できないエリアもございますので、詳細はお問い合わせくださいませ。</p>
+            <img src="/web/wp-content/themes/rakuruma/images/map.png" alt="エリアマップ">
+        </section>
+
+        <section class="plan bk_lb">
+            <div class="area_s">
+                <h2 class="headline headline_br bold"><span class="fontxl montserrat">PRICING</span><span class="colorfont_b fontm">料金プラン</span></h2>
+                
+                <!-- Tab Navigation -->
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="display: inline-flex; background: white; border-radius: 50px; padding: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <button id="tab-subscription" class="pricing-tab active" onclick="switchPricingTab('subscription')" style="padding: 12px 35px; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: linear-gradient(to right, #003B8B, #71B8C1); color: white;">
+                            定期プラン
+                        </button>
+                        <button id="tab-onetime" class="pricing-tab" onclick="switchPricingTab('onetime')" style="padding: 12px 35px; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; background: transparent; color: #003B8B;">
+                            単発利用
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Subscription Plan Content (Default) -->
+                <div id="subscription-content" class="pricing-content">
+                    <p class="discription fonts">決まった曜日・時間に、近づけばこちらからご連絡。<br>考える手間なく、愛車はいつもピカピカに。</p>
+                    <div class="plan_container">
+                        <div class="plan_middle flexbox">
+                            <div class="plan_box bk_w">
+                                <p class="fontll bold colorfont_b">１ヶ月に２回プラン<span class="fontss">(月額）</span></p>
+                                <p class="fontll bold">12,400円〜<span class="fontss"> (6,200円/1回)</span></p>
+                            </div>
+                            <div class="plan_box bk_w">
+                                <p class="fontll bold colorfont_b">月１回プラン<span class="fontss">(月額）</span></p>
+                                <br class="pc">
+                                <p class="fontll bold">6,900円〜</p>
+                            </div>
+                            <div class="plan_box bk_w">
+                                <p class="fontll bold colorfont_b">２ヶ月に１回プラン<span class="fontss">(2ヶ月に1回決済)</span></p>
+                                <br class="pc">
+                                <p class="fontll bold">7,900円〜</p>
+                            </div>
+                        </div>
+                        <p class="fontss attention" style="margin-top: 0;">※税込み・出張費込み<br>※料金表の詳細は<a href="/price_list">こちら</a></p>
+                    </div>
+                </div>
+
+                <!-- One-time Pricing Content (Hidden by default) -->
+                <div id="onetime-content" class="pricing-content" style="display: none;">
+                    <p class="discription fonts">ご都合に合わせて、必要な時だけご利用いただけます。<br>お気軽にお試しください。</p>
+                    <div class="plan_container">
+                        <div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+                            <h3 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 30px;">単発利用料金</h3>
+                            <div style="margin: 0 auto;">
+                                <div style="border-bottom: 2px solid #f0f0f0; padding: 20px 0; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div class="fontl bold" style="margin-bottom: 5px;">洗車（Mサイズ）</div>
+                                        <div class="fonts" style="color: #666;">30〜40分</div>
+                                    </div>
+                                    <div class="fontxl bold colorfont_b">7,700円</div>
+                                </div>
+                                <div style="border-bottom: 2px solid #f0f0f0; padding: 20px 0; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div class="fontl bold" style="margin-bottom: 5px;">室内清掃（全サイズ）</div>
+                                        <div class="fonts" style="color: #666;">20〜30分</div>
+                                    </div>
+                                    <div class="fontxl bold colorfont_b">2,200円</div>
+                                </div>
+                                <div style="border-bottom: 2px solid #f0f0f0; padding: 20px 0; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div class="fontl bold" style="margin-bottom: 5px;">安心点検（選択可）</div>
+                                        <div class="fonts" style="color: #666;">10〜20分</div>
+                                    </div>
+                                    <div class="fontxl bold colorfont_b">0円</div>
+                                </div>
+                                <div style="text-align: center; padding: 30px 0 10px 0; border-top: 2px solid #003B8B; margin-top: 20px;">
+                                    <div style="color: #666; font-size: 14px; margin-bottom: 8px;">セット料金（洗車 + 室内清掃）</div>
+                                    <div style="font-size: 42px; font-weight: bold; color: #003B8B;">9,900円</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="fontss attention" style="margin-top: 20px;">※税込み・出張費込み<br>※料金表の詳細は<a href="/price_list">こちら</a></p>
+                    </div>
+                </div>
+
+                <!-- Tab Switching Script -->
+                <script>
+                    function switchPricingTab(tab) {
+                        const subscriptionTab = document.getElementById('tab-subscription');
+                        const onetimeTab = document.getElementById('tab-onetime');
+                        const subscriptionContent = document.getElementById('subscription-content');
+                        const onetimeContent = document.getElementById('onetime-content');
+
+                        if (tab === 'subscription') {
+                            // Show subscription plan
+                            subscriptionContent.style.display = 'block';
+                            onetimeContent.style.display = 'none';
+                            
+                            // Update tab styles
+                            subscriptionTab.style.background = 'linear-gradient(to right, #003B8B, #71B8C1)';
+                            subscriptionTab.style.color = 'white';
+                            onetimeTab.style.background = 'transparent';
+                            onetimeTab.style.color = '#003B8B';
+                        } else if (tab === 'onetime') {
+                            // Show one-time pricing
+                            subscriptionContent.style.display = 'none';
+                            onetimeContent.style.display = 'block';
+                            
+                            // Update tab styles
+                            subscriptionTab.style.background = 'transparent';
+                            subscriptionTab.style.color = '#003B8B';
+                            onetimeTab.style.background = 'linear-gradient(to right, #003B8B, #71B8C1)';
+                            onetimeTab.style.color = 'white';
+                        }
+                    }
+                </script>
+            </div>
+        </section>
+
+        <section class="profile area_s">
+            <h2 class="headline headline_br bold"><span class="fontxl montserrat">SERVICE CREW</span><span class="colorfont_b fontm">ラクルマのスタッフのご紹介</span></h2>
+            <p class="discription fonts">国家一級整備士による安心の訪問サービスで、愛車にふさわしいケアを。</p>
+            <div class="prof_box flexbox">
+                <div class="prof_pic image_frame">
+                    <div class="image_pic" style="background-image: url(/web/wp-content/themes/rakuruma/images/profile2.jpg);"></div>
+                </div>
+                <div class="prof_text">
+                    <div class="fontm bold prof_name"><span class="colorfont_b">吉永 明拓［代表］</span></div>
+                    <div class="fontm bold">国家一級整備士として、必要なことだけを誠実にお届けし、安心して頼れる存在を目指します。</div>
+                    <dl>
+                        <dt>出身</dt><dd>埼玉県越谷市生まれ/埼玉自動車大学校 卒</dd>
+                        <dt>経歴</dt><dd>元HONDA正規ディーラ8年勤務 自動車検査員</dd>
+                        <dt>趣味</dt><dd>レース観戦（F1,SUPER GT）ダーツ、テニス</dd>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq bk_lb">
+            <div class="area_s">
+                <h2 class="headline headline_br bold"><span class="fontxl montserrat">FAQ</span><span class="colorfont_b fontm">よくあるご質問</span></h2>
+                <div class="faq_lists">
+                    <dl class="faq_list">
+                        <dt class="fontm bold">初回お試し利用は最短でいつから利用可能ですか？</dt>
+                        <dd class="fonts">お申込み日の翌日以降で予約表の空いているお日にちの中から、ご利用日をお選び頂けます。お住まいのエリアやご利用希望日によっては、日時調整をさせていただく場合がございます。</dd>
+                    </dl>
+                    <dl class="faq_list">
+                        <dt class="fontm bold">ペットを飼っています。シートが毛だらけでも掃除機でキレイになりますか？</dt>
+                        <dd class="fonts">ラクルマで使用する掃除機は出張用のポータブルタイプになるのでワンちゃんの毛等はすべて取り切れない可能性がございます。予めご了承下さい。</dd>
+                    </dl>
+                    <dl class="faq_list">
+                        <dt class="fontm bold">サービス利用中に物損などのトラブルがあった場合はどうなりますか？</dt>
+                        <dd class="fonts">万が一破損などのトラブルがあった場合は、損害保険に加入しているので、保険適用の範囲内にて保証いたします。トラブルを事前に防ぐためにも、貴重品や手を触れてほしくない物などはお客様の責任において厳重な管理をお願いいたします。（詳細は利用規約をご確認ください。）</dd>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact area_s" style="padding-top: 40px;">
+            <h2 class="headline headline_br bold"><span class="fontxl montserrat">CONTACT</span><span class="colorfont_b fontm">ラクルマへのお問い合わせ</span></h2>
+            <div class="button fonts bold" style="border: 3px solid #003B8B; margin: 50px auto;"><a href="/contact" style="color: #003B8B;">お問い合わせ</a></div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer style="background: #F4F9FF; color: #333; text-align: center; padding: 20px;">
+    </footer>
+
+    <script>
+        // 動画の設定と画面表示時の自動再生
+        document.addEventListener('DOMContentLoaded', function() {
+            // ヒーロー動画の再生処理
+            const heroVideo = document.getElementById('hero-video');
+            if (heroVideo) {
+                // 動画の読み込みを確実にする
+                heroVideo.load();
+
+                // 再生を試みる
+                const playPromise = heroVideo.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('Hero video playing successfully');
+                    }).catch(error => {
+                        console.log('Hero video autoplay prevented:', error);
+                        // 自動再生が失敗した場合、ユーザータップで再生
+                        heroVideo.addEventListener('click', function() {
+                            heroVideo.play();
+                        });
+                    });
+                }
+            }
+
+            // 1つ目の動画（why-video）: 通常速度、音声ミュート
+            const whyVideo = document.getElementById('why-video');
+            if (whyVideo) {
+                whyVideo.playbackRate = 1.0;  // 通常速度
+                whyVideo.muted = true;  // 音声をミュート
+                whyVideo.volume = 0;     // ボリュームも0に設定
+                whyVideo.pause();  // 初期状態では停止
+                whyVideo.addEventListener('loadedmetadata', function() {
+                    whyVideo.playbackRate = 1.0;
+                    whyVideo.muted = true;
+                    whyVideo.volume = 0;
+                });
+            }
+            
+            // 2つ目の動画（reason-video）: 1.2倍速、音声ミュート
+            const reasonVideo = document.getElementById('reason-video');
+            if (reasonVideo) {
+                reasonVideo.playbackRate = 1.2;  // 1.2倍速
+                reasonVideo.muted = true;  // 音声をミュート
+                reasonVideo.volume = 0;     // ボリュームも0に設定
+                reasonVideo.pause();  // 初期状態では停止
+                reasonVideo.addEventListener('loadedmetadata', function() {
+                    reasonVideo.playbackRate = 1.2;
+                    reasonVideo.muted = true;
+                    reasonVideo.volume = 0;
+                });
+            }
+            
+            // Intersection Observerで画面に入ったら再生
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3  // 30%見えたら再生開始
+            };
+            
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    if (entry.isIntersecting) {
+                        // 画面に入ったら再生
+                        video.play().catch(err => {
+                            console.log('Video play failed:', err);
+                        });
+                    } else {
+                        // 画面から出たら停止
+                        video.pause();
+                    }
+                });
+            }, observerOptions);
+            
+            // 動画を監視対象に追加
+            if (whyVideo) {
+                videoObserver.observe(whyVideo);
+            }
+            if (reasonVideo) {
+                videoObserver.observe(reasonVideo);
+            }
+            
+            // お客様の声動画の設定（voice1-video）: 10倍速
+            const voice1Video = document.getElementById('voice1-video');
+            if (voice1Video) {
+                voice1Video.playbackRate = 10.0;  // 10倍速
+                voice1Video.muted = true;  // 音声をミュート
+                voice1Video.volume = 0;     // ボリュームも0に設定
+                voice1Video.pause();  // 初期状態では停止
+                voice1Video.addEventListener('loadedmetadata', function() {
+                    voice1Video.playbackRate = 10.0;
+                    voice1Video.muted = true;
+                    voice1Video.volume = 0;
+                });
+                // Intersection Observerに追加
+                videoObserver.observe(voice1Video);
+            }
+
+            // お客様の声動画2の設定（voice2-video）: 10倍速
+            const voice2Video = document.getElementById('voice2-video');
+            if (voice2Video) {
+                voice2Video.playbackRate = 10.0;  // 10倍速
+                voice2Video.muted = true;  // 音声をミュート
+                voice2Video.volume = 0;     // ボリュームも0に設定
+                voice2Video.pause();  // 初期状態では停止
+                voice2Video.addEventListener('loadedmetadata', function() {
+                    voice2Video.playbackRate = 10.0;
+                    voice2Video.muted = true;
+                    voice2Video.volume = 0;
+                });
+                // Intersection Observerに追加
+                videoObserver.observe(voice2Video);
+            }
+        });
+
+        // Testimonials Carousel Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const track = document.getElementById('testimonials-track');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            let currentSlide = 0;
+            const totalSlides = 3; // 6 cards / 2 cards per slide on mobile, 3 slides for desktop
+            const cardsPerSlide = window.innerWidth <= 599 ? 1 : 3;
+            
+            function updateCarousel() {
+                const cardWidth = track.children[0].offsetWidth;
+                const gap = 20;
+                const moveDistance = currentSlide * (cardWidth * cardsPerSlide + gap * cardsPerSlide);
+                
+                track.style.transform = `translateX(-${moveDistance}px)`;
+                
+                // Update indicators
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentSlide);
+                    indicator.setAttribute('aria-selected', index === currentSlide);
+                });
+                
+                // Update button states
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === totalSlides - 1;
+                
+                // Update ARIA labels
+                prevBtn.setAttribute('aria-disabled', currentSlide === 0);
+                nextBtn.setAttribute('aria-disabled', currentSlide === totalSlides - 1);
+            }
+            
+            function goToSlide(slideIndex) {
+                currentSlide = Math.max(0, Math.min(slideIndex, totalSlides - 1));
+                updateCarousel();
+            }
+            
+            // Previous button
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    goToSlide(currentSlide - 1);
+                }
+            });
+            
+            // Next button
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    goToSlide(currentSlide + 1);
+                }
+            });
+            
+            // Indicator buttons
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    goToSlide(index);
+                });
+                
+                // Keyboard navigation for indicators
+                indicator.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        goToSlide(index);
+                    }
+                });
+            });
+            
+            // Keyboard navigation for carousel
+            const carousel = document.querySelector('.testimonials-carousel');
+            carousel.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (currentSlide > 0) goToSlide(currentSlide - 1);
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+                }
+            });
+            
+            // Auto-play functionality (optional)
+            let autoPlayInterval;
+            
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(() => {
+                    if (currentSlide < totalSlides - 1) {
+                        goToSlide(currentSlide + 1);
+                    } else {
+                        goToSlide(0); // Loop back to first slide
+                    }
+                }, 5000);
+            }
+            
+            function stopAutoPlay() {
+                clearInterval(autoPlayInterval);
+            }
+            
+            // Pause auto-play on hover or focus
+            carousel.addEventListener('mouseenter', stopAutoPlay);
+            carousel.addEventListener('mouseleave', startAutoPlay);
+            carousel.addEventListener('focusin', stopAutoPlay);
+            carousel.addEventListener('focusout', startAutoPlay);
+            
+            // Handle window resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const newCardsPerSlide = window.innerWidth <= 599 ? 1 : 3;
+                    if (newCardsPerSlide !== cardsPerSlide) {
+                        location.reload(); // Simple solution for responsive changes
+                    } else {
+                        updateCarousel();
+                    }
+                }, 250);
+            });
+            
+            // Initialize carousel
+            updateCarousel();
+            startAutoPlay();
+        });
+        
+        // くらしのマーケット口コミスライダー
+        document.addEventListener('DOMContentLoaded', function() {
+            const reviewSlider = document.querySelector('.review-slider');
+            const reviewIndicators = document.querySelectorAll('.review-indicator');
+            
+            if (!reviewSlider) return;
+            
+            let currentReviewSlide = 0;
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            
+            // レスポンシブ設定
+            function getResponsiveSettings() {
+                const width = window.innerWidth;
+                const containerWidth = reviewSlider.parentElement.offsetWidth;
+                
+                if (width <= 480) {
+                    return { cardWidth: containerWidth - 40, gap: 15, visibleCards: 1 };
+                } else if (width <= 768) {
+                    return { cardWidth: containerWidth - 40, gap: 20, visibleCards: 1 };
+                } else {
+                    const cardWidth = Math.floor((containerWidth - 40) / 3);
+                    return { cardWidth: cardWidth, gap: 20, visibleCards: 3 };
+                }
+            }
+            
+            let settings = getResponsiveSettings();
+            const totalCards = 8;
+            const maxSlide = Math.max(0, totalCards - settings.visibleCards);
+            
+            function updateReviewSlider(animate = true) {
+                // 現在の設定を取得
+                settings = getResponsiveSettings();
+                
+                // カードのサイズを動的に調整
+                const cards = document.querySelectorAll('.review-card');
+                cards.forEach(card => {
+                    card.style.width = `${settings.cardWidth}px`;
+                    card.style.minWidth = `${settings.cardWidth}px`;
+                });
+                
+                // カードが完全に表示されるように調整
+                const translateX = Math.min(currentReviewSlide * (settings.cardWidth + settings.gap), maxSlide * (settings.cardWidth + settings.gap));
+                
+                if (animate) {
+                    reviewSlider.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                } else {
+                    reviewSlider.style.transition = 'none';
+                }
+                reviewSlider.style.transform = `translateX(-${translateX}px)`;
+                
+                // インジケーター更新（表示グループごと）
+                const indicatorIndex = Math.floor(currentReviewSlide / settings.visibleCards);
+                const totalIndicators = Math.ceil(totalCards / settings.visibleCards);
+                
+                reviewIndicators.forEach((indicator, index) => {
+                    if (index < totalIndicators) {
+                        indicator.style.display = 'block';
+                        if (index === indicatorIndex) {
+                            indicator.style.background = '#003B8B';
+                            indicator.style.width = '24px';
+                        } else {
+                            indicator.style.background = '#ccc';
+                            indicator.style.width = '8px';
+                        }
+                    } else {
+                        indicator.style.display = 'none';
+                    }
+                });
+            }
+            
+            // タッチ/マウス操作
+            function handleStart(e) {
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                reviewSlider.style.cursor = 'grabbing';
+            }
+            
+            function handleMove(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                const diff = currentX - startX;
+                const translateX = currentReviewSlide * (cardWidth + gap) - diff;
+                reviewSlider.style.transition = 'none';
+                reviewSlider.style.transform = `translateX(-${translateX}px)`;
+            }
+            
+            function handleEnd(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                reviewSlider.style.cursor = 'grab';
+                
+                const diff = currentX - startX;
+                const threshold = 50; // スワイプの閾値
+                
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0 && currentReviewSlide > 0) {
+                        currentReviewSlide = Math.max(0, currentReviewSlide - 1);
+                    } else if (diff < 0 && currentReviewSlide < maxSlide) {
+                        currentReviewSlide = Math.min(maxSlide, currentReviewSlide + 1);
+                    }
+                }
+                
+                updateReviewSlider(true);
+            }
+            
+            // イベントリスナー追加
+            reviewSlider.addEventListener('mousedown', handleStart);
+            reviewSlider.addEventListener('mousemove', handleMove);
+            reviewSlider.addEventListener('mouseup', handleEnd);
+            reviewSlider.addEventListener('mouseleave', handleEnd);
+            
+            reviewSlider.addEventListener('touchstart', handleStart);
+            reviewSlider.addEventListener('touchmove', handleMove);
+            reviewSlider.addEventListener('touchend', handleEnd);
+            
+            // カーソル表示
+            reviewSlider.style.cursor = 'grab';
+            
+            // インジケータークリック
+            reviewIndicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    currentReviewSlide = Math.min(index * settings.visibleCards, maxSlide);
+                    updateReviewSlider();
+                });
+            });
+            
+            // ウィンドウリサイズ対応
+            window.addEventListener('resize', () => {
+                // 設定を更新
+                settings = getResponsiveSettings();
+                // スライド位置を調整
+                currentReviewSlide = Math.min(currentReviewSlide, Math.max(0, totalCards - settings.visibleCards));
+                updateReviewSlider(false);
+            });
+            
+            // 自動スライド（レスポンシブ対応）
+            let autoSlideInterval = setInterval(() => {
+                const currentMaxSlide = Math.max(0, totalCards - settings.visibleCards);
+                if (currentReviewSlide < currentMaxSlide) {
+                    currentReviewSlide = Math.min(currentReviewSlide + settings.visibleCards, currentMaxSlide);
+                } else {
+                    currentReviewSlide = 0;
+                }
+                updateReviewSlider();
+            }, 5000);
+            
+            // マウスホバーで自動スライド停止
+            reviewSlider.parentElement.parentElement.addEventListener('mouseenter', () => {
+                clearInterval(autoSlideInterval);
+            });
+            
+            reviewSlider.parentElement.parentElement.addEventListener('mouseleave', () => {
+                autoSlideInterval = setInterval(() => {
+                    const currentMaxSlide = Math.max(0, totalCards - settings.visibleCards);
+                    if (currentReviewSlide < currentMaxSlide) {
+                        currentReviewSlide = Math.min(currentReviewSlide + settings.visibleCards, currentMaxSlide);
+                    } else {
+                        currentReviewSlide = 0;
+                    }
+                    updateReviewSlider();
+                }, 5000);
+            });
+            
+            // 初期化
+            updateReviewSlider();
+        });
+    </script>
+</body>
+</html>

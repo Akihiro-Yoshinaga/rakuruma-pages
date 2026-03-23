@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ラクルマ｜法人・フリート向けお問い合わせ</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-dark:    #1a3a5c;
+      --blue-mid:     #2563a8;
+      --blue-light:   #e8f0fb;
+      --accent:       #2563a8;
+      --accent-hover: #1a4e8a;
+      --gray-100:     #f5f7fa;
+      --gray-200:     #e8ecf0;
+      --gray-400:     #9aa3b2;
+      --gray-700:     #4a5568;
+      --gray-900:     #1a202c;
+      --white:        #ffffff;
+      --danger:       #e53e3e;
+      --success:      #2f855a;
+      --radius:       12px;
+      --shadow:       0 2px 16px rgba(0,0,0,0.10);
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 100%);
+      color: var(--white);
+      padding: 24px 20px 20px;
+      text-align: center;
+    }
+    .header-logo img {
+      height: 80px;
+      width: auto;
+      display: block;
+      margin: 0 auto 6px;
+    }
+    .header-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .header-sub {
+      font-size: 12px;
+      opacity: 0.8;
+      letter-spacing: 0.08em;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 16px;
+      margin-top: 16px;
+    }
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+    .required-badge {
+      display: inline-block;
+      background: var(--danger);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    .optional-badge {
+      display: inline-block;
+      background: var(--gray-400);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 14px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 16px;
+      color: var(--gray-900);
+      background: var(--gray-100);
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37,99,168,0.12);
+      background: var(--white);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+
+    .field-error {
+      display: none;
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .field.has-error input,
+    .field.has-error select,
+    .field.has-error textarea {
+      border-color: var(--danger);
+    }
+    .field.has-error .field-error { display: block; }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-dark));
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 4px 14px rgba(37,99,168,0.35);
+      margin-top: 24px;
+    }
+    .submit-btn:active { transform: scale(0.98); opacity: 0.9; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #success-screen {
+      display: none;
+      text-align: center;
+      padding: 48px 20px;
+    }
+    .success-card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 40px 24px;
+      margin-top: 8px;
+    }
+    .success-icon-wrap {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #34a853, #1e8a3d);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 16px rgba(52,168,83,0.3);
+    }
+    .success-icon-wrap svg {
+      width: 36px;
+      height: 36px;
+      stroke: white;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .success-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .success-divider {
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue-mid), #34a853);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+    .success-body {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+    .success-body strong { color: var(--blue-mid); }
+
+    .hp-field {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 0;
+      width: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .intro-card {
+      background: var(--blue-light);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--blue-dark);
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo"><img src="../reservation_form/logo.png" alt="ラクルマ" /></div>
+  <div class="header-title">法人・フリート向けお問い合わせ</div>
+  <div class="header-sub">出張洗車・メンテナンス</div>
+</div>
+
+<div class="container">
+
+  <div class="intro-card">
+    複数台の車両管理をまとめてお任せいただける法人・フリートプランのご案内・お見積りはこちらからお問い合わせください。担当者より2営業日以内にご連絡いたします。
+  </div>
+
+  <form id="contact-form" novalidate>
+
+    <div class="hp-field" aria-hidden="true">
+      <input type="text" name="fax_number" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- 会社情報 -->
+    <div class="card">
+      <div class="section-label">会社情報</div>
+
+      <div class="field" id="field-company">
+        <label for="company">会社名<span class="required-badge">必須</span></label>
+        <input type="text" id="company" name="company" placeholder="例：株式会社ラクルマ" autocomplete="organization" />
+        <div class="field-error">会社名を入力してください</div>
+      </div>
+
+      <div class="field" id="field-name">
+        <label for="name">担当者名<span class="required-badge">必須</span></label>
+        <input type="text" id="name" name="name" placeholder="例：山田 太郎" autocomplete="name" />
+        <div class="field-error">担当者名を入力してください</div>
+      </div>
+
+      <div class="field" id="field-phone">
+        <label for="phone">電話番号<span class="required-badge">必須</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="例：09012345678（ハイフンなし）" autocomplete="tel" />
+        <div class="field-error">電話番号を入力してください</div>
+      </div>
+
+      <div class="field" id="field-email">
+        <label for="email">メールアドレス<span class="required-badge">必須</span></label>
+        <input type="email" id="email" name="email" placeholder="例：info@example.com" autocomplete="email" />
+        <div class="field-error">メールアドレスを入力してください</div>
+      </div>
+    </div>
+
+    <!-- 車両情報 -->
+    <div class="card">
+      <div class="section-label">車両情報</div>
+
+      <div class="field" id="field-fleet-size">
+        <label for="fleet_size">管理台数<span class="required-badge">必須</span></label>
+        <select id="fleet_size" name="fleet_size">
+          <option value="">選択してください</option>
+          <option value="1〜3台">1〜3台</option>
+          <option value="4〜10台">4〜10台</option>
+          <option value="11〜30台">11〜30台</option>
+          <option value="31台以上">31台以上</option>
+        </select>
+        <div class="field-error">台数を選択してください</div>
+      </div>
+    </div>
+
+    <!-- お問い合わせ内容 -->
+    <div class="card">
+      <div class="section-label">お問い合わせ内容</div>
+
+      <div class="field" id="field-note">
+        <label for="note">ご要望・ご質問<span class="required-badge">必須</span></label>
+        <textarea id="note" name="note" placeholder="ご希望のサービス内容・エリア・頻度など、お気軽にご記入ください"></textarea>
+        <div class="field-error">ご要望・ご質問を入力してください</div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submit-btn">送信する</button>
+
+  </form>
+
+  <!-- 完了画面 -->
+  <div id="success-screen">
+    <div class="success-card">
+      <div class="success-icon-wrap">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="success-title">お問い合わせを<br>受け付けました</div>
+      <div class="success-divider"></div>
+      <div class="success-body">
+        ご入力いただいたメールアドレス宛に<br>確認メールをお送りしました。<br><br>
+        担当者より<strong>2営業日以内</strong>に<br>ご連絡いたします。
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxs16J7ggYM9MFP2h3BimMJYAuXGQ7Bj-kQXMfBb3YDdJsXCafvIQH0HfAzLPjcgqO/exec';
+
+  const form = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+
+  function validateField(fieldId, inputId, checkFn) {
+    const field = document.getElementById(fieldId);
+    const input = document.getElementById(inputId);
+    const valid = checkFn(input.value.trim());
+    field.classList.toggle('has-error', !valid);
+    return valid;
+  }
+
+  function validateAll() {
+    const r1 = validateField('field-company',    'company',    v => v.length > 0);
+    const r2 = validateField('field-name',       'name',       v => v.length > 0);
+    const r3 = validateField('field-phone',      'phone',      v => /^[0-9]{10,11}$/.test(v.replace(/-/g, '')));
+    const r4 = validateField('field-email',      'email',      v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+    const r5 = validateField('field-fleet-size', 'fleet_size', v => v.length > 0);
+    const r6 = validateField('field-note',       'note',       v => v.length > 0);
+    return r1 && r2 && r3 && r4 && r5 && r6;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!validateAll()) {
+      const firstError = form.querySelector('.has-error');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // ハニーポットチェック
+    const fax = form.querySelector('[name="fax_number"]').value;
+    if (fax) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '送信中...';
+
+    const payload = {
+      type: 'corporate',
+      company:    document.getElementById('company').value.trim(),
+      name:       document.getElementById('name').value.trim(),
+      phone:      document.getElementById('phone').value.trim(),
+      email:      document.getElementById('email').value.trim(),
+      fleet_size: document.getElementById('fleet_size').value,
+      note:       document.getElementById('note').value.trim(),
+      fax_number: fax,
+    };
+
+    try {
+      const res = await fetch(GAS_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)));
+      const data = await res.json();
+      if (data.status === 'success') {
+        form.style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error('GAS error');
+      }
+    } catch {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '送信する';
+      alert('送信に失敗しました。時間をおいて再度お試しください。');
+    }
+  });
+
+  // リアルタイムバリデーション
+  ['company','name','phone','email','fleet_size','note'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('blur', () => {
+      const fieldId = 'field-' + id.replace('_', '-');
+      const field = document.getElementById(fieldId);
+      if (field && field.classList.contains('has-error')) validateAll();
+    });
+  });
+</script>
+
+</body>
+</html>

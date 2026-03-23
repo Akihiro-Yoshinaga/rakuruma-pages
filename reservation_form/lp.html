@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ラクルマ｜出張洗車 予約フォーム</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-dark:    #1a3a5c;
+      --blue-mid:     #2563a8;
+      --blue-light:   #e8f0fb;
+      --accent:       #2563a8;
+      --accent-hover: #1a4e8a;
+      --gray-100:     #f5f7fa;
+      --gray-200:     #e8ecf0;
+      --gray-400:     #9aa3b2;
+      --gray-700:     #4a5568;
+      --gray-900:     #1a202c;
+      --white:        #ffffff;
+      --danger:       #e53e3e;
+      --success:      #2f855a;
+      --radius:       12px;
+      --shadow:       0 2px 16px rgba(0,0,0,0.10);
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ローディング */
+    #loading-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+      gap: 16px;
+    }
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 4px solid var(--gray-200);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: var(--gray-700); }
+
+    /* カード */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 16px;
+      margin-top: 16px;
+    }
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* フォーム部品 */
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+    .required-badge {
+      display: inline-block;
+      background: var(--danger);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 14px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 16px;
+      color: var(--gray-900);
+      background: var(--gray-100);
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37,99,168,0.12);
+      background: var(--white);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa3b2' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 38px;
+    }
+
+    /* エラー */
+    .field-error {
+      display: none;
+      color: var(--danger);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .field.has-error input,
+    .field.has-error select,
+    .field.has-error textarea { border-color: var(--danger); }
+    .field.has-error .field-error { display: block; }
+
+    /* 日時選択 */
+    .datetime-section { margin-bottom: 0; }
+    .slot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .slot-badge {
+      font-size: 11px;
+      background: var(--blue-light);
+      color: var(--blue-mid);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .date-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .date-tabs::-webkit-scrollbar { display: none; }
+
+    .date-tab {
+      flex: 0 0 auto;
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      min-width: 64px;
+    }
+    .date-tab:active { transform: scale(0.96); }
+    .date-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--white);
+    }
+    .date-tab .weekday {
+      font-size: 10px;
+      font-weight: 400;
+      opacity: 0.75;
+      display: block;
+    }
+
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .slot-btn {
+      background: var(--gray-100);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 14px 4px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .slot-btn:active { transform: scale(0.95); }
+    .slot-btn.selected-1 {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--white);
+    }
+    .slot-btn.selected-2 {
+      background: #e8f5e9;
+      border-color: var(--success);
+      color: var(--success);
+    }
+    .slot-btn.disabled { opacity: 0.3; pointer-events: none; }
+
+    .selected-display {
+      margin-top: 14px;
+      background: var(--blue-light);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--blue-dark);
+      line-height: 1.7;
+    }
+    .selected-display strong { color: var(--accent); }
+    .clear-btn {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--gray-400);
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    #fallback-notice {
+      display: none;
+      background: #fff8e1;
+      border: 1.5px solid #f6c90e;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #7a5c00;
+      margin-bottom: 14px;
+    }
+
+    #slot-availability-note {
+      display: none;
+      background: #fff8e1;
+      border: 1.5px solid #f6c90e;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #7a5c00;
+      margin-bottom: 14px;
+    }
+
+    /* 送信ボタン */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-dark));
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 4px 14px rgba(37,99,168,0.35);
+      margin-top: 24px;
+    }
+    .submit-btn:active { transform: scale(0.98); opacity: 0.9; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* 完了画面 */
+    #success-screen {
+      display: none;
+      text-align: center;
+      padding: 48px 20px;
+    }
+    .success-card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 40px 24px;
+      margin-top: 8px;
+    }
+    .success-icon-wrap {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #34a853, #1e8a3d);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 16px rgba(52,168,83,0.3);
+    }
+    .success-icon-wrap svg {
+      width: 36px;
+      height: 36px;
+      stroke: white;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .success-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .success-divider {
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue-mid), #34a853);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+    .success-body {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+    .success-body strong { color: var(--blue-mid); }
+
+    /* ハニーポット */
+    .hp-field {
+      opacity: 0;
+      position: absolute;
+      top: 0; left: 0;
+      height: 0; width: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ローディング -->
+  <div id="loading-section">
+    <div class="spinner"></div>
+    <p class="loading-text">カレンダーの空き状況を確認中...</p>
+  </div>
+
+  <!-- メインフォーム -->
+  <form id="reservation-form" style="display:none;" novalidate>
+
+    <!-- ハニーポット（スパム対策） -->
+    <div class="hp-field" aria-hidden="true">
+      <input type="text" name="fax_number" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- お客様情報 -->
+    <div class="card">
+      <div class="section-label">お客様情報</div>
+
+      <div class="field" id="field-name">
+        <label for="name">お名前<span class="required-badge">必須</span></label>
+        <input type="text" id="name" name="name" placeholder="例：山田 太郎" autocomplete="name" />
+        <div class="field-error">お名前を入力してください</div>
+      </div>
+
+      <div class="field" id="field-phone">
+        <label for="phone">電話番号<span class="required-badge">必須</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="例：09012345678（ハイフンなし）" autocomplete="tel" />
+        <div class="field-error" id="phone-error">電話番号を入力してください</div>
+      </div>
+
+      <div class="field" id="field-email">
+        <label for="email">メールアドレス<span class="required-badge">必須</span></label>
+        <input type="email" id="email" name="email" placeholder="例：rakuruma@example.com" autocomplete="email" />
+        <div class="field-error">メールアドレスを入力してください</div>
+      </div>
+
+      <div class="field" id="field-address">
+        <label for="address">ご住所<span class="required-badge">必須</span></label>
+        <input type="text" id="address" name="address" placeholder="例：東京都世田谷区○○ 1-2-3" autocomplete="street-address" />
+        <div class="field-error">ご住所を入力してください</div>
+      </div>
+
+      <div class="field" id="field-car">
+        <label for="car">車種<span class="required-badge">必須</span></label>
+        <input type="text" id="car" name="car" placeholder="例：トヨタ アルファード" />
+        <div class="field-error">車種を入力してください</div>
+      </div>
+
+      <!-- 初回チェック -->
+      <div class="field" style="margin-bottom:18px;">
+        <label style="display:flex; align-items:flex-start; gap:12px; padding:14px; background:var(--blue-light); border:1.5px solid var(--accent); border-radius:10px; cursor:pointer;">
+          <input type="checkbox" id="first_time" name="first_time" value="はい" checked style="width:20px;height:20px;min-width:20px;accent-color:var(--accent);margin-top:1px;cursor:pointer;" />
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--blue-dark);line-height:1.4;">初めてのご利用</div>
+            <div style="font-size:12px;color:var(--blue-mid);margin-top:4px;">初回限定価格が適用されます</div>
+          </div>
+        </label>
+      </div>
+
+      <!-- 料金表示 -->
+      <div id="price-display" style="margin-bottom:18px; padding:16px; background:var(--blue-light); border-radius:10px; text-align:center;">
+        <div style="font-size:13px;color:var(--blue-mid);margin-bottom:4px;">ご利用料金（目安）</div>
+        <div id="price-total" style="font-size:28px;font-weight:900;color:var(--blue-dark);">6,000円〜</div>
+        <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">※車の状態により変動する場合があります</div>
+      </div>
+
+      <!-- 室内清掃 -->
+      <div class="field" style="margin-bottom:18px;">
+        <label style="display:flex; align-items:flex-start; gap:12px; padding:14px; background:var(--gray-100); border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer;" id="indoor-check-label">
+          <input type="checkbox" id="indoor_cleaning" name="indoor_cleaning" value="希望する" style="width:20px;height:20px;min-width:20px;accent-color:var(--accent);margin-top:1px;cursor:pointer;" />
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--gray-900);line-height:1.4;">室内清掃を希望する</div>
+            <div style="font-size:12px;color:var(--blue-mid);font-weight:700;margin-top:2px;">+2,200円</div>
+            <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">※汚れがひどい場合、追加料金が発生する場合がございます</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="field" style="margin-bottom:0;">
+        <label style="margin-bottom:8px;">ボディの状態</label>
+        <label style="display:flex; align-items:flex-start; gap:12px; padding:14px; background:var(--gray-100); border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer;" id="dirty-check-label">
+          <input type="checkbox" id="heavily_dirty" name="heavily_dirty" value="はい" style="width:20px;height:20px;min-width:20px;accent-color:var(--accent);margin-top:1px;cursor:pointer;" />
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--gray-900);line-height:1.4;">半年以上洗車していない / ひどく汚れている場合は✓</div>
+            <div style="font-size:12px;color:var(--gray-400);margin-top:4px;">※汚れがひどい場合、追加料金が発生する場合がございます</div>
+          </div>
+        </label>
+      </div>
+
+    </div>
+
+    <!-- 希望日時 -->
+    <div class="card">
+      <div class="section-label">ご希望日時</div>
+
+      <div id="fallback-notice">
+        ⚠️ 空き状況の自動取得ができませんでした。<br>
+        お手数ですが、希望日時を直接ご入力ください。
+      </div>
+
+      <div id="slot-availability-note">
+        ⚠️ 実際の空き状況を反映していますが、前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。
+      </div>
+
+      <!-- 空き状況ボタンUI -->
+      <div id="slot-ui">
+
+        <!-- 第1希望 -->
+        <div class="datetime-section" style="margin-bottom:20px;">
+          <div class="slot-header">
+            <label style="margin:0;">第1希望日時<span class="required-badge">必須</span></label>
+            <span class="slot-badge">● 第1希望</span>
+          </div>
+          <div class="date-tabs" id="date-tabs-1"></div>
+          <div class="time-slots" id="time-slots-1"></div>
+          <div id="selected-display-1" class="selected-display" style="display:none;"></div>
+          <input type="hidden" id="slot1-value" name="slot1" />
+        </div>
+
+        <!-- 第2希望 -->
+        <div class="datetime-section">
+          <div class="slot-header">
+            <label style="margin:0;">第2希望日時<span class="required-badge">必須</span></label>
+            <span class="slot-badge" style="background:#e8f5e9;color:var(--success);">● 第2希望</span>
+          </div>
+          <div class="date-tabs" id="date-tabs-2"></div>
+          <div class="time-slots" id="time-slots-2"></div>
+          <div id="selected-display-2" class="selected-display" style="display:none;"></div>
+          <input type="hidden" id="slot2-value" name="slot2" />
+        </div>
+
+      </div>
+
+      <!-- フォールバック（手入力） -->
+      <div id="fallback-ui" style="display:none;">
+        <div class="field" id="field-slot1-manual">
+          <label for="slot1-manual">第1希望日時<span class="required-badge">必須</span></label>
+          <input type="datetime-local" id="slot1-manual" name="slot1-manual" />
+          <div class="field-error">第1希望日時を入力してください</div>
+        </div>
+        <div class="field" id="field-slot2-manual">
+          <label for="slot2-manual">第2希望日時<span class="required-badge">必須</span></label>
+          <input type="datetime-local" id="slot2-manual" name="slot2-manual" />
+          <div class="field-error">第2希望日時を入力してください</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 補足・ご要望 -->
+    <div class="card">
+      <div class="section-label">補足・ご要望</div>
+      <div class="field" style="margin-bottom:0;">
+        <label for="note">その他補足・ご要望</label>
+        <textarea id="note" name="note" rows="3" placeholder="気になること・ご要望などご自由にお書きください"></textarea>
+      </div>
+    </div>
+
+    <!-- 送信ボタン -->
+    <button type="submit" class="submit-btn" id="submit-btn">予約リクエストを送信する →</button>
+
+    <p style="text-align:center;font-size:12px;color:var(--gray-400);margin-top:12px;">
+      送信後、ご登録いただいたメールアドレスにご連絡いたします
+    </p>
+
+  </form>
+
+  <!-- 完了画面 -->
+  <div id="success-screen">
+    <div class="success-card">
+      <div class="success-icon-wrap">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <div class="success-title">予約リクエストを<br>受け付けました！</div>
+      <div class="success-divider"></div>
+      <div class="success-body">
+        お申し込みありがとうございます。<br>
+        担当者より <strong>ご登録いただいたメールアドレス</strong> にご連絡いたします。<br>
+        少々お待ちください。
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzDkLU20ClA1Vj_A6aveb4zzbWeYN0_ebq-Lpxy-5tIh4mMVCrhRa49ZV-tzdqc4xsEaw/exec';
+
+  const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
+  let availabilityData = [];
+  let isFallbackMode = false;
+  const selection = { 1: { date: null, time: null }, 2: { date: null, time: null } };
+  const activeDateIndex = { 1: 0, 2: 0 };
+
+  window.addEventListener('DOMContentLoaded', () => {
+    // localStorageから復元
+    const saved = {
+      name:    localStorage.getItem('rakuruma_name'),
+      phone:   localStorage.getItem('rakuruma_phone'),
+      email:   localStorage.getItem('rakuruma_email'),
+      address: localStorage.getItem('rakuruma_address'),
+    };
+    if (saved.name)    document.getElementById('name').value    = saved.name;
+    if (saved.phone)   document.getElementById('phone').value   = saved.phone;
+    if (saved.email)   document.getElementById('email').value   = saved.email;
+    if (saved.address) document.getElementById('address').value = saved.address;
+
+    fetchWithRetry(3, 8000);
+  });
+
+  function fetchOnce(timeoutMs) {
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timeout')), timeoutMs)
+    );
+    const fetching = fetch(GAS_URL)
+      .then(res => { if (!res.ok) throw new Error('fetch error'); return res.json(); });
+    return Promise.race([fetching, timeout]);
+  }
+
+  function fetchWithRetry(maxRetries, timeoutMs, attempt) {
+    attempt = attempt || 1;
+    const loadingText = document.querySelector('.loading-text');
+    if (attempt > 1) loadingText.textContent = `空き状況を確認中... (${attempt}/${maxRetries})`;
+
+    fetchOnce(timeoutMs)
+      .then(data => {
+        if (data.error) throw new Error(data.error);
+        availabilityData = data.availability || [];
+        showForm();
+        document.getElementById('slot-availability-note').style.display = 'block';
+        renderSlotUI();
+      })
+      .catch(() => {
+        if (attempt < maxRetries) {
+          setTimeout(() => fetchWithRetry(maxRetries, timeoutMs, attempt + 1), 1000);
+        } else {
+          showForm();
+          showFallback();
+        }
+      });
+  }
+
+  function showForm() {
+    document.getElementById('loading-section').style.display = 'none';
+    document.getElementById('reservation-form').style.display = 'block';
+  }
+
+  function showFallback() {
+    isFallbackMode = true;
+    document.getElementById('fallback-notice').style.display = 'block';
+    document.getElementById('slot-ui').style.display = 'none';
+    document.getElementById('fallback-ui').style.display = 'block';
+  }
+
+  function renderSlotUI() {
+    if (availabilityData.length === 0) { showFallback(); return; }
+    [1, 2].forEach(pref => {
+      renderDateTabs(pref);
+      renderTimeSlots(pref, activeDateIndex[pref]);
+    });
+  }
+
+  function renderDateTabs(pref) {
+    const container = document.getElementById(`date-tabs-${pref}`);
+    container.innerHTML = '';
+    availabilityData.forEach((day, idx) => {
+      const d = new Date(day.date + 'T00:00:00');
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'date-tab' + (idx === activeDateIndex[pref] ? ' active' : '');
+      tab.innerHTML = `${d.getMonth() + 1}/${d.getDate()}<span class="weekday">${WEEKDAYS[d.getDay()]}</span>`;
+      tab.addEventListener('click', () => {
+        activeDateIndex[pref] = idx;
+        renderDateTabs(pref);
+        renderTimeSlots(pref, idx);
+      });
+      container.appendChild(tab);
+    });
+  }
+
+  function renderTimeSlots(pref, dateIdx) {
+    const container = document.getElementById(`time-slots-${pref}`);
+    container.innerHTML = '';
+    const day = availabilityData[dateIdx];
+    if (!day || day.slots.length === 0) {
+      container.innerHTML = '<p style="font-size:13px;color:var(--gray-400);grid-column:1/-1;padding:8px 0;">この日の空き枠はありません</p>';
+      return;
+    }
+    const otherPref = pref === 1 ? 2 : 1;
+    day.slots.forEach(time => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot-btn';
+      btn.textContent = time;
+      if (selection[otherPref].date === day.date && selection[otherPref].time === time) btn.classList.add('disabled');
+      if (selection[pref].date === day.date && selection[pref].time === time) btn.classList.add(`selected-${pref}`);
+      btn.addEventListener('click', () => selectSlot(pref, day.date, time));
+      container.appendChild(btn);
+    });
+  }
+
+  function selectSlot(pref, date, time) {
+    if (selection[pref].date === date && selection[pref].time === time) {
+      selection[pref] = { date: null, time: null };
+    } else {
+      selection[pref] = { date, time };
+    }
+    const d = new Date(date + 'T00:00:00');
+    const mmdd = `${d.getMonth() + 1}/${d.getDate()}(${WEEKDAYS[d.getDay()]})`;
+    document.getElementById(`slot${pref}-value`).value =
+      selection[pref].date ? `${mmdd} ${selection[pref].time}` : '';
+    updateSelectedDisplay(pref);
+    [1, 2].forEach(p => { renderDateTabs(p); renderTimeSlots(p, activeDateIndex[p]); });
+  }
+
+  function updateSelectedDisplay(pref) {
+    const el = document.getElementById(`selected-display-${pref}`);
+    const s = selection[pref];
+    if (s.date && s.time) {
+      const d = new Date(s.date + 'T00:00:00');
+      const label = pref === 1 ? '第1希望' : '第2希望';
+      el.style.display = 'block';
+      el.innerHTML = `<strong>${label}：</strong>${d.getMonth() + 1}/${d.getDate()}(${WEEKDAYS[d.getDay()]}) ${s.time}<br>
+        <button class="clear-btn" onclick="clearSlot(${pref})">× クリア</button>`;
+    } else {
+      el.style.display = 'none';
+    }
+  }
+
+  function clearSlot(pref) {
+    selection[pref] = { date: null, time: null };
+    document.getElementById(`slot${pref}-value`).value = '';
+    updateSelectedDisplay(pref);
+    [1, 2].forEach(p => { renderDateTabs(p); renderTimeSlots(p, activeDateIndex[p]); });
+  }
+
+  // フォーム送信
+  document.getElementById('reservation-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    // ハニーポットチェック
+    if (document.querySelector('input[name="fax_number"]').value) {
+      showSuccess();
+      return;
+    }
+
+    const data = {
+      name:    document.getElementById('name').value.trim(),
+      phone:   document.getElementById('phone').value.trim(),
+      email:   document.getElementById('email').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      car:     document.getElementById('car').value,
+      menu:            '出張洗車',
+      first_time:      document.getElementById('first_time').checked ? 'はい' : '',
+      indoor_cleaning: document.getElementById('indoor_cleaning').checked ? '希望する' : '',
+      heavily_dirty:   document.getElementById('heavily_dirty').checked ? 'はい' : '',
+      slot1:   isFallbackMode ? document.getElementById('slot1-manual').value : document.getElementById('slot1-value').value,
+      slot2:   isFallbackMode ? document.getElementById('slot2-manual').value : document.getElementById('slot2-value').value,
+      note:    document.getElementById('note').value.trim(),
+    };
+
+    const encoded = encodeURIComponent(JSON.stringify(data));
+    fetch(GAS_URL + '?payload=' + encoded, { method: 'GET', mode: 'no-cors' })
+      .then(() => {
+        localStorage.setItem('rakuruma_name',    data.name);
+        localStorage.setItem('rakuruma_phone',   data.phone);
+        localStorage.setItem('rakuruma_email',   data.email);
+        localStorage.setItem('rakuruma_address', data.address);
+        showSuccess();
+      })
+      .catch(() => {
+        btn.disabled = false;
+        btn.textContent = '予約リクエストを送信する →';
+        alert('送信に失敗しました。通信状況を確認して再度お試しください。');
+      });
+  });
+
+  function validate() {
+    let ok = true;
+
+    [
+      { id: 'field-name',    val: () => document.getElementById('name').value.trim() },
+      { id: 'field-phone',   val: () => document.getElementById('phone').value.trim() },
+      { id: 'field-email',   val: () => document.getElementById('email').value.trim() },
+      { id: 'field-address', val: () => document.getElementById('address').value.trim() },
+      { id: 'field-car',     val: () => document.getElementById('car').value },
+    ].forEach(({ id, val }) => {
+      const field = document.getElementById(id);
+      if (!val()) { field.classList.add('has-error'); ok = false; }
+      else field.classList.remove('has-error');
+    });
+
+    // 電話番号形式チェック
+    const phoneVal = document.getElementById('phone').value.trim();
+    const phoneField = document.getElementById('field-phone');
+    const phoneError = document.getElementById('phone-error');
+    if (phoneVal && /^\+/.test(phoneVal)) {
+      phoneField.classList.add('has-error');
+      phoneError.textContent = '「090...」など国内番号形式でご入力ください（+81〜は不可）';
+      ok = false;
+    } else if (!phoneField.classList.contains('has-error')) {
+      phoneError.textContent = '電話番号を入力してください';
+    }
+
+    // 希望日時チェック
+    if (!isFallbackMode) {
+      [1, 2].forEach(pref => {
+        if (!document.getElementById(`slot${pref}-value`).value) {
+          const el = document.getElementById(`time-slots-${pref}`);
+          el.style.outline = '2px solid var(--danger)';
+          el.style.borderRadius = '10px';
+          setTimeout(() => { el.style.outline = ''; }, 1500);
+          ok = false;
+        }
+      });
+    } else {
+      [1, 2].forEach(pref => {
+        const field = document.getElementById(`field-slot${pref}-manual`);
+        if (!document.getElementById(`slot${pref}-manual`).value) {
+          field.classList.add('has-error'); ok = false;
+        } else {
+          field.classList.remove('has-error');
+        }
+      });
+    }
+
+    if (!ok) {
+      const firstError = document.querySelector('.has-error, [style*="outline"]');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return ok;
+  }
+
+  function showSuccess() {
+    document.getElementById('reservation-form').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    sendHeight();
+  }
+
+  // 料金計算
+  function updatePrice() {
+    const isFirst = document.getElementById('first_time').checked;
+    const hasIndoor = document.getElementById('indoor_cleaning').checked;
+    const priceDisplay = document.getElementById('price-display');
+    const priceTotal = document.getElementById('price-total');
+
+    if (!isFirst) {
+      priceDisplay.style.display = 'none';
+      return;
+    }
+    priceDisplay.style.display = 'block';
+    const base = 6000;
+    const indoor = hasIndoor ? 2200 : 0;
+    const total = base + indoor;
+    priceTotal.textContent = total.toLocaleString() + '円〜';
+  }
+
+  document.getElementById('first_time').addEventListener('change', updatePrice);
+  document.getElementById('indoor_cleaning').addEventListener('change', updatePrice);
+  updatePrice();
+
+  // 親ページにiframeの高さを通知
+  function sendHeight() {
+    const height = document.body.scrollHeight + 40;
+    try {
+      window.parent.postMessage({ type: 'rakuruma-resize', height: height }, '*');
+    } catch(e) {}
+    // iframeのhtml/body自体も高さを明示
+    document.documentElement.style.height = 'auto';
+    document.body.style.height = 'auto';
+  }
+
+  // 高さが変わるたびに通知（ResizeObserver）
+  const resizeObserver = new ResizeObserver(() => sendHeight());
+  resizeObserver.observe(document.body);
+
+  // 初回・ロード後・少し遅延して通知
+  window.addEventListener('DOMContentLoaded', sendHeight);
+  window.addEventListener('load', () => {
+    sendHeight();
+    setTimeout(sendHeight, 500);
+    setTimeout(sendHeight, 1500);
+  });
+</script>
+</body>
+</html>

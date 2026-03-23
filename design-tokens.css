@@ -1,0 +1,188 @@
+/*
+================================================================================
+RAKURUMA DESIGN TOKENS
+================================================================================
+Description: CSS Custom Properties extracted from existing rakuruma-style.css
+Version: 1.0
+Purpose: Centralize design values without changing existing class implementations
+================================================================================
+*/
+
+:root {
+  /* ========================================
+     COLOR SYSTEM
+     ======================================== */
+  
+  /* Primary Brand Colors */
+  --color-primary-blue: #003B8B;
+  --color-primary-green: #5EBE86;
+  --color-accent-mint: #5EBEAF;
+  --color-accent-yellow: #F4D110;
+  
+  /* Background Colors */
+  --color-bg-white: #ffffff;
+  --color-bg-light-blue: #F4F9FF;
+  --color-bg-gray: #F7F7F7;
+  
+  /* Text Colors */
+  --color-text-primary: #333333;
+  --color-text-secondary: #555555;
+  --color-text-muted: #999999;
+  --color-text-white: #ffffff;
+  
+  /* Border Colors */
+  --color-border-light: #EAEAEA;
+  --color-border-gray: #dedede;
+  
+  /* Gradient Colors */
+  --gradient-primary: linear-gradient(145deg, #A2D1DA, #003B8B);
+  --gradient-button-blue: linear-gradient(to left, #003B8B, #71B8C1);
+  --gradient-button-green: linear-gradient(to left, #5AC263, #7DF487);
+  --gradient-feature-bg: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+  
+  /* ========================================
+     TYPOGRAPHY SYSTEM
+     ======================================== */
+  
+  /* Font Families */
+  --font-primary: 'Noto Sans JP', sans-serif;
+  --font-secondary: 'Montserrat', sans-serif;
+  
+  /* Font Sizes - Desktop */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+  --font-size-3xl: 48px;
+  
+  /* Font Sizes - Mobile */
+  --font-size-xs-mobile: 10px;
+  --font-size-sm-mobile: 12px;
+  --font-size-base-mobile: 14px;
+  --font-size-md-mobile: 16px;
+  --font-size-lg-mobile: 18px;
+  --font-size-xl-mobile: 18px;
+  --font-size-2xl-mobile: 20px;
+  --font-size-3xl-mobile: 24px;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Line Heights */
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 2;
+  --line-height-loose: 2.3;
+  
+  /* Letter Spacing */
+  --letter-spacing-normal: 0.05em;
+  
+  /* ========================================
+     SPACING SYSTEM
+     ======================================== */
+  
+  /* Container Widths */
+  --container-sm: 1024px;
+  --container-md: 1152px;
+  --container-lg: 1280px;
+  --container-fixed: 700px; /* button area */
+  --container-profile: 640px; /* footer */
+  --container-map: 720px; /* map section */
+  
+  /* Section Padding */
+  --section-padding-desktop: 80px;
+  --section-padding-mobile: 60px;
+  
+  /* Component Spacing */
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 25px;
+  --spacing-2xl: 30px;
+  --spacing-3xl: 40px;
+  --spacing-4xl: 50px;
+  --spacing-5xl: 64px;
+  
+  /* ========================================
+     BORDER RADIUS SYSTEM
+     ======================================== */
+  
+  --radius-xs: 8px;
+  --radius-sm: 20px;
+  --radius-md: 40px;
+  --radius-lg: 80px;
+  --radius-xl: 160px;
+  --radius-round: 50%;
+  
+  /* ========================================
+     COMPONENT DIMENSIONS
+     ======================================== */
+  
+  /* Button Dimensions */
+  --button-width: 330px;
+  --button-height: 64px;
+  --button-height-mobile: 60px;
+  --button-radius: 40px;
+  
+  /* Card Dimensions */
+  --card-radius: 20px;
+  --card-padding: 40px;
+  --card-padding-mobile: 25px;
+  
+  /* Icon Dimensions */
+  --icon-sm: 48px;
+  --icon-md: 70px;
+  --icon-lg: 80px;
+  --icon-profile: 240px;
+  
+  /* Header Dimensions */
+  --header-height: 78px;
+  --header-height-mobile: 72px;
+  --logo-width: 120px;
+  --logo-width-mobile: 100px;
+  
+  /* ========================================
+     SHADOW SYSTEM
+     ======================================== */
+  
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 15px 30px rgba(0, 59, 139, 0.12);
+  --shadow-heavy: 0 15px 35px rgba(0, 59, 139, 0.15);
+  
+  /* ========================================
+     TRANSITION SYSTEM
+     ======================================== */
+  
+  --transition-fast: all linear 0.2s;
+  --transition-smooth: all 0.3s ease;
+  --transition-carousel: transform 0.5s ease;
+  
+  /* ========================================
+     Z-INDEX SYSTEM
+     ======================================== */
+  
+  --z-index-fixed: 999;
+  
+  /* ========================================
+     OPACITY SYSTEM
+     ======================================== */
+  
+  --opacity-hover: 0.65;
+  --opacity-disabled: 0.5;
+  --opacity-overlay: 0.3;
+  
+  /* ========================================
+     ASPECT RATIOS
+     ======================================== */
+  
+  --aspect-ratio-default: 66.66%; /* 2:3 ratio */
+  --aspect-ratio-square: 100%;
+  --aspect-ratio-wide: 43%; /* top section */
+  --aspect-ratio-function: 85%; /* function blocks */
+  --aspect-ratio-service: 75%; /* service images */
+}
