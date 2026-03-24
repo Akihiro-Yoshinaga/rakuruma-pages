@@ -475,3 +475,34 @@ for smartphone
 	}
 
 }
+
+/* クリーニングオプション: 4列グリッド表示 */
+.about_clean .grid_box {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+}
+.about_clean .grid_box .box_child {
+    width: 100%;
+    margin-right: 0;
+    padding: 25px;
+    text-align: center;
+}
+.about_clean .grid_box .box_child div {
+    margin-bottom: 15px;
+}
+.about_clean .grid_box .box_child img {
+    width: 80px;
+    margin: 10px 0;
+}
+.about_clean .grid_box .box_child p {
+    text-align: left;
+    line-height: 1.8;
+    font-size: 14px;
+}
+@media screen and (max-width: 599px) {
+    .about_clean .grid_box {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
