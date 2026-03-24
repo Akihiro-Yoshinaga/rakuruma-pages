@@ -94,7 +94,11 @@ page:price_list
 	width: 140px;
 	height: 140px;
 	border-radius: 20px;
-	padding-top: 25px;
+	padding-top: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 .about_choice ul.flexbox li .icon_area .bk_gr p{
 	margin-bottom: 10px;
