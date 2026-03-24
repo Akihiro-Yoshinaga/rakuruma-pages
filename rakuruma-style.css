@@ -288,6 +288,8 @@ top
 ---------------------------------*/
 .top{
     padding-top: 0;
+    height: auto;
+    max-height: none;
     border-radius: 0 0 0 160px;
     background: -moz-linear-gradient(115deg, #A2D1DA, #003B8B); 
     background: -webkit-linear-gradient(115deg, #A2D1DA, #003B8B); 
