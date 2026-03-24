@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+/* ------------------------------
+page: corporate
+------------------------------ */
+
+/* ヒーローコピー調整（「法人」ではなく複数台向け） */
+.head_copy {
+    font-size: 48px;
+}
+
+@media screen and (max-width: 599px) {
+    .head_copy {
+        font-size: 32px;
+    }
+}

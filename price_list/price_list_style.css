@@ -480,6 +480,60 @@ for smartphone
 
 }
 
+/* 固定CTAバー（price_list専用） */
+.button_area {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 12px 25px;
+    border-top: 1px solid #EAEAEA;
+    z-index: 100;
+    box-sizing: border-box;
+}
+.button_area .flexbox {
+    justify-content: space-between;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.button_area p {
+    text-align: left;
+    line-height: 1.6;
+}
+.button_area .button_g {
+    background: -moz-linear-gradient(right, #5AC263,#7DF487);
+    background: -webkit-linear-gradient(right, #5AC263,#7DF487);
+    background: linear-gradient(to left, #5AC263,#7DF487);
+    border-radius: 40px;
+    padding: 0 20px;
+    height: 48px;
+    line-height: 48px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: 20px;
+}
+.button_area .button_g a {
+    color: #fff;
+    display: block;
+    height: 100%;
+}
+
+@media screen and (max-width: 599px) {
+    .button_area {
+        padding: 10px 15px;
+    }
+    .button_area p {
+        font-size: 11px;
+    }
+    .button_area .button_g {
+        height: 40px;
+        line-height: 40px;
+        font-size: 12px;
+        padding: 0 15px;
+    }
+}
+
 /* クリーニングオプション: 4列グリッド表示 */
 .about_clean .grid_box {
     display: grid;
