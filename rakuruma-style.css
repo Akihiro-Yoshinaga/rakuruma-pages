@@ -1618,14 +1618,19 @@ Hero (WordPress)
     display: block;
 }
 
-/* PC版のみ: 縦長動画の横幅を制限して中央配置 */
-@media (min-width: 600px) {
-    .hero--wp .hero__media {
-        left: 50%;
-        transform: translateX(-50%);
-        max-width: 900px;
-        width: 100%;
-    }
+/* ロゴサイズをPC・スマホ共通で制限 */
+.hero__logo {
+    position: absolute;
+    top: clamp(16px, 4vw, 24px);
+    left: clamp(16px, 4vw, 24px);
+    z-index: 10;
+    width: clamp(80px, 15vw, 120px);
+    height: auto;
+}
+.hero__logo img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .hero__copy {
