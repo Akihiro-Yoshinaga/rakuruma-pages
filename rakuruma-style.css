@@ -1669,7 +1669,7 @@ Hero (WordPress)
     top: 32%;
     transform: translateY(-40%);
     display: inline-flex;
-    gap: 2px;
+    gap: 0px;
     padding: 0;
     font-family: 'Noto Sans JP', sans-serif;
     font-size: clamp(18px, 2vw, 22px);
@@ -1684,9 +1684,9 @@ Hero (WordPress)
     display: inline-block;
     font-weight: 500;
     background: rgba(0, 0, 0, 0.8);
-    padding: 2px 0;
+    padding: 8px 4px;
     border-radius: 4px;
-    line-height: 1;
+    line-height: 1.9;
     width: fit-content;
     letter-spacing: -0.1em;
 }
