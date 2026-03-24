@@ -1857,7 +1857,7 @@ Hero (WordPress)
     display: block;
     width: 160px;
     height: 32px;
-    background-image: url('https://rakuruma.com/web/wp-content/uploads/2025/09/logo_tate.png');
+    background-image: url('/assets/uploads/2025/09/logo_tate.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
