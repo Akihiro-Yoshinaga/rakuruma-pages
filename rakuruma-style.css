@@ -7,12 +7,16 @@ Theme Name: rakuruma_vibe
     display: none !important;
 }
 
-.fv, .hero, .top {
+.fv, .hero {
     position: relative;
     isolation: isolate;
     min-height: clamp(300px, 40vh, 400px);
     height: clamp(300px, 40vh, 400px);
     max-height: clamp(300px, 40vh, 400px);
+}
+.top {
+    position: relative;
+    isolation: isolate;
     --edge-gap: clamp(12px, 3vw, 24px);
     --vcopy-safe: clamp(116px, 12vw, 168px);
 }
@@ -288,8 +292,8 @@ top
 ---------------------------------*/
 .top{
     padding-top: 0;
-    height: auto;
-    max-height: none;
+    height: auto !important;
+    max-height: none !important;
     border-radius: 0 0 0 160px;
     background: -moz-linear-gradient(115deg, #A2D1DA, #003B8B); 
     background: -webkit-linear-gradient(115deg, #A2D1DA, #003B8B); 
