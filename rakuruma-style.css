@@ -1757,6 +1757,8 @@ Hero (WordPress)
     .hero__copy-line {
         padding: 3px 2px;
         margin-bottom: 2px;
+        letter-spacing: 0.15em;
+        line-height: 1.9;
     }
 
     /* Googleカレンダー埋め込みの高さ - スマホ版 */
