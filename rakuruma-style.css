@@ -1599,7 +1599,7 @@ Hero (WordPress)
     isolation: isolate;
     color: #ffffff;
     overflow: hidden;
-    background: linear-gradient(145deg, #A2D1DA, #003B8B);
+    background: #0d1f3c;
 }
 
 /* PC: 動画を中央に固定幅で表示 */
