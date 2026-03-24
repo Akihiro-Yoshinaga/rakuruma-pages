@@ -494,7 +494,8 @@ for smartphone
 }
 .about_clean .grid_box .box_child img {
     width: 80px;
-    margin: 10px 0;
+    margin: 10px auto;
+    display: block;
 }
 .about_clean .grid_box .box_child p {
     text-align: left;
