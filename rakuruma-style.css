@@ -910,12 +910,20 @@ profile
 }
 .profile .prof_box .prof_pic{
     width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 .profile .prof_box .prof_pic::before{
-    padding-top: 100%;
+    display: none;
 }
 .profile .prof_box .prof_pic .image_pic{
-    border-radius: 50%;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center top;
 }
 .profile .prof_box .prof_text{
     padding-left: 64px;
