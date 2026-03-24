@@ -1597,25 +1597,55 @@ Hero (WordPress)
 .hero--wp {
     position: relative;
     isolation: isolate;
-    min-height: clamp(460px, 75vh, 520px);
-    height: clamp(460px, 75vh, 520px);
-    max-height: clamp(460px, 75vh, 520px);
     color: #ffffff;
     overflow: hidden;
+    background: #000;
 }
 
-.hero--wp .hero__media {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
+/* PC: 動画を中央に固定幅で表示、高さは動画に合わせる */
+@media (min-width: 600px) {
+    .hero--wp {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 0;
+        height: auto;
+        max-height: none;
+    }
+    .hero--wp .hero__media {
+        position: relative;
+        inset: auto;
+        z-index: 1;
+        width: 420px;
+        flex-shrink: 0;
+    }
+    .hero--wp .hero__video {
+        width: 100%;
+        height: auto;
+        object-fit: unset;
+        display: block;
+    }
 }
 
-.hero--wp .hero__video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
+/* SP: 従来通り全面表示 */
+@media (max-width: 599px) {
+    .hero--wp {
+        min-height: clamp(460px, 75vh, 520px);
+        height: clamp(460px, 75vh, 520px);
+        max-height: clamp(460px, 75vh, 520px);
+    }
+    .hero--wp .hero__media {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
+    .hero--wp .hero__video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
 }
 
 /* ロゴサイズをPC・スマホ共通で制限 */
