@@ -1599,16 +1599,16 @@ Hero (WordPress)
     isolation: isolate;
     color: #ffffff;
     overflow: hidden;
-    background: #000;
+    background: linear-gradient(145deg, #A2D1DA, #003B8B);
 }
 
-/* PC: 動画を中央に固定幅で表示、高さは動画に合わせる */
+/* PC: 動画を中央に固定幅で表示 */
 @media (min-width: 600px) {
     .hero--wp {
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        min-height: 0;
+        min-height: 600px;
         height: auto;
         max-height: none;
     }
@@ -1616,13 +1616,13 @@ Hero (WordPress)
         position: relative;
         inset: auto;
         z-index: 1;
-        width: 420px;
+        width: 340px;
         flex-shrink: 0;
+        line-height: 0;
     }
     .hero--wp .hero__video {
         width: 100%;
         height: auto;
-        object-fit: unset;
         display: block;
     }
 }
