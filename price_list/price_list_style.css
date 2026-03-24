@@ -1,0 +1,477 @@
+@charset "UTF-8";
+
+/* ------------------------------
+page:price_list
+------------------------------ */
+.grid_box {
+	flex-wrap: wrap;
+	margin-top: 30px;
+}
+.grid_box .box_child{
+	width: 32.22%;
+	margin-right: 1.6%;
+	margin-bottom: 17px;
+	padding: 25px 0;
+	border-radius: 20px;
+}
+.grid_gox_gr .box_child{
+	padding-left: 25px;
+	padding-right: 25px;
+}
+.grid_gox_gr .box_child div{
+	margin-bottom: 25px;
+}
+.grid_gox_gr .box_child img{
+	width: 100px;
+}
+.grid_gox_gr .box_child p{
+	text-align: left;
+	margin-top: 15px;
+	line-height: 1.7;
+}
+.grid_box .box_child:nth-child(3n){
+	margin-right: 0;
+}
+.header{
+	height: 73px;
+	width: 100%;
+	border-bottom: 1px solid #EAEAEA;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 25px;
+}
+.header .logo_area{
+	width: 8%;
+}
+.header .button{
+	width: 188px;
+	height: 48px;
+	border-radius: 10px;
+}
+.header .button a{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+.header .button_g{
+	background: -moz-linear-gradient(right, #5AC263,#7DF487);
+	background: -webkit-linear-gradient(right, #5AC263,#7DF487);
+	background: linear-gradient(to left, #5AC263,#7DF487);
+}
+.header .button_g a{
+	color: #fff;
+}
+.page_head h2{
+	font-size: 40px;
+	margin-bottom: 25px;
+}
+.about_choice{
+	border-radius: 80px 0 80px 0;
+}
+.about_choice ul.flexbox{
+	margin: 35px 0 15px;
+	justify-content: space-between;
+}
+.about_choice ul.flexbox li{
+	width: 32.22%;
+	border-radius: 20px;
+	padding: 47px 8px;
+}
+.about_choice ul.flexbox li .title_block{
+	width: 60%;
+	height: 58px;
+	line-height: 58px;
+	border-radius: 20px;
+	margin: 0 auto 16px;
+}
+.about_choice ul.flexbox li .icon_area{
+	justify-content: space-between;
+	margin: 26px 0 0;
+}
+.about_choice ul.flexbox li .icon_area .bk_gr{
+	width: 140px;
+	height: 140px;
+	border-radius: 20px;
+	padding-top: 25px;
+}
+.about_choice ul.flexbox li .icon_area .bk_gr p{
+	margin-bottom: 10px;
+}
+.about_choice ul.flexbox li .size_box {
+	margin-top: 30px;
+}
+.about_choice ul.flexbox li .size_box .monthly_price{
+	font-size: 40px;
+	margin-bottom: 15px;
+}
+.about_choice ul.flexbox li .size_box .bk_gr{
+	height: 39px;
+	line-height: 39px;
+}
+.about_size table{
+	width: 100%;
+	margin-top: 40px;
+	border-collapse: separate;
+	border-spacing: 0; 
+}
+.about_size table tbody tr{
+	height: 115px;
+	margin-bottom: 8px;
+}
+.about_size table tbody tr th{
+	width: 13%;
+	border-radius: 20px 0 0 20px;
+	vertical-align: middle;
+}
+.about_size table tbody tr td:nth-of-type(2n+1){
+	width: 32.6%;
+	border:1px solid #CECECE;
+	vertical-align: middle;
+}
+.about_size table tbody tr td:nth-of-type(2n){
+	width: 54.4%;
+	border:1px solid #CECECE;
+	border-radius:0 20px 20px 0;
+	padding: 0 1em;
+	vertical-align: middle;
+}
+.about_size table tbody tr.separator{
+	height: 0;
+}
+.about_size table tbody tr.separator th,
+.about_size table tbody tr.separator td{
+	padding-top: 8px;
+	border: none;
+}
+.about_size .button{
+	border: 3px solid #003B8B;
+	margin:50px auto 0;
+}
+.about_size .button a{
+	color: #003B8B;
+}
+.about_package{
+	padding-top: 0;
+}
+.about_package .grid_box .box_child{
+	border: 1px solid #003B8B;
+}
+.about_package .grid_box .box_child img{
+	width: 100px;
+	margin: 15px 0 10px;
+}
+.about_package .grid_box .box_child ul{
+	text-align: left;
+	margin-left: 99px;
+	margin-bottom: 20px;
+	line-height: 2;
+}
+.about_package .grid_box .box_child ul li::before{
+	content: '';
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+	background-image: url(../images/arrow_icon.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	transform: translateY(3px);
+}
+.about_package .grid_box .box_child p{
+	font-size: 11px;
+}
+.about_clean,
+.about_option{
+	padding-top: 0;
+}
+.about_clean h2,
+.about_option h2{
+	margin-bottom: 15px;
+}
+.about_clean .grid_gox_gr .box_child:nth-child(3) div,
+.about_option .grid_gox_gr .box_child:nth-child(8) div{
+	margin-bottom: 0;
+}
+.howtouse_plan{
+	border-radius: 80px 0 80px 0;
+}
+.howtouse_plan ol{
+	width: 100%;
+	margin-top: 40px;
+}
+.howtouse_plan ol li{
+	align-items: center;
+	border-radius: 20px;
+	margin-bottom: 50px;
+	padding: 26px 0 26px 66px;
+	position: relative;
+}
+.howtouse_plan ol li .step_number{
+	width: 148px;
+	height: 148px;
+	border-radius: 50%;
+	margin-right: 45px;
+	padding-top: 42px;
+}
+.howtouse_plan ol li .step_number span{
+	display: block;
+}
+.howtouse_plan ol li .step_description{
+	width: 74%;
+	text-align: left;
+	line-height: 2;
+}
+.howtouse_plan ol li:nth-child(4){
+	margin-bottom: 0;
+}
+.howtouse_plan ol li img{
+	width: 40px;
+    height: 20px;
+    position: absolute;
+    bottom: -36px;
+    left: 120px;
+}
+.message .flexbox{
+	justify-content: space-between;
+}
+.message .flexbox .image_frame,
+.message .flexbox .message_description{
+	width: 47.8%;
+}
+.message .flexbox .image_frame::before{
+	padding-top: 53%;
+}
+.message .flexbox .message_description{
+	text-align: left;
+	padding-top: 35px;
+}
+.message .flexbox .message_description p{
+	margin-top: 18px;
+	line-height: 2;
+}
+.contact  .button_g{
+	background: -moz-linear-gradient(right, #5AC263,#7DF487);
+	background: -webkit-linear-gradient(right, #5AC263,#7DF487);
+	background: linear-gradient(to left, #5AC263,#7DF487);
+	border: none;
+}
+.contact .button_g a{
+	color: #fff;
+}
+/* ------------------------------
+contact_form
+------------------------------ */
+.contact_form{
+	margin: 80px auto;
+	max-width: 100%;
+	text-align: left;
+	width: 700px;
+}
+.contact_form .form_item{
+	margin-bottom: 10px;
+}
+.contact_form .form_item{
+	padding-bottom: 30px;
+}
+.contact_form .form_item span{
+	color: #B20000;
+}
+.contact_form input[type=text],
+.contact_form input[type=email],
+.contact_form input[type=tel]{
+	border: 1px solid #EAEAEA;
+	display: block;
+	height: 60px;
+	line-height: 60px;
+	width: 100%;
+}
+.contact_form textarea{
+	height: 200px;
+	width: 100%;
+	border: 1px solid #EAEAEA;
+}
+.contact_form input[type="submit"] {
+    background: -moz-linear-gradient(right, #5AC263,#7DF487);
+    background: -webkit-linear-gradient(right, #5AC263,#7DF487);
+    background: linear-gradient(to left, #5AC263,#7DF487);
+
+	border-radius: 40px;
+    color: #fff;
+	cursor: pointer;
+    padding: 1em;
+	width: 50%;
+}
+
+/* ------------------------------
+for smartphone
+------------------------------ */
+@media screen and (max-width: 599px) {
+	.grid_box {
+		margin-top: 35px;
+		flex-direction: column;
+	}
+	.grid_box .box_child{
+		width: 100%;
+		margin-right: 0;
+	}
+	.grid_gox_gr .box_child{
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+	.grid_gox_gr .box_child div{
+		margin-bottom: 19px;
+	}
+	.header{
+		height: 48px;
+		padding: 0 15px;
+	}
+	.header .logo_area{
+		width: 20%;
+	}
+	.header .button{
+		width: 128px;
+		height: 32px;
+		border-radius: 5px;
+		font-size: 11px;
+	}
+	.page_head{
+		padding-top: 40px;
+		padding-bottom: 40px;
+	}
+	.page_head h2{
+		font-size: 24px;
+		margin-bottom: 18px;
+	}
+	.about_choice ul.flexbox{
+		margin: 30px 0 15px;
+		flex-direction: column;
+	}
+	.about_choice ul.flexbox li{
+		width: 100%;
+		padding: 47px 15px;
+		margin-bottom: 20px;
+	}
+	.about_choice ul.flexbox li .title_block,
+	.about_choice ul.flexbox li p{
+		font-size: 18px;
+	}
+	.about_choice ul.flexbox li .icon_area{
+		justify-content: space-around;
+	}
+	.about_choice ul.flexbox li .icon_area .bk_gr p{
+		font-size: 16px;
+	}
+	.about_choice ul.flexbox li .size_box .fontl{
+		font-size: 20px;
+	}
+	.about_size table{
+		margin-top: 35px;
+	}
+	.about_size table tbody tr{
+		height: initial;
+		margin-bottom: 15px;
+	}
+	.about_size table tbody tr th{
+		display: block;
+		width: 100%;
+		border-radius: 20px 20px 0 0;
+		height: 58px;
+		line-height: 58px;
+	}
+	.about_size table tbody tr td{
+		display: block;
+	}
+	.about_size table tbody tr td.fontm{
+		width: 100%;
+		height: 73px;
+		line-height: 73px;
+	}
+	.about_size table tbody tr td.fonts{
+		width: 100%;
+		border-radius:0 0 20px 20px;
+		padding: 27px 0 27px 15px;
+		text-align: left;
+	}
+	.about_size table tbody tr.separator th,
+	.about_size table tbody tr.separator td{
+		padding-top: 5px;
+		height: 0;
+	}
+	.about_size .button{
+		margin:30px auto 0;
+	}
+
+	.about_package .grid_box .box_child ul{
+		margin-left: 30%;
+	}
+
+	.about_clean .grid_box,
+	.about_option .grid_box {
+		flex-direction: unset;
+		flex-wrap: unset;
+		margin-bottom: 20px;
+	}
+
+	.about_clean .grid_box .box_child,
+	.about_option .grid_box .box_child {
+		width: 100%;
+	}
+	
+	.howtouse_plan ol{
+		margin-top: 56px;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+	.howtouse_plan ol li{
+		flex-direction: column;
+		padding: 25px 15px;
+		position: relative;
+	}
+	.howtouse_plan ol li .step_number{
+		margin-right: 0;
+		margin-bottom: 15px;
+	}
+	.howtouse_plan ol li .step_description{
+		width: 100%;
+	}
+	.howtouse_plan ol li img{
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.message .flexbox{
+		flex-direction: column;
+	}
+	.message .flexbox .image_frame{
+		margin-top: 35px;
+	}
+	.message .flexbox .image_frame,
+	.message .flexbox .message_description{
+		width: 100%;
+	}
+	.message .flexbox .message_description{
+		padding-top: 15px;
+	}
+	.message .flexbox .message_description p{
+		margin-top: 0;
+	}
+	.contact{
+		padding-top: 0;
+	}
+	.contact h2{
+		margin-bottom: 20px;
+	}
+
+	/* フッターボタン */
+	.button_area {
+		background-color: #fff;
+	}
+	.button_area .flexbox .button {
+		width: 140px;
+	}
+	.button_area .fontm{
+		font-size: 12px;
+	}
+
+}
