@@ -217,7 +217,6 @@ page:price_list
 	height: 148px;
 	border-radius: 50%;
 	margin-right: 45px;
-	padding-top: 42px;
 }
 .howtouse_plan ol li .step_number span{
 	display: block;
@@ -521,6 +520,7 @@ for smartphone
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-top: 0;
 }
 .howtouse_plan ol li .step_description {
     text-align: left;
