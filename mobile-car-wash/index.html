@@ -1999,6 +1999,29 @@
     </footer>
 
     <script>
+        // 料金プランタブ切り替え
+        document.querySelectorAll('.plan-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.plan-tab').forEach(function(t) {
+                    t.classList.remove('plan-tab--active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                this.classList.add('plan-tab--active');
+                this.setAttribute('aria-selected', 'true');
+                const target = this.getAttribute('data-tab');
+                document.querySelectorAll('.plan-content').forEach(function(c) {
+                    c.style.display = 'none';
+                });
+                const active = document.querySelector('.plan-content--' + target);
+                if (active) {
+                    active.style.display = 'block';
+                    active.classList.add('u-fade-in');
+                }
+            });
+        });
+    </script>
+
+    <script>
         // 動画の設定と画面表示時の自動再生
         document.addEventListener('DOMContentLoaded', function() {
             // ヒーロー動画の再生処理
