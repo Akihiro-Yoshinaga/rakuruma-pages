@@ -149,7 +149,7 @@ img {
     height: auto;
     max-width: 100%;
 }
-input, button, select, textarea {
+input:not([type="checkbox"]):not([type="radio"]), button, select, textarea {
     -webkit-appearance: none;
 }
 h2, ul, li{
@@ -1417,6 +1417,7 @@ for smartphone
     .howtouse ol.step_list li{
         height: 320px;
         flex-direction: column;
+        background-position: center;
     }
     .howtouse ol.step_list li:nth-child(1){
         background-image: url(/assets/images/step1_sp.jpg);
