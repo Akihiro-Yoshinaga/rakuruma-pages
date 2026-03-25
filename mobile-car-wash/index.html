@@ -53,6 +53,171 @@
     from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ===== 予約フォーム直接埋め込み用CSS ===== */
+#rakuruma-form-wrap {
+    --blue-dark: #1a3a5c;
+    --blue-mid: #2563a8;
+    --blue-light: #e8f0fb;
+    --accent: #2563a8;
+    --gray-100: #f5f7fa;
+    --gray-200: #e8ecf0;
+    --gray-400: #9aa3b2;
+    --gray-700: #4a5568;
+    --gray-900: #1a202c;
+    --white: #ffffff;
+    --danger: #e53e3e;
+    --success: #2f855a;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.10);
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    color: var(--gray-900);
+    padding: 16px;
+}
+#rakuruma-form-wrap .rf-spinner {
+    width: 44px; height: 44px;
+    border: 4px solid var(--gray-200);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: rfspin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+@keyframes rfspin { to { transform: rotate(360deg); } }
+#rakuruma-form-wrap .rf-loading {
+    text-align: center; padding: 40px 20px;
+}
+#rakuruma-form-wrap .rf-loading-text { font-size: 14px; color: var(--gray-700); }
+#rakuruma-form-wrap .rf-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 16px;
+    margin-top: 16px;
+}
+#rakuruma-form-wrap .rf-section-label {
+    font-size: 13px; font-weight: 700; color: var(--blue-mid);
+    letter-spacing: 0.08em; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+}
+#rakuruma-form-wrap .rf-section-label::before {
+    content: ''; display: block; width: 4px; height: 16px;
+    background: var(--accent); border-radius: 2px;
+}
+#rakuruma-form-wrap .rf-field { margin-bottom: 18px; }
+#rakuruma-form-wrap .rf-field:last-child { margin-bottom: 0; }
+#rakuruma-form-wrap .rf-field label {
+    display: block; font-size: 14px; font-weight: 600;
+    color: var(--gray-700); margin-bottom: 6px;
+}
+#rakuruma-form-wrap .rf-required {
+    display: inline-block; background: var(--danger); color: var(--white);
+    font-size: 10px; font-weight: 700; padding: 1px 5px;
+    border-radius: 4px; margin-left: 5px; vertical-align: middle;
+}
+#rakuruma-form-wrap input[type="text"],
+#rakuruma-form-wrap input[type="tel"],
+#rakuruma-form-wrap input[type="email"],
+#rakuruma-form-wrap input[type="datetime-local"],
+#rakuruma-form-wrap textarea {
+    width: 100%; padding: 14px; border: 1.5px solid var(--gray-200);
+    border-radius: 10px; font-size: 16px; color: var(--gray-900);
+    background: var(--gray-100); outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none; appearance: none;
+    font-family: inherit;
+}
+#rakuruma-form-wrap input:focus,
+#rakuruma-form-wrap textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,168,0.12);
+    background: var(--white);
+}
+#rakuruma-form-wrap .rf-field-error {
+    display: none; color: var(--danger); font-size: 12px; margin-top: 4px;
+}
+#rakuruma-form-wrap .rf-field.has-error input,
+#rakuruma-form-wrap .rf-field.has-error textarea { border-color: var(--danger); }
+#rakuruma-form-wrap .rf-field.has-error .rf-field-error { display: block; }
+#rakuruma-form-wrap .rf-check-row {
+    display: flex; align-items: flex-start; gap: 12px; padding: 14px;
+    background: var(--gray-100); border: 1.5px solid var(--gray-200);
+    border-radius: 10px; margin-bottom: 10px; cursor: pointer;
+}
+#rakuruma-form-wrap .rf-check-row input[type="checkbox"] {
+    width: 20px; height: 20px; min-width: 20px;
+    accent-color: var(--accent); margin-top: 1px; cursor: pointer;
+}
+#rakuruma-form-wrap .rf-check-label { font-size: 14px; font-weight: 600; color: var(--gray-900); line-height: 1.4; }
+#rakuruma-form-wrap .rf-check-note { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+#rakuruma-form-wrap .rf-check-price { font-size: 12px; color: var(--blue-mid); font-weight: 700; margin-top: 2px; }
+#rakuruma-form-wrap .rf-date-tabs {
+    display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px;
+    margin-bottom: 12px; scrollbar-width: none;
+}
+#rakuruma-form-wrap .rf-date-tabs::-webkit-scrollbar { display: none; }
+#rakuruma-form-wrap .rf-date-tab {
+    flex: 0 0 auto; background: var(--gray-100); border: 1.5px solid var(--gray-200);
+    border-radius: 10px; padding: 8px 14px; font-size: 13px; font-weight: 600;
+    color: var(--gray-700); cursor: pointer; text-align: center; min-width: 64px;
+    transition: all 0.15s;
+}
+#rakuruma-form-wrap .rf-date-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
+#rakuruma-form-wrap .rf-date-tab .rf-weekday { font-size: 10px; font-weight: 400; opacity: 0.75; display: block; }
+#rakuruma-form-wrap .rf-time-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+#rakuruma-form-wrap .rf-slot-btn {
+    background: var(--gray-100); border: 1.5px solid var(--gray-200);
+    border-radius: 10px; padding: 14px 4px; font-size: 15px; font-weight: 600;
+    color: var(--gray-700); cursor: pointer; text-align: center; transition: all 0.15s;
+}
+#rakuruma-form-wrap .rf-slot-btn.sel1 { background: var(--accent); border-color: var(--accent); color: var(--white); }
+#rakuruma-form-wrap .rf-slot-btn.sel2 { background: #e8f5e9; border-color: var(--success); color: var(--success); }
+#rakuruma-form-wrap .rf-slot-btn.disabled { opacity: 0.3; pointer-events: none; }
+#rakuruma-form-wrap .rf-selected-display {
+    margin-top: 14px; background: var(--blue-light); border-radius: 10px;
+    padding: 12px 14px; font-size: 13px; color: var(--blue-dark); line-height: 1.7;
+}
+#rakuruma-form-wrap .rf-clear-btn {
+    display: inline-block; margin-top: 4px; font-size: 12px; color: var(--gray-400);
+    cursor: pointer; text-decoration: underline; background: none; border: none; padding: 0;
+}
+#rakuruma-form-wrap .rf-slot-badge {
+    font-size: 11px; background: var(--blue-light); color: var(--blue-mid);
+    padding: 2px 8px; border-radius: 20px; font-weight: 600;
+}
+#rakuruma-form-wrap .rf-slot-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+#rakuruma-form-wrap .rf-fallback-notice {
+    display: none; background: #fff8e1; border: 1.5px solid #f6c90e;
+    border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #7a5c00; margin-bottom: 14px;
+}
+#rakuruma-form-wrap .rf-avail-note {
+    display: none; background: #fff8e1; border: 1.5px solid #f6c90e;
+    border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #7a5c00; margin-bottom: 14px;
+}
+#rakuruma-form-wrap .rf-submit-btn {
+    display: block; width: 100%; padding: 18px;
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-dark));
+    color: var(--white); border: none; border-radius: var(--radius);
+    font-size: 17px; font-weight: 800; letter-spacing: 0.04em;
+    cursor: pointer; margin-top: 24px;
+    box-shadow: 0 4px 14px rgba(37,99,168,0.35);
+    font-family: inherit;
+}
+#rakuruma-form-wrap .rf-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+#rakuruma-form-wrap .rf-success { display: none; text-align: center; padding: 48px 20px; }
+#rakuruma-form-wrap .rf-success-card {
+    background: var(--white); border-radius: 20px; box-shadow: var(--shadow); padding: 40px 24px; margin-top: 8px;
+}
+#rakuruma-form-wrap .rf-success-icon {
+    width: 72px; height: 72px; background: linear-gradient(135deg, #34a853, #1e8a3d);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; box-shadow: 0 4px 16px rgba(52,168,83,0.3);
+}
+#rakuruma-form-wrap .rf-success-icon svg { width: 36px; height: 36px; stroke: white; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+#rakuruma-form-wrap .rf-success-title { font-size: 19px; font-weight: 800; color: var(--gray-900); margin-bottom: 12px; line-height: 1.4; }
+#rakuruma-form-wrap .rf-success-body { font-size: 14px; color: var(--gray-700); line-height: 1.8; }
+#rakuruma-form-wrap .rf-hp { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -1119,46 +1284,399 @@
                         </div>
                     </div>
                     
-                    <!-- カレンダーとスクロールガイドのコンテナ -->
-                    <div id="calendar-container" style="position: relative; overscroll-behavior: contain;">
-                        <!-- Loading skeleton -->
-                        <div id="calendar-skeleton" style="width: 100%; height: 1100px; background: white; border-radius: 12px; padding: 30px; box-sizing: border-box;">
-                            <!-- Header skeleton -->
-                            <div style="margin-bottom: 30px;">
-                                <div style="height: 28px; width: 60%; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px; margin-bottom: 15px;"></div>
-                                <div style="height: 20px; width: 40%; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 4px;"></div>
-                            </div>
+                    <!-- 予約フォーム直接埋め込み -->
+                    <div id="calendar-container">
+                    <div id="rakuruma-form-wrap">
 
-                            <!-- Calendar grid skeleton -->
-                            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 20px;">
-                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
-                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
-                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
-                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
-                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
-                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
-                                <div style="height: 40px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 6px;"></div>
-                            </div>
+                      <!-- ローディング -->
+                      <div id="rf-loading" class="rf-loading">
+                        <div class="rf-spinner"></div>
+                        <p class="rf-loading-text">カレンダーの空き状況を確認中...</p>
+                      </div>
 
-                            <!-- Time slots skeleton -->
-                            <div style="display: flex; flex-direction: column; gap: 12px;">
-                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
-                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
-                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
-                                <div style="height: 60px; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeleton-loading 1.5s infinite; border-radius: 8px;"></div>
-                            </div>
-
-                            <!-- Loading text -->
-                            <div style="text-align: center; margin-top: 30px; color: #003B8B; font-size: 14px; font-weight: 600;">
-                                <div style="display: inline-block; width: 20px; height: 20px; border: 3px solid #f0f0f0; border-top-color: #003B8B; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; vertical-align: middle;"></div>
-                                カレンダーを読み込み中...
-                            </div>
+                      <!-- メインフォーム -->
+                      <form id="rf-form" style="display:none;" novalidate>
+                        <div class="rf-hp" aria-hidden="true">
+                          <input type="text" name="fax_number" tabindex="-1" autocomplete="off" />
                         </div>
 
-                        <!-- ラクルマ予約フォーム（GAS） -->
-                        <iframe id="calendar-iframe" src="https://script.google.com/macros/s/AKfycbzDkLU20ClA1Vj_A6aveb4zzbWeYN0_ebq-Lpxy-5tIh4mMVCrhRa49ZV-tzdqc4xsEaw/exec?form=lp" style="border: 0; display: none; width: 100%; height: 2500px;" width="100%" frameborder="0" scrolling="no"></iframe>
-                        <!-- end ラクルマ予約フォーム -->
-                        
+                        <!-- お客様情報 -->
+                        <div class="rf-card">
+                          <div class="rf-section-label">お客様情報</div>
+                          <div class="rf-field" id="rf-field-name">
+                            <label>お名前<span class="rf-required">必須</span></label>
+                            <input type="text" id="rf-name" placeholder="例：山田 太郎" autocomplete="name" />
+                            <div class="rf-field-error">お名前を入力してください</div>
+                          </div>
+                          <div class="rf-field" id="rf-field-phone">
+                            <label>電話番号<span class="rf-required">必須</span></label>
+                            <input type="tel" id="rf-phone" placeholder="例：09012345678（ハイフンなし）" autocomplete="tel" />
+                            <div class="rf-field-error" id="rf-phone-error">電話番号を入力してください</div>
+                          </div>
+                          <div class="rf-field" id="rf-field-email">
+                            <label>メールアドレス<span class="rf-required">必須</span></label>
+                            <input type="email" id="rf-email" placeholder="例：rakuruma@example.com" autocomplete="email" />
+                            <div class="rf-field-error">メールアドレスを入力してください</div>
+                          </div>
+                          <div class="rf-field" id="rf-field-address">
+                            <label>ご住所<span class="rf-required">必須</span></label>
+                            <input type="text" id="rf-address" placeholder="例：東京都世田谷区○○ 1-2-3" autocomplete="street-address" />
+                            <div class="rf-field-error">ご住所を入力してください</div>
+                          </div>
+                          <div class="rf-field" id="rf-field-car">
+                            <label>車種<span class="rf-required">必須</span></label>
+                            <input type="text" id="rf-car" placeholder="例：トヨタ アルファード" />
+                            <div class="rf-field-error">車種を入力してください</div>
+                          </div>
+
+                          <!-- 初回チェック -->
+                          <div class="rf-field" style="margin-bottom:18px;">
+                            <label class="rf-check-row" style="cursor:pointer;">
+                              <input type="checkbox" id="rf-first-time" value="はい" checked style="width:20px;height:20px;min-width:20px;accent-color:#2563a8;margin-top:1px;" />
+                              <div>
+                                <div class="rf-check-label">初めてのご利用</div>
+                                <div class="rf-check-note">初回限定価格が適用されます</div>
+                              </div>
+                            </label>
+                          </div>
+
+                          <!-- 室内清掃 -->
+                          <div class="rf-field" style="margin-bottom:18px;">
+                            <label class="rf-check-row" style="cursor:pointer;">
+                              <input type="checkbox" id="rf-indoor" value="希望する" style="width:20px;height:20px;min-width:20px;accent-color:#2563a8;margin-top:1px;" />
+                              <div>
+                                <div class="rf-check-label">室内清掃を希望する</div>
+                                <div class="rf-check-price">+2,200円</div>
+                                <div class="rf-check-note">※汚れがひどい場合、追加料金が発生する場合がございます</div>
+                              </div>
+                            </label>
+                          </div>
+
+                          <!-- ボディの状態 -->
+                          <div class="rf-field" style="margin-bottom:0;">
+                            <label style="margin-bottom:8px;">ボディの状態</label>
+                            <label class="rf-check-row" style="cursor:pointer;">
+                              <input type="checkbox" id="rf-dirty" value="はい" style="width:20px;height:20px;min-width:20px;accent-color:#2563a8;margin-top:1px;" />
+                              <div>
+                                <div class="rf-check-label">半年以上洗車していない / ひどく汚れている場合は✓</div>
+                                <div class="rf-check-note">※汚れがひどい場合、追加料金が発生する場合がございます</div>
+                              </div>
+                            </label>
+                          </div>
+
+                          <!-- 料金表示 -->
+                          <div id="rf-price-display" style="margin-top:18px; padding:16px; background:#e8f0fb; border-radius:10px; text-align:center;">
+                            <div style="font-size:13px;color:#2563a8;margin-bottom:4px;">ご利用料金（目安）</div>
+                            <div id="rf-price-total" style="font-size:28px;font-weight:900;color:#1a3a5c;">6,000円〜</div>
+                            <div style="font-size:11px;color:#9aa3b2;margin-top:4px;">※車の状態により変動する場合があります</div>
+                          </div>
+                        </div>
+
+                        <!-- 希望日時 -->
+                        <div class="rf-card">
+                          <div class="rf-section-label">ご希望日時</div>
+                          <div class="rf-fallback-notice" id="rf-fallback-notice">⚠️ 空き状況の自動取得ができませんでした。お手数ですが、希望日時を直接ご入力ください。</div>
+                          <div class="rf-avail-note" id="rf-avail-note">⚠️ 実際の空き状況を反映していますが、前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。</div>
+
+                          <div id="rf-slot-ui">
+                            <!-- 第1希望 -->
+                            <div style="margin-bottom:20px;">
+                              <div class="rf-slot-header">
+                                <label style="margin:0;">第1希望日時<span class="rf-required">必須</span></label>
+                                <span class="rf-slot-badge">● 第1希望</span>
+                              </div>
+                              <div class="rf-date-tabs" id="rf-date-tabs-1"></div>
+                              <div class="rf-time-slots" id="rf-time-slots-1"></div>
+                              <div id="rf-selected-1" class="rf-selected-display" style="display:none;"></div>
+                              <input type="hidden" id="rf-slot1-value" />
+                            </div>
+                            <!-- 第2希望 -->
+                            <div>
+                              <div class="rf-slot-header">
+                                <label style="margin:0;">第2希望日時<span class="rf-required">必須</span></label>
+                                <span class="rf-slot-badge" style="background:#e8f5e9;color:#2f855a;">● 第2希望</span>
+                              </div>
+                              <div class="rf-date-tabs" id="rf-date-tabs-2"></div>
+                              <div class="rf-time-slots" id="rf-time-slots-2"></div>
+                              <div id="rf-selected-2" class="rf-selected-display" style="display:none;"></div>
+                              <input type="hidden" id="rf-slot2-value" />
+                            </div>
+                          </div>
+
+                          <!-- フォールバック手入力 -->
+                          <div id="rf-fallback-ui" style="display:none;">
+                            <div class="rf-field" id="rf-field-slot1-manual">
+                              <label>第1希望日時<span class="rf-required">必須</span></label>
+                              <input type="datetime-local" id="rf-slot1-manual" />
+                              <div class="rf-field-error">第1希望日時を入力してください</div>
+                            </div>
+                            <div class="rf-field" id="rf-field-slot2-manual">
+                              <label>第2希望日時<span class="rf-required">必須</span></label>
+                              <input type="datetime-local" id="rf-slot2-manual" />
+                              <div class="rf-field-error">第2希望日時を入力してください</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- 補足 -->
+                        <div class="rf-card">
+                          <div class="rf-section-label">補足・ご要望</div>
+                          <div class="rf-field" style="margin-bottom:0;">
+                            <label>その他補足・ご要望</label>
+                            <textarea id="rf-note" rows="3" placeholder="気になること・ご要望などご自由にお書きください"></textarea>
+                          </div>
+                        </div>
+
+                        <button type="submit" class="rf-submit-btn" id="rf-submit-btn">予約リクエストを送信する →</button>
+                        <p style="text-align:center;font-size:12px;color:#9aa3b2;margin-top:12px;">送信後、ご登録いただいたメールアドレスにご連絡いたします</p>
+
+                        <!-- フリート向けリンク -->
+                        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e8ecf0;text-align:center;">
+                          <p style="font-size:13px;color:#9aa3b2;margin-bottom:12px;">複数台のご利用をご検討の法人・事業者様へ</p>
+                          <a href="/corporate_form/" style="display:inline-block;padding:12px 28px;border:1.5px solid #2563a8;border-radius:8px;font-size:14px;font-weight:600;color:#2563a8;text-decoration:none;">法人・フリート向けお問い合わせはこちら →</a>
+                        </div>
+                      </form>
+
+                      <!-- 完了画面 -->
+                      <div id="rf-success" class="rf-success">
+                        <div class="rf-success-card">
+                          <div class="rf-success-icon">
+                            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          </div>
+                          <div class="rf-success-title">予約リクエストを<br>受け付けました！</div>
+                          <div class="rf-success-body">お申し込みありがとうございます。<br>担当者より <strong style="color:#2563a8;">ご登録いただいたメールアドレス</strong> にご連絡いたします。</div>
+                        </div>
+                      </div>
+
+                    </div><!-- /rakuruma-form-wrap -->
+                    </div><!-- /calendar-container -->
+
+                    <script>
+                    (function() {
+                      const GAS_URL = 'https://script.google.com/macros/s/AKfycbzDkLU20ClA1Vj_A6aveb4zzbWeYN0_ebq-Lpxy-5tIh4mMVCrhRa49ZV-tzdqc4xsEaw/exec';
+                      const WEEKDAYS = ['日','月','火','水','木','金','土'];
+                      let availabilityData = [];
+                      let isFallbackMode = false;
+                      const selection = { 1: { date: null, time: null }, 2: { date: null, time: null } };
+                      const activeDateIndex = { 1: 0, 2: 0 };
+
+                      // localStorageから復元
+                      const saved = {
+                        name:    localStorage.getItem('rakuruma_name'),
+                        phone:   localStorage.getItem('rakuruma_phone'),
+                        email:   localStorage.getItem('rakuruma_email'),
+                        address: localStorage.getItem('rakuruma_address'),
+                      };
+                      if (saved.name)    document.getElementById('rf-name').value    = saved.name;
+                      if (saved.phone)   document.getElementById('rf-phone').value   = saved.phone;
+                      if (saved.email)   document.getElementById('rf-email').value   = saved.email;
+                      if (saved.address) document.getElementById('rf-address').value = saved.address;
+
+                      // 空き状況取得
+                      function fetchOnce(ms) {
+                        return Promise.race([
+                          fetch(GAS_URL).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
+                          new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))
+                        ]);
+                      }
+                      function fetchWithRetry(max, ms, n) {
+                        n = n || 1;
+                        if (n > 1) document.querySelector('.rf-loading-text').textContent = `空き状況を確認中... (${n}/${max})`;
+                        fetchOnce(ms)
+                          .then(data => {
+                            if (data.error) throw new Error();
+                            availabilityData = data.availability || [];
+                            showForm();
+                            if (availabilityData.length > 0) {
+                              document.getElementById('rf-avail-note').style.display = 'block';
+                              renderSlotUI();
+                            } else { showFallback(); }
+                          })
+                          .catch(() => {
+                            if (n < max) setTimeout(() => fetchWithRetry(max, ms, n + 1), 1000);
+                            else { showForm(); showFallback(); }
+                          });
+                      }
+                      fetchWithRetry(3, 8000);
+
+                      function showForm() {
+                        document.getElementById('rf-loading').style.display = 'none';
+                        document.getElementById('rf-form').style.display = 'block';
+                      }
+                      function showFallback() {
+                        isFallbackMode = true;
+                        document.getElementById('rf-fallback-notice').style.display = 'block';
+                        document.getElementById('rf-slot-ui').style.display = 'none';
+                        document.getElementById('rf-fallback-ui').style.display = 'block';
+                      }
+
+                      function renderSlotUI() {
+                        [1, 2].forEach(p => { renderDateTabs(p); renderTimeSlots(p, activeDateIndex[p]); });
+                      }
+                      function renderDateTabs(pref) {
+                        const c = document.getElementById(`rf-date-tabs-${pref}`);
+                        c.innerHTML = '';
+                        availabilityData.forEach((day, idx) => {
+                          const d = new Date(day.date + 'T00:00:00');
+                          const btn = document.createElement('button');
+                          btn.type = 'button';
+                          btn.className = 'rf-date-tab' + (idx === activeDateIndex[pref] ? ' active' : '');
+                          btn.innerHTML = `${d.getMonth()+1}/${d.getDate()}<span class="rf-weekday">${WEEKDAYS[d.getDay()]}</span>`;
+                          btn.addEventListener('click', () => { activeDateIndex[pref] = idx; renderDateTabs(pref); renderTimeSlots(pref, idx); });
+                          c.appendChild(btn);
+                        });
+                      }
+                      function renderTimeSlots(pref, dateIdx) {
+                        const c = document.getElementById(`rf-time-slots-${pref}`);
+                        c.innerHTML = '';
+                        const day = availabilityData[dateIdx];
+                        if (!day || day.slots.length === 0) {
+                          c.innerHTML = '<p style="font-size:13px;color:#9aa3b2;grid-column:1/-1;padding:8px 0;">この日の空き枠はありません</p>';
+                          return;
+                        }
+                        const other = pref === 1 ? 2 : 1;
+                        day.slots.forEach(time => {
+                          const btn = document.createElement('button');
+                          btn.type = 'button';
+                          btn.className = 'rf-slot-btn';
+                          btn.textContent = time;
+                          if (selection[other].date === day.date && selection[other].time === time) btn.classList.add('disabled');
+                          if (selection[pref].date === day.date && selection[pref].time === time) btn.classList.add(`sel${pref}`);
+                          btn.addEventListener('click', () => selectSlot(pref, day.date, time));
+                          c.appendChild(btn);
+                        });
+                      }
+                      function selectSlot(pref, date, time) {
+                        if (selection[pref].date === date && selection[pref].time === time) {
+                          selection[pref] = { date: null, time: null };
+                        } else { selection[pref] = { date, time }; }
+                        const d = new Date(date + 'T00:00:00');
+                        const label = `${d.getMonth()+1}/${d.getDate()}(${WEEKDAYS[d.getDay()]})`;
+                        document.getElementById(`rf-slot${pref}-value`).value = selection[pref].date ? `${label} ${time}` : '';
+                        updateSelectedDisplay(pref);
+                        [1, 2].forEach(p => { renderDateTabs(p); renderTimeSlots(p, activeDateIndex[p]); });
+                      }
+                      function updateSelectedDisplay(pref) {
+                        const el = document.getElementById(`rf-selected-${pref}`);
+                        const s = selection[pref];
+                        if (s.date && s.time) {
+                          const d = new Date(s.date + 'T00:00:00');
+                          const lbl = pref === 1 ? '第1希望' : '第2希望';
+                          el.style.display = 'block';
+                          el.innerHTML = `<strong>${lbl}：</strong>${d.getMonth()+1}/${d.getDate()}(${WEEKDAYS[d.getDay()]}) ${s.time}<br><button class="rf-clear-btn" onclick="rfClearSlot(${pref})">× クリア</button>`;
+                        } else { el.style.display = 'none'; }
+                      }
+                      window.rfClearSlot = function(pref) {
+                        selection[pref] = { date: null, time: null };
+                        document.getElementById(`rf-slot${pref}-value`).value = '';
+                        updateSelectedDisplay(pref);
+                        [1, 2].forEach(p => { renderDateTabs(p); renderTimeSlots(p, activeDateIndex[p]); });
+                      };
+
+                      // 料金計算
+                      function updatePrice() {
+                        const isFirst = document.getElementById('rf-first-time').checked;
+                        const hasIndoor = document.getElementById('rf-indoor').checked;
+                        const isDirty = document.getElementById('rf-dirty').checked;
+                        const display = document.getElementById('rf-price-display');
+                        if (!isFirst) { display.style.display = 'none'; return; }
+                        display.style.display = 'block';
+                        const total = 6000 + (hasIndoor ? 2200 : 0);
+                        document.getElementById('rf-price-total').textContent = total.toLocaleString() + (isDirty ? '円〜' : '円');
+                      }
+                      document.getElementById('rf-first-time').addEventListener('change', updatePrice);
+                      document.getElementById('rf-indoor').addEventListener('change', updatePrice);
+                      document.getElementById('rf-dirty').addEventListener('change', updatePrice);
+                      updatePrice();
+
+                      // 送信
+                      document.getElementById('rf-form').addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        if (!validate()) return;
+                        const btn = document.getElementById('rf-submit-btn');
+                        btn.disabled = true;
+                        btn.textContent = '送信中...';
+                        if (document.querySelector('input[name="fax_number"]').value) { showSuccess(); return; }
+                        const data = {
+                          name:            document.getElementById('rf-name').value.trim(),
+                          phone:           document.getElementById('rf-phone').value.trim(),
+                          email:           document.getElementById('rf-email').value.trim(),
+                          address:         document.getElementById('rf-address').value.trim(),
+                          car:             document.getElementById('rf-car').value.trim(),
+                          menu:            '出張洗車',
+                          first_time:      document.getElementById('rf-first-time').checked ? 'はい' : '',
+                          indoor_cleaning: document.getElementById('rf-indoor').checked ? '希望する' : '',
+                          heavily_dirty:   document.getElementById('rf-dirty').checked ? 'はい' : '',
+                          slot1: isFallbackMode ? document.getElementById('rf-slot1-manual').value : document.getElementById('rf-slot1-value').value,
+                          slot2: isFallbackMode ? document.getElementById('rf-slot2-manual').value : document.getElementById('rf-slot2-value').value,
+                          note: document.getElementById('rf-note').value.trim(),
+                        };
+                        fetch(GAS_URL + '?payload=' + encodeURIComponent(JSON.stringify(data)), { method: 'GET', mode: 'no-cors' })
+                          .then(() => {
+                            localStorage.setItem('rakuruma_name',    data.name);
+                            localStorage.setItem('rakuruma_phone',   data.phone);
+                            localStorage.setItem('rakuruma_email',   data.email);
+                            localStorage.setItem('rakuruma_address', data.address);
+                            showSuccess();
+                          })
+                          .catch(() => {
+                            btn.disabled = false;
+                            btn.textContent = '予約リクエストを送信する →';
+                            alert('送信に失敗しました。通信状況を確認して再度お試しください。');
+                          });
+                      });
+
+                      function validate() {
+                        let ok = true;
+                        [
+                          { id: 'rf-field-name',    val: () => document.getElementById('rf-name').value.trim() },
+                          { id: 'rf-field-phone',   val: () => document.getElementById('rf-phone').value.trim() },
+                          { id: 'rf-field-email',   val: () => document.getElementById('rf-email').value.trim() },
+                          { id: 'rf-field-address', val: () => document.getElementById('rf-address').value.trim() },
+                          { id: 'rf-field-car',     val: () => document.getElementById('rf-car').value.trim() },
+                        ].forEach(({ id, val }) => {
+                          const f = document.getElementById(id);
+                          if (!val()) { f.classList.add('has-error'); ok = false; }
+                          else f.classList.remove('has-error');
+                        });
+                        const phoneVal = document.getElementById('rf-phone').value.trim();
+                        if (phoneVal && /^\+/.test(phoneVal)) {
+                          document.getElementById('rf-field-phone').classList.add('has-error');
+                          document.getElementById('rf-phone-error').textContent = '「090...」など国内番号形式でご入力ください';
+                          ok = false;
+                        }
+                        if (!isFallbackMode) {
+                          [1, 2].forEach(pref => {
+                            if (!document.getElementById(`rf-slot${pref}-value`).value) {
+                              const el = document.getElementById(`rf-time-slots-${pref}`);
+                              el.style.outline = '2px solid #e53e3e';
+                              el.style.borderRadius = '10px';
+                              setTimeout(() => { el.style.outline = ''; }, 1500);
+                              ok = false;
+                            }
+                          });
+                        } else {
+                          [1, 2].forEach(pref => {
+                            const f = document.getElementById(`rf-field-slot${pref}-manual`);
+                            if (!document.getElementById(`rf-slot${pref}-manual`).value) { f.classList.add('has-error'); ok = false; }
+                            else f.classList.remove('has-error');
+                          });
+                        }
+                        if (!ok) {
+                          const first = document.querySelector('.has-error');
+                          if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        return ok;
+                      }
+
+                      function showSuccess() {
+                        document.getElementById('rf-form').style.display = 'none';
+                        document.getElementById('rf-success').style.display = 'block';
+                        document.getElementById('calendar-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    })();
+                    </script>
+
                         <!-- LINEから予約可能の案内 -->
                         <div style="margin: 20px 20px 0; padding: 20px 25px; background: linear-gradient(135deg, rgba(6, 199, 85, 0.05) 0%, rgba(6, 199, 85, 0.08) 100%); border-left: 4px solid #06C755; border-radius: 12px; text-align: center;">
                             <!-- 上部の目立つメッセージ -->
@@ -1322,48 +1840,6 @@
                                     console.error('Required elements not found);
                                 }
                             }, 500); // 500ms遅延
-                        });
-                    </script>
-
-                    <!-- Calendar skeleton hide script -->
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const calendarIframe = document.getElementById('calendar-iframe');
-                            const calendarSkeleton = document.getElementById('calendar-skeleton');
-
-                            if (calendarIframe && calendarSkeleton) {
-                                let hasLoaded = false;
-
-                                // iframe読み込み完了時にスケルトンを非表示
-                                calendarIframe.addEventListener('load', function() {
-                                    if (!hasLoaded) {
-                                        hasLoaded = true;
-                                        setTimeout(() => {
-                                            calendarSkeleton.style.display = 'none';
-                                            calendarIframe.style.display = 'block';
-                                        }, 300);
-                                    }
-                                });
-
-                                // 安全策: 5秒経ってもloadイベントが発火しない場合は強制的に切り替え
-                                setTimeout(() => {
-                                    if (!hasLoaded) {
-                                        hasLoaded = true;
-                                        calendarSkeleton.style.display = 'none';
-                                        calendarIframe.style.display = 'block';
-                                    }
-                                }, 5000);
-                            }
-                        });
-
-                        // GAS側からpostMessageでコンテンツ高さを受け取り、iframeを動的リサイズ
-                        window.addEventListener('message', function(event) {
-                            if (event.data && event.data.type === 'rakuruma-resize') {
-                                const iframe = document.getElementById('calendar-iframe');
-                                if (iframe) {
-                                    iframe.style.height = event.data.height + 'px';
-                                }
-                            }
                         });
                     </script>
 
