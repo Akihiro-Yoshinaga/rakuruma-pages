@@ -492,9 +492,18 @@ for smartphone
     padding: 30px 25px;
     margin-bottom: 0;
     text-align: center;
-    position: relative;
 }
-.howtouse_plan ol li + li::before {
+.howtouse_plan ol li + li {
+    margin-top: 0;
+}
+/* STEPカード間の▼矢印 */
+.howtouse_plan .step_arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0;
+}
+.howtouse_plan .step_arrow::after {
     content: '';
     display: block;
     width: 0;
@@ -502,7 +511,6 @@ for smartphone
     border-left: 16px solid transparent;
     border-right: 16px solid transparent;
     border-top: 20px solid #003B8B;
-    margin: 16px auto;
 }
 .howtouse_plan ol li .step_number {
     width: 148px;
