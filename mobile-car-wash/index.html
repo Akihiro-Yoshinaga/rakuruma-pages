@@ -1355,6 +1355,16 @@
                                 }, 5000);
                             }
                         });
+
+                        // GAS側からpostMessageでコンテンツ高さを受け取り、iframeを動的リサイズ
+                        window.addEventListener('message', function(event) {
+                            if (event.data && event.data.type === 'rakuruma-resize') {
+                                const iframe = document.getElementById('calendar-iframe');
+                                if (iframe) {
+                                    iframe.style.height = event.data.height + 'px';
+                                }
+                            }
+                        });
                     </script>
 
                     <!-- 予約フォーム下部の補足 -->
@@ -1375,7 +1385,7 @@
             <ol class="step_list colorfont_w">
                 <li class="flexbox">
                     <div class="subhead fontll"><span class="montserrat fontm">STEP 1</span><br>初回お申込み</div>
-                    <p class="fonts"><a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0-U5ieKvac0LHUZMHtF7H2-qoYR0MrzopxjXO_-FclFF16g9Ww9TRiIF6aUY42xcyDXXPDCVlp" target="_blank" rel="noopener noreferrer" style="color: #F4D110; font-weight: bold;">カレンダー</a>より日付→時間をタップし、詳細をご入力いただければ予約が完了します。</p>
+                    <p class="fonts"><a href="#calendar-container" style="color: #F4D110; font-weight: bold;">カレンダー</a>より日付→時間をタップし、詳細をご入力いただければ予約が完了します。</p>
                 </li>
                 <li class="flexbox">
                     <div class="subhead fontll"><span class="montserrat fontm">STEP 2</span><br>訪問</div>
