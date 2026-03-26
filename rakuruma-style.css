@@ -1422,7 +1422,7 @@ for smartphone
     .howtouse ol.step_list li{
         height: 320px;
         flex-direction: column;
-        background-position: center;
+        background-position: 30% center;
     }
     .howtouse ol.step_list li:nth-child(1){
         background-image: url(/assets/images/step1_sp.jpg);
