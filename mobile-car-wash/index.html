@@ -1324,6 +1324,11 @@
                           <div class="rf-fallback-notice" id="rf-fallback-notice">⚠️ 空き状況の自動取得ができませんでした。お手数ですが、希望日時を直接ご入力ください。</div>
 
                           <div id="rf-slot-ui">
+                            <!-- 空き状況取得完了バッジ -->
+                            <div id="rf-fetched-badge" style="display:none; margin:0 0 16px; padding:10px 14px; background:#e8f5e9; border:1.5px solid #34a853; border-radius:10px; align-items:center; gap:8px;">
+                              <span style="font-size:18px;">✅</span>
+                              <div style="font-size:13px;font-weight:700;color:#1e8a3d;">空き状況を取得しました（<span id="rf-fetched-time"></span>）</div>
+                            </div>
                             <!-- 第1希望 -->
                             <div style="margin-bottom:20px;">
                               <div class="rf-slot-header">
@@ -1348,14 +1353,8 @@
                             </div>
                           </div>
 
-                          <!-- 空き状況取得完了バッジ＋注意文 -->
-                          <div id="rf-fetched-badge" style="display:none; margin:14px 0 0; padding:10px 14px; background:#e8f5e9; border:1.5px solid #34a853; border-radius:10px; align-items:center; gap:8px;">
-                            <span style="font-size:18px;">✅</span>
-                            <div>
-                              <div style="font-size:13px;font-weight:700;color:#1e8a3d;">空き状況を取得しました（<span id="rf-fetched-time"></span>）</div>
-                              <div class="rf-avail-note" id="rf-avail-note" style="display:none; font-size:12px; color:#7a5c00; margin-top:4px; background:none; border:none; padding:0;">⚠️ 前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。</div>
-                            </div>
-                          </div>
+                          <!-- 注意文 -->
+                          <div class="rf-avail-note" id="rf-avail-note" style="display:none; background:#fff8e1; border:1.5px solid #f6c90e; border-radius:10px; padding:12px 14px; font-size:13px; color:#7a5c00; margin-top:14px;">⚠️ 前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。</div>
 
                           <!-- フォールバック手入力 -->
                           <div id="rf-fallback-ui" style="display:none;">
