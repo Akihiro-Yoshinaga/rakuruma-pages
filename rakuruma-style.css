@@ -868,6 +868,9 @@ plan
     left: 50%;
     transform: translateX(-50%);
 }
+.plan .plan_container .plan_middle .plan_box--single::after{
+    display: none;
+}
 .plan .plan_container .plan_middle .plan_box p span{
     display: block;
 }
