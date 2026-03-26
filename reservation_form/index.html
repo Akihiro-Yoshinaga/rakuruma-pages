@@ -497,6 +497,71 @@
       <input type="text" name="fax_number" tabindex="-1" autocomplete="off" />
     </div>
 
+    <!-- 希望日時 -->
+    <div class="card">
+      <div class="section-label">ご希望日時</div>
+
+      <!-- フォールバック通知 -->
+      <div id="fallback-notice">
+        ⚠️ 空き状況の自動取得ができませんでした。<br>
+        お手数ですが、希望日時を直接ご入力ください。
+      </div>
+
+      <!-- === 空き状況ボタンUI === -->
+      <div id="slot-ui">
+
+        <!-- 空き状況取得完了バッジ -->
+        <div id="fetched-badge" style="display:none; margin:0 0 16px; padding:10px 14px; background:#e8f5e9; border:1.5px solid #34a853; border-radius:10px; align-items:center; gap:8px;">
+          <span style="font-size:18px;">✅</span>
+          <div style="font-size:13px;font-weight:700;color:#1e8a3d;">空き状況を取得しました（<span id="fetched-time"></span>）</div>
+        </div>
+
+        <!-- 第1希望 -->
+        <div class="datetime-section" style="margin-bottom:20px;">
+          <div class="slot-header">
+            <label style="margin:0;">第1希望日時<span class="required-badge">必須</span></label>
+            <span class="slot-badge">● 第1希望</span>
+          </div>
+          <div class="date-tabs" id="date-tabs-1"></div>
+          <div class="time-slots" id="time-slots-1"></div>
+          <div id="selected-display-1" class="selected-display" style="display:none;"></div>
+          <input type="hidden" id="slot1-value" name="slot1" />
+        </div>
+
+        <!-- 第2希望 -->
+        <div class="datetime-section">
+          <div class="slot-header">
+            <label style="margin:0;">第2希望日時<span class="required-badge">必須</span></label>
+            <span class="slot-badge" style="background:#e8f5e9;color:var(--success);">● 第2希望</span>
+          </div>
+          <div class="date-tabs" id="date-tabs-2"></div>
+          <div class="time-slots" id="time-slots-2"></div>
+          <div id="selected-display-2" class="selected-display" style="display:none;"></div>
+          <input type="hidden" id="slot2-value" name="slot2" />
+        </div>
+      </div>
+
+      <!-- 注意文 -->
+      <div id="slot-availability-note" style="display:none; background:#fff8e1; border:1.5px solid #f6c90e; border-radius:10px; padding:12px 14px; font-size:13px; color:#7a5c00; margin-top:14px;">
+        ⚠️ 前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。
+      </div>
+
+      <!-- === フォールバック（手入力）UI === -->
+      <div id="fallback-ui" style="display:none;">
+        <div class="field" id="field-slot1-manual">
+          <label for="slot1-manual">第1希望日時<span class="required-badge">必須</span></label>
+          <input type="datetime-local" id="slot1-manual" name="slot1-manual" />
+          <div class="field-error">第1希望日時を入力してください</div>
+        </div>
+        <div class="field" id="field-slot2-manual">
+          <label for="slot2-manual">第2希望日時<span class="required-badge">必須</span></label>
+          <input type="datetime-local" id="slot2-manual" name="slot2-manual" />
+          <div class="field-error">第2希望日時を入力してください</div>
+        </div>
+      </div>
+
+    </div>
+
     <!-- お客様情報 -->
     <div class="card">
       <div class="section-label">お客様情報</div>
@@ -515,7 +580,7 @@
 
       <div class="field" id="field-phone">
         <label for="phone">電話番号<span class="required-badge">必須</span></label>
-        <input type="tel" id="phone" name="phone" placeholder="例：09012345678（ハイフンなし）" autocomplete="tel" />
+        <input type="tel" id="phone" name="phone" placeholder="例：09012345678" autocomplete="tel" />
         <div class="field-error" id="phone-error">電話番号を入力してください</div>
       </div>
 
@@ -661,65 +726,6 @@
       </div>
     </div>
 
-    <!-- 希望日時 -->
-    <div class="card">
-      <div class="section-label">ご希望日時</div>
-
-      <!-- フォールバック通知 -->
-      <div id="fallback-notice">
-        ⚠️ 空き状況の自動取得ができませんでした。<br>
-        お手数ですが、希望日時を直接ご入力ください。
-      </div>
-
-      <!-- 空き状況の補足 -->
-      <div id="slot-availability-note" style="display:none; background:#fff8e1; border:1.5px solid #f6c90e; border-radius:10px; padding:12px 14px; font-size:13px; color:#7a5c00; margin-bottom:14px;">
-        ⚠️ 実際の空き状況を反映していますが、前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。
-      </div>
-
-      <!-- === 空き状況ボタンUI === -->
-      <div id="slot-ui">
-
-        <!-- 第1希望 -->
-        <div class="datetime-section" style="margin-bottom:20px;">
-          <div class="slot-header">
-            <label style="margin:0;">第1希望日時<span class="required-badge">必須</span></label>
-            <span class="slot-badge">● 第1希望</span>
-          </div>
-          <div class="date-tabs" id="date-tabs-1"></div>
-          <div class="time-slots" id="time-slots-1"></div>
-          <div id="selected-display-1" class="selected-display" style="display:none;"></div>
-          <input type="hidden" id="slot1-value" name="slot1" />
-        </div>
-
-        <!-- 第2希望 -->
-        <div class="datetime-section">
-          <div class="slot-header">
-            <label style="margin:0;">第2希望日時<span class="required-badge">必須</span></label>
-            <span class="slot-badge" style="background:#e8f5e9;color:var(--success);">● 第2希望</span>
-          </div>
-          <div class="date-tabs" id="date-tabs-2"></div>
-          <div class="time-slots" id="time-slots-2"></div>
-          <div id="selected-display-2" class="selected-display" style="display:none;"></div>
-          <input type="hidden" id="slot2-value" name="slot2" />
-        </div>
-      </div>
-
-      <!-- === フォールバック（手入力）UI === -->
-      <div id="fallback-ui" style="display:none;">
-        <div class="field" id="field-slot1-manual">
-          <label for="slot1-manual">第1希望日時<span class="required-badge">必須</span></label>
-          <input type="datetime-local" id="slot1-manual" name="slot1-manual" />
-          <div class="field-error">第1希望日時を入力してください</div>
-        </div>
-        <div class="field" id="field-slot2-manual">
-          <label for="slot2-manual">第2希望日時<span class="required-badge">必須</span></label>
-          <input type="datetime-local" id="slot2-manual" name="slot2-manual" />
-          <div class="field-error">第2希望日時を入力してください</div>
-        </div>
-      </div>
-
-    </div>
-
     <!-- 送信ボタン -->
     <button type="submit" class="submit-btn" id="submit-btn">予約リクエストを送信する →</button>
 
@@ -786,6 +792,14 @@
     if (saved.email)   document.getElementById('email').value   = saved.email;
     if (saved.car)     document.getElementById('car').value     = saved.car;
     if (saved.address) document.getElementById('address').value = saved.address;
+
+    document.getElementById('phone').addEventListener('input', function() {
+      var pos = this.selectionStart;
+      var before = this.value;
+      this.value = before.replace(/[－\-ー]/g, '');
+      var removed = before.length - this.value.length;
+      this.setSelectionRange(pos - removed, pos - removed);
+    });
 
     fetchWithRetry(3, 8000);
   });
@@ -871,7 +885,7 @@
       .then(data => {
         if (data.error) throw new Error(data.error);
         availabilityData = data.availability || [];
-        showForm();
+        showForm(true);
         document.getElementById('slot-availability-note').style.display = 'block';
         renderSlotUI();
       })
@@ -887,9 +901,20 @@
       });
   }
 
-  function showForm() {
+  function showForm(success) {
     document.getElementById('loading-section').style.display = 'none';
     document.getElementById('reservation-form').style.display = 'block';
+    if (success) {
+      var badge = document.getElementById('fetched-badge');
+      var timeEl = document.getElementById('fetched-time');
+      var now = new Date();
+      var m = now.getMonth() + 1;
+      var d = now.getDate();
+      var hh = now.getHours();
+      var mm = String(now.getMinutes()).padStart(2, '0');
+      timeEl.textContent = m + '月' + d + '日 ' + hh + '時' + mm + '分';
+      badge.style.display = 'flex';
+    }
   }
 
   function showFallback() {
