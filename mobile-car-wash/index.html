@@ -1318,6 +1318,61 @@
                           <input type="text" name="fax_number" tabindex="-1" autocomplete="off" />
                         </div>
 
+                        <!-- 空き状況取得完了バッジ -->
+                        <div id="rf-fetched-badge" style="display:none; margin:16px 16px 0; padding:10px 14px; background:#e8f5e9; border:1.5px solid #34a853; border-radius:10px; align-items:center; gap:8px;">
+                          <span style="font-size:18px;">✅</span>
+                          <div>
+                            <div style="font-size:13px;font-weight:700;color:#1e8a3d;">空き状況を取得しました</div>
+                            <div id="rf-fetched-time" style="font-size:11px;color:#2f855a;margin-top:2px;"></div>
+                          </div>
+                        </div>
+
+                        <!-- 希望日時（最初に表示） -->
+                        <div class="rf-card">
+                          <div class="rf-section-label">ご希望日時</div>
+                          <div class="rf-fallback-notice" id="rf-fallback-notice">⚠️ 空き状況の自動取得ができませんでした。お手数ですが、希望日時を直接ご入力ください。</div>
+                          <div class="rf-avail-note" id="rf-avail-note" style="display:none; background:#fff8e1; border:1.5px solid #f6c90e; border-radius:10px; padding:12px 14px; font-size:13px; color:#7a5c00; margin-bottom:14px;">⚠️ 実際の空き状況を反映していますが、前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。</div>
+
+                          <div id="rf-slot-ui">
+                            <!-- 第1希望 -->
+                            <div style="margin-bottom:20px;">
+                              <div class="rf-slot-header">
+                                <label style="margin:0;">第1希望日時<span class="rf-required">必須</span></label>
+                                <span class="rf-slot-badge">● 第1希望</span>
+                              </div>
+                              <div class="rf-date-tabs" id="rf-date-tabs-1"></div>
+                              <div class="rf-time-slots" id="rf-time-slots-1"></div>
+                              <div id="rf-selected-1" class="rf-selected-display" style="display:none;"></div>
+                              <input type="hidden" id="rf-slot1-value" />
+                            </div>
+                            <!-- 第2希望 -->
+                            <div>
+                              <div class="rf-slot-header">
+                                <label style="margin:0;">第2希望日時<span class="rf-required">必須</span></label>
+                                <span class="rf-slot-badge" style="background:#e8f5e9;color:#2f855a;">● 第2希望</span>
+                              </div>
+                              <div class="rf-date-tabs" id="rf-date-tabs-2"></div>
+                              <div class="rf-time-slots" id="rf-time-slots-2"></div>
+                              <div id="rf-selected-2" class="rf-selected-display" style="display:none;"></div>
+                              <input type="hidden" id="rf-slot2-value" />
+                            </div>
+                          </div>
+
+                          <!-- フォールバック手入力 -->
+                          <div id="rf-fallback-ui" style="display:none;">
+                            <div class="rf-field" id="rf-field-slot1-manual">
+                              <label>第1希望日時<span class="rf-required">必須</span></label>
+                              <input type="datetime-local" id="rf-slot1-manual" />
+                              <div class="rf-field-error">第1希望日時を入力してください</div>
+                            </div>
+                            <div class="rf-field" id="rf-field-slot2-manual">
+                              <label>第2希望日時<span class="rf-required">必須</span></label>
+                              <input type="datetime-local" id="rf-slot2-manual" />
+                              <div class="rf-field-error">第2希望日時を入力してください</div>
+                            </div>
+                          </div>
+                        </div>
+
                         <!-- お客様情報 -->
                         <div class="rf-card">
                           <div class="rf-section-label">お客様情報</div>
@@ -1390,52 +1445,6 @@
                           </div>
                         </div>
 
-                        <!-- 希望日時 -->
-                        <div class="rf-card">
-                          <div class="rf-section-label">ご希望日時</div>
-                          <div class="rf-fallback-notice" id="rf-fallback-notice">⚠️ 空き状況の自動取得ができませんでした。お手数ですが、希望日時を直接ご入力ください。</div>
-                          <div class="rf-avail-note" id="rf-avail-note">⚠️ 実際の空き状況を反映していますが、前後の作業場所によってはご希望に添えない場合がございます。その際は別日程をご提案いたします。</div>
-
-                          <div id="rf-slot-ui">
-                            <!-- 第1希望 -->
-                            <div style="margin-bottom:20px;">
-                              <div class="rf-slot-header">
-                                <label style="margin:0;">第1希望日時<span class="rf-required">必須</span></label>
-                                <span class="rf-slot-badge">● 第1希望</span>
-                              </div>
-                              <div class="rf-date-tabs" id="rf-date-tabs-1"></div>
-                              <div class="rf-time-slots" id="rf-time-slots-1"></div>
-                              <div id="rf-selected-1" class="rf-selected-display" style="display:none;"></div>
-                              <input type="hidden" id="rf-slot1-value" />
-                            </div>
-                            <!-- 第2希望 -->
-                            <div>
-                              <div class="rf-slot-header">
-                                <label style="margin:0;">第2希望日時<span class="rf-required">必須</span></label>
-                                <span class="rf-slot-badge" style="background:#e8f5e9;color:#2f855a;">● 第2希望</span>
-                              </div>
-                              <div class="rf-date-tabs" id="rf-date-tabs-2"></div>
-                              <div class="rf-time-slots" id="rf-time-slots-2"></div>
-                              <div id="rf-selected-2" class="rf-selected-display" style="display:none;"></div>
-                              <input type="hidden" id="rf-slot2-value" />
-                            </div>
-                          </div>
-
-                          <!-- フォールバック手入力 -->
-                          <div id="rf-fallback-ui" style="display:none;">
-                            <div class="rf-field" id="rf-field-slot1-manual">
-                              <label>第1希望日時<span class="rf-required">必須</span></label>
-                              <input type="datetime-local" id="rf-slot1-manual" />
-                              <div class="rf-field-error">第1希望日時を入力してください</div>
-                            </div>
-                            <div class="rf-field" id="rf-field-slot2-manual">
-                              <label>第2希望日時<span class="rf-required">必須</span></label>
-                              <input type="datetime-local" id="rf-slot2-manual" />
-                              <div class="rf-field-error">第2希望日時を入力してください</div>
-                            </div>
-                          </div>
-                        </div>
-
                         <!-- 補足 -->
                         <div class="rf-card">
                           <div class="rf-section-label">補足・ご要望</div>
@@ -1504,7 +1513,7 @@
                           .then(data => {
                             if (data.error) throw new Error();
                             availabilityData = data.availability || [];
-                            showForm();
+                            showForm(true);
                             if (availabilityData.length > 0) {
                               document.getElementById('rf-avail-note').style.display = 'block';
                               renderSlotUI();
@@ -1517,9 +1526,20 @@
                       }
                       fetchWithRetry(3, 8000);
 
-                      function showForm() {
+                      function showForm(success) {
                         document.getElementById('rf-loading').style.display = 'none';
                         document.getElementById('rf-form').style.display = 'block';
+                        if (success) {
+                          var badge = document.getElementById('rf-fetched-badge');
+                          var timeEl = document.getElementById('rf-fetched-time');
+                          var now = new Date();
+                          var m = now.getMonth() + 1;
+                          var d = now.getDate();
+                          var hh = now.getHours();
+                          var mm = String(now.getMinutes()).padStart(2, '0');
+                          timeEl.textContent = m + '月' + d + '日 ' + hh + '時' + mm + '分時点';
+                          badge.style.display = 'flex';
+                        }
                       }
                       function showFallback() {
                         isFallbackMode = true;
