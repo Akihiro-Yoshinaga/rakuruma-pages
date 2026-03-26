@@ -1413,6 +1413,7 @@ for smartphone
     .howtouse{
         padding-left: 0;
         padding-right: 0;
+        overflow: hidden;
     }
     .howtouse ol.step_list{
         margin-top: 35px;
@@ -1425,7 +1426,9 @@ for smartphone
     .howtouse ol.step_list li{
         height: 320px;
         flex-direction: column;
-        background-position: left center;
+        background-position: center center;
+        width: 100%;
+        max-width: 100%;
     }
     .howtouse ol.step_list li:nth-child(1){
         background-image: url(/assets/images/step1_sp.jpg);
