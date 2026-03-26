@@ -1381,7 +1381,7 @@
                           </div>
                           <div class="rf-field" id="rf-field-phone">
                             <label>電話番号<span class="rf-required">必須</span></label>
-                            <input type="tel" id="rf-phone" placeholder="例：09012345678（ハイフンなし）" autocomplete="tel" />
+                            <input type="tel" id="rf-phone" placeholder="例：09012345678" autocomplete="tel" />
                             <div class="rf-field-error" id="rf-phone-error">電話番号を入力してください</div>
                           </div>
                           <div class="rf-field" id="rf-field-email">
@@ -1496,6 +1496,14 @@
                       if (saved.phone)   document.getElementById('rf-phone').value   = saved.phone;
                       if (saved.email)   document.getElementById('rf-email').value   = saved.email;
                       if (saved.address) document.getElementById('rf-address').value = saved.address;
+
+                      document.getElementById('rf-phone').addEventListener('input', function() {
+                        var pos = this.selectionStart;
+                        var before = this.value;
+                        this.value = before.replace(/[－\-ー]/g, '');
+                        var removed = before.length - this.value.length;
+                        this.setSelectionRange(pos - removed, pos - removed);
+                      });
 
                       // 空き状況取得
                       function fetchOnce(ms) {
