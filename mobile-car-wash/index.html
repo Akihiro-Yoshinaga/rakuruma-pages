@@ -1595,6 +1595,10 @@
                         }
                         const other = pref === 1 ? 2 : 1;
 
+                        // 午前・午後のスロット有無を判定（"HH:MM" 形式）
+                        const hasMorning = day.slots.some(t => { const h = parseInt(t.split(':')[0], 10); return h >= 9 && h < 12; });
+                        const hasAfternoon = day.slots.some(t => parseInt(t.split(':')[0], 10) >= 12);
+
                         // まとめ選択ボタン（終日・午前・午後）
                         const qWrap = document.createElement('div');
                         qWrap.className = 'rf-quick-btns';
@@ -1608,22 +1612,32 @@
                         btnAllDay.addEventListener('click', () => selectSlot(pref, day.date, '終日'));
                         qWrap.appendChild(btnAllDay);
 
-                        // 午前・午後（2列）
-                        const row = document.createElement('div');
-                        row.className = 'rf-quick-btns-row';
-                        [
-                          { label: '午前（09〜12時）', value: '午前（09:00〜12:00）' },
-                          { label: '午後（12〜18時）', value: '午後（12:00〜18:00）' },
-                        ].forEach(def => {
-                          const btn = document.createElement('button');
-                          btn.type = 'button';
-                          btn.className = 'rf-quick-btn';
-                          btn.textContent = def.label;
-                          if (selection[pref].date === day.date && selection[pref].time === def.value) btn.classList.add(`sel${pref}`);
-                          btn.addEventListener('click', () => selectSlot(pref, day.date, def.value));
-                          row.appendChild(btn);
-                        });
-                        qWrap.appendChild(row);
+                        // 午前・午後（2列、空きがある帯のみ有効）
+                        if (hasMorning || hasAfternoon) {
+                          const row = document.createElement('div');
+                          row.className = 'rf-quick-btns-row';
+                          [
+                            { label: '午前（09〜12時）', value: '午前（09:00〜12:00）', available: hasMorning },
+                            { label: '午後（12〜18時）', value: '午後（12:00〜18:00）', available: hasAfternoon },
+                          ].forEach(def => {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'rf-quick-btn';
+                            btn.textContent = def.label;
+                            if (!def.available) {
+                              btn.disabled = true;
+                              btn.style.opacity = '0.35';
+                              btn.style.cursor = 'default';
+                              btn.style.borderColor = '#ccc';
+                              btn.style.color = '#999';
+                            } else {
+                              if (selection[pref].date === day.date && selection[pref].time === def.value) btn.classList.add(`sel${pref}`);
+                              btn.addEventListener('click', () => selectSlot(pref, day.date, def.value));
+                            }
+                            row.appendChild(btn);
+                          });
+                          qWrap.appendChild(row);
+                        }
                         c.appendChild(qWrap);
 
                         // 区切り線
