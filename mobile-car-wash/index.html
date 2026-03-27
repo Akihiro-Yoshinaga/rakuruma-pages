@@ -182,15 +182,18 @@
 #rakuruma-form-wrap .rf-date-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
 #rakuruma-form-wrap .rf-date-tab .rf-weekday { font-size: 10px; font-weight: 400; opacity: 0.75; display: block; }
 #rakuruma-form-wrap .rf-time-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-#rakuruma-form-wrap .rf-quick-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+#rakuruma-form-wrap .rf-quick-btns { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
+#rakuruma-form-wrap .rf-quick-btns-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 #rakuruma-form-wrap .rf-quick-btn {
-    background: #fff; border: 1.5px solid #003B8B; border-radius: 10px; padding: 10px 14px;
-    font-size: 13px; font-weight: 700; color: #003B8B; cursor: pointer; text-align: center; transition: all 0.15s;
-    line-height: 1.4; white-space: nowrap;
+    background: #fff; border: 2px solid #003B8B; border-radius: 12px; padding: 14px 8px;
+    font-size: 15px; font-weight: 700; color: #003B8B; cursor: pointer; text-align: center; transition: all 0.15s;
+    line-height: 1.4;
 }
 #rakuruma-form-wrap .rf-quick-btn:hover { background: #003B8B; color: #fff; }
 #rakuruma-form-wrap .rf-quick-btn.sel1 { background: #003B8B; color: #fff; border-color: #003B8B; }
 #rakuruma-form-wrap .rf-quick-btn.sel2 { background: #34a853; color: #fff; border-color: #34a853; }
+#rakuruma-form-wrap .rf-slots-divider { font-size: 12px; color: #aaa; text-align: center; margin: 4px 0 8px; position: relative; }
+#rakuruma-form-wrap .rf-slots-divider::before, #rakuruma-form-wrap .rf-slots-divider::after { content:''; display:inline-block; width:28%; height:1px; background:#e0e0e0; vertical-align:middle; margin:0 6px; }
 #rakuruma-form-wrap .rf-slot-btn {
     background: var(--gray-100); border: 1.5px solid var(--gray-200);
     border-radius: 10px; padding: 14px 4px; font-size: 15px; font-weight: 600;
@@ -1590,23 +1593,41 @@
                         const other = pref === 1 ? 2 : 1;
 
                         // まとめ選択ボタン（終日・午前・午後）
-                        const quickDefs = [
-                          { label: '終日OK', value: '終日' },
-                          { label: '午前（09〜12時）', value: '午前（09:00〜12:00）' },
-                          { label: '午後（12〜18時）', value: '午後（12:00〜18:00）' },
-                        ];
                         const qWrap = document.createElement('div');
                         qWrap.className = 'rf-quick-btns';
-                        quickDefs.forEach(def => {
+
+                        // 終日OK（1行フル幅）
+                        const btnAllDay = document.createElement('button');
+                        btnAllDay.type = 'button';
+                        btnAllDay.className = 'rf-quick-btn';
+                        btnAllDay.textContent = '終日OK';
+                        if (selection[pref].date === day.date && selection[pref].time === '終日') btnAllDay.classList.add(`sel${pref}`);
+                        btnAllDay.addEventListener('click', () => selectSlot(pref, day.date, '終日'));
+                        qWrap.appendChild(btnAllDay);
+
+                        // 午前・午後（2列）
+                        const row = document.createElement('div');
+                        row.className = 'rf-quick-btns-row';
+                        [
+                          { label: '午前（09〜12時）', value: '午前（09:00〜12:00）' },
+                          { label: '午後（12〜18時）', value: '午後（12:00〜18:00）' },
+                        ].forEach(def => {
                           const btn = document.createElement('button');
                           btn.type = 'button';
                           btn.className = 'rf-quick-btn';
-                          btn.innerHTML = def.label.replace('\n', '<br>');
+                          btn.textContent = def.label;
                           if (selection[pref].date === day.date && selection[pref].time === def.value) btn.classList.add(`sel${pref}`);
                           btn.addEventListener('click', () => selectSlot(pref, day.date, def.value));
-                          qWrap.appendChild(btn);
+                          row.appendChild(btn);
                         });
+                        qWrap.appendChild(row);
                         c.appendChild(qWrap);
+
+                        // 区切り
+                        const divider = document.createElement('div');
+                        divider.className = 'rf-slots-divider';
+                        divider.textContent = '時間を詳しく指定する場合';
+                        c.appendChild(divider);
 
                         // 個別スロット
                         const slotWrap = document.createElement('div');
