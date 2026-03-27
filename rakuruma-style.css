@@ -755,6 +755,8 @@ howtouse
 }
 .howtouse ol.step_list{
     margin-top: 50px;
+    padding-left: 0;
+    list-style: none;
 }
 .howtouse ol.step_list li:nth-child(1){
     background-image: url(/assets/images/step1.jpg);
