@@ -182,6 +182,15 @@
 #rakuruma-form-wrap .rf-date-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
 #rakuruma-form-wrap .rf-date-tab .rf-weekday { font-size: 10px; font-weight: 400; opacity: 0.75; display: block; }
 #rakuruma-form-wrap .rf-time-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+#rakuruma-form-wrap .rf-quick-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+#rakuruma-form-wrap .rf-quick-btn {
+    background: #fff; border: 1.5px solid #003B8B; border-radius: 10px; padding: 10px 4px;
+    font-size: 13px; font-weight: 700; color: #003B8B; cursor: pointer; text-align: center; transition: all 0.15s;
+    line-height: 1.3;
+}
+#rakuruma-form-wrap .rf-quick-btn:hover { background: #003B8B; color: #fff; }
+#rakuruma-form-wrap .rf-quick-btn.sel1 { background: #003B8B; color: #fff; border-color: #003B8B; }
+#rakuruma-form-wrap .rf-quick-btn.sel2 { background: #34a853; color: #fff; border-color: #34a853; }
 #rakuruma-form-wrap .rf-slot-btn {
     background: var(--gray-100); border: 1.5px solid var(--gray-200);
     border-radius: 10px; padding: 14px 4px; font-size: 15px; font-weight: 600;
@@ -1579,6 +1588,29 @@
                           return;
                         }
                         const other = pref === 1 ? 2 : 1;
+
+                        // まとめ選択ボタン（終日・午前・午後）
+                        const quickDefs = [
+                          { label: '終日OK', value: '終日' },
+                          { label: '午前\n09:00〜12:00', value: '午前（09:00〜12:00）' },
+                          { label: '午後\n12:00〜18:00', value: '午後（12:00〜18:00）' },
+                        ];
+                        const qWrap = document.createElement('div');
+                        qWrap.className = 'rf-quick-btns';
+                        quickDefs.forEach(def => {
+                          const btn = document.createElement('button');
+                          btn.type = 'button';
+                          btn.className = 'rf-quick-btn';
+                          btn.innerHTML = def.label.replace('\n', '<br>');
+                          if (selection[pref].date === day.date && selection[pref].time === def.value) btn.classList.add(`sel${pref}`);
+                          btn.addEventListener('click', () => selectSlot(pref, day.date, def.value));
+                          qWrap.appendChild(btn);
+                        });
+                        c.appendChild(qWrap);
+
+                        // 個別スロット
+                        const slotWrap = document.createElement('div');
+                        slotWrap.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;';
                         day.slots.forEach(time => {
                           const btn = document.createElement('button');
                           btn.type = 'button';
@@ -1587,8 +1619,9 @@
                           if (selection[other].date === day.date && selection[other].time === time) btn.classList.add('disabled');
                           if (selection[pref].date === day.date && selection[pref].time === time) btn.classList.add(`sel${pref}`);
                           btn.addEventListener('click', () => selectSlot(pref, day.date, time));
-                          c.appendChild(btn);
+                          slotWrap.appendChild(btn);
                         });
+                        c.appendChild(slotWrap);
                       }
                       function selectSlot(pref, date, time) {
                         if (selection[pref].date === date && selection[pref].time === time) {
