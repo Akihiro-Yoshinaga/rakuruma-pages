@@ -181,7 +181,8 @@
 }
 #rakuruma-form-wrap .rf-date-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
 #rakuruma-form-wrap .rf-date-tab .rf-weekday { font-size: 10px; font-weight: 400; opacity: 0.75; display: block; }
-#rakuruma-form-wrap .rf-time-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+#rakuruma-form-wrap .rf-time-slots { display: block; }
+#rakuruma-form-wrap .rf-slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 #rakuruma-form-wrap .rf-quick-btns { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
 #rakuruma-form-wrap .rf-quick-btns-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 #rakuruma-form-wrap .rf-quick-btn {
@@ -1629,7 +1630,7 @@
 
                         // 個別スロット
                         const slotWrap = document.createElement('div');
-                        slotWrap.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;';
+                        slotWrap.className = 'rf-slot-grid';
                         day.slots.forEach(time => {
                           const btn = document.createElement('button');
                           btn.type = 'button';
