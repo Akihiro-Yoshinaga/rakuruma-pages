@@ -255,11 +255,19 @@
     }
 
     /* 時間スロットボタン */
-    .time-slots {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+    .time-slots { display: block; }
+    .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .quick-btns { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
+    .quick-btns-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .quick-btn {
+      background: #fff; border: 2px solid #003B8B; border-radius: 12px; padding: 14px 8px;
+      font-size: 15px; font-weight: 700; color: #003B8B; cursor: pointer; text-align: center;
+      transition: all 0.15s; line-height: 1.4;
     }
+    .quick-btn:hover { background: #003B8B; color: #fff; }
+    .quick-btn.selected-1 { background: #003B8B; color: #fff; border-color: #003B8B; }
+    .quick-btn.selected-2 { background: #34a853; color: #fff; border-color: #34a853; }
+    .slots-divider { height: 1px; background: #e8e8e8; margin: 12px 0; }
     .slot-btn {
       background: var(--gray-100);
       border: 1.5px solid var(--gray-200);
@@ -511,9 +519,12 @@
       <div id="slot-ui">
 
         <!-- 空き状況取得完了バッジ -->
-        <div id="fetched-badge" style="display:none; margin:0 0 16px; padding:10px 14px; background:#e8f5e9; border:1.5px solid #34a853; border-radius:10px; align-items:center; gap:8px;">
-          <span style="font-size:18px;">✅</span>
-          <div style="font-size:13px;font-weight:700;color:#1e8a3d;">空き状況を取得しました（<span id="fetched-time"></span>）</div>
+        <div id="fetched-badge" style="display:none; margin:0 0 16px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:14px;color:#003B8B;font-weight:900;">●</span>
+            <div style="font-size:14px;font-weight:700;color:#003B8B;">表示されていない時間は空きなしです</div>
+          </div>
+          <div style="font-size:11px;color:#666;margin-top:3px;padding-left:4px;"><span id="fetched-time"></span>時点</div>
         </div>
 
         <!-- 第1希望 -->
@@ -912,8 +923,8 @@
       var d = now.getDate();
       var hh = now.getHours();
       var mm = String(now.getMinutes()).padStart(2, '0');
-      timeEl.textContent = m + '月' + d + '日 ' + hh + '時' + mm + '分';
-      badge.style.display = 'flex';
+      timeEl.textContent = m + '/' + d + ' ' + hh + ':' + mm;
+      badge.style.display = 'block';
     }
   }
 
@@ -963,29 +974,57 @@
     container.innerHTML = '';
     const day = availabilityData[dateIdx];
     if (!day || day.slots.length === 0) {
-      container.innerHTML = '<p style="font-size:13px;color:var(--gray-400);grid-column:1/-1;padding:8px 0;">この日の空き枠はありません</p>';
+      container.innerHTML = '<p style="font-size:13px;color:var(--gray-400);padding:8px 0;">この日の空き枠はありません</p>';
       return;
     }
+    const otherPref = pref === 1 ? 2 : 1;
+
+    // まとめ選択ボタン（終日・午前・午後）
+    const qWrap = document.createElement('div');
+    qWrap.className = 'quick-btns';
+    const btnAllDay = document.createElement('button');
+    btnAllDay.type = 'button';
+    btnAllDay.className = 'quick-btn';
+    btnAllDay.textContent = '終日OK';
+    if (selection[pref].date === day.date && selection[pref].time === '終日') btnAllDay.classList.add(`selected-${pref}`);
+    btnAllDay.addEventListener('click', () => selectSlot(pref, day.date, '終日'));
+    qWrap.appendChild(btnAllDay);
+    const row = document.createElement('div');
+    row.className = 'quick-btns-row';
+    [
+      { label: '午前（09〜12時）', value: '午前（09:00〜12:00）' },
+      { label: '午後（12〜18時）', value: '午後（12:00〜18:00）' },
+    ].forEach(def => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quick-btn';
+      btn.textContent = def.label;
+      if (selection[pref].date === day.date && selection[pref].time === def.value) btn.classList.add(`selected-${pref}`);
+      btn.addEventListener('click', () => selectSlot(pref, day.date, def.value));
+      row.appendChild(btn);
+    });
+    qWrap.appendChild(row);
+    container.appendChild(qWrap);
+
+    // 区切り線
+    const divider = document.createElement('div');
+    divider.className = 'slots-divider';
+    container.appendChild(divider);
+
+    // 個別スロット
+    const slotGrid = document.createElement('div');
+    slotGrid.className = 'slot-grid';
     day.slots.forEach(time => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'slot-btn';
       btn.textContent = time;
-
-      // 他の希望で選択済みのスロットは無効化
-      const otherPref = pref === 1 ? 2 : 1;
-      if (selection[otherPref].date === day.date && selection[otherPref].time === time) {
-        btn.classList.add('disabled');
-      }
-
-      // 選択済みスタイル
-      if (selection[pref].date === day.date && selection[pref].time === time) {
-        btn.classList.add(`selected-${pref}`);
-      }
-
+      if (selection[otherPref].date === day.date && selection[otherPref].time === time) btn.classList.add('disabled');
+      if (selection[pref].date === day.date && selection[pref].time === time) btn.classList.add(`selected-${pref}`);
       btn.addEventListener('click', () => selectSlot(pref, day.date, time));
-      container.appendChild(btn);
+      slotGrid.appendChild(btn);
     });
+    container.appendChild(slotGrid);
   }
 
   function selectSlot(pref, date, time) {
