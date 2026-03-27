@@ -182,11 +182,11 @@
 #rakuruma-form-wrap .rf-date-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
 #rakuruma-form-wrap .rf-date-tab .rf-weekday { font-size: 10px; font-weight: 400; opacity: 0.75; display: block; }
 #rakuruma-form-wrap .rf-time-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-#rakuruma-form-wrap .rf-quick-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+#rakuruma-form-wrap .rf-quick-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
 #rakuruma-form-wrap .rf-quick-btn {
-    background: #fff; border: 1.5px solid #003B8B; border-radius: 10px; padding: 10px 4px;
+    background: #fff; border: 1.5px solid #003B8B; border-radius: 10px; padding: 10px 14px;
     font-size: 13px; font-weight: 700; color: #003B8B; cursor: pointer; text-align: center; transition: all 0.15s;
-    line-height: 1.3;
+    line-height: 1.4; white-space: nowrap;
 }
 #rakuruma-form-wrap .rf-quick-btn:hover { background: #003B8B; color: #fff; }
 #rakuruma-form-wrap .rf-quick-btn.sel1 { background: #003B8B; color: #fff; border-color: #003B8B; }
@@ -1592,8 +1592,8 @@
                         // まとめ選択ボタン（終日・午前・午後）
                         const quickDefs = [
                           { label: '終日OK', value: '終日' },
-                          { label: '午前\n09:00〜12:00', value: '午前（09:00〜12:00）' },
-                          { label: '午後\n12:00〜18:00', value: '午後（12:00〜18:00）' },
+                          { label: '午前（09〜12時）', value: '午前（09:00〜12:00）' },
+                          { label: '午後（12〜18時）', value: '午後（12:00〜18:00）' },
                         ];
                         const qWrap = document.createElement('div');
                         qWrap.className = 'rf-quick-btns';
