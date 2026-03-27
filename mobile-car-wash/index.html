@@ -192,8 +192,7 @@
 #rakuruma-form-wrap .rf-quick-btn:hover { background: #003B8B; color: #fff; }
 #rakuruma-form-wrap .rf-quick-btn.sel1 { background: #003B8B; color: #fff; border-color: #003B8B; }
 #rakuruma-form-wrap .rf-quick-btn.sel2 { background: #34a853; color: #fff; border-color: #34a853; }
-#rakuruma-form-wrap .rf-slots-divider { font-size: 12px; color: #aaa; text-align: center; margin: 4px 0 8px; position: relative; }
-#rakuruma-form-wrap .rf-slots-divider::before, #rakuruma-form-wrap .rf-slots-divider::after { content:''; display:inline-block; width:28%; height:1px; background:#e0e0e0; vertical-align:middle; margin:0 6px; }
+#rakuruma-form-wrap .rf-slots-divider { height: 1px; background: #e8e8e8; margin: 12px 0; }
 #rakuruma-form-wrap .rf-slot-btn {
     background: var(--gray-100); border: 1.5px solid var(--gray-200);
     border-radius: 10px; padding: 14px 4px; font-size: 15px; font-weight: 600;
@@ -1623,10 +1622,9 @@
                         qWrap.appendChild(row);
                         c.appendChild(qWrap);
 
-                        // 区切り
+                        // 区切り線
                         const divider = document.createElement('div');
                         divider.className = 'rf-slots-divider';
-                        divider.textContent = '時間を詳しく指定する場合';
                         c.appendChild(divider);
 
                         // 個別スロット
