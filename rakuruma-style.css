@@ -1419,6 +1419,8 @@ for smartphone
     }
     .howtouse ol.step_list{
         margin-top: 35px;
+        margin-left: 15px;
+        margin-right: 15px;
     }
     .howtouse h2,
     .howtouse .discription {
