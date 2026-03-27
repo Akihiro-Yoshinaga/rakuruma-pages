@@ -1381,7 +1381,7 @@
                           </div>
                           <div class="rf-field" id="rf-field-phone">
                             <label>電話番号<span class="rf-required">必須</span></label>
-                            <input type="tel" id="rf-phone" placeholder="例：09012345678" autocomplete="tel" />
+                            <input type="tel" id="rf-phone" placeholder="例：09012345678" autocomplete="tel" oninput="this.value=this.value.replace(/[－\-ー]/g,'')" />
                             <div class="rf-field-error" id="rf-phone-error">電話番号を入力してください</div>
                           </div>
                           <div class="rf-field" id="rf-field-email">
