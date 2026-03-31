@@ -915,13 +915,9 @@
     const LINE_CLIENT_ID = '2004330318';
     const redirectUri = encodeURIComponent(GAS_URL + '?action=lineCallback');
     const state = encodeURIComponent(phone || '');
-    // まずprompt=noneで試みる（ログイン済みならスキップ）
-    // login_requiredエラー時はコールバック側で通常フローにリダイレクト
-    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive&prompt=none`;
-    const lineLoginUrlFull = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive`;
+    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive`;
     const btn = document.getElementById('line-login-btn');
     btn.href = lineLoginUrl;
-    btn.dataset.fallbackUrl = lineLoginUrlFull;
   }
 
   // 料金計算
