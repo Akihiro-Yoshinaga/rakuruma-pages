@@ -356,6 +356,31 @@
       line-height: 1.8;
     }
     .success-body strong { color: var(--blue-mid); }
+    .line-login-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-200);
+      text-align: center;
+    }
+    .line-login-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #06C755;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .line-login-btn:hover { background: #05b34c; }
+    .line-login-btn svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
 
     /* ハニーポット */
     .hp-field {
@@ -549,8 +574,23 @@
       <div class="success-divider"></div>
       <div class="success-body">
         お申し込みありがとうございます。<br>
-        担当者より <strong>ご登録いただいたメールアドレス</strong> にご連絡いたします。<br>
-        少々お待ちください。
+        <strong style="color:#e53e3e;">※まだ予約は確定していません。</strong><br>
+        担当者より日程を確認のうえ、<strong>LINEまたはメール</strong>にてご連絡いたします。<br>
+        <span style="font-size:13px;color:var(--gray-400);">通常24時間以内にご連絡します</span>
+      </div>
+      <div class="line-login-section">
+        <div style="font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:8px;">LINEを連携すると</div>
+        <ul style="text-align:left;font-size:13px;color:var(--gray-700);margin:0 0 12px 0;padding-left:0;list-style:none;">
+          <li style="margin-bottom:6px;">✅ 予約確定のご連絡をLINEでお知らせ</li>
+          <li style="margin-bottom:6px;">✅ 2回目以降はLINEで簡単予約</li>
+          <li style="margin-bottom:6px;">✅ 作業完了レポートをLINEで受け取り</li>
+        </ul>
+        <p style="font-size:12px;color:#c05300;margin-bottom:14px;">⚠️ 連携しないと予約確定のお知らせが届きません</p>
+        <a id="line-login-btn" href="#" class="line-login-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="width:22px;height:22px;fill:white;flex-shrink:0;"><path d="M24 4C12.95 4 4 11.86 4 21.5c0 5.7 3.07 10.77 7.84 14.04L9.5 44l7.72-3.97C19.34 40.65 21.62 41 24 41c11.05 0 20-7.86 20-17.5S35.05 4 24 4z"/></svg>
+          LINEと連携する（無料）
+        </a>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:10px;text-align:center;">連携後はこのページを閉じて構いません</p>
       </div>
     </div>
   </div>
@@ -745,7 +785,7 @@
         localStorage.setItem('rakuruma_phone',   data.phone);
         localStorage.setItem('rakuruma_email',   data.email);
         localStorage.setItem('rakuruma_address', data.address);
-        showSuccess();
+        showSuccess(data.phone);
       })
       .catch(() => {
         btn.disabled = false;
@@ -810,11 +850,36 @@
     return ok;
   }
 
-  function showSuccess() {
+  function showSuccess(phone) {
     document.getElementById('reservation-form').style.display = 'none';
     document.getElementById('success-screen').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     sendHeight();
+
+    // LINEログインURLを生成（アプリ起動優先）
+    const LINE_CLIENT_ID = '2004330318';
+    const redirectUri = encodeURIComponent(GAS_URL + '?action=lineCallback');
+    const state = encodeURIComponent(phone || '');
+    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive`;
+    const btn = document.getElementById('line-login-btn');
+    btn.href = lineLoginUrl;
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const appUrl = `lineauth2://authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive`;
+      let appLaunched = false;
+      document.addEventListener('visibilitychange', function onHide() {
+        if (document.hidden) {
+          appLaunched = true;
+          document.removeEventListener('visibilitychange', onHide);
+        }
+      }, { once: true });
+      window.location.href = appUrl;
+      setTimeout(function() {
+        if (!appLaunched) {
+          window.location.href = lineLoginUrl;
+        }
+      }, 800);
+    });
   }
 
   // 料金計算

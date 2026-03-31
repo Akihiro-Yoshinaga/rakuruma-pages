@@ -807,8 +807,9 @@
       <div class="success-divider"></div>
       <div class="success-body">
         お申し込みありがとうございます。<br>
-        担当者より <strong>ご登録いただいたメールアドレス</strong> にご連絡いたします。<br>
-        少々お待ちください。
+        <strong style="color:#e53e3e;">※まだ予約は確定していません。</strong><br>
+        担当者より日程を確認のうえ、<strong>LINEまたはメール</strong>にてご連絡いたします。<br>
+        <span style="font-size:13px;color:var(--gray-400);">通常24時間以内にご連絡します</span>
       </div>
       <div class="line-login-section">
         <div class="line-login-label">LINEを連携すると</div>
@@ -1303,8 +1304,26 @@
     const LINE_CLIENT_ID = '2004330318';
     const redirectUri = encodeURIComponent(GAS_URL + '?action=lineCallback');
     const state = encodeURIComponent(phone || '');
-    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile`;
-    document.getElementById('line-login-btn').href = lineLoginUrl;
+    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive`;
+    const btn = document.getElementById('line-login-btn');
+    btn.href = lineLoginUrl;
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const appUrl = `lineauth2://authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive`;
+      let appLaunched = false;
+      document.addEventListener('visibilitychange', function onHide() {
+        if (document.hidden) {
+          appLaunched = true;
+          document.removeEventListener('visibilitychange', onHide);
+        }
+      }, { once: true });
+      window.location.href = appUrl;
+      setTimeout(function() {
+        if (!appLaunched) {
+          window.location.href = lineLoginUrl;
+        }
+      }, 800);
+    });
   }
 </script>
 </body>
