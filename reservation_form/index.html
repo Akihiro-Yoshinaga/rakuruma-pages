@@ -1354,12 +1354,10 @@
     document.getElementById('success-screen').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    const LINE_CLIENT_ID = '2004330318';
-    const redirectUri = encodeURIComponent(GAS_URL + '?action=lineCallback');
-    const state = encodeURIComponent(phone || '');
-    const lineLoginUrl = `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${LINE_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=profile%20openid&bot_prompt=aggressive`;
+    // LIFF URL（電話番号をphoneパラメータで渡す）
+    const liffUrl = `https://liff.line.me/2004330318-mPsaNrNY?phone=${encodeURIComponent(phone || '')}`;
     const btn = document.getElementById('line-login-btn');
-    btn.href = lineLoginUrl;
+    btn.href = liffUrl;
   }
 </script>
 </body>
