@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINE連携</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 28px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .icon { font-size: 56px; margin-bottom: 16px; }
+    h2 { color: #1a202c; font-size: 20px; margin: 0 0 10px; }
+    p { color: #4a5568; font-size: 15px; line-height: 1.7; margin: 0 0 8px; }
+    .status-text { color: #4a5568; font-size: 16px; margin-top: 12px; }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #06C755;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #06C755;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 16px;
+      box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(6,199,85,0.3);
+    }
+    .input {
+      width: 100%;
+      padding: 13px;
+      font-size: 16px;
+      border: 1.5px solid #cbd5e0;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-top: 12px;
+    }
+    .error { color: #c53030; font-size: 14px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="spinner"></div>
+  <p class="status-text">LINE情報を取得中...</p>
+</div>
+
+<script>
+  var LIFF_ID = '2004330318-mPsaNrNY';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbzSTmbOmruOGqbKLDDgAZF_tqX3S5hc34L93KEZReF3nkbRLVWAD1RvkZQ4kfKEA-yZ4Q/exec';
+
+  // URLパラメータから電話番号を取得
+  var savedPhone = new URLSearchParams(location.search).get('phone') || '';
+
+  liff.init({ liffId: LIFF_ID })
+    .then(function() {
+      if (!liff.isLoggedIn()) {
+        liff.login({ redirectUri: location.href });
+        return;
+      }
+      return liff.getProfile().then(function(profile) {
+        var lineUserId = profile.userId;
+        if (savedPhone) {
+          saveLineId(lineUserId, savedPhone);
+        } else {
+          showPhoneForm(lineUserId);
+        }
+      });
+    })
+    .catch(function(err) {
+      showError('エラーが発生しました。<br><small style="color:#aaa;">' + err.message + '</small>');
+    });
+
+  function saveLineId(lineUserId, phone) {
+    document.getElementById('card').innerHTML = '<div class="spinner"></div><p class="status-text">連携中...</p>';
+    fetch(GAS_URL + '?action=saveLiffId&lineUserId=' + encodeURIComponent(lineUserId) + '&phone=' + encodeURIComponent(phone))
+      .then(function(r) { return r.text(); })
+      .then(function(t) {
+        var res;
+        try { res = JSON.parse(t); } catch(e) { res = { ok: false }; }
+        if (res.ok) {
+          showComplete();
+        } else {
+          showPhoneForm(lineUserId);
+        }
+      })
+      .catch(function() { showError('通信エラーが発生しました。'); });
+  }
+
+  function showPhoneForm(lineUserId) {
+    document.getElementById('card').innerHTML =
+        '<div class="icon">📱</div>'
+      + '<h2>電話番号を入力してください</h2>'
+      + '<p>LINE連携を完了するために<br>ご登録の電話番号を入力してください。</p>'
+      + '<input class="input" type="tel" id="phone" placeholder="例：09012345678" inputmode="numeric">'
+      + '<button class="btn" id="btn" onclick="submitPhone(\'' + lineUserId + '\')">連携を完了する</button>'
+      + '<p class="error" id="err"></p>';
+  }
+
+  function submitPhone(lineUserId) {
+    var phone = document.getElementById('phone').value.replace(/[\s\-]/g, '');
+    if (!phone) { document.getElementById('err').textContent = '電話番号を入力してください'; return; }
+    var btn = document.getElementById('btn');
+    btn.disabled = true; btn.textContent = '送信中...';
+    fetch(GAS_URL + '?action=saveLiffId&lineUserId=' + encodeURIComponent(lineUserId) + '&phone=' + encodeURIComponent(phone))
+      .then(function(r) { return r.text(); })
+      .then(function(t) {
+        var res;
+        try { res = JSON.parse(t); } catch(e) { res = { ok: false }; }
+        if (res.ok) {
+          showComplete();
+        } else {
+          document.getElementById('err').textContent = '一致する電話番号が見つかりませんでした';
+          btn.disabled = false; btn.textContent = '連携を完了する';
+        }
+      })
+      .catch(function() {
+        document.getElementById('err').textContent = '通信エラーが発生しました';
+        btn.disabled = false; btn.textContent = '連携を完了する';
+      });
+  }
+
+  function showComplete() {
+    document.getElementById('card').innerHTML =
+        '<div class="icon">✅</div>'
+      + '<h2>LINE連携が完了しました</h2>'
+      + '<p>ご予約の確定連絡をLINEでお送りします。<br>このページを閉じて構いません。</p>';
+    setTimeout(function() {
+      try { liff.closeWindow(); } catch(e) {}
+    }, 2000);
+  }
+
+  function showError(msg) {
+    document.getElementById('card').innerHTML =
+        '<div class="icon">⚠️</div><h2>エラー</h2><p>' + msg + '</p>';
+  }
+</script>
+</body>
+</html>
