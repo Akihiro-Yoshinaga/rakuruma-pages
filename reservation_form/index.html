@@ -836,7 +836,7 @@
   <!-- 完了画面 -->
   <div id="success-screen">
     <div class="success-card">
-      <div class="success-title" style="font-size:20px;color:#e53e3e;">すでにお友達でも連携が必要です！</div>
+      <div class="success-title" style="font-size:20px;color:#e53e3e;">友達登録とは別に、LINE連携が必要です</div>
       <div class="success-divider"></div>
 
       <div class="step-flow">
@@ -860,6 +860,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="width:18px;height:18px;fill:white;flex-shrink:0;"><path d="M24 4C12.95 4 4 11.86 4 21.5c0 5.7 3.07 10.77 7.84 14.04L9.5 44l7.72-3.97C19.34 40.65 21.62 41 24 41c11.05 0 20-7.86 20-17.5S35.05 4 24 4z"/></svg>
               LINEと連携する
             </a>
+            <p style="font-size:11px;color:#888;margin-top:8px;text-align:center;">※ 以前に連携ボタンを押してLINE IDを登録済みの方は<br>このページを閉じて構いません</p>
           </div>
         </div>
 
@@ -874,13 +875,8 @@
         </div>
       </div>
 
-      <p class="step-warning">⚠️ STEP 2を完了しないと確定通知が届きません</p>
-
-      <a id="line-login-btn" href="#" class="line-login-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="width:22px;height:22px;fill:white;flex-shrink:0;"><path d="M24 4C12.95 4 4 11.86 4 21.5c0 5.7 3.07 10.77 7.84 14.04L9.5 44l7.72-3.97C19.34 40.65 21.62 41 24 41c11.05 0 20-7.86 20-17.5S35.05 4 24 4z"/></svg>
-        LINEと連携する
-      </a>
-      <p style="font-size:11px;color:var(--gray-400);margin-top:10px;text-align:center;">※ 以前に連携ボタンを押してLINE IDを登録済みの方は<br>このページを閉じて構いません</p>
+      <!-- line-login-btn はJSからhrefをセットするため非表示で残す -->
+      <a id="line-login-btn" href="#" style="display:none;"></a>
     </div>
   </div>
 
