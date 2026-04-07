@@ -1062,6 +1062,40 @@ button_area
 }
 
 
+/* service_top */
+.service_top {
+    padding: 40px 0;
+}
+.service_top .service_top_list {
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 12px;
+}
+.service_top .service_top_list li {
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 0.95em;
+}
+
+/* point (compressed) */
+.point .point_list {
+    flex-wrap: wrap;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 24px 0 0;
+}
+.point .point_list li {
+    flex: 1 1 28%;
+    padding: 24px 20px;
+    border-radius: 8px;
+}
+.point .point_list li .subhead {
+    margin-bottom: 10px;
+}
+
 /* ------------------------------
 for smartphone
 ------------------------------ */
@@ -2095,4 +2129,15 @@ button_area（固定CTA）
 }
 footer {
     padding-bottom: 112px;
+}
+
+@media screen and (max-width: 599px) {
+    .service_top .service_top_list li {
+        flex: 1 1 42%;
+        font-size: 0.88em;
+        padding: 8px 12px;
+    }
+    .point .point_list li {
+        flex: 1 1 100%;
+    }
 }
