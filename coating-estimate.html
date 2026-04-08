@@ -15,14 +15,14 @@
     }
 
     .container {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
     }
 
     /* ヘッダー */
     .header {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
     .header .brand {
       font-size: 13px;
@@ -42,17 +42,60 @@
       color: #666;
     }
 
-    /* 車種バッジ */
-    .vehicle-badge {
-      display: inline-block;
+    /* 特徴 */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .feature-icon { font-size: 20px; margin-bottom: 6px; }
+    .feature-title { font-size: 12px; font-weight: 700; color: #222; margin-bottom: 3px; }
+    .feature-text { font-size: 11px; color: #777; line-height: 1.5; }
+
+    /* サイズ比較テーブル */
+    .compare-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .size-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid #e0e0e0;
+      background: #fff;
+      color: #888;
+      transition: all 0.2s;
+    }
+    .tab.active {
+      border-color: #1a1a2e;
       background: #1a1a2e;
       color: #fff;
-      font-size: 13px;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin: 16px 0 8px;
-      letter-spacing: 0.05em;
     }
+
+    /* パネル */
+    .panel { display: none; }
+    .panel.active { display: block; }
 
     /* セクション */
     .section {
@@ -82,17 +125,8 @@
       border-bottom: 1px solid #f5f5f5;
     }
     .item:last-child { border-bottom: none; }
-
-    .item-name {
-      font-size: 14px;
-      color: #333;
-      flex: 1;
-    }
-    .item-desc {
-      font-size: 11px;
-      color: #999;
-      margin-top: 2px;
-    }
+    .item-name { font-size: 14px; color: #333; flex: 1; }
+    .item-desc { font-size: 11px; color: #999; margin-top: 2px; }
     .item-price {
       font-size: 15px;
       font-weight: 600;
@@ -100,18 +134,19 @@
       white-space: nowrap;
       margin-left: 16px;
     }
+    .item-diff {
+      font-size: 11px;
+      color: #e8a838;
+      margin-left: 6px;
+      font-weight: 600;
+    }
 
     /* 作業内容リスト */
-    .work-list {
-      margin-top: 4px;
-      padding-left: 0;
-      list-style: none;
-    }
+    .work-list { margin-top: 4px; padding-left: 0; list-style: none; }
     .work-list li {
       font-size: 12px;
       color: #666;
-      padding: 3px 0;
-      padding-left: 14px;
+      padding: 3px 0 3px 14px;
       position: relative;
     }
     .work-list li::before {
@@ -136,16 +171,12 @@
       margin-bottom: 6px;
     }
     .total-amount {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 700;
       color: #fff;
       letter-spacing: 0.02em;
     }
-    .total-amount span {
-      font-size: 16px;
-      font-weight: 400;
-      margin-right: 4px;
-    }
+    .total-amount span { font-size: 16px; font-weight: 400; margin-right: 4px; }
 
     /* オプション */
     .option-section {
@@ -170,15 +201,8 @@
       align-items: center;
       margin-bottom: 8px;
     }
-    .option-name {
-      font-size: 14px;
-      color: #333;
-    }
-    .option-desc {
-      font-size: 11px;
-      color: #888;
-      margin-top: 2px;
-    }
+    .option-name { font-size: 14px; color: #333; }
+    .option-desc { font-size: 11px; color: #888; margin-top: 2px; }
     .option-price {
       font-size: 15px;
       font-weight: 600;
@@ -194,44 +218,8 @@
       margin-top: 8px;
       border-top: 1px solid #f0f0f0;
     }
-    .option-total-label {
-      font-size: 12px;
-      color: #555;
-    }
-    .option-total-price {
-      font-size: 18px;
-      font-weight: 700;
-      color: #222;
-    }
-
-    /* 特徴 */
-    .features {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .feature-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 14px 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .feature-icon {
-      font-size: 20px;
-      margin-bottom: 6px;
-    }
-    .feature-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: #222;
-      margin-bottom: 3px;
-    }
-    .feature-text {
-      font-size: 11px;
-      color: #777;
-      line-height: 1.5;
-    }
+    .option-total-label { font-size: 12px; color: #555; }
+    .option-total-price { font-size: 18px; font-weight: 700; color: #222; }
 
     /* フッター */
     .footer {
@@ -251,7 +239,6 @@
       <div class="brand">ラクルマ — Coating Estimate</div>
       <h1>コーティング施工<br>お見積り</h1>
       <div class="sub">使用コーティング剤：<strong>ZeusClear（業務用）</strong></div>
-      <div class="vehicle-badge">ハイエース 標準ボディ ハイルーフ</div>
     </div>
 
     <!-- ZeusClear特徴 -->
@@ -278,62 +265,125 @@
       </div>
     </div>
 
-    <!-- 材料費 -->
-    <div class="section">
-      <div class="section-title">材料費</div>
-      <div class="item">
-        <div>
-          <div class="item-name">コーティング剤（ZeusClear）</div>
-        </div>
-        <div class="item-price">¥18,000</div>
-      </div>
-      <div class="item">
-        <div>
-          <div class="item-name">専用プライマー</div>
-          <div class="item-desc">密着性向上・長期効果を確保するための下地処理剤</div>
-        </div>
-        <div class="item-price">¥7,000</div>
-      </div>
+    <!-- サイズ切り替えタブ -->
+    <div class="compare-title">車両サイズを選択</div>
+    <div class="size-tabs">
+      <div class="tab active" onclick="switchTab('standard')">標準ボディ ハイルーフ</div>
+      <div class="tab" onclick="switchTab('long')">ロング</div>
     </div>
 
-    <!-- 施工代 -->
-    <div class="section">
-      <div class="section-title">施工代</div>
-      <div class="item">
-        <div style="flex:1">
-          <div class="item-name">コーティング施工（フルパッケージ）</div>
-          <ul class="work-list">
-            <li>洗車</li>
-            <li>簡易水垢処理</li>
-            <li>フロントガラス油膜除去</li>
-            <li>プライマー施工</li>
-            <li>ZeusClearコーティング施工</li>
-          </ul>
+    <!-- 標準ボディ ハイルーフ -->
+    <div id="panel-standard" class="panel active">
+
+      <div class="section">
+        <div class="section-title">材料費</div>
+        <div class="item">
+          <div><div class="item-name">コーティング剤（ZeusClear）</div></div>
+          <div class="item-price">¥18,000</div>
         </div>
-        <div class="item-price">¥66,000</div>
+        <div class="item">
+          <div>
+            <div class="item-name">専用プライマー</div>
+            <div class="item-desc">密着性向上・長期効果を確保するための下地処理剤</div>
+          </div>
+          <div class="item-price">¥7,000</div>
+        </div>
       </div>
+
+      <div class="section">
+        <div class="section-title">施工代</div>
+        <div class="item">
+          <div style="flex:1">
+            <div class="item-name">コーティング施工（フルパッケージ）</div>
+            <ul class="work-list">
+              <li>洗車</li>
+              <li>簡易水垢処理</li>
+              <li>フロントガラス油膜除去</li>
+              <li>プライマー施工</li>
+              <li>ZeusClearコーティング施工</li>
+            </ul>
+          </div>
+          <div class="item-price">¥66,000</div>
+        </div>
+      </div>
+
+      <div class="total-section">
+        <div class="total-label">合計（税込）</div>
+        <div class="total-amount"><span>¥</span>91,000</div>
+      </div>
+
+      <div class="option-section">
+        <div class="option-title">Option — 水垢が多い場合</div>
+        <div class="option-row">
+          <div>
+            <div class="option-name">本格ポリッシャー磨き</div>
+            <div class="option-desc">中古車など水垢・くすみが多い場合に推奨</div>
+          </div>
+          <div class="option-price">+ ¥66,000</div>
+        </div>
+        <div class="option-total-row">
+          <div class="option-total-label">オプション込み合計</div>
+          <div class="option-total-price">¥157,000</div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- 合計 -->
-    <div class="total-section">
-      <div class="total-label">合計（税込）</div>
-      <div class="total-amount"><span>¥</span>91,000</div>
-    </div>
+    <!-- ロング -->
+    <div id="panel-long" class="panel">
 
-    <!-- オプション：磨き -->
-    <div class="option-section">
-      <div class="option-title">Option — 水垢が多い場合</div>
-      <div class="option-row">
-        <div>
-          <div class="option-name">本格ポリッシャー磨き</div>
-          <div class="option-desc">中古車など水垢・くすみが多い場合に推奨</div>
+      <div class="section">
+        <div class="section-title">材料費</div>
+        <div class="item">
+          <div><div class="item-name">コーティング剤（ZeusClear）</div></div>
+          <div class="item-price">¥18,000</div>
         </div>
-        <div class="option-price">+ ¥66,000</div>
+        <div class="item">
+          <div>
+            <div class="item-name">専用プライマー</div>
+            <div class="item-desc">密着性向上・長期効果を確保するための下地処理剤</div>
+          </div>
+          <div class="item-price">¥7,000</div>
+        </div>
       </div>
-      <div class="option-total-row">
-        <div class="option-total-label">オプション込み合計</div>
-        <div class="option-total-price">¥157,000</div>
+
+      <div class="section">
+        <div class="section-title">施工代</div>
+        <div class="item">
+          <div style="flex:1">
+            <div class="item-name">コーティング施工（フルパッケージ）</div>
+            <ul class="work-list">
+              <li>洗車</li>
+              <li>簡易水垢処理</li>
+              <li>フロントガラス油膜除去</li>
+              <li>プライマー施工</li>
+              <li>ZeusClearコーティング施工</li>
+            </ul>
+          </div>
+          <div class="item-price">¥71,000 <span class="item-diff">+¥5,000</span></div>
+        </div>
       </div>
+
+      <div class="total-section">
+        <div class="total-label">合計（税込）</div>
+        <div class="total-amount"><span>¥</span>96,000</div>
+      </div>
+
+      <div class="option-section">
+        <div class="option-title">Option — 水垢が多い場合</div>
+        <div class="option-row">
+          <div>
+            <div class="option-name">本格ポリッシャー磨き</div>
+            <div class="option-desc">中古車など水垢・くすみが多い場合に推奨</div>
+          </div>
+          <div class="option-price">+ ¥66,000</div>
+        </div>
+        <div class="option-total-row">
+          <div class="option-total-label">オプション込み合計</div>
+          <div class="option-total-price">¥162,000</div>
+        </div>
+      </div>
+
     </div>
 
     <!-- フッター -->
@@ -344,5 +394,15 @@
     </div>
 
   </div>
+
+  <script>
+    function switchTab(size) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + size).classList.add('active');
+      const idx = size === 'standard' ? 0 : 1;
+      document.querySelectorAll('.tab')[idx].classList.add('active');
+    }
+  </script>
 </body>
 </html>
