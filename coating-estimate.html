@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コーティング施工お見積り | ラクルマ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .header .brand {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .header .sub {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* 車種バッジ */
+    .vehicle-badge {
+      display: inline-block;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin: 16px 0 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* セクション */
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* 明細行 */
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .item:last-child { border-bottom: none; }
+
+    .item-name {
+      font-size: 14px;
+      color: #333;
+      flex: 1;
+    }
+    .item-desc {
+      font-size: 11px;
+      color: #999;
+      margin-top: 2px;
+    }
+    .item-price {
+      font-size: 15px;
+      font-weight: 600;
+      color: #222;
+      white-space: nowrap;
+      margin-left: 16px;
+    }
+
+    /* 作業内容リスト */
+    .work-list {
+      margin-top: 4px;
+      padding-left: 0;
+      list-style: none;
+    }
+    .work-list li {
+      font-size: 12px;
+      color: #666;
+      padding: 3px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+    .work-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #4caf82;
+      font-size: 11px;
+    }
+
+    /* 合計 */
+    .total-section {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .total-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .total-amount {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+    .total-amount span {
+      font-size: 16px;
+      font-weight: 400;
+      margin-right: 4px;
+    }
+
+    /* オプション */
+    .option-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border-left: 4px solid #e8a838;
+    }
+    .option-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #e8a838;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .option-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .option-name {
+      font-size: 14px;
+      color: #333;
+    }
+    .option-desc {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+    }
+    .option-price {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e8a838;
+      white-space: nowrap;
+      margin-left: 16px;
+    }
+    .option-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 12px;
+      margin-top: 8px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .option-total-label {
+      font-size: 12px;
+      color: #555;
+    }
+    .option-total-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #222;
+    }
+
+    /* 特徴 */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .feature-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .feature-icon {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+    .feature-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 3px;
+    }
+    .feature-text {
+      font-size: 11px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    /* フッター */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 8px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- ヘッダー -->
+    <div class="header">
+      <div class="brand">ラクルマ — Coating Estimate</div>
+      <h1>コーティング施工<br>お見積り</h1>
+      <div class="sub">使用コーティング剤：<strong>ZeusClear（業務用）</strong></div>
+      <div class="vehicle-badge">ハイエース 標準ボディ ハイルーフ</div>
+    </div>
+
+    <!-- ZeusClear特徴 -->
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🚗</div>
+        <div class="feature-title">ボディ全面対応</div>
+        <div class="feature-text">塗装面はもちろん未塗装樹脂・ヘッドライトにも施工可能</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🪟</div>
+        <div class="feature-title">ガラスにも施工</div>
+        <div class="feature-text">撥水・防汚効果でフロント・サイドガラスも美しく保護</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <div class="feature-title">トータル美観</div>
+        <div class="feature-text">車全体をまとめてコーティングし、統一感のある仕上がりに</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏢</div>
+        <div class="feature-title">業務用品質</div>
+        <div class="feature-text">プロ向けZeusClear使用。専用プライマーで密着性を確保</div>
+      </div>
+    </div>
+
+    <!-- 材料費 -->
+    <div class="section">
+      <div class="section-title">材料費</div>
+      <div class="item">
+        <div>
+          <div class="item-name">コーティング剤（ZeusClear）</div>
+        </div>
+        <div class="item-price">¥18,000</div>
+      </div>
+      <div class="item">
+        <div>
+          <div class="item-name">専用プライマー</div>
+          <div class="item-desc">密着性向上・長期効果を確保するための下地処理剤</div>
+        </div>
+        <div class="item-price">¥7,000</div>
+      </div>
+    </div>
+
+    <!-- 施工代 -->
+    <div class="section">
+      <div class="section-title">施工代</div>
+      <div class="item">
+        <div style="flex:1">
+          <div class="item-name">コーティング施工（フルパッケージ）</div>
+          <ul class="work-list">
+            <li>洗車</li>
+            <li>簡易水垢処理</li>
+            <li>フロントガラス油膜除去</li>
+            <li>プライマー施工</li>
+            <li>ZeusClearコーティング施工</li>
+          </ul>
+        </div>
+        <div class="item-price">¥66,000</div>
+      </div>
+    </div>
+
+    <!-- 合計 -->
+    <div class="total-section">
+      <div class="total-label">合計（税込）</div>
+      <div class="total-amount"><span>¥</span>91,000</div>
+    </div>
+
+    <!-- オプション：磨き -->
+    <div class="option-section">
+      <div class="option-title">Option — 水垢が多い場合</div>
+      <div class="option-row">
+        <div>
+          <div class="option-name">本格ポリッシャー磨き</div>
+          <div class="option-desc">中古車など水垢・くすみが多い場合に推奨</div>
+        </div>
+        <div class="option-price">+ ¥66,000</div>
+      </div>
+      <div class="option-total-row">
+        <div class="option-total-label">オプション込み合計</div>
+        <div class="option-total-price">¥157,000</div>
+      </div>
+    </div>
+
+    <!-- フッター -->
+    <div class="footer">
+      ラクルマ（出張洗車・コーティング）<br>
+      世田谷区・目黒区・渋谷区エリア対応<br>
+      ※ 表示価格はすべて税込です
+    </div>
+
+  </div>
+</body>
+</html>
