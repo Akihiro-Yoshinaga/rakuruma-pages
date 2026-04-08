@@ -273,20 +273,22 @@
     .detail-btn {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       font-size: 13px;
       font-weight: 700;
-      color: #1a1a2e;
-      background: #f0f0f0;
+      color: #fff;
+      background: #e8a838;
       border: none;
-      border-radius: 20px;
-      padding: 7px 16px;
+      border-radius: 8px;
+      padding: 9px 18px;
       cursor: pointer;
       margin-left: auto;
       white-space: nowrap;
-      transition: background 0.15s;
+      box-shadow: 0 2px 6px rgba(232,168,56,0.4);
+      transition: background 0.15s, transform 0.1s;
     }
-    .detail-btn:hover { background: #e0e0e0; }
+    .detail-btn:hover { background: #d4952a; }
+    .detail-btn:active { transform: scale(0.97); }
 
     /* モーダル */
     .modal-overlay {
@@ -394,7 +396,7 @@
   <div class="section-header">
     <div class="icon icon-coating">✨</div>
     <div class="label">コーティング（ZeusClear 業務用）</div>
-    <button class="detail-btn" onclick="document.getElementById('zeus-modal').classList.add('open')">製品詳細・注意事項</button>
+    <button class="detail-btn" onclick="document.getElementById('zeus-modal').classList.add('open')">📋 詳細・注意事項</button>
   </div>
 
   <div class="size-tabs">
