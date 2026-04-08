@@ -366,9 +366,11 @@
     }
     .modal-list li:last-child { border-bottom: none; }
     .modal-list li::before {
-      content: attr(data-icon);
+      content: '—';
       position: absolute;
       left: 0;
+      color: #ccc;
+      font-size: 12px;
     }
     .modal-warn {
       background: #fff8ec;
@@ -617,29 +619,29 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">
-      ✨ ZeusClear（ゼウスクリア）について
+      ZeusClear（ゼウスクリア）について
       <span class="modal-close" onclick="document.getElementById('zeus-modal').classList.remove('open')">×</span>
     </div>
 
     <div class="modal-section">
       <div class="modal-section-title">製品の特徴</div>
       <ul class="modal-list">
-        <li data-icon="🔬">ポリシラザン（無機）＋高分子化合物（有機）の2層ハイブリッド構造</li>
-        <li data-icon="🚗">ボディ塗装面・未塗装樹脂・ヘッドライト・ガラス・ホイールに施工可能</li>
-        <li data-icon="✨">深い艶・光沢と強力な撥水効果が約3年持続</li>
-        <li data-icon="💧">イオンデポジット（水シミ）を寄せ付けにくい無機層設計</li>
-        <li data-icon="🛡️">専用プライマーで密着性を高め、長期間効果を維持</li>
+        <li data-icon="·">ポリシラザン（無機）＋高分子化合物（有機）の2層ハイブリッド構造</li>
+        <li data-icon="·">ボディ塗装面・未塗装樹脂・ヘッドライト・ガラス・ホイールに施工可能</li>
+        <li data-icon="·">深い艶・光沢と強力な撥水効果が約3年持続</li>
+        <li data-icon="·">イオンデポジット（水シミ）を寄せ付けにくい無機層設計</li>
+        <li data-icon="·">専用プライマーで密着性を高め、長期間効果を維持</li>
       </ul>
     </div>
 
     <div class="modal-section">
       <div class="modal-section-title">施工後の注意事項</div>
       <ul class="modal-list">
-        <li data-icon="⏱️">施工後3時間は水に濡れないようにしてください（雨・結露に注意）</li>
-        <li data-icon="📅">完全硬化まで約1ヶ月かかります</li>
-        <li data-icon="🚿">硬化期間中の洗車はマイクロファイバーによる水洗いのみ（カーシャンプー・洗車機は不可）</li>
-        <li data-icon="⚠️">硬化前に強くこすると被膜が傷つく場合があります</li>
-        <li data-icon="🚫">研磨剤入りワックスやクリーナーは被膜を削るため使用不可</li>
+        <li data-icon="·">施工後3時間は水に濡れないようにしてください（雨・結露に注意）</li>
+        <li data-icon="·">完全硬化まで約1ヶ月かかります</li>
+        <li data-icon="·">硬化期間中の洗車はマイクロファイバーによる水洗いのみ（カーシャンプー・洗車機は不可）</li>
+        <li data-icon="·">硬化前に強くこすると被膜が傷つく場合があります</li>
+        <li data-icon="·">研磨剤入りワックスやクリーナーは被膜を削るため使用不可</li>
       </ul>
       <div class="modal-warn">施工直後は特にデリケートな状態です。1ヶ月間はできるだけ水洗いのみでお願いします。</div>
     </div>
@@ -647,10 +649,10 @@
     <div class="modal-section">
       <div class="modal-section-title">メンテナンス</div>
       <ul class="modal-list">
-        <li data-icon="🗓️">3ヶ月に1度を目安に専用メンテナンス剤で拭き上げ</li>
-        <li data-icon="💦">撥水力が弱まってきたタイミングがメンテナンスの目安</li>
-        <li data-icon="🧼">通常の洗車はカーシャンプーでOK（硬化後）</li>
-        <li data-icon="🚫">コンパウンド・研磨剤入り製品は使用しないこと</li>
+        <li data-icon="·">3ヶ月に1度を目安に専用メンテナンス剤で拭き上げ</li>
+        <li data-icon="·">撥水力が弱まってきたタイミングがメンテナンスの目安</li>
+        <li data-icon="·">通常の洗車はカーシャンプーでOK（硬化後）</li>
+        <li data-icon="·">コンパウンド・研磨剤入り製品は使用しないこと</li>
       </ul>
     </div>
   </div>
