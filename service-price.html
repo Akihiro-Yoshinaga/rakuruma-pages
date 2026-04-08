@@ -268,6 +268,116 @@
       margin-top: 16px;
       line-height: 2;
     }
+
+    /* 詳細ボタン */
+    .detail-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 5px 14px;
+      cursor: pointer;
+      margin-left: auto;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .detail-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* モーダル */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 24px 40px;
+      width: 100%;
+      max-width: 720px;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-close {
+      margin-left: auto;
+      font-size: 20px;
+      color: #aaa;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-section {
+      margin-bottom: 20px;
+    }
+    .modal-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-list {
+      list-style: none;
+      padding: 0;
+    }
+    .modal-list li {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.6;
+      padding: 5px 0 5px 18px;
+      position: relative;
+      border-bottom: 1px solid #f8f8f8;
+    }
+    .modal-list li:last-child { border-bottom: none; }
+    .modal-list li::before {
+      content: attr(data-icon);
+      position: absolute;
+      left: 0;
+    }
+    .modal-warn {
+      background: #fff8ec;
+      border-left: 3px solid #e8a838;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #666;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -284,6 +394,7 @@
   <div class="section-header">
     <div class="icon icon-coating">✨</div>
     <div class="label">コーティング（ZeusClear 業務用）</div>
+    <button class="detail-btn" onclick="document.getElementById('zeus-modal').classList.add('open')">詳細 ▸</button>
   </div>
 
   <div class="size-tabs">
@@ -497,6 +608,50 @@
     ※ 部品・用品代は別途実費
   </div>
 
+</div>
+
+<!-- ZeusClear モーダル -->
+<div id="zeus-modal" class="modal-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">
+      ✨ ZeusClear（ゼウスクリア）について
+      <span class="modal-close" onclick="document.getElementById('zeus-modal').classList.remove('open')">×</span>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">製品の特徴</div>
+      <ul class="modal-list">
+        <li data-icon="🔬">ポリシラザン（無機）＋高分子化合物（有機）の2層ハイブリッド構造</li>
+        <li data-icon="🚗">ボディ塗装面・未塗装樹脂・ヘッドライト・ガラス・ホイールに施工可能</li>
+        <li data-icon="✨">深い艶・光沢と強力な撥水効果が約3年持続</li>
+        <li data-icon="💧">イオンデポジット（水シミ）を寄せ付けにくい無機層設計</li>
+        <li data-icon="🛡️">専用プライマーで密着性を高め、長期間効果を維持</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">施工後の注意事項</div>
+      <ul class="modal-list">
+        <li data-icon="⏱️">施工後3時間は水に濡れないようにしてください（雨・結露に注意）</li>
+        <li data-icon="📅">完全硬化まで約1ヶ月かかります</li>
+        <li data-icon="🚿">硬化期間中の洗車はマイクロファイバーによる水洗いのみ（カーシャンプー・洗車機は不可）</li>
+        <li data-icon="⚠️">硬化前に強くこすると被膜が傷つく場合があります</li>
+        <li data-icon="🚫">研磨剤入りワックスやクリーナーは被膜を削るため使用不可</li>
+      </ul>
+      <div class="modal-warn">施工直後は特にデリケートな状態です。1ヶ月間はできるだけ水洗いのみでお願いします。</div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">メンテナンス</div>
+      <ul class="modal-list">
+        <li data-icon="🗓️">3ヶ月に1度を目安に専用メンテナンス剤で拭き上げ</li>
+        <li data-icon="💦">撥水力が弱まってきたタイミングがメンテナンスの目安</li>
+        <li data-icon="🧼">通常の洗車はカーシャンプーでOK（硬化後）</li>
+        <li data-icon="🚫">コンパウンド・研磨剤入り製品は使用しないこと</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <script>
