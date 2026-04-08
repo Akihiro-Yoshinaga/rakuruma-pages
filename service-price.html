@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>施工料金表 | ラクルマ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 24px 16px 48px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ヘッダー */
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .header .brand {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .header .note {
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* セクションヘッダー */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 28px 0 14px;
+    }
+    .section-header .icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .icon-coating { background: #1a1a2e; }
+    .icon-parts   { background: #1e3a5f; }
+    .section-header .label {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .section-header .updated {
+      font-size: 11px;
+      color: #aaa;
+      margin-left: auto;
+    }
+
+    /* サイズタブ */
+    .size-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tab {
+      flex: 1;
+      padding: 9px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid #e0e0e0;
+      background: #fff;
+      color: #888;
+      transition: all 0.18s;
+    }
+    .tab.active {
+      border-color: #1a1a2e;
+      background: #1a1a2e;
+      color: #fff;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* カード */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* 明細行 */
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 9px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .item:last-child { border-bottom: none; }
+    .item-name {
+      font-size: 14px;
+      color: #333;
+      flex: 1;
+      padding-right: 12px;
+      line-height: 1.45;
+    }
+    .item-note {
+      font-size: 11px;
+      color: #999;
+      margin-top: 2px;
+    }
+    .item-prices {
+      text-align: right;
+      white-space: nowrap;
+    }
+    .item-price-tax {
+      font-size: 15px;
+      font-weight: 700;
+      color: #222;
+    }
+    .item-price-notax {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 1px;
+    }
+    .item-diff {
+      font-size: 11px;
+      color: #e8a838;
+      font-weight: 600;
+    }
+
+    /* 合計バー */
+    .total-bar {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .total-bar .label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+    .total-bar .amount {
+      font-size: 30px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .total-bar .amount span { font-size: 15px; font-weight: 400; margin-right: 3px; }
+
+    /* オプション */
+    .option-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border-left: 4px solid #e8a838;
+    }
+    .option-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #e8a838;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .option-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .option-name { font-size: 14px; color: #333; }
+    .option-note { font-size: 11px; color: #999; margin-top: 2px; }
+    .option-price-tax { font-size: 15px; font-weight: 700; color: #e8a838; white-space: nowrap; margin-left: 12px; }
+    .option-price-notax { font-size: 11px; color: #aaa; text-align: right; margin-top: 1px; }
+    .option-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 12px;
+      margin-top: 8px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .option-total-label { font-size: 12px; color: #666; }
+    .option-total-price { font-size: 18px; font-weight: 700; color: #222; }
+
+    /* 整備テーブル */
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .price-table th {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #888;
+      text-align: left;
+      padding: 0 0 10px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    .price-table th:not(:first-child) { text-align: right; }
+    .price-table td {
+      font-size: 13px;
+      color: #333;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+      vertical-align: top;
+      line-height: 1.45;
+    }
+    .price-table td:not(:first-child) {
+      text-align: right;
+      white-space: nowrap;
+      padding-left: 12px;
+    }
+    .price-table tr:last-child td { border-bottom: none; }
+    .price-table .td-notax { font-size: 11px; color: #bbb; }
+    .price-table .td-note { font-size: 11px; color: #999; margin-top: 2px; }
+    .cat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #1e3a5f;
+      text-transform: uppercase;
+      padding: 14px 0 4px;
+      border-bottom: 1px solid #e8eef5;
+    }
+
+    /* フッター */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #bbb;
+      margin-top: 16px;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="brand">ラクルマ — Service Price List</div>
+    <h1>施工料金表</h1>
+    <div class="note">※ コーティングは税込 / 用品取り付けは税抜き表示（税込併記）</div>
+  </div>
+
+  <!-- ━━━━ 1. コーティング ━━━━ -->
+  <div class="section-header">
+    <div class="icon icon-coating">✨</div>
+    <div class="label">コーティング（ZeusClear 業務用）</div>
+  </div>
+
+  <div class="size-tabs">
+    <div class="tab active" onclick="switchTab('std')">標準ボディ ハイルーフ</div>
+    <div class="tab" onclick="switchTab('lng')">ロング</div>
+  </div>
+
+  <!-- 標準 -->
+  <div id="panel-std" class="panel active">
+    <div class="card">
+      <div class="card-title">材料費</div>
+      <div class="item">
+        <div class="item-name">コーティング剤（ZeusClear）</div>
+        <div class="item-prices">
+          <div class="item-price-tax">¥18,000</div>
+        </div>
+      </div>
+      <div class="item">
+        <div>
+          <div class="item-name">専用プライマー</div>
+          <div class="item-note">密着性向上・長期効果を確保</div>
+        </div>
+        <div class="item-prices">
+          <div class="item-price-tax">¥7,000</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">施工代（フルパッケージ）</div>
+      <div class="item">
+        <div class="item-name">洗車・簡易水垢処理・フロントガラス油膜除去<br>プライマー施工・コーティング施工</div>
+        <div class="item-prices">
+          <div class="item-price-tax">¥66,000</div>
+        </div>
+      </div>
+    </div>
+    <div class="total-bar">
+      <div class="label">合計（税込）</div>
+      <div class="amount"><span>¥</span>91,000</div>
+    </div>
+    <div class="option-card">
+      <div class="option-label">Option — 水垢が多い場合</div>
+      <div class="option-row">
+        <div>
+          <div class="option-name">本格ポリッシャー磨き</div>
+          <div class="option-note">中古車など水垢・くすみが多い場合に推奨</div>
+        </div>
+        <div>
+          <div class="option-price-tax">+ ¥66,000</div>
+        </div>
+      </div>
+      <div class="option-total-row">
+        <div class="option-total-label">オプション込み合計（税込）</div>
+        <div class="option-total-price">¥157,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ロング -->
+  <div id="panel-lng" class="panel">
+    <div class="card">
+      <div class="card-title">材料費</div>
+      <div class="item">
+        <div class="item-name">コーティング剤（ZeusClear）</div>
+        <div class="item-prices">
+          <div class="item-price-tax">¥18,000</div>
+        </div>
+      </div>
+      <div class="item">
+        <div>
+          <div class="item-name">専用プライマー</div>
+          <div class="item-note">密着性向上・長期効果を確保</div>
+        </div>
+        <div class="item-prices">
+          <div class="item-price-tax">¥7,000</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">施工代（フルパッケージ）</div>
+      <div class="item">
+        <div class="item-name">洗車・簡易水垢処理・フロントガラス油膜除去<br>プライマー施工・コーティング施工</div>
+        <div class="item-prices">
+          <div class="item-price-tax">¥71,000 <span class="item-diff">+¥5,000</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="total-bar">
+      <div class="label">合計（税込）</div>
+      <div class="amount"><span>¥</span>96,000</div>
+    </div>
+    <div class="option-card">
+      <div class="option-label">Option — 水垢が多い場合</div>
+      <div class="option-row">
+        <div>
+          <div class="option-name">本格ポリッシャー磨き</div>
+          <div class="option-note">中古車など水垢・くすみが多い場合に推奨</div>
+        </div>
+        <div>
+          <div class="option-price-tax">+ ¥66,000</div>
+        </div>
+      </div>
+      <div class="option-total-row">
+        <div class="option-total-label">オプション込み合計（税込）</div>
+        <div class="option-total-price">¥162,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ━━━━ 2. 用品取り付け・整備 ━━━━ -->
+  <div class="section-header">
+    <div class="icon icon-parts">🔧</div>
+    <div class="label">用品取り付け・整備</div>
+    <div class="updated">2024年7月6日更新</div>
+  </div>
+
+  <div class="card">
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>項目</th>
+          <th>税抜</th>
+          <th>税込</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- タイヤ -->
+        <tr><td colspan="3" class="cat-label">タイヤ</td></tr>
+        <tr>
+          <td>タイヤ履き替え<div class="td-note">ホイール座面あたり付け込み</div></td>
+          <td class="td-notax">¥10,000</td>
+          <td><strong>¥11,000</strong></td>
+        </tr>
+
+        <!-- 電装・ナビ -->
+        <tr><td colspan="3" class="cat-label">電装・ナビ</td></tr>
+        <tr>
+          <td>ETC車載器取り付け<div class="td-note">セットアップなし</div></td>
+          <td class="td-notax">¥10,000</td>
+          <td><strong>¥11,000</strong></td>
+        </tr>
+        <tr>
+          <td>ナビ取り付け<div class="td-note">リアカメラ取り付けは別途</div></td>
+          <td class="td-notax">¥24,000</td>
+          <td><strong>¥26,400</strong></td>
+        </tr>
+        <tr>
+          <td>リアカメラ取り付け<div class="td-note">ガーニッシュ穴あけ加工は +¥5,500（税込）</div></td>
+          <td class="td-notax">¥15,000</td>
+          <td><strong>¥16,500</strong></td>
+        </tr>
+        <tr>
+          <td>リアカメラ車外取り付け（ドラレコ用）</td>
+          <td class="td-notax">¥5,000</td>
+          <td><strong>¥5,500</strong></td>
+        </tr>
+        <tr>
+          <td>フリップダウンモニター取り付け</td>
+          <td class="td-notax">¥25,000</td>
+          <td><strong>¥27,500</strong></td>
+        </tr>
+        <tr>
+          <td>オーディオ取り付け</td>
+          <td class="td-notax">¥20,000</td>
+          <td><strong>¥22,000</strong></td>
+        </tr>
+        <tr>
+          <td>スピーカー左右交換（2箇所）</td>
+          <td class="td-notax">¥15,000</td>
+          <td><strong>¥16,500</strong></td>
+        </tr>
+
+        <!-- ドラレコ -->
+        <tr><td colspan="3" class="cat-label">ドライブレコーダー</td></tr>
+        <tr>
+          <td>ドラレコ取り付け（前のみ）</td>
+          <td class="td-notax">¥8,000</td>
+          <td><strong>¥8,800</strong></td>
+        </tr>
+        <tr>
+          <td>ドラレコ取り付け（前後）<div class="td-note">国産車</div></td>
+          <td class="td-notax">¥15,000</td>
+          <td><strong>¥16,500</strong></td>
+        </tr>
+        <tr>
+          <td>ドラレコ取り付け（前後）<div class="td-note">輸入車</div></td>
+          <td class="td-notax">¥22,000</td>
+          <td><strong>¥24,200</strong></td>
+        </tr>
+
+        <!-- デジタルインナーミラー -->
+        <tr><td colspan="3" class="cat-label">デジタルインナーミラー</td></tr>
+        <tr>
+          <td>デジタルインナーミラー取り付け<div class="td-note">国産車</div></td>
+          <td class="td-notax">¥20,000</td>
+          <td><strong>¥22,000</strong></td>
+        </tr>
+        <tr>
+          <td>デジタルインナーミラー取り付け<div class="td-note">輸入車</div></td>
+          <td class="td-notax">¥24,000</td>
+          <td><strong>¥26,400</strong></td>
+        </tr>
+
+        <!-- 外装パーツ -->
+        <tr><td colspan="3" class="cat-label">外装パーツ</td></tr>
+        <tr>
+          <td>サイドバイザー取り付け<div class="td-note">運転席・助手席</div></td>
+          <td class="td-notax">¥6,000</td>
+          <td><strong>¥6,600</strong></td>
+        </tr>
+        <tr>
+          <td>ミラーステー（取り付けステー）交換</td>
+          <td class="td-notax">¥3,000</td>
+          <td><strong>¥3,300</strong></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- フッター -->
+  <div class="footer">
+    ラクルマ（出張洗車・コーティング・用品取り付け）<br>
+    世田谷区・目黒区・渋谷区エリア対応<br>
+    ※ コーティングは税込表示 / 用品取り付けは税抜き価格（税込10%換算を併記）<br>
+    ※ 部品・用品代は別途実費
+  </div>
+
+</div>
+
+<script>
+  function switchTab(size) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + size).classList.add('active');
+    const idx = size === 'std' ? 0 : 1;
+    document.querySelectorAll('.tab')[idx].classList.add('active');
+  }
+</script>
+</body>
+</html>
