@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ラクルマ｜ログイン中...</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  background: #f0f4f8;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 24px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
+  text-align: center;
+}
+.logo { font-size: 22px; font-weight: 800; color: #003B8B; margin-bottom: 8px; }
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #003B8B;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 20px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.msg { font-size: 14px; color: #718096; }
+.err { color: #c53030; font-size: 14px; margin-top: 16px; display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">ラクルマ</div>
+  <div class="spinner"></div>
+  <div class="msg">ログイン中...</div>
+  <div class="err" id="errMsg"></div>
+</div>
+
+<script>
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+
+var params = new URLSearchParams(window.location.search);
+var code  = params.get('code');
+var state = params.get('state') || 'customers';
+var error = params.get('error');
+
+if (error || !code) {
+  showError('LINEログインがキャンセルされました。もう一度お試しください。');
+} else {
+  var redirectUrl = GAS_URL + '?action=staffCallback&code=' + encodeURIComponent(code) + '&state=' + encodeURIComponent(state);
+  window.location.href = redirectUrl;
+}
+
+function showError(msg) {
+  document.querySelector('.spinner').style.display = 'none';
+  document.querySelector('.msg').style.display = 'none';
+  var el = document.getElementById('errMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+</script>
+</body>
+</html>
