@@ -83,8 +83,17 @@ if (error || !code) {
   .then(function(r) { return r.json(); })
   .then(function(profile) {
     if (!profile.userId) { showError('プロフィールの取得に失敗しました。'); return; }
-    // GASにlineUserIdを渡す
-    window.location.href = GAS_URL + '?action=customers&token=' + encodeURIComponent(profile.userId);
+    // GASにlineUserIdを渡す（stateからリダイレクト先を復元）
+    var parts  = state.split('__');
+    var action = parts[0] || 'customers';
+    var param  = parts[1] || '';
+    var dest;
+    if (action === 'customerDetailByPhone') {
+      dest = GAS_URL + '?action=customerDetailByPhone&phone=' + encodeURIComponent(param) + '&token=' + encodeURIComponent(profile.userId);
+    } else {
+      dest = GAS_URL + '?action=' + action + (param ? '&row=' + encodeURIComponent(param) : '') + '&token=' + encodeURIComponent(profile.userId);
+    }
+    window.location.href = dest;
   })
   .catch(function(e) { showError('通信エラーが発生しました。再度お試しください。'); });
 }
