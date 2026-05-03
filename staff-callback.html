@@ -47,7 +47,10 @@ body {
 </div>
 
 <script>
-var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+var GAS_URL        = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+var CHANNEL_ID     = '2004330318';
+var CHANNEL_SECRET = '8c91804575d554a3d175d192d69ef161';
+var CALLBACK_URL   = 'https://rakuruma.com/staff-callback.html';
 
 var params = new URLSearchParams(window.location.search);
 var code  = params.get('code');
@@ -57,8 +60,33 @@ var error = params.get('error');
 if (error || !code) {
   showError('LINEログインがキャンセルされました。もう一度お試しください。');
 } else {
-  var redirectUrl = GAS_URL + '?action=staffCallback&code=' + encodeURIComponent(code) + '&state=' + encodeURIComponent(state);
-  window.location.href = redirectUrl;
+  // トークン交換
+  var body = 'grant_type=authorization_code'
+    + '&code=' + encodeURIComponent(code)
+    + '&redirect_uri=' + encodeURIComponent(CALLBACK_URL)
+    + '&client_id=' + CHANNEL_ID
+    + '&client_secret=' + CHANNEL_SECRET;
+
+  fetch('https://api.line.me/oauth2/v2.1/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(tokenData) {
+    if (!tokenData.access_token) { showError('LINEトークンの取得に失敗しました。'); return; }
+    // プロフィール取得
+    return fetch('https://api.line.me/v2/profile', {
+      headers: { 'Authorization': 'Bearer ' + tokenData.access_token }
+    });
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(profile) {
+    if (!profile.userId) { showError('プロフィールの取得に失敗しました。'); return; }
+    // GASにlineUserIdを渡す
+    window.location.href = GAS_URL + '?action=customers&token=' + encodeURIComponent(profile.userId);
+  })
+  .catch(function(e) { showError('通信エラーが発生しました。再度お試しください。'); });
 }
 
 function showError(msg) {
