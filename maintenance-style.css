@@ -88,6 +88,8 @@ section {
     border-radius: 16px;
     padding: 30px;
     transition: all 0.3s;
+    min-width: 0;
+    word-break: break-word;
 }
 
 .menu-card:hover {
@@ -146,10 +148,20 @@ section {
     font-weight: bold;
 }
 
+.menu-scene {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
 .menu-note {
     font-size: 13px;
     color: #999;
     font-style: italic;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 12px;
+    margin-top: 4px;
 }
 
 /* サービスの特徴 */
@@ -343,6 +355,10 @@ section {
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+    }
+
     .hero-title {
         font-size: 32px;
     }
@@ -359,6 +375,19 @@ section {
     .features-grid,
     .flow-steps {
         grid-template-columns: 1fr;
+    }
+
+    .menu-card {
+        padding: 20px;
+    }
+
+    .menu-header {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .menu-price {
+        font-size: 20px;
     }
 
     .flow-step:after {
