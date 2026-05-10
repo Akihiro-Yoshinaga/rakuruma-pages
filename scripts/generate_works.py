@@ -35,6 +35,7 @@ COL_SOURCE      = 12
 # 13〜19: carCheck系
 COL_CAR         = 20  # car列（追加済み）
 COL_TASK        = 21  # taskName列（追加済み）
+COL_PUBLISH     = 22  # 公開フラグ列（× = 非公開、空欄 = 公開）
 
 # 洗車系メニューのキーワード（これを含む報告は除外）
 WASH_KEYWORDS = ['洗車', 'コーティング', 'ガラスコーティング', 'クリーニング', '車内清掃', 'ポリッシュ']
@@ -246,6 +247,11 @@ def main():
 
             # 写真なし・作業内容なしはスキップ
             if not photos or not work_note.strip():
+                continue
+
+            # 公開フラグが × の行はスキップ
+            publish = row[COL_PUBLISH].strip() if len(row) > COL_PUBLISH else ''
+            if publish == '×':
                 continue
 
             # 洗車系メニューはスキップ（整備ページなので整備実績のみ表示）
