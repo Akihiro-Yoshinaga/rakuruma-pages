@@ -15,7 +15,7 @@ import gspread
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 SPREADSHEET_ID = os.environ['SPREADSHEET_ID']
-WORK_REPORT_SHEET = 'WorkReport'
+WORK_REPORT_SHEET = '作業報告記録'
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), '..', 'works.json')
 
 # WorkReportシートの列インデックス（0始まり）
