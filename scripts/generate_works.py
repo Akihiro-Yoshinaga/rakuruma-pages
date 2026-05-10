@@ -36,6 +36,8 @@ COL_SOURCE      = 12
 COL_CAR         = 20  # car列（追加済み）
 COL_TASK        = 21  # taskName列（追加済み）
 COL_PUBLISH     = 22  # 公開フラグ列（チェックボックスTRUE = 非公開、FALSE/空欄 = 公開）
+COL_REVIEW      = 23  # 口コミテキスト列（手動入力）
+COL_RATING      = 24  # 評価（星数）列（手動入力、例: 5）
 
 # 洗車系メニューのキーワード（これを含む報告は除外）
 WASH_KEYWORDS = ['洗車', 'コーティング', 'ガラスコーティング', 'クリーニング', '車内清掃', 'ポリッシュ']
@@ -267,6 +269,9 @@ def main():
 
             maker = detect_maker(car)
 
+            review = row[COL_REVIEW].strip() if len(row) > COL_REVIEW else ''
+            rating = row[COL_RATING].strip() if len(row) > COL_RATING else ''
+
             works.append({
                 'id':     row[COL_REPORT_ID],
                 'date':   date_display,
@@ -276,6 +281,8 @@ def main():
                 'staff':  row[COL_STAFF] if len(row) > COL_STAFF else '',
                 'photo':  photos[0],
                 'url':    row[COL_VIEW_URL] if len(row) > COL_VIEW_URL else '',
+                'review': review,
+                'rating': rating,
             })
 
     # 新しい順にソート（最大100件）
