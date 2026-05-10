@@ -874,6 +874,89 @@
             border-color: rgba(255,255,255,0.8);
         }
 
+        /* ========== WORKS ========== */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .work-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .work-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,59,139,0.12);
+        }
+        .work-card-photo {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            background: var(--bg-light);
+            display: block;
+        }
+        .work-card-photo-placeholder {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
+            font-size: 13px;
+        }
+        .work-card-body {
+            padding: 18px 20px;
+        }
+        .work-card-date {
+            font-size: 12px;
+            color: var(--yellow-dark);
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 6px;
+        }
+        .work-card-car {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+        .work-card-note {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .work-card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-top: 12px;
+        }
+        .works-more {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .works-empty {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 48px 0;
+            font-size: 14px;
+        }
+
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .hero-title { font-size: 28px; }
@@ -889,6 +972,7 @@
             .section { padding: 64px 0; }
             .section-title { font-size: 24px; }
 
+            .works-grid { grid-template-columns: 1fr; }
             .menu-grid { grid-template-columns: 1fr; }
             .flow-grid { grid-template-columns: 1fr; gap: 0; }
             .flow-card::after { display: none; }
@@ -999,7 +1083,24 @@
         </div>
     </div>
 
-    <!-- ③ よくあるご依頼 -->
+    <!-- ③ 作業実績 -->
+    <section class="section section-bg" id="works-section">
+        <div class="container">
+            <div class="section-label">WORKS</div>
+            <h2 class="section-title">作業実績</h2>
+            <p class="section-lead">実際の作業内容と写真を公開しています。</p>
+
+            <div class="works-grid" id="works-grid">
+                <div class="works-empty" id="works-loading" style="grid-column:1/-1;">読み込み中...</div>
+            </div>
+
+            <div class="works-more" id="works-more" style="display:none;">
+                <button onclick="showMoreWorks()" class="btn-line-outline">もっと見る</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ④ よくあるご依頼 -->
     <section class="section">
         <div class="container">
             <div class="section-label">SERVICES</div>
@@ -1341,7 +1442,63 @@
 </main>
 
 <script>
-    // FAQ toggle is handled via onclick on each .faq-item
+    // FAQ toggle
+    // (handled via onclick on each .faq-item)
+
+    // ========== 作業実績 ==========
+    const WORKS_PER_PAGE = 9;
+    let allWorks = [];
+    let shownCount = 0;
+
+    function renderWorkCard(w) {
+        const photo = w.photo
+            ? `<img class="work-card-photo" src="${w.photo}" alt="${w.car || '作業写真'}" loading="lazy">`
+            : `<div class="work-card-photo-placeholder">📷 写真準備中</div>`;
+        const car  = w.car  ? `<div class="work-card-car">${w.car}</div>` : '';
+        const link = w.url  ? `<div class="work-card-link">詳細を見る →</div>` : '';
+        const href = w.url  ? `href="${w.url}" target="_blank" rel="noopener"` : '';
+        return `
+        <a class="work-card" ${href}>
+            ${photo}
+            <div class="work-card-body">
+                <div class="work-card-date">${w.date || ''}</div>
+                ${car}
+                <div class="work-card-note">${w.note || ''}</div>
+                ${link}
+            </div>
+        </a>`;
+    }
+
+    function showMoreWorks() {
+        const grid = document.getElementById('works-grid');
+        const next = allWorks.slice(shownCount, shownCount + WORKS_PER_PAGE);
+        next.forEach(w => grid.insertAdjacentHTML('beforeend', renderWorkCard(w)));
+        shownCount += next.length;
+        if (shownCount >= allWorks.length) {
+            document.getElementById('works-more').style.display = 'none';
+        }
+    }
+
+    fetch('/works.json')
+        .then(r => r.json())
+        .then(data => {
+            const grid = document.getElementById('works-grid');
+            document.getElementById('works-loading').remove();
+
+            allWorks = data;
+            if (allWorks.length === 0) {
+                grid.innerHTML = '<div class="works-empty" style="grid-column:1/-1;">作業実績を準備中です。</div>';
+                return;
+            }
+
+            showMoreWorks();
+            if (allWorks.length > WORKS_PER_PAGE) {
+                document.getElementById('works-more').style.display = 'block';
+            }
+        })
+        .catch(() => {
+            document.getElementById('works-loading').textContent = '';
+        });
 </script>
 
 </body>
