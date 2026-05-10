@@ -34,6 +34,10 @@ COL_VIEW_URL    = 11
 COL_SOURCE      = 12
 # 13〜19: carCheck系
 COL_CAR         = 20  # car列（追加済み）
+COL_TASK        = 21  # taskName列（追加済み）
+
+# 洗車系メニューのキーワード（これを含む報告は除外）
+WASH_KEYWORDS = ['洗車', 'コーティング', 'ガラスコーティング', 'クリーニング', '車内清掃', 'ポリッシュ']
 
 # ------------------------------------------------------------
 # メーカー判定マップ
@@ -238,9 +242,14 @@ def main():
             photos = parse_photos(row[COL_PHOTOS] if len(row) > COL_PHOTOS else '')
             work_note = row[COL_WORK_NOTE] if len(row) > COL_WORK_NOTE else ''
             car = row[COL_CAR] if len(row) > COL_CAR else ''
+            task = row[COL_TASK] if len(row) > COL_TASK else ''
 
             # 写真なし・作業内容なしはスキップ
             if not photos or not work_note.strip():
+                continue
+
+            # 洗車系メニューはスキップ（整備ページなので整備実績のみ表示）
+            if any(kw in task for kw in WASH_KEYWORDS):
                 continue
 
             # 日付を整形（yyyy/MM/dd HH:mm:ss → yyyy.MM.dd）
