@@ -928,6 +928,18 @@
             color: var(--navy);
             margin-bottom: 6px;
         }
+        .work-card-maker {
+            display: inline-block;
+            background: var(--navy);
+            color: var(--yellow);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 2px;
+            margin-right: 6px;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+        }
         .work-card-note {
             font-size: 13px;
             color: var(--text-muted);
@@ -1451,12 +1463,14 @@
     let shownCount = 0;
 
     function renderWorkCard(w) {
+        const altText = [w.maker, w.car, '作業写真'].filter(Boolean).join(' ');
         const photo = w.photo
-            ? `<img class="work-card-photo" src="${w.photo}" alt="${w.car || '作業写真'}" loading="lazy">`
+            ? `<img class="work-card-photo" src="${w.photo}" alt="${altText}" loading="lazy">`
             : `<div class="work-card-photo-placeholder">📷 写真準備中</div>`;
-        const car  = w.car  ? `<div class="work-card-car">${w.car}</div>` : '';
-        const link = w.url  ? `<div class="work-card-link">詳細を見る →</div>` : '';
-        const href = w.url  ? `href="${w.url}" target="_blank" rel="noopener"` : '';
+        const maker = w.maker ? `<span class="work-card-maker">${w.maker}</span>` : '';
+        const car   = w.car   ? `<div class="work-card-car">${maker}${w.car}</div>` : '';
+        const link  = w.url   ? `<div class="work-card-link">詳細を見る →</div>` : '';
+        const href  = w.url   ? `href="${w.url}" target="_blank" rel="noopener"` : '';
         return `
         <a class="work-card" ${href}>
             ${photo}
