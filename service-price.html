@@ -252,7 +252,36 @@
     .maintenance-kit-item-name { font-size: 14px; font-weight: 700; color: #222; }
     .maintenance-kit-item-note { font-size: 11px; color: #888; line-height: 1.5; }
     .maintenance-kit-item-price { font-size: 15px; font-weight: 700; color: #3a7bd5; margin-top: 4px; }
-    .maintenance-kit-payment { font-size: 11px; color: #888; margin: 0; line-height: 1.6; }
+    .maintenance-kit-payment { font-size: 11px; color: #888; margin: 0 0 16px; line-height: 1.6; }
+    .maintenance-kit-pdf { margin-top: 4px; }
+    .maintenance-kit-pdf-title { font-size: 12px; font-weight: 700; color: #3a7bd5; margin-bottom: 10px; }
+    .maintenance-kit-pdf-viewer {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #d0e4f7;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .maintenance-kit-pdf-viewer iframe {
+      width: 100%;
+      height: 420px;
+      border: none;
+      display: block;
+    }
+    .maintenance-kit-pdf-dl {
+      display: inline-block;
+      background: #3a7bd5;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
 
     /* 整備テーブル */
     .price-table {
@@ -565,6 +594,15 @@
       </div>
     </div>
     <p class="maintenance-kit-payment">お支払いは請求書払いにてお願いいたします。合計20,000円以下のご注文時は送料770円がかかります。</p>
+    <div class="maintenance-kit-pdf">
+      <div class="maintenance-kit-pdf-title">📄 製品カタログ（PDF）</div>
+      <div class="maintenance-kit-pdf-viewer">
+        <iframe src="assets/docs/gwear-maintenance.pdf" title="GWEARメンテナンス剤カタログ"></iframe>
+      </div>
+      <a class="maintenance-kit-pdf-dl" href="assets/docs/gwear-maintenance.pdf" download="GWEAR_メンテナンス剤カタログ.pdf">
+        ⬇ PDFをダウンロード
+      </a>
+    </div>
   </div>
 
   <!-- ━━━━ 2. 用品取り付け・整備 ━━━━ -->
