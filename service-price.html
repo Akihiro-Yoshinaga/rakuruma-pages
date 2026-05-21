@@ -219,6 +219,41 @@
     .option-total-label { font-size: 12px; color: #666; }
     .option-total-price { font-size: 18px; font-weight: 700; color: #222; }
 
+    /* メンテナンスキット */
+    .maintenance-kit-card {
+      background: #f0f7ff;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid #3a7bd5;
+    }
+    .maintenance-kit-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #3a7bd5;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    .maintenance-kit-desc {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.6;
+      margin: 0 0 16px;
+    }
+    .maintenance-kit-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+    .maintenance-kit-item {
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .maintenance-kit-item-name { font-size: 14px; font-weight: 700; color: #222; }
+    .maintenance-kit-item-note { font-size: 11px; color: #888; line-height: 1.5; }
+    .maintenance-kit-item-price { font-size: 15px; font-weight: 700; color: #3a7bd5; margin-top: 4px; }
+    .maintenance-kit-payment { font-size: 11px; color: #888; margin: 0; line-height: 1.6; }
+
     /* 整備テーブル */
     .price-table {
       width: 100%;
@@ -506,6 +541,30 @@
         <div class="option-total-price">¥167,000</div>
       </div>
     </div>
+  </div>
+
+  <!-- メンテナンスキット -->
+  <div class="maintenance-kit-card">
+    <div class="maintenance-kit-label">🧴 GWEARメンテナンスキット（別売り）</div>
+    <p class="maintenance-kit-desc">本コーティングのメンテナンス用品は「別売り」となっております。指定のメンテナンス剤をご使用いただくことで保証の対象となりますので、ご希望に合わせてぜひご検討くださいませ。</p>
+    <div class="maintenance-kit-items">
+      <div class="maintenance-kit-item">
+        <div class="maintenance-kit-item-name">GWEARメンテナンスBOXライト</div>
+        <div class="maintenance-kit-item-note">メンテナンス剤・クロス・シャンプー・スポンジ・拭き上げタオルのすべてが入った基本セット</div>
+        <div class="maintenance-kit-item-price">¥7,656</div>
+      </div>
+      <div class="maintenance-kit-item">
+        <div class="maintenance-kit-item-name">メンテナンス剤（単品）</div>
+        <div class="maintenance-kit-item-note">すでに洗車用具をお持ちの方に向けた、メンテナンス剤のみの商品</div>
+        <div class="maintenance-kit-item-price">¥6,336</div>
+      </div>
+      <div class="maintenance-kit-item">
+        <div class="maintenance-kit-item-name">撥水/滑水復活キット</div>
+        <div class="maintenance-kit-item-note">水弾きが弱まってきた際に状態を修復できるセット（専用クリーナー・復活剤・シャンプー・クロスのセット）</div>
+        <div class="maintenance-kit-item-price">¥7,920</div>
+      </div>
+    </div>
+    <p class="maintenance-kit-payment">お支払いは請求書払いにてお願いいたします。合計20,000円以下のご注文時は送料770円がかかります。</p>
   </div>
 
   <!-- ━━━━ 2. 用品取り付け・整備 ━━━━ -->
