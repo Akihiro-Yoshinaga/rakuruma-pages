@@ -220,25 +220,38 @@
     .option-total-price { font-size: 18px; font-weight: 700; color: #222; }
 
     /* メンテナンスキット */
-    .maintenance-kit-card {
+    .maintenance-kit-toggle {
+      width: 100%;
       background: #f0f7ff;
+      border: none;
       border-radius: 12px;
-      padding: 20px 24px;
-      margin-bottom: 20px;
-      border-left: 4px solid #3a7bd5;
-    }
-    .maintenance-kit-label {
+      padding: 16px 20px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 13px;
       font-weight: 700;
       color: #3a7bd5;
-      letter-spacing: 0.06em;
-      margin-bottom: 10px;
+      cursor: pointer;
+      text-align: left;
     }
+    .maintenance-kit-chevron { font-size: 11px; transition: transform 0.25s; }
+    .maintenance-kit-toggle.open .maintenance-kit-chevron { transform: rotate(180deg); }
+    .maintenance-kit-body {
+      display: none;
+      background: #f0f7ff;
+      border-radius: 0 0 12px 12px;
+      padding: 0 20px 20px;
+      margin-bottom: 20px;
+    }
+    .maintenance-kit-body.open { display: block; }
     .maintenance-kit-desc {
       font-size: 12px;
       color: #555;
       line-height: 1.6;
       margin: 0 0 16px;
+      padding-top: 4px;
     }
     .maintenance-kit-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
     .maintenance-kit-item {
@@ -253,7 +266,6 @@
     .maintenance-kit-item-note { font-size: 11px; color: #888; line-height: 1.5; }
     .maintenance-kit-item-price { font-size: 15px; font-weight: 700; color: #3a7bd5; margin-top: 4px; }
     .maintenance-kit-payment { font-size: 11px; color: #888; margin: 0 0 16px; line-height: 1.6; }
-    .maintenance-kit-pdf { margin-top: 4px; }
     .maintenance-kit-pdf-title { font-size: 12px; font-weight: 700; color: #3a7bd5; margin-bottom: 10px; }
     .maintenance-kit-pdf-viewer {
       width: 100%;
@@ -270,7 +282,7 @@
       display: block;
     }
     .maintenance-kit-pdf-dl {
-      display: inline-block;
+      display: block;
       background: #3a7bd5;
       color: #fff;
       text-decoration: none;
@@ -279,7 +291,6 @@
       padding: 10px 20px;
       border-radius: 8px;
       text-align: center;
-      width: 100%;
       box-sizing: border-box;
     }
 
@@ -573,8 +584,11 @@
   </div>
 
   <!-- メンテナンスキット -->
-  <div class="maintenance-kit-card">
-    <div class="maintenance-kit-label">🧴 GWEARメンテナンスキット（別売り）</div>
+  <button class="maintenance-kit-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')" aria-expanded="false">
+    🧴 GWEARメンテナンスキット（別売り）
+    <span class="maintenance-kit-chevron">▼</span>
+  </button>
+  <div class="maintenance-kit-body">
     <p class="maintenance-kit-desc">本コーティングのメンテナンス用品は「別売り」となっております。指定のメンテナンス剤をご使用いただくことで保証の対象となりますので、ご希望に合わせてぜひご検討くださいませ。</p>
     <div class="maintenance-kit-items">
       <div class="maintenance-kit-item">
