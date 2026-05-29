@@ -93,11 +93,6 @@ if (error || !code) {
     } else {
       dest = GAS_URL + '?action=' + action + (param ? '&row=' + encodeURIComponent(param) : '') + '&token=' + encodeURIComponent(profile.userId);
     }
-    // 予約登録ページ（upload）はlocalStorageに保存してからリダイレクト
-    if (action === 'upload') {
-      localStorage.setItem('rakuruma_staff_token', profile.userId);
-      dest = GAS_URL + '?action=upload';
-    }
     window.location.href = dest;
   })
   .catch(function(e) { showError('通信エラーが発生しました。再度お試しください。'); });
