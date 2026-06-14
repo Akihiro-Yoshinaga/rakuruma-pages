@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "6e921310-a8fc-4fb3-9bb2-79e19a862123",
+    "date": "2026.06.14",
+    "maker": "",
+    "car": "",
+    "note": "vantrueのリアカメラの配線がワクワクゲート側まで届かなかったので、運転席側ガラスに設置",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=1wM5aYk5PEBXI_blLJ4urPwNinSyowSWR&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=6e921310-a8fc-4fb3-9bb2-79e19a862123",
+    "review": "洗車",
+    "rating": "0"
+  },
+  {
+    "id": "8c9624f4-c414-4acc-a599-f925575fd7e3",
+    "date": "2026.06.14",
+    "maker": "",
+    "car": "",
+    "note": "テスト",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=1fNBS3l1mDH8GjcZAnnwlS8fwdh2FNbf6&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=8c9624f4-c414-4acc-a599-f925575fd7e3",
+    "review": "洗車",
+    "rating": "0"
+  }
+]
