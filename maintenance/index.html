@@ -489,7 +489,7 @@
       font-style: italic;
     }
 
-    /* スマホ：縦並び代替レイアウト */
+    /* スマホ：縦積みレイアウト */
     @media (max-width: 600px) {
       .compare-scroll-wrap {
         overflow-x: visible;
@@ -500,7 +500,7 @@
       .compare-cards {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
       }
       .compare-card {
         background: #fff;
@@ -509,45 +509,50 @@
         box-shadow: var(--shadow-light);
       }
       .compare-card-head {
-        padding: 14px 18px;
+        padding: 12px 16px;
         font-size: 14px;
         font-weight: 800;
         color: var(--color-text-primary);
-        border-bottom: 1px solid #e8eef6;
-        background: #f5f8ff;
+        background: #f0f4ff;
+        border-bottom: 2px solid var(--color-bg-light-blue);
       }
+      /* 1行 = 1社。3行縦積み */
       .compare-card-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        padding: 11px 16px;
         border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+        line-height: 1.55;
       }
       .compare-card-row:last-child {
         border-bottom: none;
       }
-      .compare-card-col {
-        padding: 10px 12px;
-        font-size: 12px;
-        line-height: 1.6;
-        border-right: 1px solid #f0f0f0;
+      .compare-card-col-label {
+        flex-shrink: 0;
+        width: 80px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--color-text-muted);
+        letter-spacing: 0.02em;
       }
-      .compare-card-col:last-child {
-        border-right: none;
+      .compare-card-col-label.is-rakuruma {
+        color: var(--color-primary-blue);
+      }
+      .compare-card-col {
+        flex: 1;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--color-text-secondary);
       }
       .compare-card-col.is-rakuruma {
-        background: rgba(26, 82, 160, 0.05);
         color: var(--color-primary-blue);
         font-weight: 700;
       }
-      .compare-card-col-label {
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        color: var(--color-text-muted);
-        display: block;
-        margin-bottom: 4px;
-      }
-      .compare-card-col.is-rakuruma .compare-card-col-label {
-        color: var(--color-primary-blue);
+      /* ラクルマ行は背景で強調 */
+      .compare-card-row:first-child {
+        background: rgba(26, 82, 160, 0.04);
       }
     }
 
@@ -2137,93 +2142,89 @@
       </table>
     </div>
 
-    <!-- スマホ：カード形式 -->
+    <!-- スマホ：縦積みカード形式（1項目=1カード、1社=1行） -->
     <div class="compare-cards">
+
       <div class="compare-card">
         <div class="compare-card-head">⏱ 拘束時間</div>
         <div class="compare-card-row">
-          <div class="compare-card-col is-rakuruma">
-            <span class="compare-card-col-label">ラクルマ</span>
-            <span class="cmp-best">◎</span> 0分。自宅で自由に過ごせる
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">ディーラー</span>
-            <span class="cmp-ng">×</span> 半日〜数日かかる
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">カー用品店</span>
-            <span class="cmp-ng">×</span> 数時間、店で待ち続ける
-          </div>
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 0分。自宅で自由に過ごせる</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 半日〜数日かかる</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 数時間、店で待ち続ける</div>
         </div>
       </div>
+
       <div class="compare-card">
         <div class="compare-card-head">🅿️ 駐車スペース</div>
         <div class="compare-card-row">
-          <div class="compare-card-col is-rakuruma">
-            <span class="compare-card-col-label">ラクルマ</span>
-            <span class="cmp-best">◎</span> バイク訪問。追加スペース不要
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">ディーラー</span>
-            <span class="cmp-ng">×</span> 店舗へ持ち込み
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">カー用品店</span>
-            <span class="cmp-ng">×</span> 店舗へ持ち込み
-          </div>
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> バイク訪問。追加スペース不要</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 店舗へ持ち込み</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 店舗へ持ち込み</div>
         </div>
       </div>
+
       <div class="compare-card">
         <div class="compare-card-head">🔧 対応の柔軟性</div>
         <div class="compare-card-row">
-          <div class="compare-card-col is-rakuruma">
-            <span class="compare-card-col-label">ラクルマ</span>
-            <span class="cmp-best">◎</span> 社外パーツ・他店断り案件もLINEでOK
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">ディーラー</span>
-            <span class="cmp-ng">×</span> 純正品以外NG・融通が利かない
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">カー用品店</span>
-            <span class="cmp-ok">◯</span> 消耗品は得意。輸入車は制限あり
-          </div>
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 社外パーツ・他店断り案件もLINEでOK</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 純正品以外NG・融通が利かない</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ok">◯</span> 消耗品は得意。輸入車は制限あり</div>
         </div>
       </div>
+
       <div class="compare-card">
         <div class="compare-card-head">👤 担当者の顔</div>
         <div class="compare-card-row">
-          <div class="compare-card-col is-rakuruma">
-            <span class="compare-card-col-label">ラクルマ</span>
-            <span class="cmp-best">◎</span> 毎回同じ国家1級整備士が専属
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">ディーラー</span>
-            <span class="cmp-ng">×</span> 担当が変わりやすく話せない
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">カー用品店</span>
-            <span class="cmp-ng">×</span> 経験の浅いスタッフのことも
-          </div>
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 毎回同じ国家1級整備士が専属</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 担当が変わりやすく話せない</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 経験の浅いスタッフのことも</div>
         </div>
       </div>
+
       <div class="compare-card">
         <div class="compare-card-head">⚙️ 重整備・高度な診断</div>
         <div class="compare-card-row">
-          <div class="compare-card-col is-rakuruma">
-            <span class="compare-card-col-label">ラクルマ</span>
-            <span class="cmp-ok">◯</span> 一部対応<br><small style="font-size:10px;">提携工場にて対応できる場合があります</small>
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">ディーラー</span>
-            <span class="cmp-best">◎</span> フル対応
-          </div>
-          <div class="compare-card-col">
-            <span class="compare-card-col-label">カー用品店</span>
-            <span class="cmp-ok">◯</span> 一部対応
-          </div>
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-ok">◯</span> 一部対応（提携工場）</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-best">◎</span> フル対応</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ok">◯</span> 一部対応</div>
         </div>
       </div>
+
     </div>
 
   </div>
