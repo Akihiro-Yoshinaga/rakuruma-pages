@@ -1,1656 +1,2891 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>出張整備・出張オイル交換 世田谷｜国家一級整備士が自宅まで【ラクルマ】</title>
-    <meta name="description" content="世田谷区・目黒区・渋谷区の出張整備はラクルマへ。国家一級整備士がご自宅・駐車場まで訪問。LINEで写真を送るだけで見積り対応。口コミ510件超・評価4.93の実績。">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>出張整備・車検｜ラクルマ｜世田谷区・目黒区・渋谷区</title>
+  <meta name="description" content="世田谷区・目黒区・渋谷区で国家1級自動車整備士が自宅に来る出張整備サービス。車検・オイル交換・タイヤ交換・バッテリー交換など対応。整備工場への持ち込み不要。LINEで気軽に相談できます。">
+  <meta name="keywords" content="出張整備,世田谷区,目黒区,渋谷区,出張車検,オイル交換,タイヤ交換,バッテリー交換,国家1級整備士,自宅整備,ラクルマ">
 
-    <!-- Schema markup -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AutoRepair",
-      "name": "ラクルマ",
-      "image": "https://rakuruma.com/assets/og-image.jpg",
-      "@id": "https://rakuruma.com/",
-      "url": "https://rakuruma.com/",
-      "telephone": "",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "三軒茶屋",
-        "addressLocality": "世田谷区",
-        "addressRegion": "東京都",
-        "postalCode": "154-0004",
-        "addressCountry": "JP"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 35.6433,
-        "longitude": 139.6694
-      },
-      "areaServed": [
-        {"@type": "City", "name": "世田谷区"},
-        {"@type": "City", "name": "目黒区"},
-        {"@type": "City", "name": "渋谷区"}
-      ],
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.93",
-        "reviewCount": "510"
-      },
-      "founder": {
-        "@type": "Person",
-        "name": "吉永 明宏",
-        "jobTitle": "国家一級自動車整備士",
-        "description": "元HONDAディーラー勤務10年以上。国家一級自動車整備士資格保有。"
-      },
-      "dateModified": "2026-05-09",
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-        "opens": "09:00",
-        "closes": "19:00"
+  <!-- OGP -->
+  <meta property="og:title" content="出張整備・車検｜ラクルマ｜世田谷区・目黒区・渋谷区">
+  <meta property="og:description" content="国家1級自動車整備士が自宅の駐車場へ。整備工場への持ち込み不要の出張整備サービス。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rakuruma.com/seibi">
+
+  <link rel="stylesheet" href="https://rakuruma.com/design-tokens.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ── 公式トークンにない補完エイリアス ── */
+    :root {
+      --blue-dark:  var(--color-primary-blue);
+      --blue-mid:   var(--color-accent-mint);
+      --blue-pale:  var(--color-bg-light-blue);
+      --green-cta:  var(--color-primary-green);
+      --text-dark:  var(--color-text-primary);
+      --text-mid:   var(--color-text-secondary);
+      --white:      var(--color-bg-white);
+      --radius:     var(--card-radius);
+      --radius-sm:  var(--radius-xs);
+    }
+
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-text-primary);
+      background: var(--color-bg-white);
+      line-height: var(--line-height-normal);
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--color-bg-white);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: var(--z-index-fixed);
+      box-shadow: var(--shadow-light);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      text-decoration: none;
+    }
+
+    .logo-text {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-sub {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .header-area {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: #0d1a2e;
+    }
+
+    .hero-video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 動画上の半透明オーバーレイ */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 18, 36, 0.58);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 760px;
+      width: 100%;
+      padding: 40px var(--spacing-lg);
+      color: #fff;
+      text-align: center;
+    }
+
+    /* トラストバッジ帯 */
+    .hero-trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .hero-trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 40px;
+      padding: 7px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.03em;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-trust-badge .badge-icon {
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .hero-trust-badge.badge-highlight {
+      background: rgba(60, 196, 122, 0.22);
+      border-color: rgba(60, 196, 122, 0.6);
+      color: #a8f0c6;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-secondary);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent-mint);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .hero h1 {
+      font-family: var(--font-primary);
+      font-size: clamp(28px, 5.5vw, 52px);
+      font-weight: 900;
+      line-height: 1.35;
+      color: var(--color-text-white);
+      margin-bottom: var(--spacing-xl);
+      letter-spacing: -0.01em;
+    }
+
+    .hero-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--color-accent-mint);
+      margin: 0 auto var(--spacing-xl);
+      opacity: 0.8;
+    }
+
+    .hero-sub {
+      font-family: var(--font-primary);
+      font-size: clamp(14px, 1.8vw, 17px);
+      color: rgba(255,255,255,0.85);
+      line-height: 1.85;
+      margin-bottom: var(--spacing-3xl);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--spacing-5xl);
+    }
+
+    .btn-primary {
+      background: var(--color-bg-white);
+      color: var(--color-primary-blue);
+      border: none;
+      padding: 16px 32px;
+      border-radius: var(--button-radius);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition-smooth);
+      box-shadow: var(--shadow-light);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-line {
+      background: var(--gradient-button-green);
+      color: var(--color-text-white);
+      border: none;
+      padding: 16px 32px;
+      border-radius: var(--button-radius);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition-smooth);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-line:hover {
+      transform: translateY(-2px);
+      opacity: var(--opacity-hover);
+    }
+
+    .hero-trust {
+      display: flex;
+      gap: var(--spacing-lg);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      font-size: var(--font-size-sm);
+      color: rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trust-item::before {
+      content: '✓';
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-green);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+      color: rgba(255,255,255,0.5);
+      font-size: var(--font-size-xs);
+      letter-spacing: 2px;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      animation: scrollLine 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0.5; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ===== SECTION COMMON ===== */
+    section {
+      padding: var(--section-padding-desktop) 24px;
+    }
+
+    .section-inner {
+      max-width: var(--container-sm);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 2px;
+      color: var(--color-accent-mint);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .section-title {
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-normal);
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text-primary);
+    }
+
+    .section-desc {
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    /* ===== COMPARE セクション ===== */
+    .compare-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .compare-section .section-label {
+      color: var(--color-primary-blue);
+    }
+
+    .compare-scroll-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -8px;
+      padding: 0 8px 12px;
+    }
+
+    .compare-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: var(--font-size-sm);
+    }
+
+    /* ヘッダー行 */
+    .compare-table thead tr th {
+      padding: 16px 14px;
+      font-weight: var(--font-weight-bold);
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 2px solid transparent;
+    }
+
+    .compare-table thead th:first-child {
+      text-align: left;
+      background: transparent;
+      border-bottom-color: #dde5f0;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+    }
+
+    .compare-table thead th.col-rakuruma {
+      background: var(--color-primary-blue);
+      color: #fff;
+      border-radius: 12px 12px 0 0;
+      border-bottom-color: var(--color-primary-blue);
+    }
+
+    .compare-table thead th.col-dealer {
+      background: #f0f0f0;
+      color: var(--color-text-secondary);
+      border-radius: 12px 12px 0 0;
+      border-bottom-color: #dde5f0;
+    }
+
+    .compare-table thead th.col-shop {
+      background: #f0f0f0;
+      color: var(--color-text-secondary);
+      border-radius: 12px 12px 0 0;
+      border-bottom-color: #dde5f0;
+    }
+
+    .compare-table thead th .col-badge {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      opacity: 0.75;
+    }
+
+    .compare-table thead th.col-rakuruma .col-badge {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ボディ行 */
+    .compare-table tbody tr td {
+      padding: 18px 14px;
+      vertical-align: top;
+      border-bottom: 1px solid #e8eef6;
+      line-height: 1.65;
+    }
+
+    .compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .compare-table tbody td:first-child {
+      font-weight: var(--font-weight-bold);
+      font-size: 13px;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      padding-right: 20px;
+    }
+
+    /* ラクルマ列のハイライト */
+    .compare-table td.col-rakuruma,
+    .compare-table th.col-rakuruma {
+      background: rgba(26, 82, 160, 0.06);
+      border-left: 2px solid var(--color-primary-blue);
+      border-right: 2px solid var(--color-primary-blue);
+    }
+
+    .compare-table thead th.col-rakuruma {
+      background: var(--color-primary-blue);
+      border-top: 2px solid var(--color-primary-blue);
+    }
+
+    .compare-table tbody tr:last-child td.col-rakuruma {
+      border-bottom: 2px solid var(--color-primary-blue);
+      border-radius: 0 0 8px 8px;
+    }
+
+    .compare-table td.col-rakuruma {
+      color: var(--color-primary-blue);
+      font-weight: var(--font-weight-bold);
+    }
+
+    /* ◎ / ◯ / × バッジ */
+    .cmp-best,
+    .cmp-ok,
+    .cmp-ng {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 900;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .cmp-best {
+      background: rgba(26, 82, 160, 0.12);
+      color: var(--color-primary-blue);
+    }
+
+    .cmp-ok {
+      background: rgba(60, 196, 122, 0.18);
+      color: #1a8a4a;
+    }
+
+    .cmp-ng {
+      background: rgba(200, 60, 60, 0.1);
+      color: #c0392b;
+    }
+
+    /* 弱み開示行：ラクルマ列のスタイル調整 */
+    .compare-table td.col-rakuruma.is-honest {
+      color: var(--color-text-secondary);
+      font-weight: 600;
+    }
+
+    .compare-table td.col-rakuruma.is-honest small {
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    /* スマホ：縦並び代替レイアウト */
+    @media (max-width: 600px) {
+      .compare-scroll-wrap {
+        overflow-x: visible;
+      }
+      .compare-table {
+        display: none;
+      }
+      .compare-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .compare-card {
+        background: #fff;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-light);
+      }
+      .compare-card-head {
+        padding: 14px 18px;
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--color-text-primary);
+        border-bottom: 1px solid #e8eef6;
+        background: #f5f8ff;
+      }
+      .compare-card-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .compare-card-row:last-child {
+        border-bottom: none;
+      }
+      .compare-card-col {
+        padding: 10px 12px;
+        font-size: 12px;
+        line-height: 1.6;
+        border-right: 1px solid #f0f0f0;
+      }
+      .compare-card-col:last-child {
+        border-right: none;
+      }
+      .compare-card-col.is-rakuruma {
+        background: rgba(26, 82, 160, 0.05);
+        color: var(--color-primary-blue);
+        font-weight: 700;
+      }
+      .compare-card-col-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: var(--color-text-muted);
+        display: block;
+        margin-bottom: 4px;
+      }
+      .compare-card-col.is-rakuruma .compare-card-col-label {
+        color: var(--color-primary-blue);
       }
     }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "serviceType": "出張整備・出張オイル交換",
-      "provider": {
-        "@type": "AutoRepair",
-        "name": "ラクルマ"
-      },
-      "areaServed": [
-        {"@type": "City", "name": "世田谷区"},
-        {"@type": "City", "name": "目黒区"},
-        {"@type": "City", "name": "渋谷区"}
-      ],
-      "offers": {
-        "@type": "Offer",
-        "price": "8800",
-        "priceCurrency": "JPY"
+
+    @media (min-width: 601px) {
+      .compare-cards {
+        display: none;
       }
     }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "マンションの駐車場でも対応できますか？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "平面駐車場であれば基本的に対応可能です。管理会社への許可依頼についてもサポートします。立体・機械式駐車場は作業スペースの関係で対応が難しい場合があります。事前にご相談ください。"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "料金に追加費用はかかりますか？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "掲載価格に出張費・部品処分費・消費税すべて含まれています。追加請求は一切ありません。作業前に確定金額をお伝えしますので、安心してご利用いただけます。"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "予約方法を教えてください。",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "LINEが最も簡単です。気になる箇所の写真を送っていただければ、概算見積りをお返しします。Web予約フォームからのご予約も受け付けています。"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "在宅していなくても頼めますか？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "はい、鍵預けOKです。鍵預け契約書を事前にお送りしますので安心してご利用いただけます。作業完了後はLINEで写真付きレポートをお送りします。"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "保証や保険はありますか？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "PL保険（製造物責任保険）および業務上の損害賠償に対応した賠償責任保険に加入しています。万が一、作業中に車体を傷つけてしまった場合や、部品交換後に不具合が生じた場合は、保険の範囲内で対応いたします。"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "対応エリアはどこですか？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "世田谷区・目黒区・渋谷区を中心に、品川区・大田区・港区にも対応しています。上記以外のエリアもまずはLINEでご相談ください。"
-          }
-        }
-      ]
+
+    /* ===== WORKS セクション ===== */
+    .works-section {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
     }
-    </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;900&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    .works-section .section-label {
+      color: rgba(255,255,255,0.5);
+    }
 
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .works-section .section-title {
+      color: var(--color-text-white);
+    }
 
-        :root {
-            --navy: #003B8B;
-            --navy-dark: #002A66;
-            --yellow: #F4C430;
-            --yellow-dark: #D4A800;
-            --green: #06C755;
-            --green-dark: #05A847;
-            --bg-light: #F5F7FA;
-            --text: #1A1A1A;
-            --text-muted: #666;
-            --border: #E0E8F4;
-            --white: #fff;
-        }
+    .works-section .section-desc {
+      color: rgba(255,255,255,0.75);
+    }
 
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            color: var(--text);
-            line-height: 1.7;
-            font-size: 16px;
-        }
+    .works-headline {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: var(--font-weight-bold);
+      line-height: 1.35;
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text-white);
+    }
 
-        img { max-width: 100%; display: block; }
-        a { color: inherit; text-decoration: none; }
+    .works-headline span {
+      color: var(--color-accent-mint);
+    }
 
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+    /* works carousel */
+    .works-carousel-wrap {
+      position: relative;
+      overflow: hidden;
+      margin-top: var(--spacing-3xl);
+    }
 
-        /* ========== HEADER ========== */
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: var(--white);
-            border-bottom: 2px solid var(--navy);
-            padding: 0 24px;
-        }
-        .site-header-inner {
-            max-width: 960px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 60px;
-        }
-        .site-header-logo {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 20px;
-            font-weight: 900;
-            color: var(--navy);
-            letter-spacing: 0.05em;
-        }
-        .site-header-logo span {
-            color: var(--yellow);
-        }
-        .site-header-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--green);
-            color: var(--white);
-            font-size: 14px;
-            font-weight: 700;
-            padding: 10px 22px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-        .site-header-cta:hover { background: var(--green-dark); }
-        @media (max-width: 768px) { .site-header-cta { display: none; } }
+    .works-track {
+      display: flex;
+      gap: var(--spacing-lg);
+      transition: var(--transition-carousel);
+    }
 
-        /* ========== FIXED CTA (mobile) ========== */
-        .fixed-cta {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 999;
-            background: var(--white);
-            padding: 12px 16px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-        }
-        .fixed-cta-inner { display: flex; gap: 10px; }
-        .fixed-cta-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 14px 8px;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 700;
-            min-height: 50px;
-        }
-        .fixed-cta-btn-line { background: var(--green); color: var(--white); }
-        .fixed-cta-btn-reserve { background: var(--navy); color: var(--white); }
-        @media (max-width: 768px) {
-            .fixed-cta { display: block; }
-            body { padding-bottom: 80px; }
-        }
+    .work-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-top: 3px solid var(--color-accent-mint);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      transition: var(--transition-smooth);
+      min-width: 300px;
+      max-width: 300px;
+      flex-shrink: 0;
+    }
 
-        /* ========== HERO ========== */
-        .hero {
-            position: relative;
-            background: var(--navy-dark);
-            color: var(--white);
-            min-height: 560px;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(to right, rgba(0,30,80,0.92) 55%, rgba(0,30,80,0.5) 100%),
-                url('') center/cover no-repeat;
-            background-color: #001a4d;
-        }
-        .hero-bg-placeholder {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 40px;
-            pointer-events: none;
-        }
-        .hero-bg-placeholder-box {
-            width: 380px;
-            height: 420px;
-            border: 2px dashed rgba(255,255,255,0.2);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255,255,255,0.3);
-            font-size: 14px;
-            text-align: center;
-            line-height: 1.8;
-        }
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            padding: 80px 24px 80px;
-            max-width: 960px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        .hero-badge {
-            display: inline-block;
-            background: var(--yellow);
-            color: var(--navy-dark);
-            font-size: 12px;
-            font-weight: 700;
-            padding: 6px 16px;
-            border-radius: 2px;
-            margin-bottom: 24px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-        .hero-title {
-            font-size: 44px;
-            font-weight: 900;
-            line-height: 1.25;
-            margin-bottom: 20px;
-            letter-spacing: -0.01em;
-        }
-        .hero-title em {
-            font-style: normal;
-            color: var(--yellow);
-        }
-        .hero-subtitle {
-            font-size: 17px;
-            opacity: 0.88;
-            margin-bottom: 40px;
-            line-height: 1.8;
-            max-width: 480px;
-        }
-        .hero-stats {
-            display: flex;
-            gap: 32px;
-            margin-bottom: 44px;
-            flex-wrap: wrap;
-        }
-        .hero-stat-num {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 38px;
-            font-weight: 900;
-            color: var(--yellow);
-            line-height: 1;
-        }
-        .hero-stat-num small {
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .hero-stat-label {
-            font-size: 12px;
-            opacity: 0.75;
-            margin-top: 4px;
-        }
-        .hero-cta-group {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--green);
-            color: var(--white);
-            font-size: 17px;
-            font-weight: 700;
-            padding: 18px 40px;
-            border-radius: 4px;
-            transition: all 0.2s;
-            min-height: 60px;
-        }
-        .btn-primary:hover {
-            background: var(--green-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(6,199,85,0.4);
-        }
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            border: 2px solid rgba(255,255,255,0.5);
-            color: var(--white);
-            font-size: 15px;
-            font-weight: 700;
-            padding: 18px 32px;
-            border-radius: 4px;
-            transition: all 0.2s;
-            min-height: 60px;
-        }
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.8);
-        }
+    .work-card:hover {
+      transform: translateY(-4px);
+    }
 
-        /* ========== TRUST BAR ========== */
-        .trust-bar {
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            padding: 24px;
-        }
-        .trust-bar-inner {
-            max-width: 960px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            flex-wrap: wrap;
-        }
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .trust-icon {
-            font-size: 22px;
-        }
-        .trust-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--navy);
-            line-height: 1.3;
-        }
-        .trust-sub {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+    .work-card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: rgba(255,255,255,0.3);
+      overflow: hidden;
+    }
 
-        /* ========== SECTION COMMON ========== */
-        .section { padding: 88px 0; }
-        .section-bg { background: var(--bg-light); }
-        .section-navy { background: var(--navy); color: var(--white); }
+    .work-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .section-label {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--yellow);
-            margin-bottom: 12px;
-        }
-        .section-navy .section-label { color: var(--yellow); }
+    .work-card-body {
+      padding: var(--spacing-md);
+    }
 
-        .section-title {
-            font-size: 32px;
-            font-weight: 900;
-            line-height: 1.3;
-            margin-bottom: 16px;
-            color: var(--navy);
-        }
-        .section-navy .section-title { color: var(--white); }
+    .work-card-date {
+      font-size: var(--font-size-xs);
+      color: var(--color-accent-mint);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
 
-        .section-lead {
-            font-size: 16px;
-            color: var(--text-muted);
-            margin-bottom: 56px;
-            max-width: 560px;
-        }
-        .section-navy .section-lead { color: rgba(255,255,255,0.75); }
+    .work-card-title {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-white);
+      line-height: var(--line-height-normal);
+    }
 
-        /* ========== MENU CARDS ========== */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        .menu-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-top: 3px solid var(--navy);
-            border-radius: 4px;
-            padding: 28px 24px;
-        }
-        .menu-card-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 12px;
-        }
-        .menu-card-body {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.8;
-            margin-bottom: 14px;
-        }
-        .menu-card-note {
-            font-size: 12px;
-            color: var(--navy);
-            font-weight: 600;
-            border-top: 1px solid var(--border);
-            padding-top: 12px;
-            line-height: 1.7;
-        }
-        .cta-center {
-            text-align: center;
-            margin-top: 48px;
-        }
-        .btn-line {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--green);
-            color: var(--white);
-            font-size: 16px;
-            font-weight: 700;
-            padding: 16px 40px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .btn-line:hover {
-            background: var(--green-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(6,199,85,0.35);
-        }
-        .btn-line-outline {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            border: 2px solid var(--green);
-            color: var(--green);
-            font-size: 16px;
-            font-weight: 700;
-            padding: 14px 36px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .btn-line-outline:hover {
-            background: var(--green);
-            color: var(--white);
-        }
+    .work-card-tag {
+      display: inline-block;
+      margin-top: var(--spacing-sm);
+      background: rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      padding: 3px 10px;
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.7);
+    }
 
-        /* ========== FLOW (STEP) ========== */
-        .flow-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2px;
-        }
-        .flow-card {
-            background: rgba(255,255,255,0.06);
-            padding: 36px 24px;
-            position: relative;
-        }
-        .flow-card::after {
-            content: '→';
-            position: absolute;
-            right: -14px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 20px;
-            color: var(--yellow);
-            z-index: 1;
-        }
-        .flow-card:last-child::after { display: none; }
-        .flow-num {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 56px;
-            font-weight: 900;
-            color: var(--yellow);
-            line-height: 1;
-            margin-bottom: 16px;
-            opacity: 0.9;
-        }
-        .flow-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--white);
-        }
-        .flow-desc {
-            font-size: 13px;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.8;
-        }
+    /* ===== TROUBLE セクション ===== */
+    .trouble-section {
+      background: var(--color-bg-gray);
+      position: relative;
+    }
 
-        /* ========== SAFETY ========== */
-        .safety-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-        }
-        .safety-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 28px 20px;
-            position: relative;
-        }
-        .safety-num {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--yellow-dark);
-            background: var(--navy);
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 2px;
-            margin-bottom: 16px;
-            letter-spacing: 0.05em;
-        }
-        .safety-icon { font-size: 28px; margin-bottom: 10px; }
-        .safety-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        .safety-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 14px;
-        }
-        .safety-voice {
-            font-size: 12px;
-            color: #888;
-            background: var(--bg-light);
-            border-radius: 4px;
-            padding: 10px 12px;
-            line-height: 1.7;
-            font-style: italic;
-            border-left: 3px solid var(--yellow);
-        }
+    .trouble-headline {
+      font-size: clamp(20px, 3.5vw, 30px);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-normal);
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
 
-        /* ========== REVIEWS ========== */
-        .curama-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .review-scroll-wrap {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            margin-top: 32px;
-            padding-bottom: 8px;
-        }
-        .review-scroll-wrap::-webkit-scrollbar { display: none; }
-        .review-scroll-track {
-            display: flex;
-            gap: 20px;
-            width: max-content;
-            padding: 4px 4px 8px;
-        }
-        .review-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            width: 300px;
-            flex-shrink: 0;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            display: flex;
-            flex-direction: column;
-        }
-        .review-card-photo {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            background: #f0f2f5;
-        }
-        .review-card-photo-placeholder {
-            width: 100%;
-            aspect-ratio: 4/3;
-            background: #f0f2f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ccc;
-            font-size: 40px;
-        }
-        .review-card-body {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .review-stars {
-            color: #F4D110;
-            font-size: 15px;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-        .review-text {
-            font-size: 13px;
-            line-height: 1.85;
-            color: #444;
-            margin-bottom: 14px;
-            flex: 1;
-        }
-        .review-author {
-            font-size: 12px;
-            color: #999;
-            border-top: 1px solid var(--border);
-            padding-top: 10px;
-        }
+    .trouble-headline span {
+      color: var(--color-primary-blue);
+    }
 
-        /* ========== MECHANIC ========== */
-        .mechanic-card {
-            display: flex;
-            gap: 48px;
-            align-items: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .mechanic-photo {
-            width: 160px;
-            height: 160px;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid var(--yellow);
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 64px;
-        }
-        .mechanic-name {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--white);
-            margin-bottom: 6px;
-        }
-        .mechanic-role {
-            font-size: 13px;
-            color: var(--yellow);
-            font-weight: 700;
-            margin-bottom: 16px;
-            letter-spacing: 0.05em;
-        }
-        .mechanic-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 18px;
-        }
-        .mechanic-tag {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: rgba(255,255,255,0.9);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 14px;
-            border-radius: 2px;
-        }
-        .mechanic-comment {
-            font-size: 15px;
-            line-height: 1.85;
-            color: rgba(255,255,255,0.8);
-        }
+    .trouble-sub {
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-3xl);
+      line-height: var(--line-height-relaxed);
+    }
 
-        /* ========== PRICE TABLE ========== */
-        .price-table-wrap {
-            overflow-x: auto;
-            margin-top: 40px;
-        }
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 15px;
-            min-width: 520px;
-        }
-        .price-table thead tr {
-            background: var(--navy);
-            color: var(--white);
-        }
-        .price-table th {
-            padding: 16px 20px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 14px;
-        }
-        .price-table th:first-child { text-align: left; }
-        .price-table tbody tr:nth-child(even) { background: var(--bg-light); }
-        .price-table tbody tr:nth-child(odd) { background: var(--white); }
-        .price-table td {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
-        .price-table td:first-child {
-            text-align: left;
-            font-weight: 700;
-            color: var(--navy);
-        }
-        .price-note {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 14px;
-            text-align: center;
-        }
+    .trouble-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-5xl);
+    }
 
-        /* ========== TRUST CARDS ========== */
-        .trust-card-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-            margin-top: 40px;
-        }
-        .trust-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-top: 3px solid var(--yellow);
-            border-radius: 4px;
-            padding: 24px 16px;
-            text-align: center;
-        }
-        .trust-card-icon { font-size: 28px; margin-bottom: 10px; }
-        .trust-card-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--navy);
-            line-height: 1.5;
-            margin-bottom: 6px;
-        }
-        .trust-card-note {
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
+    @media (max-width: 768px) {
+      .trouble-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+      }
+    }
 
-        /* ========== FAQ ========== */
-        .faq-list { margin-top: 40px; }
-        .faq-item {
-            border-bottom: 1px solid var(--border);
-        }
-        .faq-question {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--navy);
-            gap: 16px;
-        }
-        .faq-question-icon {
-            font-size: 22px;
-            font-weight: 300;
-            color: var(--navy);
-            flex-shrink: 0;
-            transition: transform 0.3s;
-            line-height: 1;
-        }
-        .faq-item.open .faq-question-icon { transform: rotate(45deg); }
-        .faq-answer {
-            display: none;
-            padding: 0 0 20px;
-            font-size: 15px;
-            color: var(--text-muted);
-            line-height: 1.85;
-        }
-        .faq-item.open .faq-answer { display: block; }
+    .trouble-card {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      padding: var(--card-padding-mobile) var(--spacing-2xl);
+      box-shadow: var(--shadow-medium);
+      position: relative;
+    }
 
-        /* ========== FINAL CTA ========== */
-        .final-cta {
-            background: var(--navy);
-            color: var(--white);
-            padding: 88px 24px;
-            text-align: center;
-        }
-        .final-cta-title {
-            font-size: 30px;
-            font-weight: 900;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-        .final-cta-lead {
-            font-size: 16px;
-            color: rgba(255,255,255,0.75);
-            margin-bottom: 40px;
-            line-height: 1.8;
-        }
-        .final-cta-btns {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .btn-cta-line {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--green);
-            color: var(--white);
-            font-size: 18px;
-            font-weight: 700;
-            padding: 20px 48px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .btn-cta-line:hover {
-            background: var(--green-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(6,199,85,0.4);
-        }
-        .btn-cta-reserve {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            border: 2px solid rgba(255,255,255,0.5);
-            color: var(--white);
-            font-size: 16px;
-            font-weight: 700;
-            padding: 18px 40px;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .btn-cta-reserve:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: rgba(255,255,255,0.8);
-        }
+    .trouble-card::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      background: var(--color-primary-blue);
+      border-radius: 2px;
+      margin-bottom: var(--spacing-md);
+      opacity: 0.4;
+    }
 
-        /* ========== WORKS ========== */
-        .works-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 40px;
-        }
-        .work-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-        .work-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,59,139,0.12);
-        }
-        .work-card-photo {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            background: var(--bg-light);
-            display: block;
-        }
-        .work-card-photo-placeholder {
-            width: 100%;
-            aspect-ratio: 4/3;
-            background: var(--bg-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #bbb;
-            font-size: 13px;
-        }
-        .work-card-body {
-            padding: 18px 20px;
-        }
-        .work-card-date {
-            font-size: 12px;
-            color: var(--yellow-dark);
-            font-weight: 700;
-            font-family: 'Montserrat', sans-serif;
-            margin-bottom: 6px;
-        }
-        .work-card-car {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 6px;
-        }
-        .work-card-maker {
-            display: inline-block;
-            background: var(--navy);
-            color: var(--yellow);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 2px;
-            margin-right: 6px;
-            letter-spacing: 0.1em;
-            vertical-align: middle;
-            text-transform: uppercase;
-        }
-        .work-card-note {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.7;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .work-card-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-top: 12px;
-        }
-        .works-more {
-            text-align: center;
-            margin-top: 40px;
-        }
-        .works-empty {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 48px 0;
-            font-size: 14px;
-        }
+    .trouble-card-icon {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.1em;
+      color: var(--color-primary-blue);
+      margin-bottom: var(--spacing-sm);
+      opacity: 0.7;
+    }
 
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 768px) {
-            .hero-title { font-size: 28px; }
-            .hero-stats { gap: 20px; }
-            .hero-stat-num { font-size: 28px; }
-            .hero-cta-group { flex-direction: column; }
-            .hero-cta-group .btn-primary,
-            .hero-cta-group .btn-secondary { width: 100%; max-width: 320px; justify-content: center; font-size: 15px; padding: 16px 24px; }
-            .hero-bg-placeholder { display: none; }
+    .trouble-card-title {
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      line-height: var(--line-height-normal);
+      margin-bottom: var(--spacing-sm);
+    }
 
-            .trust-bar-inner { gap: 16px; }
+    .trouble-card p {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+      font-weight: var(--font-weight-normal);
+    }
 
-            .section { padding: 64px 0; }
-            .section-title { font-size: 24px; }
+    .trouble-arrow {
+      text-align: center;
+      font-size: 36px;
+      color: var(--color-primary-blue);
+      margin: var(--spacing-sm) 0 var(--spacing-2xl);
+      line-height: 1;
+    }
 
-            .works-grid { grid-template-columns: 1fr; }
-            .menu-grid { grid-template-columns: 1fr; }
-            .flow-grid { grid-template-columns: 1fr; gap: 0; }
-            .flow-card::after { display: none; }
-            .flow-card { padding: 28px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-            .safety-grid { grid-template-columns: 1fr; }
-            .review-grid { grid-template-columns: 1fr; }
-            .trust-card-grid { grid-template-columns: repeat(2, 1fr); }
-            .mechanic-card { flex-direction: column; gap: 24px; text-align: center; }
-            .mechanic-tags { justify-content: center; }
+    .trouble-resolve {
+      background: var(--gradient-button-blue);
+      color: var(--color-text-white);
+      border-radius: var(--card-radius);
+      padding: var(--spacing-2xl) var(--spacing-3xl);
+      text-align: center;
+      box-shadow: var(--shadow-heavy);
+    }
 
-            .final-cta-title { font-size: 22px; }
-            .final-cta-btns { flex-direction: column; align-items: center; }
-            .btn-cta-line, .btn-cta-reserve { width: 100%; max-width: 320px; justify-content: center; font-size: 15px; }
-        }
-    </style>
+    .trouble-resolve h3 {
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-normal);
+    }
+
+    .trouble-resolve h3 span {
+      color: var(--color-accent-mint);
+    }
+
+    /* ===== SERVICE OVERVIEW ===== */
+    .service-overview {
+      background: var(--color-bg-white);
+    }
+
+    /* ── キラーカード ── */
+    .service-killer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .service-killer-card {
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-medium);
+      transition: var(--transition-smooth);
+    }
+
+    .service-killer-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .service-killer-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      background: var(--color-bg-light-blue);
+    }
+
+    .service-killer-img-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, #dde8f5 0%, #c8d9ee 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+
+    .service-killer-body {
+      padding: 18px 20px 22px;
+    }
+
+    .service-killer-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-primary-blue);
+      background: var(--color-bg-light-blue);
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .service-killer-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .service-killer-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+
+    /* ── メニュー一覧（2カラム） ── */
+    .service-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-2xl);
+    }
+
+    .service-col {
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .service-col-head {
+      padding: 28px 28px 20px;
+      color: var(--color-text-white);
+    }
+
+    .service-col-head.visit {
+      background: var(--gradient-button-blue);
+    }
+
+    .service-col-head.pickup {
+      background: var(--gradient-button-green);
+    }
+
+    .service-col-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: var(--radius-sm);
+      padding: 4px 14px;
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 1px;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .service-col-head h3 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 6px;
+      line-height: var(--line-height-normal);
+    }
+
+    .service-col-head p {
+      font-size: var(--font-size-sm);
+      color: rgba(255,255,255,0.8);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .service-col-body {
+      background: var(--color-bg-white);
+      padding: var(--spacing-2xl) 28px;
+    }
+
+    .service-menu-group {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .service-menu-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .service-menu-group-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--color-bg-light-blue);
+      line-height: 1.4;
+    }
+
+    .service-menu-group-title .title-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    .service-menu-group-title.green {
+      color: var(--color-primary-green);
+      border-bottom-color: rgba(60,196,122,0.2);
+    }
+
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .service-tag {
+      background: var(--color-bg-white);
+      color: var(--color-primary-blue);
+      padding: 7px 14px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid var(--color-bg-light-blue);
+      transition: var(--transition-smooth);
+      cursor: default;
+    }
+
+    .service-tag:hover {
+      background: var(--color-bg-light-blue);
+      border-color: var(--color-primary-blue);
+    }
+
+    .service-tag.green {
+      color: #1a8a4a;
+      border-color: rgba(60,196,122,0.3);
+    }
+
+    .service-tag.green:hover {
+      background: rgba(60,196,122,0.08);
+      border-color: var(--color-primary-green);
+    }
+
+    .service-tag.highlight {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+      border-color: var(--color-primary-blue);
+    }
+
+    .service-tag.highlight.green {
+      background: var(--color-primary-green);
+      color: var(--color-text-white);
+      border-color: var(--color-primary-green);
+    }
+
+    .service-consult-cta {
+      margin-top: var(--spacing-2xl);
+      background: var(--color-bg-gray);
+      border-radius: var(--radius-xs);
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-left: 3px solid var(--color-primary-green);
+    }
+
+    .service-consult-text {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .service-consult-btn {
+      display: inline-block;
+      background: var(--color-primary-green);
+      color: var(--color-text-white);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      padding: 10px var(--spacing-xl);
+      border-radius: var(--button-radius);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .service-consult-btn:hover {
+      opacity: var(--opacity-hover);
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .service-killer-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    /* ===== TESLA SECTION ===== */
+    .tesla-section {
+      background: var(--color-text-primary);
+      color: var(--color-text-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tesla-section::before {
+      content: 'TESLA';
+      position: absolute;
+      font-size: 180px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .tesla-inner {
+      max-width: var(--container-sm);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tesla-section .section-label {
+      color: rgba(255,255,255,0.4);
+    }
+
+    .tesla-headline {
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-normal);
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text-white);
+    }
+
+    .tesla-headline span {
+      color: var(--color-accent-yellow);
+    }
+
+    .tesla-sub {
+      font-size: var(--font-size-base);
+      color: rgba(255,255,255,0.7);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--spacing-3xl);
+      max-width: 600px;
+    }
+
+    .tesla-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .tesla-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--card-radius);
+      padding: var(--spacing-lg);
+      transition: var(--transition-fast);
+    }
+
+    .tesla-card:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .tesla-card-icon {
+      font-size: 28px;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .tesla-card h4 {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-white);
+      margin-bottom: 6px;
+      line-height: var(--line-height-normal);
+    }
+
+    .tesla-card p {
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.6);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .tesla-note {
+      background: rgba(244,209,16,0.1);
+      border: 1px solid rgba(244,209,16,0.3);
+      border-radius: var(--radius-xs);
+      padding: var(--spacing-md) var(--spacing-lg);
+      font-size: var(--font-size-sm);
+      color: rgba(255,255,255,0.85);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .tesla-note strong {
+      color: var(--color-accent-yellow);
+    }
+
+    /* ===== IMPORT CAR ===== */
+    .import-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .import-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-2xl);
+    }
+
+    .import-card {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      padding: var(--spacing-lg) var(--spacing-md);
+      text-align: center;
+      box-shadow: var(--shadow-light);
+    }
+
+    .import-card-brand {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+      margin-bottom: 4px;
+    }
+
+    .import-card-sub {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .service-two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .tesla-section::before {
+        font-size: 80px;
+      }
+    }
+
+    /* ===== RAK POINTS セクション ===== */
+    .rak-section {
+      background: var(--color-bg-white);
+    }
+
+    .rak-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .rak-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      min-height: 320px;
+      overflow: hidden;
+    }
+
+    .rak-item:nth-child(even) {
+      direction: rtl;
+    }
+
+    .rak-item:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .rak-img {
+      background: var(--color-bg-light-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      min-height: 280px;
+      overflow: hidden;
+    }
+
+    .rak-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .rak-body {
+      padding: var(--card-padding) var(--spacing-3xl);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--color-bg-white);
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .rak-item:nth-child(even) .rak-body {
+      background: var(--color-bg-gray);
+    }
+
+    .rak-num {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 3px;
+      color: var(--color-accent-mint);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .rak-title {
+      font-size: clamp(20px, 2.5vw, 26px);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      line-height: var(--line-height-normal);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .rak-title .rak-keyword {
+      color: var(--color-primary-blue);
+    }
+
+    .rak-desc {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* ===== VOICE カルーセル ===== */
+    .voice-section {
+      background: var(--color-bg-gray);
+      overflow: hidden;
+    }
+
+    .carousel-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: var(--spacing-lg);
+      transition: var(--transition-carousel);
+    }
+
+    .voice-card {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      padding: var(--spacing-2xl);
+      box-shadow: var(--shadow-medium);
+      border-top: 3px solid var(--color-primary-blue);
+      min-width: 300px;
+      max-width: 300px;
+      flex-shrink: 0;
+    }
+
+    .voice-card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--color-bg-light-blue);
+      border-radius: var(--radius-xs);
+      margin-bottom: 14px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--color-accent-mint);
+    }
+
+    .voice-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stars {
+      color: var(--color-accent-yellow);
+      font-size: var(--font-size-base);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .voice-text {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .voice-meta {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .carousel-controls {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    .carousel-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-round);
+      border: 2px solid var(--color-primary-blue);
+      background: var(--color-bg-white);
+      color: var(--color-primary-blue);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+
+    .carousel-btn:hover {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: var(--spacing-sm);
+      justify-content: center;
+      margin-top: var(--spacing-lg);
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-round);
+      background: var(--color-border-gray);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .carousel-dot.active {
+      background: var(--color-primary-blue);
+    }
+
+    /* ===== MEMBER セクション ===== */
+    .member-section {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+    }
+
+    .member-section .section-label {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .member-section .section-title {
+      color: var(--color-text-white);
+    }
+
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--spacing-2xl);
+      margin-top: var(--spacing-3xl);
+    }
+
+    .member-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+    }
+
+    .member-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      overflow: hidden;
+    }
+
+    .member-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .member-body {
+      padding: var(--spacing-lg);
+    }
+
+    .member-name {
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 2px;
+    }
+
+    .member-role {
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .member-certs {
+      list-style: none;
+      margin-bottom: 14px;
+    }
+
+    .member-certs li {
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.8);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+      line-height: var(--line-height-normal);
+    }
+
+    .member-certs li::before {
+      content: '◉';
+      color: var(--color-primary-green);
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .member-quote {
+      background: rgba(255,255,255,0.08);
+      border-left: 3px solid var(--color-primary-green);
+      padding: var(--spacing-md) var(--spacing-md);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      font-size: var(--font-size-sm);
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* ===== PRICE ===== */
+    .price-section {
+      background: var(--color-bg-gray);
+    }
+
+    .price-note {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+      margin-bottom: var(--spacing-2xl);
+      padding: var(--spacing-md) var(--spacing-md);
+      background: var(--color-bg-white);
+      border-radius: var(--radius-xs);
+      border-left: 3px solid var(--color-primary-blue);
+    }
+
+    /* アコーディオン */
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .accordion-item {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: var(--spacing-lg) var(--spacing-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+      gap: var(--spacing-md);
+    }
+
+    .accordion-trigger:hover {
+      background: var(--color-bg-light-blue);
+    }
+
+    .accordion-trigger-left {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .accordion-trigger-title {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+    }
+
+    .accordion-trigger-count {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      font-weight: var(--font-weight-normal);
+    }
+
+    .accordion-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--color-bg-light-blue);
+      border-radius: var(--radius-round);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--color-primary-blue);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+
+    .accordion-item.open .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .accordion-item.open .accordion-body {
+      max-height: 1200px;
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--color-bg-white);
+    }
+
+    .price-table th {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+      padding: var(--spacing-md) var(--spacing-lg);
+      text-align: left;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .price-table td {
+      padding: 13px var(--spacing-lg);
+      border-bottom: 1px solid var(--color-border-light);
+      font-size: var(--font-size-sm);
+    }
+
+    .price-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .price-table tr:hover td {
+      background: var(--color-bg-light-blue);
+    }
+
+    .price {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+    }
+
+    /* ===== PRICE CTA ===== */
+    .price-cta-block {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .price-cta-micro {
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--color-primary-green);
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+
+    .price-cta-card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-medium);
+      border-top: 3px solid var(--color-primary-green);
+      text-align: left;
+    }
+
+    .price-cta-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .price-cta-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      margin-bottom: 6px;
+    }
+
+    .price-cta-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+
+    .price-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--gradient-button-green);
+      color: #fff;
+      text-decoration: none;
+      padding: 18px 36px;
+      border-radius: 50px;
+      box-shadow: 0 6px 24px rgba(60,196,122,0.45);
+      transition: var(--transition-smooth);
+      flex-shrink: 0;
+    }
+
+    .price-cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+    }
+
+    .price-cta-btn-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .price-cta-btn-main {
+      display: block;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .price-cta-btn-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.85;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 600px) {
+      .price-cta-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+        text-align: center;
+      }
+      .price-cta-text {
+        text-align: center;
+      }
+      .price-cta-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 18px 24px;
+      }
+    }
+
+    /* ===== HOW TO ===== */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-2xl);
+      position: relative;
+    }
+
+    .step {
+      text-align: center;
+      padding: var(--spacing-2xl) var(--spacing-md);
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+      border-radius: var(--radius-round);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-md);
+      margin: 0 auto var(--spacing-md);
+    }
+
+    .step h3 {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .step p {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* ===== FAQ ===== */
+    .faq-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .faq-item {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+    }
+
+    .faq-q {
+      padding: var(--spacing-lg) var(--spacing-2xl);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+      user-select: none;
+    }
+
+    .faq-q-mark {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-round);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      flex-shrink: 0;
+    }
+
+    .faq-a {
+      padding: 0 var(--spacing-2xl) var(--spacing-lg) 60px;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .faq-more-wrap {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .faq-more-wrap.open {
+      max-height: 2000px;
+    }
+
+    .faq-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin: var(--spacing-lg) auto 0;
+      background: none;
+      border: 2px solid var(--color-primary-blue);
+      color: var(--color-primary-blue);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      padding: var(--spacing-md) var(--spacing-2xl);
+      border-radius: var(--button-radius);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      font-family: var(--font-primary);
+    }
+
+    .faq-toggle-btn:hover {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+    }
+
+    .faq-toggle-icon {
+      font-size: 18px;
+      transition: transform 0.3s;
+      line-height: 1;
+    }
+
+    .faq-toggle-btn.open .faq-toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    /* ===== AREA ===== */
+    .area-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-lg);
+    }
+
+    .area-tag {
+      background: var(--color-bg-light-blue);
+      color: var(--color-primary-blue);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      background: var(--gradient-button-blue);
+      color: var(--color-text-white);
+      text-align: center;
+      padding: var(--section-padding-desktop) var(--spacing-lg);
+    }
+
+    .cta-section h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .cta-section p {
+      font-size: var(--font-size-base);
+      opacity: 0.9;
+      margin-bottom: var(--spacing-2xl);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--color-text-primary);
+      color: rgba(255,255,255,0.7);
+      padding: var(--spacing-3xl) var(--spacing-lg);
+      text-align: center;
+      font-size: var(--font-size-sm);
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: var(--spacing-2xl);
+      justify-content: center;
+      margin-bottom: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    /* ===== FLOATING LINE BTN ===== */
+    .float-line {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--gradient-button-green);
+      color: var(--color-text-white);
+      padding: 14px 22px;
+      border-radius: var(--button-radius);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      text-decoration: none;
+      box-shadow: var(--shadow-heavy);
+      z-index: var(--z-index-fixed);
+      transition: var(--transition-smooth);
+    }
+
+    .float-line:hover {
+      transform: scale(1.05);
+      opacity: var(--opacity-hover);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 20px;
+      }
+
+      section {
+        padding: 60px 20px;
+      }
+
+      .rak-item {
+        grid-template-columns: 1fr;
+        direction: ltr !important;
+      }
+
+      .member-two-col {
+        grid-template-columns: 1fr !important;
+      }
+
+      .rak-item:nth-child(even) {
+        direction: ltr;
+      }
+
+      .rak-item:nth-child(even) > * {
+        direction: ltr;
+      }
+
+      .rak-body {
+        padding: 32px 24px;
+      }
+
+      .rak-img {
+        min-height: 200px;
+      }
+
+      .voice-card {
+        min-width: 260px;
+        max-width: 260px;
+      }
+
+      .price-table {
+        font-size: var(--font-size-sm-mobile);
+      }
+
+      .price-table th,
+      .price-table td {
+        padding: var(--spacing-md) 14px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ヘッダー -->
-<header class="site-header">
-    <div class="site-header-inner">
-        <a href="/" class="site-header-logo">ラク<span>ル</span>マ</a>
-        <a href="https://lin.ee/r0BAZkR0" class="site-header-cta">
-            📱 LINEで無料見積り
-        </a>
-    </div>
+<!-- HEADER -->
+<header>
+  <a href="https://rakuruma.com" class="logo">
+    <img src="assets/images/logo.jpg" alt="ラクルマ" style="height:36px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+    <span class="logo-text" style="display:none;">ラクルマ</span>
+  </a>
+  <span class="header-area">世田谷区・目黒区・渋谷区</span>
 </header>
 
-<!-- スマホ固定CTA -->
-<div class="fixed-cta">
-    <div class="fixed-cta-inner">
-        <a href="https://lin.ee/r0BAZkR0" class="fixed-cta-btn fixed-cta-btn-line">📱 LINEで無料見積り</a>
-        <a href="https://rakuruma.com/reservation_form/" class="fixed-cta-btn fixed-cta-btn-reserve">📅 Web予約</a>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video-wrap">
+    <video autoplay loop muted playsinline src="assets/hero.mp4"></video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <!-- トラストバッジ -->
+    <div class="hero-trust-badges">
+      <span class="hero-trust-badge badge-highlight">
+        <span class="badge-icon">★</span>くらしのマーケット 出張整備・車検エリア口コミ高評価！
+      </span>
+      <span class="hero-trust-badge">
+        <span class="badge-icon">🔧</span>国家1級整備士が直接お伺いします
+      </span>
     </div>
-</div>
+    <p class="hero-eyebrow">Mobile Maintenance Service</p>
+    <h1>整備は行くから、<br>自宅で完結する時代へ。</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">
+      貴重な休日を、車屋さんの待ち時間で終わらせない。<br>
+      国家1級整備士がバイクでご自宅へ出張します。
+    </p>
+    <div class="hero-cta">
+      <a href="https://lin.ee/r0BAZkR0" class="btn-primary">LINEで無料相談</a>
+      <a href="https://lin.ee/r0BAZkR0" class="btn-line">整備を予約する</a>
+    </div>
+    <div class="hero-trust">
+      <span class="trust-item">出張費無料</span>
+      <span class="trust-item">輸入車・社外パーツ対応</span>
+      <span class="trust-item">損害保険加入済み</span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    SCROLL
+  </div>
+</section>
 
-<main>
+<!-- TROUBLE：悩み→解決 -->
+<section class="trouble-section">
+  <div class="section-inner">
+    <div class="section-label">YOUR TROUBLE</div>
+    <h2 class="trouble-headline">その悩み、<span>いつもの車屋さん</span>に<br>任せていいの？</h2>
+    <p class="trouble-sub">車検や整備のたびに、こんな「ちょっとしたストレス」を感じていませんか？</p>
+    <div class="trouble-grid">
+      <div class="trouble-card">
+        <div class="trouble-card-icon">コミュニケーションのストレス</div>
+        <div class="trouble-card-title">言い出しづらい…</div>
+        <p>「これ本当に交換必要？」と聞けない。他店で断られたカスタムも相談しにくい…。</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-icon">手続きのストレス</div>
+        <div class="trouble-card-title">また電話しなきゃ…</div>
+        <p>車検の時期はわかってても、電話での日程調整や代車手配がどうしても後回しに…。</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-icon">時間のストレス</div>
+        <div class="trouble-card-title">休日がつぶれる…</div>
+        <p>工場まで持ち込んで、終わるまでずっと待つ。せっかくの休みがそれだけで終わる…。</p>
+      </div>
+    </div>
+    <div class="trouble-arrow">↓</div>
+    <div class="trouble-resolve">
+      <h3>その「当たり前」だったストレス、<span>ラクルマならすべて「LINE」と「出張整備」で解決します。</span></h3>
+    </div>
+  </div>
+</section>
 
-    <!-- ① FV -->
-    <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-bg-placeholder">
-            <div class="hero-bg-placeholder-box">
-                作業写真<br>プレースホルダー<br>（吉永さん提供待ち）
-            </div>
-        </div>
-        <div class="hero-content">
-            <div class="hero-badge">世田谷・目黒・渋谷 出張整備</div>
-            <h1 class="hero-title">
-                自宅の駐車場まで、<br>
-                <em>国家一級整備士</em>が来ます。
-            </h1>
-            <p class="hero-subtitle">
-                LINEで写真を送るだけ。<br>見積りはその日のうちにお返しします。
-            </p>
-            <div class="hero-stats">
-                <div>
-                    <div class="hero-stat-num">510<small>件超</small></div>
-                    <div class="hero-stat-label">口コミ累計実績</div>
-                </div>
-                <div>
-                    <div class="hero-stat-num">4.93</div>
-                    <div class="hero-stat-label">総合評価（5点満点）</div>
-                </div>
-                <div>
-                    <div class="hero-stat-num">10<small>年超</small></div>
-                    <div class="hero-stat-label">元HONDAディーラー経験</div>
-                </div>
-            </div>
-            <div class="hero-cta-group">
-                <a href="https://lin.ee/r0BAZkR0" class="btn-primary">📱 LINEで写真を送って無料見積り</a>
-                <a href="https://rakuruma.com/reservation_form/" class="btn-secondary">📅 Web予約はこちら</a>
-            </div>
-        </div>
-    </section>
+<!-- RAK POINTS：3つのラク -->
+<section class="rak-section">
+  <div class="section-inner" style="max-width:100%;padding:0;">
+    <div style="max-width:1000px;margin:0 auto;padding:0 24px 48px;">
+      <div class="section-label">RAK POINTS</div>
+      <h2 class="section-title">ラクルマが選ばれ続ける<br>3つの"ラク"ポイント</h2>
+    </div>
+  </div>
+  <div class="rak-list">
 
-    <!-- ② 実績バナー -->
-    <div class="trust-bar">
-        <div class="trust-bar-inner">
-            <div class="trust-item">
-                <span class="trust-icon">🏆</span>
-                <div>
-                    <div class="trust-label">出張整備 1位</div>
-                    <div class="trust-sub">くらしのマーケット 世田谷・目黒・渋谷</div>
-                </div>
-            </div>
-            <div class="trust-item">
-                <span class="trust-icon">⭐</span>
-                <div>
-                    <div class="trust-label">4.93 / 5.0</div>
-                    <div class="trust-sub">くらしのマーケット評価</div>
-                </div>
-            </div>
-            <div class="trust-item">
-                <span class="trust-icon">🔧</span>
-                <div>
-                    <div class="trust-label">国家一級整備士</div>
-                    <div class="trust-sub">元HONDAディーラー勤務10年以上</div>
-                </div>
-            </div>
-            <div class="trust-item">
-                <span class="trust-icon">📋</span>
-                <div>
-                    <div class="trust-label">追加料金なし</div>
-                    <div class="trust-sub">出張費・消費税すべて込み</div>
-                </div>
-            </div>
-        </div>
+    <div class="rak-item">
+      <div class="rak-img">💬</div>
+      <div class="rak-body">
+        <div class="rak-num">RAK POINT 01</div>
+        <h3 class="rak-title">相談は<span class="rak-keyword">「LINEで送る」</span>だけ</h3>
+        <p class="rak-desc">「こんなこと聞いていいの？」という疑問も、他店で断られたカスタムも、まずはLINEでメッセージを。国家1級整備士がプロの目線で丁寧にお答えします。</p>
+      </div>
     </div>
 
-    <!-- ③ 作業実績 -->
-    <section class="section section-bg" id="works-section">
-        <div class="container">
-            <div class="section-label">WORKS</div>
-            <h2 class="section-title">作業実績</h2>
-            <p class="section-lead">実際の作業内容と写真を公開しています。</p>
+    <div class="rak-item">
+      <div class="rak-img">📱</div>
+      <div class="rak-body">
+        <div class="rak-num">RAK POINT 02</div>
+        <h3 class="rak-title">依頼は<span class="rak-keyword">「LINEから予約」</span>するだけ</h3>
+        <p class="rak-desc">面倒な電話のやり取りは一切不要。思い立ったその時に、LINEでサクッと日程調整から予約まで完了します。</p>
+      </div>
+    </div>
 
-            <div class="works-grid" id="works-grid">
-                <div class="works-empty" id="works-loading" style="grid-column:1/-1;">読み込み中...</div>
-            </div>
+    <div class="rak-item">
+      <div class="rak-img">🏠</div>
+      <div class="rak-body">
+        <div class="rak-num">RAK POINT 03</div>
+        <h3 class="rak-title">当日は<span class="rak-keyword">「鍵を渡す」</span>だけ</h3>
+        <p class="rak-desc">整備士がご自宅の駐車場へ直接伺います。工場への移動も、退屈な待ち時間もゼロ。作業中は、お仕事でも家事でも自由にお過ごしください。</p>
+      </div>
+    </div>
 
-            <div class="works-more" id="works-more" style="display:none;">
-                <button onclick="showMoreWorks()" class="btn-line-outline">もっと見る</button>
-            </div>
+  </div>
+</section>
+
+<!-- COMPARE：他社比較表 -->
+<section class="compare-section">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">本当にお得？<br>他社サービスとの徹底比較</h2>
+    <p class="section-desc">「出張整備って実際どうなの？」と思っている方へ。数字と内容で正直に比べてみました。</p>
+
+    <!-- PC・タブレット：テーブル -->
+    <div class="compare-scroll-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="col-rakuruma">
+              <span class="col-badge">RECOMMENDED</span>
+              ラクルマ<br><small>（出張整備）</small>
+            </th>
+            <th class="col-dealer">ディーラー・<br>整備工場</th>
+            <th class="col-shop">カー用品店・<br>ガソリンスタンド</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>⏱ 拘束時間</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>0分<br><small>完全お任せ。自宅で仕事や家事ができる</small></td>
+            <td><span class="cmp-ng">×</span>半日〜数日<br><small>持ち込み・引き取り・代車手配の手間あり</small></td>
+            <td><span class="cmp-ng">×</span>数時間<br><small>店舗での待ち時間で貴重な休日が潰れる</small></td>
+          </tr>
+          <tr>
+            <td>🅿️ 駐車スペース</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>追加スペース不要<br><small>バイク訪問のため、自宅の駐車場代が増えない</small></td>
+            <td><span class="cmp-ng">×</span>店舗へ持ち込み<br><small>移動の手間が発生する</small></td>
+            <td><span class="cmp-ng">×</span>店舗へ持ち込み<br><small>移動の手間が発生する</small></td>
+          </tr>
+          <tr>
+            <td>🔧 対応の柔軟性</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>柔軟対応<br><small>社外パーツ持ち込みや他店断り案件もLINEで気軽に相談OK</small></td>
+            <td><span class="cmp-ng">×</span>融通が利かない<br><small>純正品以外はNGなど、敷居が高く相談しにくい</small></td>
+            <td><span class="cmp-ok">◯</span>消耗品は得意<br><small>一般的な交換は得意だが、輸入車や特殊カスタムは断られることも</small></td>
+          </tr>
+          <tr>
+            <td>👤 担当者の顔</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>毎回同じ国家1級整備士が専属対応<br><small>信頼関係が積み重なる</small></td>
+            <td><span class="cmp-ng">×</span>担当が変わりやすい<br><small>整備士と直接話せないことが多い</small></td>
+            <td><span class="cmp-ng">×</span>経験の浅いスタッフが対応することも<br><small>品質にばらつきがある</small></td>
+          </tr>
+          <tr>
+            <td>⚙️ 重整備・高度な診断</td>
+            <td class="col-rakuruma"><span class="cmp-ok">◯</span>一部対応<br><small>提携工場にて対応できる場合があります</small></td>
+            <td><span class="cmp-best">◎</span>フル対応<br><small>専用設備と工場があり、どんな複雑な修理・診断も可能</small></td>
+            <td><span class="cmp-ok">◯</span>一部対応<br><small>店舗設備で対応できる範囲に限る</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- スマホ：カード形式 -->
+    <div class="compare-cards">
+      <div class="compare-card">
+        <div class="compare-card-head">⏱ 拘束時間</div>
+        <div class="compare-card-row">
+          <div class="compare-card-col is-rakuruma">
+            <span class="compare-card-col-label">ラクルマ</span>
+            <span class="cmp-best">◎</span> 0分。自宅で自由に過ごせる
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">ディーラー</span>
+            <span class="cmp-ng">×</span> 半日〜数日かかる
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">カー用品店</span>
+            <span class="cmp-ng">×</span> 数時間、店で待ち続ける
+          </div>
         </div>
-    </section>
-
-    <!-- ④ よくあるご依頼 -->
-    <section class="section">
-        <div class="container">
-            <div class="section-label">SERVICES</div>
-            <h2 class="section-title">よくあるご依頼</h2>
-            <p class="section-lead">「ディーラーに断られた」「予約が1ヶ月先まで埋まっている」そんな方からのご依頼が中心です。</p>
-
-            <div class="menu-grid">
-                <div class="menu-card">
-                    <h3 class="menu-card-title">ドライブレコーダー取り付け</h3>
-                    <p class="menu-card-body">「輸入車なので対応できないと断られた」「持ち込み品はNGと言われた」方からの依頼が最も多いメニューです。前後カメラ・配線処理まで対応します。</p>
-                    <p class="menu-card-note">持ち込み部品OK ／ 輸入車対応 ／ 作業時間：約60〜90分</p>
-                </div>
-                <div class="menu-card">
-                    <h3 class="menu-card-title">テレビキャンセラー・ナビ取り付け</h3>
-                    <p class="menu-card-body">カー用品店では断られる車種・配線にも対応。メーカーオプションナビへのキャンセラー取り付けなど、細かい依頼も歓迎です。</p>
-                    <p class="menu-card-note">持ち込み部品OK ／ 輸入車対応 ／ 事前にLINEでご相談ください</p>
-                </div>
-                <div class="menu-card">
-                    <h3 class="menu-card-title">タイヤ履き替え</h3>
-                    <p class="menu-card-body">シーズン前に予約が埋まって困っている方へ。お車を使っていない時間帯に駐車場まで伺い、待ち時間ゼロで完了します。</p>
-                    <p class="menu-card-note">4本脱着・バランス調整・空気圧調整込み ／ 所要時間：約45分</p>
-                </div>
-                <div class="menu-card">
-                    <h3 class="menu-card-title">車検</h3>
-                    <p class="menu-card-body">入庫不要・日程はご都合に合わせて柔軟に対応。まずはLINEで車検証の写真を送ってください。</p>
-                    <p class="menu-card-note">事前見積り無料 ／ 代車手配応相談</p>
-                </div>
-                <div class="menu-card">
-                    <h3 class="menu-card-title">バッテリー交換</h3>
-                    <p class="menu-card-body">「なんかエンジンのかかりが遅い」と感じたらバッテリーのサインかもしれません。現地で診断し、そのまま即日交換まで対応します。廃バッテリーは無料回収。</p>
-                    <p class="menu-card-note">現地診断・即日交換可 ／ 廃バッテリー無料回収 ／ 所要時間：約20分</p>
-                </div>
-                <div class="menu-card">
-                    <h3 class="menu-card-title">その他アフターパーツ取り付け</h3>
-                    <p class="menu-card-body">スピーカー交換・ホーン交換・デッドニングなど、「どこに頼めばいいかわからない」細かい依頼もお気軽にどうぞ。まず写真をLINEで送ってください。</p>
-                    <p class="menu-card-note">持ち込み部品OK ／ 内容によりお見積り</p>
-                </div>
-            </div>
-
-            <div class="cta-center">
-                <p style="color:var(--text-muted); margin-bottom:20px; font-size:14px;">掲載のない作業もお気軽にご相談ください</p>
-                <a href="https://lin.ee/r0BAZkR0" class="btn-line">📱 LINEで見積りを依頼する</a>
-            </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-card-head">🅿️ 駐車スペース</div>
+        <div class="compare-card-row">
+          <div class="compare-card-col is-rakuruma">
+            <span class="compare-card-col-label">ラクルマ</span>
+            <span class="cmp-best">◎</span> バイク訪問。追加スペース不要
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">ディーラー</span>
+            <span class="cmp-ng">×</span> 店舗へ持ち込み
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">カー用品店</span>
+            <span class="cmp-ng">×</span> 店舗へ持ち込み
+          </div>
         </div>
-    </section>
-
-    <!-- ④ ご利用の流れ（ネイビー背景・番号付き） -->
-    <section class="section section-navy">
-        <div class="container">
-            <div class="section-label">HOW IT WORKS</div>
-            <h2 class="section-title">ご利用の流れ</h2>
-            <p class="section-lead">LINEで写真を送るだけで、あとはおまかせください。</p>
-
-            <div class="flow-grid">
-                <div class="flow-card">
-                    <div class="flow-num">01</div>
-                    <h3 class="flow-title">LINEで写真を送る</h3>
-                    <p class="flow-desc">気になる箇所をLINEで送信。概算見積りをその日のうちにお返しします。内容確認後、日程調整へ。</p>
-                </div>
-                <div class="flow-card">
-                    <div class="flow-num">02</div>
-                    <h3 class="flow-title">日時・場所を確定</h3>
-                    <p class="flow-desc">ご希望の日時・訪問場所を調整します。最短翌日対応。在宅不要・鍵預けもOK。</p>
-                </div>
-                <div class="flow-card">
-                    <div class="flow-num">03</div>
-                    <h3 class="flow-title">現地で整備</h3>
-                    <p class="flow-desc">整備士がご自宅の駐車場まで訪問。作業中も随時LINEでご報告します。</p>
-                </div>
-                <div class="flow-card">
-                    <div class="flow-num">04</div>
-                    <h3 class="flow-title">レポート＆お支払い</h3>
-                    <p class="flow-desc">完了後にビフォーアフター写真付きレポートをLINE送付。現金・カード・PayPay対応。</p>
-                </div>
-            </div>
-
+      </div>
+      <div class="compare-card">
+        <div class="compare-card-head">🔧 対応の柔軟性</div>
+        <div class="compare-card-row">
+          <div class="compare-card-col is-rakuruma">
+            <span class="compare-card-col-label">ラクルマ</span>
+            <span class="cmp-best">◎</span> 社外パーツ・他店断り案件もLINEでOK
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">ディーラー</span>
+            <span class="cmp-ng">×</span> 純正品以外NG・融通が利かない
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">カー用品店</span>
+            <span class="cmp-ok">◯</span> 消耗品は得意。輸入車は制限あり
+          </div>
         </div>
-    </section>
-
-    <!-- ⑤ はじめての方も安心の5つのポイント -->
-    <section class="section section-bg">
-        <div class="container">
-            <div class="section-label">PEACE OF MIND</div>
-            <h2 class="section-title">はじめての方も安心の<br>5つのポイント</h2>
-            <p class="section-lead">「知らない整備士が自宅に来る」不安を、ラクルマはこう解決しています。</p>
-
-            <div class="safety-grid">
-                <div class="safety-card">
-                    <div class="safety-num">POINT 01</div>
-                    <div class="safety-icon">🏢</div>
-                    <div class="safety-title">マンション平面駐車場OK</div>
-                    <p class="safety-desc">マンションの平面駐車場での作業に対応。立体・機械式は事前ご相談を。</p>
-                    <div class="safety-voice">「マンションの駐車場でも対応してもらえました。作業もスムーズで安心でした」（世田谷区・40代）</div>
-                </div>
-                <div class="safety-card">
-                    <div class="safety-num">POINT 02</div>
-                    <div class="safety-icon">🔑</div>
-                    <div class="safety-title">在宅不要・鍵預けOK</div>
-                    <p class="safety-desc">お仕事中でも大丈夫。鍵預け契約書を事前にお送りします。</p>
-                    <div class="safety-voice">「留守中に対応してもらいました。契約書があったので安心して鍵を預けられました」（目黒区・30代）</div>
-                </div>
-                <div class="safety-card">
-                    <div class="safety-num">POINT 03</div>
-                    <div class="safety-icon">📸</div>
-                    <div class="safety-title">作業前後の写真をLINE報告</div>
-                    <p class="safety-desc">作業内容と写真をセットでLINE送付。留守中でも何をしたか一目でわかります。</p>
-                    <div class="safety-voice">「予約時から適切な連絡があり安心してお任せできました」（くらしのマーケット口コミ）</div>
-                </div>
-                <div class="safety-card">
-                    <div class="safety-num">POINT 04</div>
-                    <div class="safety-icon">📋</div>
-                    <div class="safety-title">追加料金なし・明朗会計</div>
-                    <p class="safety-desc">出張費・部品処分費・消費税すべて込みの料金です。作業前に確定金額をお伝えします。</p>
-                    <div class="safety-voice">「事前に金額を教えてもらえて安心でした。当日も追加費用なく、スッキリ終わりました」（世田谷区・30代）</div>
-                </div>
-                <div class="safety-card">
-                    <div class="safety-num">POINT 05</div>
-                    <div class="safety-icon">🔧</div>
-                    <div class="safety-title">国家1級整備士が担当</div>
-                    <p class="safety-desc">カー用品店で断られた輸入車の作業も対応。依頼前の相談から丁寧にサポートします。</p>
-                    <div class="safety-voice">「ベンツのドラレコ設置を丁寧かつ素早く対応いただきました」（くらしのマーケット口コミ）</div>
-                </div>
-            </div>
-
-            <div class="cta-center">
-                <a href="https://lin.ee/r0BAZkR0" class="btn-line">📱 不安なことをLINEで相談する</a>
-            </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-card-head">👤 担当者の顔</div>
+        <div class="compare-card-row">
+          <div class="compare-card-col is-rakuruma">
+            <span class="compare-card-col-label">ラクルマ</span>
+            <span class="cmp-best">◎</span> 毎回同じ国家1級整備士が専属
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">ディーラー</span>
+            <span class="cmp-ng">×</span> 担当が変わりやすく話せない
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">カー用品店</span>
+            <span class="cmp-ng">×</span> 経験の浅いスタッフのことも
+          </div>
         </div>
-    </section>
-
-    <!-- ⑥ お客様の声 -->
-    <section class="section">
-        <div class="container">
-            <div class="section-label">REVIEWS</div>
-            <h2 class="section-title">お客様の声</h2>
-
-            <div class="curama-badge">
-                <span style="font-size:16px; color:#F4D110; font-weight:900; letter-spacing:2px;">★★★★★</span>
-                <span style="font-size:15px; font-weight:700; color:var(--text);">4.93</span>
-                <span style="font-size:14px; color:var(--text-muted);">／</span>
-                <a href="https://curama.jp/car-maintenance/SER695652993/review/?sort=top-review" target="_blank" rel="noopener noreferrer"
-                   style="display:inline-flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--border);border-radius:4px;padding:8px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.07);color:var(--navy);font-size:13px;font-weight:600;">
-                    <img src="https://curama.jp/favicon.ico" alt="くらしのマーケット" style="width:16px;height:16px;">
-                    くらしのマーケットで510件の口コミを確認する →
-                </a>
-            </div>
-            <p style="text-align:center;color:var(--text-muted);font-size:14px;margin-bottom:0;">地元のお客様からご好評いただいています。</p>
-
-            <div class="review-scroll-wrap" id="review-scroll-wrap">
-                <div class="review-scroll-track" id="review-track">
-                    <!-- works.jsonの口コミ付き実績がここに動的挿入される -->
-                    <!-- 以下はフォールバック（くらしのマーケット実際の口コミ） -->
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">前後録画タイプのドラレコの取り付けを2台お願いしました。手際良く丁寧に作業していただき、配線の取り回し等の仕上がりもとても綺麗です！電装系に限らず、また色々とお願いしたいと思える業者さんです！</p>
-                            <div class="review-author">hm7348さん・ドライブレコーダー取り付け・国産車</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">ベンツGLEの現行型のドラレコ設置を依頼しました。当初は某カー用品店で「難しくできない」と断られたのですが、とても丁寧に、きれいに、素早く取り付けいただきました。本当に頼りになると感じています。</p>
-                            <div class="review-author">すずすずさん・ドライブレコーダー取り付け・外国車（ベンツGLE）</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">デジタルミラー、ドラレコ、キャンセラーの取付をご対応いただきました。作業を正式に依頼する前段階から複数回にわたって、機器の相談や組み合わせの最適解など親切丁寧にご回答いただき感動しました。</p>
-                            <div class="review-author">匿名・デジタルインナーミラー取り付け</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">レーダー探知機の設置依頼です。豊富な経験知識から適切な場所からの電源確保を選択され、安定した作業内容でした。60分以上かかる可能性があると聞いていましたが、40分程度で終了。仕上がりもキレイでした。</p>
-                            <div class="review-author">GLCオーナーさん・レーダー探知機取り付け・外国車</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">テスラモデル３の社外品（デジタルインナーミラー）取り付けを行なって頂きました。非常に丁寧に、そして、一部当初想定の仕様と異なるイレギュラーの事態も柔軟に対応して頂き感謝しております。</p>
-                            <div class="review-author">NTさん・デジタルインナーミラー取り付け・外国車（テスラ モデル3）</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">ジャガーFペイスにミラー型ドライブレコーダーの取り付けをお願いしました。取り付ける前にカメラ位置の確認と取り付け方法をしっかり説明していただき安心してお願いする事が出来ました。</p>
-                            <div class="review-author">匿名・ドライブレコーダー取り付け・外国車（ジャガーFペイス）</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">BMW X3へのドラレコ取付をお願いしました。価格、スピード感、丁寧な作業とコミュニケーション、とても満足度の高いご対応でした。他作業も含め、またぜひ依頼させていただきたいと思います。</p>
-                            <div class="review-author">匿名・ドライブレコーダー取り付け・外国車（BMW X3）</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">ダッシュボードやナビの取り外しは丁寧かつスピーディーに、作業時間30分ほどでキャンセラーの取付けをしていただきました。ありがとうございました。</p>
-                            <div class="review-author">匿名・テレビキャンセラー取り付け</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">DIYではできなかったバックカメラ取付、しっかり仕上げてもらえました。フィッティングもばっちりで、純正のカメラがあった位置に取り付けてもらえました。満足度高いです。</p>
-                            <div class="review-author">匿名・バックカメラ後付け・外国車</div>
-                        </div>
-                    </div>
-                    <div class="review-card">
-                        <div class="review-card-photo-placeholder">🚗</div>
-                        <div class="review-card-body">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">ユピテルY3200ドライブレコーダーを設置して頂きました。機種選定から相談にのって頂き、初期設定変更のオーダーにも対応して下さいました。</p>
-                            <div class="review-author">匿名・ドライブレコーダー取り付け・国産車</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="cta-center">
-                <a href="https://lin.ee/r0BAZkR0" class="btn-line">📱 LINEで30秒見積り依頼</a>
-            </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-card-head">⚙️ 重整備・高度な診断</div>
+        <div class="compare-card-row">
+          <div class="compare-card-col is-rakuruma">
+            <span class="compare-card-col-label">ラクルマ</span>
+            <span class="cmp-ok">◯</span> 一部対応<br><small style="font-size:10px;">提携工場にて対応できる場合があります</small>
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">ディーラー</span>
+            <span class="cmp-best">◎</span> フル対応
+          </div>
+          <div class="compare-card-col">
+            <span class="compare-card-col-label">カー用品店</span>
+            <span class="cmp-ok">◯</span> 一部対応
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- ⑦ 担当整備士（ネイビー背景） -->
-    <section class="section section-navy">
-        <div class="container">
-            <div class="section-label">MECHANIC</div>
-            <h2 class="section-title">担当整備士のご紹介</h2>
+  </div>
+</section>
 
-            <div class="mechanic-card">
-                <div class="mechanic-photo">👨‍🔧</div>
-                <div>
-                    <div class="mechanic-name">吉永 明宏</div>
-                    <div class="mechanic-role">代表 ／ 国家一級自動車整備士</div>
-                    <div class="mechanic-tags">
-                        <span class="mechanic-tag">国家一級自動車整備士</span>
-                        <span class="mechanic-tag">元HONDAディーラー勤務10年以上</span>
-                        <span class="mechanic-tag">輸入車・国産車対応</span>
-                        <span class="mechanic-tag">世田谷三軒茶屋拠点</span>
-                    </div>
-                    <p class="mechanic-comment">HONDAディーラーで10年以上、国産・輸入車を問わずあらゆる整備に携わってきました。独立後は地元・世田谷を中心に出張整備を提供しています。「ディーラーに断られた」「カー用品店では難しいと言われた」という依頼ほど、やりがいを感じます。お気軽にご相談ください。</p>
-                </div>
+<!-- SERVICE OVERVIEW：サービス全体像 -->
+<section class="service-overview">
+  <div class="section-inner">
+    <div class="section-label">SERVICE OVERVIEW</div>
+    <h2 class="section-title">ラクルマでできること、<br>全部お見せします。</h2>
+    <p class="section-desc">「他にどんなことができるの？」よく聞かれます。整備・パーツ取り付け・消耗品交換まで、思った以上に幅広く対応しています。</p>
+
+    <!-- キラーカード3枚 -->
+    <div class="service-killer-grid">
+
+      <div class="service-killer-card">
+        <div class="service-killer-img-placeholder">📦</div>
+        <div class="service-killer-body">
+          <span class="service-killer-label">人気 No.1</span>
+          <div class="service-killer-title">ネット購入パーツの取付</div>
+          <p class="service-killer-desc">Amazon等で購入したドラレコやナビの持ち込み取付も大歓迎。ディーラーで断られた方もご相談ください。</p>
+        </div>
+      </div>
+
+      <div class="service-killer-card">
+        <div class="service-killer-img-placeholder">🔧</div>
+        <div class="service-killer-body">
+          <span class="service-killer-label">人気 No.2</span>
+          <div class="service-killer-title">日常メンテナンス<br>（オイル・バッテリー等）</div>
+          <p class="service-killer-desc">わざわざ店舗へ行く手間ゼロ。ご自宅の駐車場でサクッと交換いたします。</p>
+        </div>
+      </div>
+
+      <div class="service-killer-card">
+        <div class="service-killer-img-placeholder">🚗</div>
+        <div class="service-killer-body">
+          <span class="service-killer-label">人気 No.3</span>
+          <div class="service-killer-title">出張・引き取り車検</div>
+          <p class="service-killer-desc">ご自宅までお車を引き取りに伺い、車検完了後にピカピカにしてお届け。貴重な休日を潰しません。</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- メニュー全体一覧 -->
+    <div class="service-two-col">
+
+      <!-- 出張でできること -->
+      <div class="service-col">
+        <div class="service-col-head visit">
+          <div class="service-col-badge">🚗 出張対応</div>
+          <h3>自宅の駐車場で<br>そのまま完結</h3>
+          <p>鍵を渡すだけ。工場への持ち込み不要で、自宅にいながらプロの作業が受けられます。</p>
+        </div>
+        <div class="service-col-body">
+          <div class="service-menu-group">
+            <div class="service-menu-group-title">
+              📱 ネット購入品の持ち込みもOK！
+              <span class="title-sub">カーナビ・AV・電装系</span>
             </div>
-        </div>
-    </section>
-
-    <!-- ⑧ 料金表 -->
-    <section class="section section-bg">
-        <div class="container">
-            <div class="section-label">PRICE</div>
-            <h2 class="section-title">車種別料金の目安</h2>
-            <p class="section-lead">すべて出張費・消費税込みの料金です。追加請求は一切ありません。</p>
-
-            <div class="price-table-wrap">
-                <table class="price-table">
-                    <thead>
-                        <tr>
-                            <th>メニュー</th>
-                            <th>軽・コンパクト</th>
-                            <th>国産普通車</th>
-                            <th>輸入車・SUV</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>バッテリー交換</td>
-                            <td>¥15,000〜</td>
-                            <td>¥18,000〜</td>
-                            <td>¥22,000〜</td>
-                        </tr>
-                        <tr>
-                            <td>タイヤ交換（4本）</td>
-                            <td>¥3,300〜</td>
-                            <td>¥4,400〜</td>
-                            <td>¥5,500〜</td>
-                        </tr>
-                        <tr>
-                            <td>ドラレコ・パーツ取り付け</td>
-                            <td colspan="3" style="text-align:center;">内容・車種により異なります。まずはLINEで写真をお送りください。</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="service-tags">
+              <span class="service-tag highlight">ドライブレコーダー</span>
+              <span class="service-tag highlight">デジタルインナーミラー</span>
+              <span class="service-tag">カーナビ取付</span>
+              <span class="service-tag">ディスプレイオーディオ</span>
+              <span class="service-tag">テレビキャンセラー</span>
+              <span class="service-tag">スピーカー</span>
+              <span class="service-tag">フリップダウンモニター</span>
+              <span class="service-tag">Fire TV Stick</span>
+              <span class="service-tag">エンジンスターター</span>
+              <span class="service-tag">デッドニング</span>
+              <span class="service-tag highlight">社外パーツ全般</span>
             </div>
-            <p class="price-note">※車種・年式・部品代により変動する場合があります。正確な金額はLINEでご確認ください。<br>※輸入車は車種・年式により変動します。LINEで車種をお知らせください。</p>
-
-        </div>
-    </section>
-
-    <!-- ⑨ 信頼の根拠 -->
-    <section class="section">
-        <div class="container">
-            <div class="section-label">CREDENTIALS</div>
-            <h2 class="section-title">安心してお任せいただける理由</h2>
-            <p class="section-lead">技術・資格・保険の3点で、初めての方でも安心してご利用いただけます。</p>
-
-            <div class="trust-card-grid">
-                <div class="trust-card">
-                    <div class="trust-card-icon">🏅</div>
-                    <div class="trust-card-label">国家一級<br>自動車整備士</div>
-                    <div class="trust-card-note">最上位の国家資格。輸入車・国産車問わず対応</div>
-                </div>
-                <div class="trust-card">
-                    <div class="trust-card-icon">🏢</div>
-                    <div class="trust-card-label">元HONDA<br>ディーラー勤務</div>
-                    <div class="trust-card-note">10年以上のディーラー経験を持つプロが対応</div>
-                </div>
-                <div class="trust-card">
-                    <div class="trust-card-icon">🛡️</div>
-                    <div class="trust-card-label">PL保険・<br>賠償責任保険加入</div>
-                    <div class="trust-card-note">万が一の際も保険で対応。安心の補償体制</div>
-                </div>
-                <div class="trust-card">
-                    <div class="trust-card-icon">⭐</div>
-                    <div class="trust-card-label">口コミ510件超<br>評価4.93</div>
-                    <div class="trust-card-note">世田谷・目黒・渋谷エリアで実績1位</div>
-                </div>
-                <div class="trust-card">
-                    <div class="trust-card-icon">📍</div>
-                    <div class="trust-card-label">2023年創業<br>地元密着3年</div>
-                    <div class="trust-card-note">世田谷三軒茶屋を拠点に地域に根ざして営業</div>
-                </div>
+          </div>
+          <div class="service-menu-group">
+            <div class="service-menu-group-title">
+              🔧 わざわざ店舗に行く手間ゼロ！
+              <span class="title-sub">消耗品・メンテナンス</span>
             </div>
-        </div>
-    </section>
-
-    <!-- ⑩ FAQ -->
-    <section class="section section-bg">
-        <div class="container">
-            <div class="section-label">FAQ</div>
-            <h2 class="section-title">よくある質問</h2>
-
-            <div class="faq-list">
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">マンションの駐車場でも対応できますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">平面駐車場であれば基本的に対応可能です。管理会社への許可依頼についてもサポートします。立体・機械式駐車場は作業スペースの関係で対応が難しい場合があります。事前にご相談ください。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">料金に追加費用はかかりますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">掲載価格に出張費・部品処分費・消費税すべて含まれています。追加請求は一切ありません。作業前に確定金額をお伝えしますので、安心してご利用いただけます。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">予約方法を教えてください。<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">LINEが最も簡単です。気になる箇所の写真を送っていただければ、概算見積りをお返しします。Web予約フォームからのご予約も受け付けています。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">作業時間はどのくらいかかりますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">作業内容によって異なります。バッテリー交換は約20分、タイヤ交換（4本）は約45分、ドラレコ取り付けは約60〜90分が目安です。お急ぎの場合はご相談ください。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">在宅していなくても頼めますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">はい、鍵預けOKです。鍵預け契約書を事前にお送りしますので安心してご利用いただけます。作業完了後はLINEで写真付きレポートをお送りします。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">キャンセルや雨天の場合はどうなりますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">前日までのキャンセルは無料です。雨天による作業困難な場合は日程を変更します。急な変更もLINEでお気軽にご連絡ください。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">支払い方法は何が使えますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">現金・クレジットカード・PayPayに対応しています。作業完了後のお支払いとなります。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">整備士は資格を持っていますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">代表の吉永は国家一級自動車整備士の資格を保有しています。国家資格の中で最上位の資格であり、輸入車から国産車まで幅広く対応できます。元HONDAディーラー勤務10年以上の経験があります。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">保証や保険はありますか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">PL保険（製造物責任保険）および業務上の損害賠償に対応した賠償責任保険に加入しています。万が一、作業中に車体を傷つけてしまった場合や、部品交換後に不具合が生じた場合は、保険の範囲内で対応いたします。</p>
-                </div>
-                <div class="faq-item" onclick="this.classList.toggle('open')">
-                    <div class="faq-question">対応エリアはどこですか？<span class="faq-question-icon">+</span></div>
-                    <p class="faq-answer">世田谷区・目黒区・渋谷区を中心に、品川区・大田区・港区にも対応しています。上記以外のエリアもまずはLINEでご相談ください。</p>
-                </div>
+            <div class="service-tags">
+              <span class="service-tag">バッテリー交換</span>
+              <span class="service-tag">タイヤ履き替え</span>
+              <span class="service-tag">エアコンフィルター</span>
+              <span class="service-tag">ワイパー交換</span>
+              <span class="service-tag">エンジンオイル</span>
+              <span class="service-tag">電球・ライト</span>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- ⑪ 最終CTA -->
-    <section class="final-cta">
-        <h2 class="final-cta-title">迷っていることがあれば、<br>まずLINEでご相談ください。</h2>
-        <p class="final-cta-lead">
-            見積りは無料です。写真を送るだけでお気軽にどうぞ。<br>
-            世田谷・目黒・渋谷エリアの出張整備はラクルマへ。
-        </p>
-        <div class="final-cta-btns">
-            <a href="https://lin.ee/r0BAZkR0" class="btn-cta-line">📱 LINEで無料見積りを依頼する</a>
-            <a href="https://rakuruma.com/reservation_form/" class="btn-cta-reserve">📅 Web予約はこちら</a>
+      <!-- 引き取り納車でできること -->
+      <div class="service-col">
+        <div class="service-col-head pickup">
+          <div class="service-col-badge">🔑 引き取り納車対応</div>
+          <h3>自宅まで引き取りに来て、<br>整備後にお届け</h3>
+          <p>設備が必要な作業は引き取り・納車で対応。代車手配不要です。</p>
         </div>
-    </section>
+        <div class="service-col-body">
+          <div class="service-menu-group">
+            <div class="service-menu-group-title green">
+              🔍 専用設備でしっかり対応！
+              <span class="title-sub">点検・車検</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag green highlight">車検（24ヶ月点検込み）</span>
+              <span class="service-tag green">法定点検</span>
+              <span class="service-tag green">診断・故障調査</span>
+            </div>
+          </div>
+          <div class="service-menu-group">
+            <div class="service-menu-group-title green">
+              🛠️ 専用設備でしっかり対応！
+              <span class="title-sub">重整備・修理</span>
+            </div>
+            <div class="service-tags">
+              <span class="service-tag green">タイヤ交換（4本）</span>
+              <span class="service-tag green">ブレーキパッド交換</span>
+              <span class="service-tag green highlight">その他重整備</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-</main>
+    </div>
+
+    <div class="service-consult-cta">
+      <p class="service-consult-text">輸入車・高級車・「他で断られた」案件も、まずはお気軽にご相談ください。</p>
+      <a href="https://lin.ee/r0BAZkR0" class="service-consult-btn">LINEで無料相談 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESLA：テスラ・輸入車専用ブロック -->
+<section class="tesla-section">
+  <div class="tesla-inner">
+    <div class="section-label">TESLA &amp; IMPORT CAR</div>
+    <h2 class="tesla-headline">テスラ・輸入車の<br><span>カスタム・整備も</span><br>ラクルマへ。</h2>
+    <p class="tesla-sub">
+      ディーラーで断られた持ち込みパーツも、近くの工場で敬遠されがちな輸入車の整備も。国家1級整備士がご自宅の駐車場で確実に対応します。ヨークステアリングや配線が必要なカメラもお任せください。
+    </p>
+    <div class="tesla-grid">
+      <div class="tesla-card">
+        <div class="tesla-card-icon">🎮</div>
+        <h4>ヨークステアリング取付</h4>
+        <p>Model 3/Y対応。テスラ純正・社外品どちらも相談可。</p>
+      </div>
+      <div class="tesla-card">
+        <div class="tesla-card-icon">🚦</div>
+        <h4>ウインカーレバー取付</h4>
+        <p>ステアリングボタン化後のレバー復元取り付け。</p>
+      </div>
+      <div class="tesla-card">
+        <div class="tesla-card-icon">📷</div>
+        <h4>フロントカメラ取付</h4>
+        <p>社外フロントカメラの配線・取り付け作業。</p>
+      </div>
+      <div class="tesla-card">
+        <div class="tesla-card-icon">🔧</div>
+        <h4>その他カスタム相談</h4>
+        <p>「こんなことできる？」はまずLINEでご相談ください。</p>
+      </div>
+    </div>
+    <div class="tesla-note">
+      <strong>輸入車・高級車オーナーの方へ：</strong>
+      BMW・メルセデス・ベンツ・レクサス・ポルシェなど、輸入車・高級車の整備・パーツ取り付けも対応しています。「近くの工場に断られた」という経験がある方も、まずはLINEでご相談ください。
+    </div>
+  </div>
+</section>
+
+<!-- WORKS：全作業実績公開 -->
+<section class="works-section">
+  <div class="section-inner">
+    <div class="section-label">WORKS · REPORT</div>
+    <h2 class="works-headline">全部見せます。<br><span>すべての作業実績を公開中。</span></h2>
+    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
+      「ちゃんとやってもらえてるの？」その不安をなくすために、全作業を記録・公開しています。
+    </p>
+    <div class="works-carousel-wrap">
+      <div class="works-track" id="worksTrack">
+        <!-- GASから動的に読み込まれます -->
+        <div class="work-card" style="justify-content:center;align-items:center;min-height:200px;">
+          <div class="work-card-body" style="text-align:center;padding:40px 20px;">
+            <div style="font-size:24px;margin-bottom:12px;">⏳</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:14px;">読み込み中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-dots" id="worksDots"></div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="worksPrev">‹</button>
+      <button class="carousel-btn" id="worksNext">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- VOICE：口コミカルーセル -->
+<section class="voice-section">
+  <div class="section-inner">
+    <div class="section-label">VOICE · REVIEW</div>
+    <h2 class="section-title">お客様の声</h2>
+    <p class="section-desc">洗車・整備でご利用いただいたお客様のリアルな声をご紹介します。</p>
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="voice-card">
+          <div class="voice-card-img">🚗</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">洗車でいつもお世話になっていたので、整備もラクルマさんにお願いしました。オイル交換を自宅でやっていただけて、説明も丁寧。これからは整備も全部ここにお願いしようと思います。</p>
+          <div class="voice-meta">世田谷区在住・40代・BMW 3シリーズ</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🚙</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">車検を出張でやってもらえるとは知りませんでした。作業後にLINEでレポートが来て、何をしたか一目でわかる。ディーラーより丁寧に説明してもらえて感動しました。</p>
+          <div class="voice-meta">目黒区在住・30代・レクサス RX</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🏎️</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">輸入車で近くの工場に断られた経験があり心配でしたが、1級整備士さんが来てくださって安心感が全然違いました。毎回同じ方が来てくれるので信頼できます。</p>
+          <div class="voice-meta">渋谷区在住・50代・メルセデス・ベンツ</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🔧</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">社外パーツの取り付けを相談したら、その場ですぐ見積もりして翌日には作業してもらえました。対応の速さと丁寧さに驚きました。また絶対お願いします。</p>
+          <div class="voice-meta">世田谷区在住・30代・アルファード</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🛢️</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">いつも車検がギリギリになってしまっていたのですが、LINEで相談したらとてもスムーズに予約できました。自宅で完結するので本当に助かっています。</p>
+          <div class="voice-meta">目黒区在住・40代・ポルシェ カイエン</div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="carouselPrev">‹</button>
+      <button class="carousel-btn" id="carouselNext">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBER -->
+<section class="member-section">
+  <div class="section-inner">
+    <div class="section-label">TEAM</div>
+    <h2 class="section-title">あたたかく、細やかな<br>接客対応でお迎えします。</h2>
+    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
+      国家1級整備士をはじめ、経験豊富なスタッフが対応します。<br>
+      お気軽にお問い合わせください。
+    </p>
+    <div class="member-two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;margin-top:8px;">
+      <!-- チーム写真（assets/images/team.jpg に差し替え） -->
+      <div style="border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:48px;">
+        👥
+      </div>
+      <div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">🔧 整備品質</div>
+            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">国家1級自動車整備士・自動車検査員資格保有。輸入車・国産車を問わず、妥協なく丁寧に作業します。</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">💬 お客様対応</div>
+            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">作業内容を写真つきでLINEにご報告。「何をしたか」が一目でわかるので、はじめての方も安心してお任せいただけます。</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">🛡️ 安心の保証</div>
+            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">損害保険加入済み。万が一の際も保険で対応します。出張費は無料です。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE -->
+<section class="price-section">
+  <div class="section-inner">
+    <div class="section-label">SERVICE · PRICE</div>
+    <h2 class="section-title">サービス内容・料金目安</h2>
+    <p class="section-desc">
+      料金はお車の車種・状態により異なります。まずはLINEでお気軽にご相談ください。
+    </p>
+    <div class="price-note">
+      ※ 以下は目安価格です。部品代・法定費用は別途となる場合があります。<br>
+      ※ 輸入車・大型車は料金が異なる場合があります。詳しくはLINEでご相談ください。
+    </div>
+
+    <div class="accordion">
+
+      <!-- 定期メンテナンス -->
+      <div class="accordion-item open">
+        <button class="accordion-trigger" onclick="toggleAccordion(this)">
+          <div class="accordion-trigger-left">
+            <span style="font-size:20px;">🛢️</span>
+            <span class="accordion-trigger-title">定期メンテナンス <span class="accordion-trigger-count">6メニュー</span></span>
+          </div>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <table class="price-table">
+            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <tbody>
+              <tr><td>エンジンオイル交換</td><td class="price">¥5,500〜</td><td>30〜60分</td></tr>
+              <tr><td>タイヤ交換（4本）</td><td class="price">¥8,800〜</td><td>60〜90分</td></tr>
+              <tr><td>バッテリー交換</td><td class="price">¥11,000〜</td><td>30〜60分</td></tr>
+              <tr><td>エアコンフィルター交換</td><td class="price">¥5,500〜</td><td>20〜30分</td></tr>
+              <tr><td>電球・ライト交換</td><td class="price">¥3,300〜</td><td>20〜40分</td></tr>
+              <tr><td>パンク修理</td><td class="price">¥5,500〜</td><td>30〜60分</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 車検・点検 -->
+      <div class="accordion-item">
+        <button class="accordion-trigger" onclick="toggleAccordion(this)">
+          <div class="accordion-trigger-left">
+            <span style="font-size:20px;">🔍</span>
+            <span class="accordion-trigger-title">車検・点検 <span class="accordion-trigger-count">3メニュー</span></span>
+          </div>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <table class="price-table">
+            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <tbody>
+              <tr><td>車検（24ヶ月点検込み）</td><td class="price">¥33,000〜＋法定費用</td><td>応相談</td></tr>
+              <tr><td>法定点検</td><td class="price">お見積もり</td><td>応相談</td></tr>
+              <tr><td>診断・故障調査</td><td class="price">お見積もり</td><td>応相談</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- カーナビ・AV・電装 -->
+      <div class="accordion-item">
+        <button class="accordion-trigger" onclick="toggleAccordion(this)">
+          <div class="accordion-trigger-left">
+            <span style="font-size:20px;">📱</span>
+            <span class="accordion-trigger-title">カーナビ・AV・電装パーツ取付 <span class="accordion-trigger-count">10メニュー</span></span>
+          </div>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <table class="price-table">
+            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <tbody>
+              <tr><td>ドライブレコーダー取付</td><td class="price">¥8,800〜</td><td>60〜90分</td></tr>
+              <tr><td>デジタルインナーミラー取付</td><td class="price">¥11,000〜</td><td>60〜90分</td></tr>
+              <tr><td>カーナビ・ディスプレイオーディオ取付</td><td class="price">¥16,500〜</td><td>90〜180分</td></tr>
+              <tr><td>テレビキャンセラー取付</td><td class="price">¥5,500〜</td><td>30〜60分</td></tr>
+              <tr><td>スピーカー取付</td><td class="price">¥8,800〜</td><td>60〜120分</td></tr>
+              <tr><td>フリップダウンモニター取付</td><td class="price">¥11,000〜</td><td>60〜120分</td></tr>
+              <tr><td>エンジンスターター取付</td><td class="price">¥16,500〜</td><td>90〜180分</td></tr>
+              <tr><td>デッドニング</td><td class="price">¥22,000〜</td><td>応相談</td></tr>
+              <tr><td>Fire TV Stick取付</td><td class="price">¥5,500〜</td><td>30〜60分</td></tr>
+              <tr><td>その他社外パーツ取付</td><td class="price">お見積もり</td><td>応相談</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- テスラ専用 -->
+      <div class="accordion-item">
+        <button class="accordion-trigger" onclick="toggleAccordion(this)">
+          <div class="accordion-trigger-left">
+            <span style="font-size:20px;">⚡</span>
+            <span class="accordion-trigger-title">テスラ専用パーツ取付 <span class="accordion-trigger-count">4メニュー</span></span>
+          </div>
+          <span class="accordion-icon">▼</span>
+        </button>
+        <div class="accordion-body">
+          <table class="price-table">
+            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <tbody>
+              <tr><td>ヨークステアリング取付</td><td class="price">お見積もり</td><td>応相談</td></tr>
+              <tr><td>ウインカーレバー取付</td><td class="price">お見積もり</td><td>応相談</td></tr>
+              <tr><td>フロントカメラ取付</td><td class="price">お見積もり</td><td>応相談</td></tr>
+              <tr><td>その他テスラカスタム</td><td class="price">お見積もり</td><td>応相談</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="price-cta-block">
+      <p class="price-cta-micro">＼ まずはスマホで写真を送るだけ！ ／</p>
+      <div class="price-cta-card">
+        <div class="price-cta-text">
+          <div class="price-cta-title">一覧にないメニューもお気軽にご相談ください</div>
+          <div class="price-cta-desc">「こんな作業もできる？」「料金はどのくらい？」<br>どんな小さなことでも、LINEで無料でお答えします。</div>
+        </div>
+        <a href="https://lin.ee/r0BAZkR0" class="price-cta-btn">
+          <span class="price-cta-btn-icon">💬</span>
+          <span>
+            <span class="price-cta-btn-main">LINEで相談する</span>
+            <span class="price-cta-btn-sub">無料・返信は最短当日</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">HOW TO USE</div>
+    <h2 class="section-title">ご利用の流れ</h2>
+    <p class="section-desc">LINEで相談するだけ。あとはお任せください。</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>LINEで相談・予約</h3>
+        <p>車種・依頼内容・ご都合を教えてください。スムーズに日程調整できます。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>整備士が自宅に訪問</h3>
+        <p>ご自宅の駐車場へ伺います。鍵の受け渡しのみでOK。作業中は外出・在宅どちらでも。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>作業・説明</h3>
+        <p>作業完了後、整備士が直接ご説明。何をしたか、今後気をつける点を丁寧にお伝えします。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>レポート＆お支払い</h3>
+        <p>作業内容の写真つきレポートをLINEで送付。お支払いはキャッシュレス対応です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="section-inner">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">よくあるご質問</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          世田谷区・目黒区・渋谷区以外には来てもらえますか？
+        </div>
+        <div class="faq-a">現在の対応エリアは世田谷区・目黒区・渋谷区を中心としています。エリア外でもご相談いただける場合がありますので、まずはLINEでお問い合わせください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          輸入車（BMWやメルセデス・ベンツ）でも対応できますか？
+        </div>
+        <div class="faq-a">はい、対応可能です。吉永は国家1級自動車整備士であり、輸入車・高級車の整備経験も豊富です。ご不安な点はLINEでご相談ください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          マンションの機械式駐車場でも作業できますか？
+        </div>
+        <div class="faq-a">機械式駐車場では作業が難しい場合があります。平置きや自走式の駐車場であれば対応可能です。ご不安な場合はご相談ください。</div>
+      </div>
+
+      <!-- 折りたたみ部分（4問目以降） -->
+      <div class="faq-more-wrap" id="faqMore">
+        <div class="faq-item">
+          <div class="faq-q">
+            <span class="faq-q-mark">Q</span>
+            作業中は立ち会いが必要ですか？
+          </div>
+          <div class="faq-a">鍵の受け渡し時のみご在宅いただければ、作業中は外出・在宅どちらでも大丈夫です。お仕事やお出かけの間に作業を完了させることも可能です。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span class="faq-q-mark">Q</span>
+            料金はいつ、どうやって支払いますか？
+          </div>
+          <div class="faq-a">作業完了後にキャッシュレスでのお支払いをお願いしています。作業前に料金の目安をご確認いただいたうえで進めますので、追加費用が発生する場合は事前にご連絡します。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span class="faq-q-mark">Q</span>
+            急なトラブル（バッテリー上がり・パンク等）にも対応できますか？
+          </div>
+          <div class="faq-a">できる限り対応いたします。まずはLINEでご状況をお知らせください。スケジュールによっては即日対応も可能です。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span class="faq-q-mark">Q</span>
+            洗車と整備を同時にお願いできますか？
+          </div>
+          <div class="faq-a">はい、もちろん可能です。整備と合わせて洗車もご依頼いただくお客様も多くいらっしゃいます。まとめてご依頼いただくと、効率よく対応できます。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">
+            <span class="faq-q-mark">Q</span>
+            作業内容はどのように確認できますか？
+          </div>
+          <div class="faq-a">作業完了後、写真つきの作業レポートをLINEでお送りします。過去の整備履歴はLINEのカルテ機能でいつでもご確認いただけます。</div>
+        </div>
+      </div>
+
+      <button class="faq-toggle-btn" id="faqToggle" onclick="toggleFaq()">
+        <span id="faqToggleLabel">もっと見る（残り5件）</span>
+        <span class="faq-toggle-icon" id="faqToggleIcon">∨</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- AREA -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">AREA</div>
+    <h2 class="section-title">サービス提供エリア</h2>
+    <p class="section-desc">現在、東京都内の以下のエリアを中心に対応しています。エリア外の方もまずはご相談ください。</p>
+    <div class="area-tags">
+      <span class="area-tag">世田谷区</span>
+      <span class="area-tag">目黒区</span>
+      <span class="area-tag">渋谷区</span>
+      <span class="area-tag">周辺エリア（要相談）</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>まずは、LINEで気軽にご相談ください。</h2>
+  <p>
+    「こんな作業もできる？」「料金はどのくらい？」<br>
+    どんな小さな疑問でもお気軽に。無料でお答えします。
+  </p>
+  <div class="cta-buttons">
+    <a href="https://lin.ee/r0BAZkR0" class="btn-primary">LINEで無料相談する</a>
+    <a href="https://lin.ee/r0BAZkR0" class="btn-line">整備を予約する</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-nav">
+    <a href="https://rakuruma.com">トップ（洗車）</a>
+    <a href="https://rakuruma.com/seibi">出張整備</a>
+    <a href="https://lin.ee/r0BAZkR0">LINE相談</a>
+  </div>
+  <p>© 2023 ラクルマ｜世田谷区・目黒区・渋谷区の出張整備・洗車サービス</p>
+  <p style="margin-top:8px;font-size:11px;opacity:0.5;">最終更新：2026年6月</p>
+</footer>
+
+<!-- FLOATING LINE BUTTON -->
+<a href="https://lin.ee/r0BAZkR0" class="float-line">💬 LINEで相談</a>
 
 <script>
-    // FAQ toggle
-    // (handled via onclick on each .faq-item)
+  function initCarousel({ trackId, dotsId, prevId, nextId, cardSelector }) {
+    const track = document.getElementById(trackId);
+    const dotsWrap = document.getElementById(dotsId);
+    const cards = track.querySelectorAll(cardSelector);
+    let current = 0;
 
-    // ========== 作業実績 ==========
-    const WORKS_PER_PAGE = 9;
-    let allWorks = [];
-    let shownCount = 0;
-
-    function renderWorkCard(w) {
-        const altText = [w.maker, w.car, '作業写真'].filter(Boolean).join(' ');
-        const photo = w.photo
-            ? `<img class="work-card-photo" src="${w.photo}" alt="${altText}" loading="lazy">`
-            : `<div class="work-card-photo-placeholder">📷 写真準備中</div>`;
-        const maker = w.maker ? `<span class="work-card-maker">${w.maker}</span>` : '';
-        const car   = w.car   ? `<div class="work-card-car">${maker}${w.car}</div>` : '';
-        const link  = w.url   ? `<div class="work-card-link">詳細を見る →</div>` : '';
-        const href  = w.url   ? `href="${w.url}" target="_blank" rel="noopener"` : '';
-        return `
-        <a class="work-card" ${href}>
-            ${photo}
-            <div class="work-card-body">
-                <div class="work-card-date">${w.date || ''}</div>
-                ${car}
-                <div class="work-card-note">${w.note || ''}</div>
-                ${link}
-            </div>
-        </a>`;
+    function getVisible() {
+      return window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
     }
 
-    function showMoreWorks() {
-        const grid = document.getElementById('works-grid');
-        const next = allWorks.slice(shownCount, shownCount + WORKS_PER_PAGE);
-        next.forEach(w => grid.insertAdjacentHTML('beforeend', renderWorkCard(w)));
-        shownCount += next.length;
-        if (shownCount >= allWorks.length) {
-            document.getElementById('works-more').style.display = 'none';
-        }
+    function buildDots() {
+      dotsWrap.innerHTML = '';
+      const total = Math.ceil(cards.length / getVisible());
+      for (let i = 0; i < total; i++) {
+        const d = document.createElement('div');
+        d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(d);
+      }
     }
 
-    const worksUrl = location.protocol === 'file:'
-        ? 'https://rakuruma.com/works.json'
-        : '/works.json';
-
-    function renderReviewCard(w) {
-        const stars = '★'.repeat(parseInt(w.rating) || 5);
-        const photo = w.photo
-            ? `<img class="review-card-photo" src="${w.photo}" alt="作業写真" loading="lazy">`
-            : `<div class="review-card-photo-placeholder">🚗</div>`;
-        const car = w.car ? `${w.maker ? w.maker + ' ' : ''}${w.car}` : (w.maker || '');
-        return `
-        <div class="review-card">
-            ${photo}
-            <div class="review-card-body">
-                <div class="review-stars">${stars}</div>
-                <p class="review-text">${w.review}</p>
-                <div class="review-author">${w.date || ''}${car ? '・' + car : ''}</div>
-            </div>
-        </div>`;
+    function goTo(index) {
+      const visible = getVisible();
+      const total = Math.ceil(cards.length / visible);
+      current = Math.max(0, Math.min(index, total - 1));
+      const cardWidth = cards[0].offsetWidth + 20;
+      track.style.transform = `translateX(-${current * visible * cardWidth}px)`;
+      dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
     }
 
-    fetch(worksUrl)
-        .then(r => r.json())
-        .then(data => {
-            const grid = document.getElementById('works-grid');
-            document.getElementById('works-loading').remove();
+    document.getElementById(prevId).addEventListener('click', () => goTo(current - 1));
+    document.getElementById(nextId).addEventListener('click', () => goTo(current + 1));
 
-            allWorks = data;
-            if (allWorks.length === 0) {
-                grid.innerHTML = '<div class="works-empty" style="grid-column:1/-1;">作業実績を準備中です。</div>';
-                return;
-            }
+    buildDots();
+    window.addEventListener('resize', () => { buildDots(); goTo(0); });
+  }
 
-            showMoreWorks();
-            if (allWorks.length > WORKS_PER_PAGE) {
-                document.getElementById('works-more').style.display = 'block';
-            }
+  // アコーディオン
+  function toggleAccordion(btn) {
+    const item = btn.closest('.accordion-item');
+    item.classList.toggle('open');
+  }
 
-            // 口コミ付きのデータをreviewセクションの先頭に挿入
-            const reviewTrack = document.getElementById('review-track');
-            if (reviewTrack) {
-                const withReview = data.filter(w => w.review && w.review.trim());
-                if (withReview.length > 0) {
-                    const html = withReview.map(renderReviewCard).join('');
-                    reviewTrack.insertAdjacentHTML('afterbegin', html);
-                }
-            }
-        })
-        .catch(() => {
-            document.getElementById('works-loading').textContent = '作業実績を読み込めませんでした。';
-        });
+  // GASから作業実績を取得してカルーセルを構築
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+
+  function buildWorkCards(works) {
+    const track = document.getElementById('worksTrack');
+    if (!works || works.length === 0) {
+      track.innerHTML = '<div class="work-card" style="min-width:300px;max-width:300px;"><div class="work-card-body"><div class="work-card-title" style="color:rgba(255,255,255,0.5);">現在公開中の実績はありません</div></div></div>';
+    } else {
+      track.innerHTML = works.map(function(w) {
+        const img = w.photo
+          ? '<img src="' + w.photo + '" alt="' + (w.car || '作業写真') + '" loading="lazy">'
+          : '🔧';
+        const tag = w.area || w.type || '';
+        return '<div class="work-card">'
+          + '<div class="work-card-img">' + img + '</div>'
+          + '<div class="work-card-body">'
+          + (w.date ? '<div class="work-card-date">' + w.date + '</div>' : '')
+          + '<div class="work-card-title">' + (w.car ? w.car + ' ' : '') + (w.work || '') + '</div>'
+          + (tag ? '<span class="work-card-tag">' + tag + '</span>' : '')
+          + '</div>'
+          + '</div>';
+      }).join('');
+    }
+    initCarousel({
+      trackId: 'worksTrack',
+      dotsId: 'worksDots',
+      prevId: 'worksPrev',
+      nextId: 'worksNext',
+      cardSelector: '.work-card'
+    });
+  }
+
+  fetch(GAS_URL + '?action=lpWorks')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { buildWorkCards(data.works); })
+    .catch(function() {
+      // 取得失敗時はフォールバック表示
+      buildWorkCards([]);
+    });
+
+  initCarousel({
+    trackId: 'carouselTrack',
+    dotsId: 'carouselDots',
+    prevId: 'carouselPrev',
+    nextId: 'carouselNext',
+    cardSelector: '.voice-card'
+  });
+
+  function toggleFaq() {
+    const wrap = document.getElementById('faqMore');
+    const btn = document.getElementById('faqToggle');
+    const label = document.getElementById('faqToggleLabel');
+    const icon = document.getElementById('faqToggleIcon');
+    const isOpen = wrap.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    label.textContent = isOpen ? '閉じる' : 'もっと見る（残り5件）';
+  }
 </script>
 
 </body>
