@@ -668,37 +668,6 @@
       color: rgba(255,255,255,0.7);
     }
 
-    /* works-section 内の作業実績レポート（ブログ）ブロック — 上のworksカードと同じ小さいカードを流用 */
-    .works-blog { margin-top: var(--spacing-3xl); display: none; }
-    .works-blog-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: var(--spacing-lg);
-    }
-    .works-blog-title {
-      font-size: var(--font-size-md);
-      font-weight: var(--font-weight-bold);
-      color: var(--color-text-white);
-    }
-    .works-blog-more {
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-bold);
-      color: var(--color-accent-mint);
-      white-space: nowrap;
-      text-decoration: none;
-    }
-    .works-blog-track {
-      display: flex;
-      gap: var(--spacing-lg);
-      overflow-x: auto;
-      padding-bottom: 8px;
-      -webkit-overflow-scrolling: touch;
-    }
-    .work-card.is-link { display: block; text-decoration: none; cursor: pointer; }
-
     /* ===== TROUBLE セクション ===== */
     .trouble-section {
       background: var(--color-bg-gray);
@@ -2471,14 +2440,6 @@
       <button class="carousel-btn" id="worksNext">›</button>
     </div>
 
-    <!-- 作業実績レポート（ブログ最新記事） -->
-    <div class="works-blog" id="worksBlog">
-      <div class="works-blog-head">
-        <h3 class="works-blog-title">📝 作業実績レポート（詳しい作業事例）</h3>
-        <a href="/blog/" class="works-blog-more">すべて見る →</a>
-      </div>
-      <div class="works-blog-track" id="worksBlogCards"></div>
-    </div>
   </div>
 </section>
 
@@ -2835,6 +2796,7 @@
   <div class="footer-nav">
     <a href="https://rakuruma.com">トップ（洗車）</a>
     <a href="https://rakuruma.com/seibi">出張整備</a>
+    <a href="/blog/">作業実績ブログ</a>
     <a href="https://lin.ee/r0BAZkR0">LINE相談</a>
   </div>
   <p>© 2023 ラクルマ｜世田谷区・目黒区・渋谷区の出張整備・洗車サービス</p>
@@ -2929,29 +2891,6 @@
       // 取得失敗時はフォールバック表示
       buildWorkCards([]);
     });
-
-  // 作業実績レポート（ブログ最新3件）
-  fetch(GAS_URL + '?action=blogPosts')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var posts = (data.posts || []).slice(0, 6);
-      if (posts.length === 0) return;
-      document.getElementById('worksBlogCards').innerHTML = posts.map(function(p) {
-        var img = p.photos && p.photos[0]
-          ? '<img src="' + p.photos[0] + '" alt="' + (p.title || '') + '" loading="lazy">'
-          : '📝';
-        return '<a class="work-card is-link" href="/blog/?id=' + p.id + '">'
-          + '<div class="work-card-img">' + img + '</div>'
-          + '<div class="work-card-body">'
-          + (p.date ? '<div class="work-card-date">' + p.date + '</div>' : '')
-          + '<div class="work-card-title">' + (p.title || '') + '</div>'
-          + (p.tag ? '<span class="work-card-tag">' + p.tag + '</span>' : '')
-          + '</div>'
-          + '</a>';
-      }).join('');
-      document.getElementById('worksBlog').style.display = 'block';
-    })
-    .catch(function() {});
 
   initCarousel({
     trackId: 'carouselTrack',
