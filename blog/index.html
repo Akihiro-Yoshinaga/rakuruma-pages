@@ -405,6 +405,10 @@
                 return;
             }
             document.getElementById('blogGrid').innerHTML = allPosts.map(renderCard).join('');
+
+            // ?id=記事ID 付きでアクセスされた場合はその記事を直接開く（整備ページ等からの直リンク用）
+            var directId = new URLSearchParams(location.search).get('id');
+            if (directId) openArticle(Number(directId));
         })
         .catch(function() {
             document.getElementById('blogLoading').textContent = '記事を読み込めませんでした。';
