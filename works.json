@@ -1,5 +1,17 @@
 [
   {
+    "id": "67cbdf44-b248-47b8-8413-509e83eefd83",
+    "date": "2026.07.07",
+    "maker": "",
+    "car": "",
+    "note": "\"ドライブレコーダー取り付け（COMTEC丨ZDR055+HDROP-14）\"",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=140-WQdEmcGxLawGIGXMEjMrfEtLbG-TW&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=67cbdf44-b248-47b8-8413-509e83eefd83",
+    "review": "整備",
+    "rating": "0"
+  },
+  {
     "id": "4b95b76b-8815-4e68-89fb-814369f3c540",
     "date": "2026.06.26",
     "maker": "",
@@ -15,7 +27,7 @@
     "id": "27cee8b0-26b8-4ef1-9abd-24af2257abec",
     "date": "2026.06.25",
     "maker": "",
-    "car": "",
+    "car": "✅",
     "note": "バンド固定型のデジタルインナーミラー（アルパイン）と補助バッテリー（icell2）とレーダー探知機（ユピテル）の取り付け",
     "staff": "吉永",
     "photo": "https://drive.google.com/thumbnail?id=1XcQo0f11qTHeA9f2qJ03PRmZOMPKQD1f&sz=w800",
