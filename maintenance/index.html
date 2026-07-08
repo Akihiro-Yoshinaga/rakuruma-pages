@@ -668,6 +668,15 @@
       color: rgba(255,255,255,0.7);
     }
 
+    .work-card.is-link { display: block; text-decoration: none; cursor: pointer; }
+    .work-card-more {
+      display: block;
+      margin-top: var(--spacing-sm);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-accent-mint);
+    }
+
     /* ===== TROUBLE セクション ===== */
     .trouble-section {
       background: var(--color-bg-gray);
@@ -2865,14 +2874,17 @@
           ? '<img src="' + w.photo + '" alt="' + (w.car || '作業写真') + '" loading="lazy">'
           : '🔧';
         const tag = w.area || w.type || '';
-        return '<div class="work-card">'
-          + '<div class="work-card-img">' + img + '</div>'
+        // ブログ記事がある実績はカードごと記事へのリンクにする
+        const inner = '<div class="work-card-img">' + img + '</div>'
           + '<div class="work-card-body">'
           + (w.date ? '<div class="work-card-date">' + w.date + '</div>' : '')
           + '<div class="work-card-title">' + (w.car ? w.car + ' ' : '') + (w.work || '') + '</div>'
           + (tag ? '<span class="work-card-tag">' + tag + '</span>' : '')
-          + '</div>'
+          + (w.blogUrl ? '<span class="work-card-more">📝 作業レポートを読む →</span>' : '')
           + '</div>';
+        return w.blogUrl
+          ? '<a class="work-card is-link" href="' + w.blogUrl + '">' + inner + '</a>'
+          : '<div class="work-card">' + inner + '</div>';
       }).join('');
     }
     initCarousel({
