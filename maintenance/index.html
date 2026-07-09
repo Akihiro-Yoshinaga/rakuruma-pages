@@ -641,15 +641,21 @@
     /* works carousel */
     .works-carousel-wrap {
       position: relative;
-      overflow: hidden;
       margin-top: var(--spacing-xl);
     }
 
     .works-track {
       display: flex;
       gap: var(--spacing-lg);
-      transition: var(--transition-carousel);
+      /* 指でスワイプして横に流せるネイティブ横スクロール＋スナップ */
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      scrollbar-width: none;            /* Firefox */
+      padding-bottom: 4px;
     }
+    .works-track::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
     .work-card {
       background: rgba(255,255,255,0.08);
@@ -661,6 +667,7 @@
       min-width: 300px;
       max-width: 300px;
       flex-shrink: 0;
+      scroll-snap-align: start;
     }
 
     .work-card:hover {
@@ -1334,14 +1341,20 @@
 
     .carousel-wrap {
       position: relative;
-      overflow: hidden;
     }
 
     .carousel-track {
       display: flex;
       gap: var(--spacing-lg);
-      transition: var(--transition-carousel);
+      /* 指でスワイプして横に流せるネイティブ横スクロール＋スナップ */
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      padding-bottom: 4px;
     }
+    .carousel-track::-webkit-scrollbar { display: none; }
 
     .voice-card {
       background: var(--color-bg-white);
@@ -1352,6 +1365,7 @@
       min-width: 300px;
       max-width: 300px;
       flex-shrink: 0;
+      scroll-snap-align: start;
     }
 
     .voice-card-img {
@@ -2868,7 +2882,6 @@
   function initCarousel({ trackId, dotsId, prevId, nextId, cardSelector }) {
     const track = document.getElementById(trackId);
     const dotsWrap = document.getElementById(dotsId);
-    let current = 0;
 
     // カードは絞り込みで差し替わるため毎回ライブ取得する
     function cards() { return track.querySelectorAll(cardSelector); }
@@ -2877,42 +2890,66 @@
       return window.innerWidth < 768 ? 1 : window.innerWidth < 1024 ? 2 : 3;
     }
 
+    // カード幅＋gap × 表示枚数 ＝ 1ページ分のスクロール量
+    function pageWidth() {
+      const cs = cards();
+      if (!cs.length) return track.clientWidth || 1;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+      return (cs[0].offsetWidth + gap) * getVisible();
+    }
+
+    function pageCount() {
+      return Math.max(1, Math.ceil(cards().length / getVisible()));
+    }
+
+    function currentPage() {
+      const pw = pageWidth();
+      // 端まで来たら最終ページ扱い（端数対策）
+      if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) return pageCount() - 1;
+      return pw ? Math.round(track.scrollLeft / pw) : 0;
+    }
+
+    function scrollToPage(i) {
+      const total = pageCount();
+      const p = Math.max(0, Math.min(i, total - 1));
+      track.scrollTo({ left: p * pageWidth(), behavior: 'smooth' });
+    }
+
     function buildDots() {
       dotsWrap.innerHTML = '';
-      const total = Math.ceil(cards().length / getVisible());
+      const total = pageCount();
+      const cur = currentPage();
       for (let i = 0; i < total; i++) {
         const d = document.createElement('div');
-        d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        d.addEventListener('click', () => goTo(i));
+        d.className = 'carousel-dot' + (i === cur ? ' active' : '');
+        d.addEventListener('click', () => scrollToPage(i));
         dotsWrap.appendChild(d);
       }
     }
 
-    function goTo(index) {
-      const cs = cards();
-      if (!cs.length) { dotsWrap.innerHTML = ''; track.style.transform = 'translateX(0)'; return; }
-      const visible = getVisible();
-      const total = Math.ceil(cs.length / visible);
-      current = Math.max(0, Math.min(index, total - 1));
-      const cardWidth = cs[0].offsetWidth + 20;
-      track.style.transform = `translateX(-${current * visible * cardWidth}px)`;
-      dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => {
-        d.classList.toggle('active', i === current);
-      });
+    function updateDots() {
+      const cur = currentPage();
+      dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === cur));
     }
 
     // onclick は再代入で上書きされるので多重登録にならない
-    document.getElementById(prevId).onclick = () => goTo(current - 1);
-    document.getElementById(nextId).onclick = () => goTo(current + 1);
+    document.getElementById(prevId).onclick = () => scrollToPage(currentPage() - 1);
+    document.getElementById(nextId).onclick = () => scrollToPage(currentPage() + 1);
 
     buildDots();
-    goTo(0);
 
-    // resizeリスナーとrefresh関数は初回のみ登録（絞り込み時はrefreshだけ呼ぶ）
+    // スクロール（指スワイプ含む）・リサイズのリスナーは初回のみ登録。
+    // 絞り込み時は refresh だけ呼ぶ（多重登録を防ぐ）。
     if (!track._carouselRefresh) {
-      window.addEventListener('resize', () => { buildDots(); goTo(0); });
+      let raf;
+      track.addEventListener('scroll', () => {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(updateDots);
+      });
+      window.addEventListener('resize', () => buildDots());
     }
-    track._carouselRefresh = function () { buildDots(); goTo(0); };
+    track._carouselRefresh = function () { track.scrollLeft = 0; buildDots(); };
   }
 
   // アコーディオン
