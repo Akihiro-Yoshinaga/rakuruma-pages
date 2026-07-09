@@ -150,33 +150,49 @@
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
 
     .hero-trust-badge {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 40px;
-      padding: 7px 18px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.03em;
-      backdrop-filter: blur(4px);
+      gap: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.06em;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
-    .hero-trust-badge .badge-icon {
-      font-size: 15px;
+    .hero-trust-badge svg {
+      width: 15px;
+      height: 15px;
       flex-shrink: 0;
     }
 
-    .hero-trust-badge.badge-highlight {
-      background: rgba(60, 196, 122, 0.22);
-      border-color: rgba(60, 196, 122, 0.6);
-      color: #a8f0c6;
+    .hero-trust-badge .icon-star {
+      color: var(--color-accent-yellow);
+    }
+
+    .hero-trust-badge .icon-shield {
+      color: var(--color-accent-mint);
+    }
+
+    .hero-trust-badge strong {
+      font-weight: 800;
+      color: #fff;
+    }
+
+    @media (max-width: 480px) {
+      .hero-trust-badge {
+        padding: 7px 16px;
+        font-size: 11px;
+      }
     }
 
     .hero-eyebrow {
@@ -266,23 +282,29 @@
 
     .hero-trust {
       display: flex;
-      gap: var(--spacing-lg);
+      gap: 8px 16px;
       justify-content: center;
+      align-items: center;
       flex-wrap: wrap;
     }
 
     .trust-item {
-      font-size: var(--font-size-sm);
-      color: rgba(255,255,255,0.8);
+      font-size: 13px;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.08em;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 16px;
     }
 
-    .trust-item::before {
-      content: '✓';
-      font-weight: var(--font-weight-bold);
-      color: var(--color-primary-green);
+    .trust-item + .trust-item::before {
+      content: '';
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--color-accent-mint);
+      opacity: 0.9;
+      flex-shrink: 0;
     }
 
     .hero-scroll {
@@ -2092,17 +2114,19 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-video-wrap">
-    <video autoplay loop muted playsinline src="assets/hero.mp4"></video>
+    <video autoplay loop muted playsinline preload="auto" src="/assets/uploads/2025/10/FV-movie1-opt.mp4"></video>
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <!-- トラストバッジ -->
     <div class="hero-trust-badges">
-      <span class="hero-trust-badge badge-highlight">
-        <span class="badge-icon">★</span>くらしのマーケット 出張整備・車検エリア口コミ高評価！
+      <span class="hero-trust-badge">
+        <svg class="icon-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.83 5.9 6.47.86-4.73 4.5 1.19 6.4L12 17.1l-5.76 3.06 1.19-6.4-4.73-4.5 6.47-.86L12 2.5z"/></svg>
+        くらしのマーケット&nbsp;<strong>口コミ高評価</strong>
       </span>
       <span class="hero-trust-badge">
-        <span class="badge-icon">🔧</span>国家1級整備士が直接お伺いします
+        <svg class="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.7-7 10-4-1.3-7-5.4-7-10V6l7-3z"/><path d="M9 12l2 2 4-4.5"/></svg>
+        <strong>国家1級整備士</strong>&nbsp;が直接対応
       </span>
     </div>
     <p class="hero-eyebrow">Mobile Maintenance Service</p>
