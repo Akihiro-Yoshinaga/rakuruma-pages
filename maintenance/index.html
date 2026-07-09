@@ -52,6 +52,10 @@
       --radius-sm:  var(--radius-xs);
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: var(--font-primary);
       color: var(--color-text-primary);
@@ -311,6 +315,7 @@
     /* ===== SECTION COMMON ===== */
     section {
       padding: var(--section-padding-desktop) 24px;
+      scroll-margin-top: 80px;
     }
 
     .section-inner {
@@ -2101,15 +2106,15 @@
       </span>
     </div>
     <p class="hero-eyebrow">Mobile Maintenance Service</p>
-    <h1>整備は行くから、<br>自宅で完結する時代へ。</h1>
+    <h1>車の整備を、<br>もっとラクに。</h1>
     <div class="hero-divider"></div>
     <p class="hero-sub">
-      貴重な休日を、車屋さんの待ち時間で終わらせない。<br>
-      国家1級整備士がバイクでご自宅へ出張します。
+      車検も、オイル交換も、パーツ取付も。<br>
+      国家1級整備士がご自宅へ伺い、いつものLINEひとつで完結します。
     </p>
     <div class="hero-cta">
-      <a href="https://lin.ee/r0BAZkR0" class="btn-primary">LINEで無料相談</a>
-      <a href="https://lin.ee/r0BAZkR0" class="btn-line">整備を予約する</a>
+      <a href="#service-overview" class="btn-primary">できることを全部見る</a>
+      <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで相談・予約</a>
     </div>
     <div class="hero-trust">
       <span class="trust-item">出張費無料</span>
@@ -2123,222 +2128,53 @@
   </div>
 </section>
 
-<!-- TROUBLE：悩み→解決 -->
+<!-- TROUBLE：こんなとき頼めます -->
 <section class="trouble-section">
   <div class="section-inner">
-    <div class="section-label">YOUR TROUBLE</div>
-    <h2 class="trouble-headline">その悩み、<span>いつもの車屋さん</span>に<br>任せていいの？</h2>
-    <p class="trouble-sub">車検や整備のたびに、こんな「ちょっとしたストレス」を感じていませんか？</p>
+    <div class="section-label">USE CASE</div>
+    <h2 class="trouble-headline">こんなとき、<span>そのままLINEで</span><br>頼めます</h2>
+    <p class="trouble-sub">一度ご利用いただいた方は、いつものトーク画面にひとこと送るだけ。こんな「車の用事」、ぜんぶラクルマで完結します。</p>
     <div class="trouble-grid">
       <div class="trouble-card">
-        <div class="trouble-card-icon">コミュニケーションのストレス</div>
-        <div class="trouble-card-title">言い出しづらい…</div>
-        <p>「これ本当に交換必要？」と聞けない。他店で断られたカスタムも相談しにくい…。</p>
+        <div class="trouble-card-icon">ネット購入品の取付</div>
+        <div class="trouble-card-title">ドラレコ、ポチったけど…</div>
+        <p>取付だけのご依頼も大歓迎。Amazon等で買ったパーツを、そのままお預けください。</p>
       </div>
       <div class="trouble-card">
-        <div class="trouble-card-icon">手続きのストレス</div>
-        <div class="trouble-card-title">また電話しなきゃ…</div>
-        <p>車検の時期はわかってても、電話での日程調整や代車手配がどうしても後回しに…。</p>
+        <div class="trouble-card-icon">車検</div>
+        <div class="trouble-card-title">車検の時期が近づいてきた</div>
+        <p>引き取りから納車まで全部お任せ。見積もり比較も、店探しももう不要です。</p>
       </div>
       <div class="trouble-card">
-        <div class="trouble-card-icon">時間のストレス</div>
-        <div class="trouble-card-title">休日がつぶれる…</div>
-        <p>工場まで持ち込んで、終わるまでずっと待つ。せっかくの休みがそれだけで終わる…。</p>
+        <div class="trouble-card-icon">定期メンテナンス</div>
+        <div class="trouble-card-title">オイル交換、そろそろかも</div>
+        <p>店舗に行く必要はありません。ご自宅の駐車場でサクッと交換します。</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-icon">季節の履き替え</div>
+        <div class="trouble-card-title">タイヤ交換の時期が来た</div>
+        <p>スタッドレスへの履き替えも自宅で完結。重いタイヤを運ぶ必要はありません。</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-icon">急なトラブル</div>
+        <div class="trouble-card-title">警告灯がついた！</div>
+        <p>まずはメーターの写真をLINEで送ってください。診断から修理まで対応します。</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-icon">ちょっとした相談</div>
+        <div class="trouble-card-title">この症状、修理が必要？</div>
+        <p>「異音がする」「なんか変」もお気軽に。相談・概算見積もりは無料です。</p>
       </div>
     </div>
     <div class="trouble-arrow">↓</div>
     <div class="trouble-resolve">
-      <h3>その「当たり前」だったストレス、<span>ラクルマならすべて「LINE」と「出張整備」で解決します。</span></h3>
+      <h3>思い立った瞬間に、LINEでひとこと。<span>あとの段取りは、ぜんぶラクルマにお任せください。</span></h3>
     </div>
-  </div>
-</section>
-
-<!-- RAK POINTS：3つのラク -->
-<section class="rak-section">
-  <div class="section-inner" style="max-width:100%;padding:0;">
-    <div style="max-width:1000px;margin:0 auto;padding:0 24px 48px;">
-      <div class="section-label">RAK POINTS</div>
-      <h2 class="section-title">ラクルマが選ばれ続ける<br>3つの"ラク"ポイント</h2>
-    </div>
-  </div>
-  <div class="rak-list">
-
-    <div class="rak-item">
-      <div class="rak-img">💬</div>
-      <div class="rak-body">
-        <div class="rak-num">RAK POINT 01</div>
-        <h3 class="rak-title">相談は<span class="rak-keyword">「LINEで送る」</span>だけ</h3>
-        <p class="rak-desc">「こんなこと聞いていいの？」という疑問も、他店で断られたカスタムも、まずはLINEでメッセージを。国家1級整備士がプロの目線で丁寧にお答えします。</p>
-      </div>
-    </div>
-
-    <div class="rak-item">
-      <div class="rak-img">📱</div>
-      <div class="rak-body">
-        <div class="rak-num">RAK POINT 02</div>
-        <h3 class="rak-title">依頼は<span class="rak-keyword">「LINEから予約」</span>するだけ</h3>
-        <p class="rak-desc">面倒な電話のやり取りは一切不要。思い立ったその時に、LINEでサクッと日程調整から予約まで完了します。</p>
-      </div>
-    </div>
-
-    <div class="rak-item">
-      <div class="rak-img">🏠</div>
-      <div class="rak-body">
-        <div class="rak-num">RAK POINT 03</div>
-        <h3 class="rak-title">当日は<span class="rak-keyword">「鍵を渡す」</span>だけ</h3>
-        <p class="rak-desc">整備士がご自宅の駐車場へ直接伺います。工場への移動も、退屈な待ち時間もゼロ。作業中は、お仕事でも家事でも自由にお過ごしください。</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- COMPARE：他社比較表 -->
-<section class="compare-section">
-  <div class="section-inner">
-    <div class="section-label">COMPARISON</div>
-    <h2 class="section-title">本当にお得？<br>他社サービスとの徹底比較</h2>
-    <p class="section-desc">「出張整備って実際どうなの？」と思っている方へ。数字と内容で正直に比べてみました。</p>
-
-    <!-- PC・タブレット：テーブル -->
-    <div class="compare-scroll-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="col-rakuruma">
-              <span class="col-badge">RECOMMENDED</span>
-              ラクルマ<br><small>（出張整備）</small>
-            </th>
-            <th class="col-dealer">ディーラー・<br>整備工場</th>
-            <th class="col-shop">カー用品店・<br>ガソリンスタンド</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>⏱ 拘束時間</td>
-            <td class="col-rakuruma"><span class="cmp-best">◎</span>0分<br><small>完全お任せ。自宅で仕事や家事ができる</small></td>
-            <td><span class="cmp-ng">×</span>半日〜数日<br><small>持ち込み・引き取り・代車手配の手間あり</small></td>
-            <td><span class="cmp-ng">×</span>数時間<br><small>店舗での待ち時間で貴重な休日が潰れる</small></td>
-          </tr>
-          <tr>
-            <td>🅿️ 駐車スペース</td>
-            <td class="col-rakuruma"><span class="cmp-best">◎</span>追加スペース不要<br><small>バイク訪問のため、自宅の駐車場代が増えない</small></td>
-            <td><span class="cmp-ng">×</span>店舗へ持ち込み<br><small>移動の手間が発生する</small></td>
-            <td><span class="cmp-ng">×</span>店舗へ持ち込み<br><small>移動の手間が発生する</small></td>
-          </tr>
-          <tr>
-            <td>🔧 対応の柔軟性</td>
-            <td class="col-rakuruma"><span class="cmp-best">◎</span>柔軟対応<br><small>社外パーツ持ち込みや他店断り案件もLINEで気軽に相談OK</small></td>
-            <td><span class="cmp-ng">×</span>融通が利かない<br><small>純正品以外はNGなど、敷居が高く相談しにくい</small></td>
-            <td><span class="cmp-ok">◯</span>消耗品は得意<br><small>一般的な交換は得意だが、輸入車や特殊カスタムは断られることも</small></td>
-          </tr>
-          <tr>
-            <td>👤 担当者の顔</td>
-            <td class="col-rakuruma"><span class="cmp-best">◎</span>毎回同じ国家1級整備士が専属対応<br><small>信頼関係が積み重なる</small></td>
-            <td><span class="cmp-ng">×</span>担当が変わりやすい<br><small>整備士と直接話せないことが多い</small></td>
-            <td><span class="cmp-ng">×</span>経験の浅いスタッフが対応することも<br><small>品質にばらつきがある</small></td>
-          </tr>
-          <tr>
-            <td>⚙️ 重整備・高度な診断</td>
-            <td class="col-rakuruma"><span class="cmp-ok">◯</span>一部対応<br><small>提携工場にて対応できる場合があります</small></td>
-            <td><span class="cmp-best">◎</span>フル対応<br><small>専用設備と工場があり、どんな複雑な修理・診断も可能</small></td>
-            <td><span class="cmp-ok">◯</span>一部対応<br><small>店舗設備で対応できる範囲に限る</small></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- スマホ：縦積みカード形式（1項目=1カード、1社=1行） -->
-    <div class="compare-cards">
-
-      <div class="compare-card">
-        <div class="compare-card-head">⏱ 拘束時間</div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
-          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 0分。自宅で自由に過ごせる</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">ディーラー</span>
-          <div class="compare-card-col"><span class="cmp-ng">×</span> 半日〜数日かかる</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">カー用品店</span>
-          <div class="compare-card-col"><span class="cmp-ng">×</span> 数時間、店で待ち続ける</div>
-        </div>
-      </div>
-
-      <div class="compare-card">
-        <div class="compare-card-head">🅿️ 駐車スペース</div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
-          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> バイク訪問。追加スペース不要</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">ディーラー</span>
-          <div class="compare-card-col"><span class="cmp-ng">×</span> 店舗へ持ち込み</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">カー用品店</span>
-          <div class="compare-card-col"><span class="cmp-ng">×</span> 店舗へ持ち込み</div>
-        </div>
-      </div>
-
-      <div class="compare-card">
-        <div class="compare-card-head">🔧 対応の柔軟性</div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
-          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 社外パーツ・他店断り案件もLINEでOK</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">ディーラー</span>
-          <div class="compare-card-col"><span class="cmp-ng">×</span> 純正品以外NG・融通が利かない</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">カー用品店</span>
-          <div class="compare-card-col"><span class="cmp-ok">◯</span> 消耗品は得意。輸入車は制限あり</div>
-        </div>
-      </div>
-
-      <div class="compare-card">
-        <div class="compare-card-head">👤 担当者の顔</div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
-          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 毎回同じ国家1級整備士が専属</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">ディーラー</span>
-          <div class="compare-card-col"><span class="cmp-ng">×</span> 担当が変わりやすく話せない</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">カー用品店</span>
-          <div class="compare-card-col"><span class="cmp-ng">×</span> 経験の浅いスタッフのことも</div>
-        </div>
-      </div>
-
-      <div class="compare-card">
-        <div class="compare-card-head">⚙️ 重整備・高度な診断</div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
-          <div class="compare-card-col is-rakuruma"><span class="cmp-ok">◯</span> 一部対応（提携工場）</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">ディーラー</span>
-          <div class="compare-card-col"><span class="cmp-best">◎</span> フル対応</div>
-        </div>
-        <div class="compare-card-row">
-          <span class="compare-card-col-label">カー用品店</span>
-          <div class="compare-card-col"><span class="cmp-ok">◯</span> 一部対応</div>
-        </div>
-      </div>
-
-    </div>
-
   </div>
 </section>
 
 <!-- SERVICE OVERVIEW：サービス全体像 -->
-<section class="service-overview">
+<section class="service-overview" id="service-overview">
   <div class="section-inner">
     <div class="section-label">SERVICE OVERVIEW</div>
     <h2 class="section-title">ラクルマでできること、<br>全部お見せします。</h2>
@@ -2502,119 +2338,6 @@
   </div>
 </section>
 
-<!-- WORKS：全作業実績公開 -->
-<section class="works-section">
-  <div class="section-inner">
-    <div class="section-label">WORKS · REPORT</div>
-    <h2 class="works-headline">全部見せます。<br><span>すべての作業実績を公開中。</span></h2>
-    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
-      「ちゃんとやってもらえてるの？」その不安をなくすために、全作業を記録・公開しています。
-    </p>
-    <div class="works-filter-label" id="worksFilterLabel" style="display:none;">🚗 メーカーで絞り込む</div>
-    <div class="works-filter" id="worksFilterMaker" style="display:none;"></div>
-    <div class="works-filter works-filter-model" id="worksFilterModel" style="display:none;"></div>
-    <div class="works-carousel-wrap">
-      <div class="works-track" id="worksTrack">
-        <!-- GASから動的に読み込まれます -->
-        <div class="work-card" style="justify-content:center;align-items:center;min-height:200px;">
-          <div class="work-card-body" style="text-align:center;padding:40px 20px;">
-            <div style="font-size:24px;margin-bottom:12px;">⏳</div>
-            <div style="color:rgba(255,255,255,0.5);font-size:14px;">読み込み中...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-dots" id="worksDots"></div>
-    <div class="carousel-controls">
-      <button class="carousel-btn" id="worksPrev">‹</button>
-      <button class="carousel-btn" id="worksNext">›</button>
-    </div>
-
-  </div>
-</section>
-
-<!-- VOICE：口コミカルーセル -->
-<section class="voice-section">
-  <div class="section-inner">
-    <div class="section-label">VOICE · REVIEW</div>
-    <h2 class="section-title">お客様の声</h2>
-    <p class="section-desc">洗車・整備でご利用いただいたお客様のリアルな声をご紹介します。</p>
-    <div class="carousel-wrap">
-      <div class="carousel-track" id="carouselTrack">
-        <div class="voice-card">
-          <div class="voice-card-img">🚗</div>
-          <div class="stars">★★★★★</div>
-          <p class="voice-text">洗車でいつもお世話になっていたので、整備もラクルマさんにお願いしました。オイル交換を自宅でやっていただけて、説明も丁寧。これからは整備も全部ここにお願いしようと思います。</p>
-          <div class="voice-meta">世田谷区在住・40代・BMW 3シリーズ</div>
-        </div>
-        <div class="voice-card">
-          <div class="voice-card-img">🚙</div>
-          <div class="stars">★★★★★</div>
-          <p class="voice-text">車検を出張でやってもらえるとは知りませんでした。作業後にLINEでレポートが来て、何をしたか一目でわかる。ディーラーより丁寧に説明してもらえて感動しました。</p>
-          <div class="voice-meta">目黒区在住・30代・レクサス RX</div>
-        </div>
-        <div class="voice-card">
-          <div class="voice-card-img">🏎️</div>
-          <div class="stars">★★★★★</div>
-          <p class="voice-text">輸入車で近くの工場に断られた経験があり心配でしたが、1級整備士さんが来てくださって安心感が全然違いました。毎回同じ方が来てくれるので信頼できます。</p>
-          <div class="voice-meta">渋谷区在住・50代・メルセデス・ベンツ</div>
-        </div>
-        <div class="voice-card">
-          <div class="voice-card-img">🔧</div>
-          <div class="stars">★★★★★</div>
-          <p class="voice-text">社外パーツの取り付けを相談したら、その場ですぐ見積もりして翌日には作業してもらえました。対応の速さと丁寧さに驚きました。また絶対お願いします。</p>
-          <div class="voice-meta">世田谷区在住・30代・アルファード</div>
-        </div>
-        <div class="voice-card">
-          <div class="voice-card-img">🛢️</div>
-          <div class="stars">★★★★★</div>
-          <p class="voice-text">いつも車検がギリギリになってしまっていたのですが、LINEで相談したらとてもスムーズに予約できました。自宅で完結するので本当に助かっています。</p>
-          <div class="voice-meta">目黒区在住・40代・ポルシェ カイエン</div>
-        </div>
-      </div>
-    </div>
-    <div class="carousel-dots" id="carouselDots"></div>
-    <div class="carousel-controls">
-      <button class="carousel-btn" id="carouselPrev">‹</button>
-      <button class="carousel-btn" id="carouselNext">›</button>
-    </div>
-  </div>
-</section>
-
-<!-- MEMBER -->
-<section class="member-section">
-  <div class="section-inner">
-    <div class="section-label">TEAM</div>
-    <h2 class="section-title">あたたかく、細やかな<br>接客対応でお迎えします。</h2>
-    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
-      国家1級整備士をはじめ、経験豊富なスタッフが対応します。<br>
-      お気軽にお問い合わせください。
-    </p>
-    <div class="member-two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;margin-top:8px;">
-      <!-- チーム写真（assets/images/team.jpg に差し替え） -->
-      <div style="border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:48px;">
-        👥
-      </div>
-      <div>
-        <div style="display:flex;flex-direction:column;gap:16px;">
-          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
-            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">🔧 整備品質</div>
-            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">国家1級自動車整備士・自動車検査員資格保有。輸入車・国産車を問わず、妥協なく丁寧に作業します。</p>
-          </div>
-          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
-            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">💬 お客様対応</div>
-            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">作業内容を写真つきでLINEにご報告。「何をしたか」が一目でわかるので、はじめての方も安心してお任せいただけます。</p>
-          </div>
-          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
-            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">🛡️ 安心の保証</div>
-            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">損害保険加入済み。万が一の際も保険で対応します。出張費は無料です。</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- PRICE -->
 <section class="price-section">
   <div class="section-inner">
@@ -2744,6 +2467,303 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- WORKS：全作業実績公開 -->
+<section class="works-section">
+  <div class="section-inner">
+    <div class="section-label">WORKS · REPORT</div>
+    <h2 class="works-headline">全部見せます。<br><span>すべての作業実績を公開中。</span></h2>
+    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
+      「ちゃんとやってもらえてるの？」その不安をなくすために、全作業を記録・公開しています。
+    </p>
+    <div class="works-filter-label" id="worksFilterLabel" style="display:none;">🚗 メーカーで絞り込む</div>
+    <div class="works-filter" id="worksFilterMaker" style="display:none;"></div>
+    <div class="works-filter works-filter-model" id="worksFilterModel" style="display:none;"></div>
+    <div class="works-carousel-wrap">
+      <div class="works-track" id="worksTrack">
+        <!-- GASから動的に読み込まれます -->
+        <div class="work-card" style="justify-content:center;align-items:center;min-height:200px;">
+          <div class="work-card-body" style="text-align:center;padding:40px 20px;">
+            <div style="font-size:24px;margin-bottom:12px;">⏳</div>
+            <div style="color:rgba(255,255,255,0.5);font-size:14px;">読み込み中...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-dots" id="worksDots"></div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="worksPrev">‹</button>
+      <button class="carousel-btn" id="worksNext">›</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- VOICE：口コミカルーセル -->
+<section class="voice-section">
+  <div class="section-inner">
+    <div class="section-label">VOICE · REVIEW</div>
+    <h2 class="section-title">お客様の声</h2>
+    <p class="section-desc">洗車・整備でご利用いただいたお客様のリアルな声をご紹介します。</p>
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="voice-card">
+          <div class="voice-card-img">🔧</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">社外パーツの取り付けを相談したら、その場ですぐ見積もりして翌日には作業してもらえました。対応の速さと丁寧さに驚きました。また絶対お願いします。</p>
+          <div class="voice-meta">世田谷区在住・30代・アルファード</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🚗</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">洗車でいつもお世話になっていたので、整備もラクルマさんにお願いしました。オイル交換を自宅でやっていただけて、説明も丁寧。これからは整備も全部ここにお願いしようと思います。</p>
+          <div class="voice-meta">世田谷区在住・40代・BMW 3シリーズ</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🚙</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">車検を出張でやってもらえるとは知りませんでした。作業後にLINEでレポートが来て、何をしたか一目でわかる。ディーラーより丁寧に説明してもらえて感動しました。</p>
+          <div class="voice-meta">目黒区在住・30代・レクサス RX</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🏎️</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">輸入車で近くの工場に断られた経験があり心配でしたが、1級整備士さんが来てくださって安心感が全然違いました。毎回同じ方が来てくれるので信頼できます。</p>
+          <div class="voice-meta">渋谷区在住・50代・メルセデス・ベンツ</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🛢️</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">いつも車検がギリギリになってしまっていたのですが、LINEで相談したらとてもスムーズに予約できました。自宅で完結するので本当に助かっています。</p>
+          <div class="voice-meta">目黒区在住・40代・ポルシェ カイエン</div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="carouselPrev">‹</button>
+      <button class="carousel-btn" id="carouselNext">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- RAK POINTS：かかりつけにする3つのメリット -->
+<section class="rak-section">
+  <div class="section-inner" style="max-width:100%;padding:0;">
+    <div style="max-width:1000px;margin:0 auto;padding:0 24px 48px;">
+      <div class="section-label">WHY RAKURUMA</div>
+      <h2 class="section-title">ラクルマを"かかりつけ"にすると、<br>車の管理はもっとラクになる。</h2>
+    </div>
+  </div>
+  <div class="rak-list">
+
+    <div class="rak-item">
+      <div class="rak-img">👤</div>
+      <div class="rak-body">
+        <div class="rak-num">MERIT 01</div>
+        <h3 class="rak-title">診るのは、<span class="rak-keyword">いつもの担当者</span></h3>
+        <p class="rak-desc">毎回同じ国家1級整備士が伺います。前回あなたの車を触った担当者だから、状態を把握したうえで話が早く、提案も的確です。</p>
+      </div>
+    </div>
+
+    <div class="rak-item">
+      <div class="rak-img">📋</div>
+      <div class="rak-body">
+        <div class="rak-num">MERIT 02</div>
+        <h3 class="rak-title">履歴は<span class="rak-keyword">LINEのカルテ</span>に、ぜんぶ残る</h3>
+        <p class="rak-desc">パーツ取付も、整備も、車検も。作業内容は写真つきレポートでLINEに記録されます。「前回いつ何をやったっけ？」を思い出す必要はありません。</p>
+      </div>
+    </div>
+
+    <div class="rak-item">
+      <div class="rak-img">🔁</div>
+      <div class="rak-body">
+        <div class="rak-num">MERIT 03</div>
+        <h3 class="rak-title">次からは、<span class="rak-keyword">もう探さない</span></h3>
+        <p class="rak-desc">車検の見積もり比較も、新しい店探しももう不要。「この前の人に頼む」のひとことで、車の用事がぜんぶ片づきます。</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARE：他社比較表 -->
+<section class="compare-section">
+  <div class="section-inner">
+    <div class="section-label">COMPARISON</div>
+    <h2 class="section-title">本当にお得？<br>他社サービスとの徹底比較</h2>
+    <p class="section-desc">「出張整備って実際どうなの？」と思っている方へ。数字と内容で正直に比べてみました。</p>
+
+    <!-- PC・タブレット：テーブル -->
+    <div class="compare-scroll-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="col-rakuruma">
+              <span class="col-badge">RECOMMENDED</span>
+              ラクルマ<br><small>（出張整備）</small>
+            </th>
+            <th class="col-dealer">ディーラー・<br>整備工場</th>
+            <th class="col-shop">カー用品店・<br>ガソリンスタンド</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>⏱ 拘束時間</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>0分<br><small>完全お任せ。自宅で仕事や家事ができる</small></td>
+            <td><span class="cmp-ng">×</span>半日〜数日<br><small>持ち込み・引き取り・代車手配の手間あり</small></td>
+            <td><span class="cmp-ng">×</span>数時間<br><small>店舗での待ち時間で貴重な休日が潰れる</small></td>
+          </tr>
+          <tr>
+            <td>🅿️ 駐車スペース</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>追加スペース不要<br><small>バイク訪問のため、自宅の駐車場代が増えない</small></td>
+            <td><span class="cmp-ng">×</span>店舗へ持ち込み<br><small>移動の手間が発生する</small></td>
+            <td><span class="cmp-ng">×</span>店舗へ持ち込み<br><small>移動の手間が発生する</small></td>
+          </tr>
+          <tr>
+            <td>🔧 対応の柔軟性</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>柔軟対応<br><small>社外パーツ持ち込みや他店断り案件もLINEで気軽に相談OK</small></td>
+            <td><span class="cmp-ng">×</span>融通が利かない<br><small>純正品以外はNGなど、敷居が高く相談しにくい</small></td>
+            <td><span class="cmp-ok">◯</span>消耗品は得意<br><small>一般的な交換は得意だが、輸入車や特殊カスタムは断られることも</small></td>
+          </tr>
+          <tr>
+            <td>👤 担当者の顔</td>
+            <td class="col-rakuruma"><span class="cmp-best">◎</span>毎回同じ国家1級整備士が専属対応<br><small>信頼関係が積み重なる</small></td>
+            <td><span class="cmp-ng">×</span>担当が変わりやすい<br><small>整備士と直接話せないことが多い</small></td>
+            <td><span class="cmp-ng">×</span>経験の浅いスタッフが対応することも<br><small>品質にばらつきがある</small></td>
+          </tr>
+          <tr>
+            <td>⚙️ 重整備・高度な診断</td>
+            <td class="col-rakuruma"><span class="cmp-ok">◯</span>一部対応<br><small>提携工場にて対応できる場合があります</small></td>
+            <td><span class="cmp-best">◎</span>フル対応<br><small>専用設備と工場があり、どんな複雑な修理・診断も可能</small></td>
+            <td><span class="cmp-ok">◯</span>一部対応<br><small>店舗設備で対応できる範囲に限る</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- スマホ：縦積みカード形式（1項目=1カード、1社=1行） -->
+    <div class="compare-cards">
+
+      <div class="compare-card">
+        <div class="compare-card-head">⏱ 拘束時間</div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 0分。自宅で自由に過ごせる</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 半日〜数日かかる</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 数時間、店で待ち続ける</div>
+        </div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-card-head">🅿️ 駐車スペース</div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> バイク訪問。追加スペース不要</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 店舗へ持ち込み</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 店舗へ持ち込み</div>
+        </div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-card-head">🔧 対応の柔軟性</div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 社外パーツ・他店断り案件もLINEでOK</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 純正品以外NG・融通が利かない</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ok">◯</span> 消耗品は得意。輸入車は制限あり</div>
+        </div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-card-head">👤 担当者の顔</div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-best">◎</span> 毎回同じ国家1級整備士が専属</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 担当が変わりやすく話せない</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ng">×</span> 経験の浅いスタッフのことも</div>
+        </div>
+      </div>
+
+      <div class="compare-card">
+        <div class="compare-card-head">⚙️ 重整備・高度な診断</div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label is-rakuruma">ラクルマ</span>
+          <div class="compare-card-col is-rakuruma"><span class="cmp-ok">◯</span> 一部対応（提携工場）</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">ディーラー</span>
+          <div class="compare-card-col"><span class="cmp-best">◎</span> フル対応</div>
+        </div>
+        <div class="compare-card-row">
+          <span class="compare-card-col-label">カー用品店</span>
+          <div class="compare-card-col"><span class="cmp-ok">◯</span> 一部対応</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- MEMBER -->
+<section class="member-section">
+  <div class="section-inner">
+    <div class="section-label">TEAM</div>
+    <h2 class="section-title">あたたかく、細やかな<br>接客対応でお迎えします。</h2>
+    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
+      国家1級整備士をはじめ、経験豊富なスタッフが対応します。<br>
+      お気軽にお問い合わせください。
+    </p>
+    <div class="member-two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;margin-top:8px;">
+      <!-- チーム写真（assets/images/team.jpg に差し替え） -->
+      <div style="border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:48px;">
+        👥
+      </div>
+      <div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">🔧 整備品質</div>
+            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">国家1級自動車整備士・自動車検査員資格保有。輸入車・国産車を問わず、妥協なく丁寧に作業します。</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">💬 お客様対応</div>
+            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">作業内容を写真つきでLINEにご報告。「何をしたか」が一目でわかるので、はじめての方も安心してお任せいただけます。</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+            <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">🛡️ 安心の保証</div>
+            <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">損害保険加入済み。万が一の際も保険で対応します。出張費は無料です。</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2918,7 +2938,7 @@
     <a href="https://lin.ee/r0BAZkR0">LINE相談</a>
   </div>
   <p>© 2023 ラクルマ｜世田谷区・目黒区・渋谷区の出張整備・洗車サービス</p>
-  <p style="margin-top:8px;font-size:11px;opacity:0.5;">最終更新：2026年6月</p>
+  <p style="margin-top:8px;font-size:11px;opacity:0.5;">最終更新：2026年7月</p>
 </footer>
 
 <!-- FLOATING LINE BUTTON -->
