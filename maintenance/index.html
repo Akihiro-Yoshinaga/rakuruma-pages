@@ -564,9 +564,9 @@
       /* 1行 = 1社。3行縦積み */
       .compare-card-row {
         display: flex;
-        align-items: baseline;
-        gap: 10px;
-        padding: 11px 16px;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 14px;
         border-bottom: 1px solid #f0f0f0;
         font-size: 13px;
         line-height: 1.55;
@@ -576,28 +576,44 @@
       }
       .compare-card-col-label {
         flex-shrink: 0;
-        width: 80px;
+        width: 62px;
         font-size: 11px;
         font-weight: 700;
         color: var(--color-text-muted);
         letter-spacing: 0.02em;
+        padding-top: 3px;
       }
       .compare-card-col-label.is-rakuruma {
         color: var(--color-primary-blue);
       }
+      /* バッジと本文を分離し、折り返してもバッジ下に回り込まない */
       .compare-card-col {
         flex: 1;
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
         font-size: 13px;
         line-height: 1.6;
         color: var(--color-text-secondary);
+      }
+      .compare-card-col .cmp-best,
+      .compare-card-col .cmp-ok,
+      .compare-card-col .cmp-ng {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 12px;
+        margin-right: 0;
+        margin-top: 1px;
       }
       .compare-card-col.is-rakuruma {
         color: var(--color-primary-blue);
         font-weight: 700;
       }
-      /* ラクルマ行は背景で強調 */
-      .compare-card-row:first-child {
-        background: rgba(26, 82, 160, 0.04);
+      /* ラクルマ行は背景＋左ラインで強調 */
+      .compare-card-head + .compare-card-row {
+        background: rgba(26, 82, 160, 0.05);
+        box-shadow: inset 3px 0 0 var(--color-primary-blue);
       }
     }
 
