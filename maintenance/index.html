@@ -624,6 +624,19 @@
       color: var(--color-primary-blue);
       border-color: var(--color-accent-mint);
     }
+    /* 車種行（メーカー選択時のみ表示）はメーカー行と区別して一段小さく */
+    .works-filter-model { margin-top: 10px; }
+    .works-filter-model .works-filter-chip {
+      padding: 7px 15px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.22);
+    }
+    .works-filter-model .works-filter-chip.active {
+      background: var(--color-accent-mint);
+      color: var(--color-primary-blue);
+      border-color: var(--color-accent-mint);
+    }
 
     /* works carousel */
     .works-carousel-wrap {
@@ -2465,8 +2478,9 @@
     <p class="section-desc" style="color:rgba(255,255,255,0.75);">
       「ちゃんとやってもらえてるの？」その不安をなくすために、全作業を記録・公開しています。
     </p>
-    <div class="works-filter-label" id="worksFilterLabel" style="display:none;">🚗 車種で絞り込む</div>
-    <div class="works-filter" id="worksFilter" style="display:none;"></div>
+    <div class="works-filter-label" id="worksFilterLabel" style="display:none;">🚗 メーカーで絞り込む</div>
+    <div class="works-filter" id="worksFilterMaker" style="display:none;"></div>
+    <div class="works-filter works-filter-model" id="worksFilterModel" style="display:none;"></div>
     <div class="works-carousel-wrap">
       <div class="works-track" id="worksTrack">
         <!-- GASから動的に読み込まれます -->
@@ -2916,15 +2930,68 @@
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
-  // 車種名から型式（例 6AA-RP8）・年式を除いた表示ラベルを作る（絞り込みのグルーピング用）
-  function normalizeCarLabel(car) {
-    return String(car || '').split(/\s+/).filter(function(tok) {
+  // メーカー名の表記ゆれ辞書（別名 → 正式名）。先頭一致でメーカーを判定する。
+  var MAKER_ALIASES = {
+    'トヨタ': ['トヨタ', 'TOYOTA'],
+    'レクサス': ['レクサス', 'LEXUS'],
+    'ホンダ': ['ホンダ', 'HONDA'],
+    '日産': ['日産', 'ニッサン', 'NISSAN'],
+    'スズキ': ['スズキ', 'SUZUKI'],
+    'ダイハツ': ['ダイハツ', 'DAIHATSU'],
+    'マツダ': ['マツダ', 'MAZDA'],
+    'スバル': ['スバル', 'SUBARU'],
+    '三菱': ['三菱', 'ミツビシ', 'MITSUBISHI'],
+    'メルセデス・ベンツ': ['メルセデス・ベンツ', 'メルセデスベンツ', 'メルセデス', 'ベンツ', 'MERCEDES', 'BENZ'],
+    'BMW': ['BMW'],
+    'アウディ': ['アウディ', 'AUDI'],
+    'フォルクスワーゲン': ['フォルクスワーゲン', 'VW', 'VOLKSWAGEN'],
+    'MINI': ['MINI', 'ミニ'],
+    'ボルボ': ['ボルボ', 'VOLVO'],
+    'プジョー': ['プジョー', 'PEUGEOT'],
+    'シトロエン': ['シトロエン', 'CITROEN'],
+    'ルノー': ['ルノー', 'RENAULT'],
+    'フィアット': ['フィアット', 'FIAT'],
+    'アルファロメオ': ['アルファロメオ', 'アルファ ロメオ', 'ALFA ROMEO', 'ALFA'],
+    'ポルシェ': ['ポルシェ', 'PORSCHE'],
+    'テスラ': ['テスラ', 'TESLA'],
+    'ジープ': ['ジープ', 'JEEP'],
+    'ロータス': ['ロータス', 'LOTUS']
+  };
+  // 別名を長い順に並べた [別名, 正式名] リスト（"メルセデス・ベンツ"を"ベンツ"より先に判定するため）
+  var MAKER_MATCHERS = (function () {
+    var list = [];
+    Object.keys(MAKER_ALIASES).forEach(function (canon) {
+      MAKER_ALIASES[canon].forEach(function (a) { list.push([a, canon]); });
+    });
+    return list.sort(function (x, y) { return y[0].length - x[0].length; });
+  })();
+
+  // 型式(6AA-RP8)・年式(2025/令和)などグルーピングに邪魔なトークンを除去
+  function cleanModel(s) {
+    return String(s || '').split(/\s+/).filter(function (tok) {
       if (!tok) return false;
-      if (/^[0-9]{4}年?$/.test(tok)) return false;                               // 年式 2025 / 2025年
-      if (/^(令和|平成|昭和)/.test(tok)) return false;                            // 和暦
-      if (/-/.test(tok) && /[0-9]/.test(tok) && /^[0-9A-Za-z-]+$/.test(tok)) return false; // 型式 6AA-RP8
+      if (/^[0-9]{4}年?$/.test(tok)) return false;
+      if (/^(令和|平成|昭和)/.test(tok)) return false;
+      if (/-/.test(tok) && /[0-9]/.test(tok) && /^[0-9A-Za-z-]+$/.test(tok)) return false;
       return true;
     }).join(' ').trim();
+  }
+
+  // 車種名 "ホンダ ステップワゴンスパーダ 6AA-RP8" → { maker:"ホンダ", model:"ステップワゴンスパーダ" }
+  function parseCar(car) {
+    var s = String(car || '').trim();
+    if (!s) return { maker: '', model: '' };
+    var up = s.toUpperCase();
+    for (var i = 0; i < MAKER_MATCHERS.length; i++) {
+      var alias = MAKER_MATCHERS[i][0], canon = MAKER_MATCHERS[i][1];
+      if (up.indexOf(alias.toUpperCase()) === 0) {
+        var rest = s.slice(alias.length).trim();
+        return { maker: canon, model: cleanModel(rest) };
+      }
+    }
+    // 辞書に無いメーカー: 先頭トークンをメーカー扱い
+    var parts = s.split(/\s+/);
+    return { maker: parts[0], model: cleanModel(parts.slice(1).join(' ')) };
   }
 
   function buildWorkCards(works) {
@@ -2961,45 +3028,91 @@
     }
   }
 
-  // ===== 車種で絞り込む =====
+  // ===== メーカー→車種の2段階で絞り込む =====
   var allWorks = [];
-  var activeCarLabel = '__all__';
+  var activeMaker = '__all__';
+  var activeModel = '__all__';
 
   function applyWorksFilter() {
-    var filtered = (activeCarLabel === '__all__')
-      ? allWorks
-      : allWorks.filter(function(w) { return normalizeCarLabel(w.car) === activeCarLabel; });
+    var filtered = allWorks.filter(function(w) {
+      var p = parseCar(w.car);
+      if (activeMaker !== '__all__' && p.maker !== activeMaker) return false;
+      if (activeModel !== '__all__' && p.model !== activeModel) return false;
+      return true;
+    });
     buildWorkCards(filtered);
   }
 
-  function buildWorksFilter() {
+  // 順序を保った件数カウント → [{key,count}] を返す
+  function countBy(works, keyFn) {
     var counts = {}, order = [];
-    allWorks.forEach(function(w) {
-      var label = normalizeCarLabel(w.car);
-      if (!label) return;
-      if (!(label in counts)) { counts[label] = 0; order.push(label); }
-      counts[label]++;
+    works.forEach(function(w) {
+      var k = keyFn(w);
+      if (!k) return;
+      if (!(k in counts)) { counts[k] = 0; order.push(k); }
+      counts[k]++;
     });
-    var labelEl = document.getElementById('worksFilterLabel');
-    var el = document.getElementById('worksFilter');
+    return order.map(function(k) { return { key: k, count: counts[k] }; });
+  }
+
+  function chipHtml(label, dataKey, count, isActive) {
+    return '<button type="button" class="works-filter-chip' + (isActive ? ' active' : '')
+      + '" data-key="' + escWorks(dataKey) + '">' + escWorks(label) + ' (' + count + ')</button>';
+  }
+
+  // 車種行（選択中メーカーの車種チップ）を描画。メーカー未選択なら隠す。
+  function buildModelChips() {
+    var el = document.getElementById('worksFilterModel');
     if (!el) return;
-    // 車種が2種類未満なら絞り込みUIは出さない
-    if (order.length < 2) { el.style.display = 'none'; if (labelEl) labelEl.style.display = 'none'; return; }
-    el.style.display = ''; if (labelEl) labelEl.style.display = '';
-    var chips = ['<button type="button" class="works-filter-chip' + (activeCarLabel === '__all__' ? ' active' : '') + '" data-car="__all__">すべて (' + allWorks.length + ')</button>'];
-    order.forEach(function(label) {
-      chips.push('<button type="button" class="works-filter-chip' + (activeCarLabel === label ? ' active' : '') + '" data-car="' + escWorks(label) + '">' + escWorks(label) + ' (' + counts[label] + ')</button>');
-    });
+    if (activeMaker === '__all__') { el.style.display = 'none'; el.innerHTML = ''; return; }
+    var makerWorks = allWorks.filter(function(w) { return parseCar(w.car).maker === activeMaker; });
+    var models = countBy(makerWorks, function(w) { return parseCar(w.car).model; });
+    // 車種が1種類しかないなら車種行は出さない（メーカー絞りだけで十分）
+    if (models.length < 2) { el.style.display = 'none'; el.innerHTML = ''; return; }
+    el.style.display = '';
+    var chips = [chipHtml('すべての車種', '__all__', makerWorks.length, activeModel === '__all__')];
+    models.forEach(function(m) { chips.push(chipHtml(m.key, m.key, m.count, activeModel === m.key)); });
     el.innerHTML = chips.join('');
     el.querySelectorAll('.works-filter-chip').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        activeCarLabel = btn.getAttribute('data-car');
-        el.querySelectorAll('.works-filter-chip').forEach(function(b) {
-          b.classList.toggle('active', b === btn);
-        });
+        activeModel = btn.getAttribute('data-key');
+        el.querySelectorAll('.works-filter-chip').forEach(function(b) { b.classList.toggle('active', b === btn); });
         applyWorksFilter();
       });
     });
+  }
+
+  // メーカー行を描画
+  function buildMakerChips() {
+    var labelEl = document.getElementById('worksFilterLabel');
+    var el = document.getElementById('worksFilterMaker');
+    if (!el) return;
+    var makers = countBy(allWorks, function(w) { return parseCar(w.car).maker; });
+    // メーカーが2種類未満なら絞り込みUIは出さない
+    if (makers.length < 2) {
+      el.style.display = 'none';
+      if (labelEl) labelEl.style.display = 'none';
+      var mEl = document.getElementById('worksFilterModel'); if (mEl) mEl.style.display = 'none';
+      return;
+    }
+    el.style.display = ''; if (labelEl) labelEl.style.display = '';
+    var chips = [chipHtml('すべて', '__all__', allWorks.length, activeMaker === '__all__')];
+    makers.forEach(function(m) { chips.push(chipHtml(m.key, m.key, m.count, activeMaker === m.key)); });
+    el.innerHTML = chips.join('');
+    el.querySelectorAll('.works-filter-chip').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        activeMaker = btn.getAttribute('data-key');
+        activeModel = '__all__'; // メーカーを変えたら車種は「すべて」に戻す
+        el.querySelectorAll('.works-filter-chip').forEach(function(b) { b.classList.toggle('active', b === btn); });
+        buildModelChips();
+        applyWorksFilter();
+      });
+    });
+  }
+
+  function buildWorksFilter() {
+    buildMakerChips();
+    buildModelChips();
   }
 
   fetch(GAS_URL + '?action=lpWorks')
