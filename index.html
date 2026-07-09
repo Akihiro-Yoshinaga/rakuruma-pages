@@ -309,5 +309,59 @@
 </div>
 </div>
 
+<!-- サービス回遊リンク（内部リンク強化） -->
+<style>
+.rk-services{max-width:900px;margin:8px auto 0;padding:24px 16px;}
+.rk-services__ttl{text-align:center;font-size:15px;font-weight:700;color:#003B8B;letter-spacing:.05em;margin-bottom:16px;}
+.rk-services__grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.rk-service-card{display:block;background:#fff;border:1px solid #e2e8f0;border-top:3px solid #003B8B;border-radius:12px;padding:18px 16px;text-decoration:none;color:#1a1a2e;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s;}
+.rk-service-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.1);}
+.rk-service-card__ico{font-size:26px;}
+.rk-service-card__name{font-size:17px;font-weight:800;margin:6px 0 4px;}
+.rk-service-card__desc{font-size:13px;color:#64748b;line-height:1.6;}
+.rk-service-card__more{display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:#003B8B;}
+.rk-services__blog{display:block;text-align:center;margin-top:14px;font-size:14px;font-weight:700;color:#003B8B;text-decoration:none;}
+@media(max-width:520px){.rk-services__grid{grid-template-columns:1fr;}}
+</style>
+<section class="rk-services" aria-label="サービス一覧">
+  <div class="rk-services__ttl">SERVICE ｜ サービス一覧</div>
+  <div class="rk-services__grid">
+    <a class="rk-service-card" href="/mobile-car-wash/">
+      <div class="rk-service-card__ico">🚿</div>
+      <div class="rk-service-card__name">出張洗車</div>
+      <div class="rk-service-card__desc">ご自宅までお伺いして、車内外をまるごと洗浄。忙しい方の代わりに愛車をきれいに保ちます。</div>
+      <span class="rk-service-card__more">詳しく見る →</span>
+    </a>
+    <a class="rk-service-card" href="/maintenance/">
+      <div class="rk-service-card__ico">🔧</div>
+      <div class="rk-service-card__name">出張整備・パーツ取付</div>
+      <div class="rk-service-card__desc">ドラレコ・インナーミラー等の取り付けから車検・整備管理まで。国家1級整備士が出張対応。</div>
+      <span class="rk-service-card__more">詳しく見る →</span>
+    </a>
+  </div>
+  <a class="rk-services__blog" href="/blog/">📝 車種別の作業実績（ブログ）を見る →</a>
+</section>
+
+<!-- 共通サイトフッター（内部リンク） -->
+<style>
+.rk-sitefooter{background:#0a2540;color:#cbd5e1;padding:32px 20px 130px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN',sans-serif;}
+.rk-sitefooter__nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-bottom:16px;}
+.rk-sitefooter__nav a{color:#e2e8f0;text-decoration:none;font-size:15px;font-weight:700;padding:6px 4px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+.rk-sitefooter__nav a:hover{color:#5eead4;border-color:#5eead4;}
+.rk-sitefooter__nav a[aria-current="page"]{color:#5eead4;border-color:#5eead4;}
+.rk-sitefooter__copy{font-size:12px;color:#94a3b8;margin:0;line-height:1.7;}
+</style>
+<footer class="rk-sitefooter">
+  <nav class="rk-sitefooter__nav" aria-label="サイト内ナビゲーション">
+    <a href="/" aria-current="page">ホーム</a>
+    <a href="/mobile-car-wash/">出張洗車</a>
+    <a href="/maintenance/">出張整備・パーツ取付</a>
+    <a href="/blog/">作業実績ブログ</a>
+    <a href="/price_list/">料金</a>
+    <a href="https://lin.ee/r0BAZkR0">LINEで相談・予約</a>
+  </nav>
+  <p class="rk-sitefooter__copy">© ラクルマ｜世田谷区・目黒区・渋谷区の出張洗車・整備・パーツ取付</p>
+</footer>
+
 </body>
 </html>

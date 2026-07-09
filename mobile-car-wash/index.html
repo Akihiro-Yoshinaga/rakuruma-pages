@@ -2109,10 +2109,33 @@
             </div>
         </section>
     </main>
-    
-    <!-- フッター -->
-    <footer style="background: #F4F9FF; color: #333; text-align: center; padding: 20px;">
-    </footer>
+
+    <!-- 他サービスへの回遊リンク（内部リンク強化） -->
+    <style>
+    .rk-crosslink{max-width:720px;margin:0 auto;padding:28px 16px;text-align:center;}
+    .rk-crosslink__ttl{font-size:15px;font-weight:700;color:#003B8B;margin-bottom:14px;}
+    .rk-crosslink__row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+    .rk-crosslink__card{flex:1 1 220px;max-width:320px;display:block;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;color:#1a1a2e;box-shadow:0 1px 6px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s;}
+    .rk-crosslink__card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.1);}
+    .rk-crosslink__name{font-size:16px;font-weight:800;}
+    .rk-crosslink__desc{font-size:13px;color:#64748b;margin-top:4px;line-height:1.6;}
+    .rk-crosslink__more{display:inline-block;margin-top:8px;font-size:13px;font-weight:700;color:#003B8B;}
+    </style>
+    <section class="rk-crosslink" aria-label="関連サービス">
+      <div class="rk-crosslink__ttl">こんなご依頼も出張対応しています</div>
+      <div class="rk-crosslink__row">
+        <a class="rk-crosslink__card" href="/maintenance/">
+          <div class="rk-crosslink__name">🔧 出張整備・パーツ取付</div>
+          <div class="rk-crosslink__desc">ドラレコ・インナーミラー取付、車検・整備管理まで。国家1級整備士が対応。</div>
+          <span class="rk-crosslink__more">整備ページを見る →</span>
+        </a>
+        <a class="rk-crosslink__card" href="/blog/">
+          <div class="rk-crosslink__name">📝 車種別の作業実績</div>
+          <div class="rk-crosslink__desc">実際の施工・取付事例をブログで公開中。あなたの車種の実績も探せます。</div>
+          <span class="rk-crosslink__more">作業実績を見る →</span>
+        </a>
+      </div>
+    </section>
 
     <script>
         // 料金プランタブ切り替え
@@ -2577,5 +2600,26 @@
         <p style="font-size: 14px; color: #4a5568; line-height: 1.8; margin-bottom: 28px;">複数台の車両管理をまとめてお任せいただける<br>法人・フリートプランをご用意しています。<br>お見積り・ご相談はお気軽にどうぞ。</p>
         <a href="/corporate_form/" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #2563a8, #1a3a5c); color: #ffffff; font-size: 16px; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(37,99,168,0.35); letter-spacing: 0.04em;">法人・フリート向けお問い合わせはこちら</a>
     </section>
+
+    <!-- 共通サイトフッター（内部リンク） -->
+    <style>
+    .rk-sitefooter{background:#0a2540;color:#cbd5e1;padding:32px 20px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN',sans-serif;}
+    .rk-sitefooter__nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;margin-bottom:16px;}
+    .rk-sitefooter__nav a{color:#e2e8f0;text-decoration:none;font-size:15px;font-weight:700;padding:6px 4px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+    .rk-sitefooter__nav a:hover{color:#5eead4;border-color:#5eead4;}
+    .rk-sitefooter__nav a[aria-current="page"]{color:#5eead4;border-color:#5eead4;}
+    .rk-sitefooter__copy{font-size:12px;color:#94a3b8;margin:0;line-height:1.7;}
+    </style>
+    <footer class="rk-sitefooter">
+      <nav class="rk-sitefooter__nav" aria-label="サイト内ナビゲーション">
+        <a href="/">ホーム</a>
+        <a href="/mobile-car-wash/" aria-current="page">出張洗車</a>
+        <a href="/maintenance/">出張整備・パーツ取付</a>
+        <a href="/blog/">作業実績ブログ</a>
+        <a href="/price_list/">料金</a>
+        <a href="https://lin.ee/r0BAZkR0">LINEで相談・予約</a>
+      </nav>
+      <p class="rk-sitefooter__copy">© ラクルマ｜世田谷区・目黒区・渋谷区の出張洗車・整備・パーツ取付</p>
+    </footer>
 </body>
 </html>
