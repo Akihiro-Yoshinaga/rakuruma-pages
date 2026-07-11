@@ -1953,6 +1953,66 @@
       color: var(--color-text-white);
     }
 
+    /* 担当者：写真＋安心根拠の2カラム */
+    .member-layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 32px;
+      align-items: start;
+      max-width: 900px;
+      margin-top: 8px;
+    }
+
+    .member-photo-card {
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .member-photo-card img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+    }
+
+    .member-photo-caption {
+      padding: 14px 18px 16px;
+    }
+
+    .member-photo-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .member-photo-role {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-accent-mint);
+      margin-top: 4px;
+    }
+
+    .member-reasons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .member-layout {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+      .member-photo-card {
+        max-width: 300px;
+        margin: 0 auto;
+      }
+    }
+
     .member-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -3239,18 +3299,27 @@
     <p class="section-desc" style="color:rgba(255,255,255,0.75);">
       資格・保険・作業報告。安心の根拠を揃えてお迎えします。
     </p>
-    <div style="display:flex;flex-direction:column;gap:16px;max-width:720px;margin-top:8px;">
-      <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
-        <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">整備品質</div>
-        <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">国家1級自動車整備士・自動車検査員資格保有。輸入車・国産車を問わず、妥協なく丁寧に作業します。</p>
+    <div class="member-layout">
+      <div class="member-photo-card">
+        <img src="/assets/images/team-yoshinaga.jpg" alt="ラクルマ 国家1級自動車整備士 吉永" loading="lazy">
+        <div class="member-photo-caption">
+          <div class="member-photo-name">吉永 明拓</div>
+          <div class="member-photo-role">国家1級自動車整備士 / 自動車検査員</div>
+        </div>
       </div>
-      <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
-        <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">お客様対応</div>
-        <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">作業内容を写真つきでLINEにご報告。「何をしたか」が一目でわかるので、はじめての方も安心してお任せいただけます。</p>
-      </div>
-      <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
-        <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">安心の保証</div>
-        <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">損害保険加入済み。万が一の際も保険で対応します。出張費は無料です。</p>
+      <div class="member-reasons">
+        <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+          <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">整備品質</div>
+          <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">国家1級自動車整備士・自動車検査員資格保有。輸入車・国産車を問わず、妥協なく丁寧に作業します。</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+          <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">お客様対応</div>
+          <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">作業内容を写真つきでLINEにご報告。「何をしたか」が一目でわかるので、はじめての方も安心してお任せいただけます。</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.08);border-left:3px solid var(--green-cta);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:16px 20px;">
+          <div style="font-size:13px;font-weight:800;color:var(--green-cta);margin-bottom:6px;">安心の保証</div>
+          <p style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.7;">損害保険加入済み。万が一の際も保険で対応します。出張費は無料です。</p>
+        </div>
       </div>
     </div>
   </div>
