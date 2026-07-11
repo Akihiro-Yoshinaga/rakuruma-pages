@@ -254,100 +254,61 @@
       text-align: center;
     }
 
-    /* ── FV実績バッジ（左下：エリア口コミ / 右下：くらしのマーケットリング） ── */
-    .hero-fv-badge {
+    /* ── FV情報バー（対応エリア＋くらしのマーケット評価） ── */
+    .hero-fv-bar {
       position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: clamp(14px, 3vw, 28px);
+      width: min(440px, calc(100% - 40px));
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 6px 20px;
       z-index: 10;
-      font-family: var(--font-primary);
     }
 
-    .hero-fv-badge--area {
-      left: clamp(16px, 4vw, 40px);
-      bottom: clamp(14px, 3vw, 28px);
-      background: rgba(0, 0, 0, 0.88);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 6px;
-      padding: 10px 16px 12px;
-      box-shadow: 0 14px 36px rgba(0,0,0,0.45);
-      color: #fff;
-      display: inline-flex;
-      flex-direction: column;
-      gap: 2px;
-      text-align: left;
-    }
-
-    .hero-fv-badge-location {
-      font-weight: 600;
-      font-size: clamp(14px, 2vw, 20px);
-      letter-spacing: 0.02em;
-    }
-
-    .hero-fv-badge-caption {
-      font-size: clamp(10px, 1.4vw, 13px);
-      font-weight: 500;
-      color: rgba(255,255,255,0.85);
-    }
-
-    .hero-fv-badge-caption sup {
-      font-size: 8px;
-    }
-
-    .hero-fv-badge-rank {
-      font-weight: 900;
-      font-size: clamp(26px, 4.5vw, 44px);
-      color: #FFD700;
-      text-shadow: 0 3px 8px rgba(0,0,0,0.4);
-      line-height: 1.2;
-    }
-
-    .hero-fv-badge-rank .rank-star {
-      font-size: 0.7em;
-      margin-right: 4px;
-      vertical-align: 2px;
-    }
-
-    .hero-fv-badge--ring {
-      right: clamp(16px, 5vw, 48px);
-      bottom: clamp(14px, 3vw, 28px);
-      width: clamp(92px, 13vw, 118px);
-      height: clamp(92px, 13vw, 118px);
+    .hero-fv-bar-row {
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      gap: 2px;
-      background: rgba(255,255,255,0.96);
-      border-radius: 50%;
-      box-shadow: 0 14px 36px rgba(0,0,0,0.25), inset 0 0 0 2px #F66A00;
+      gap: 10px;
+      padding: 9px 0;
     }
 
-    .hero-fv-ring-logo {
-      width: clamp(58px, 8vw, 74px);
-      height: auto;
-      display: block;
+    .hero-fv-bar-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.18);
     }
 
-    .hero-fv-ring-rank {
-      font-size: clamp(15px, 2.2vw, 20px);
-      font-weight: 800;
-      color: #F66A00;
-      line-height: 1.15;
-    }
-
-    .hero-fv-ring-note {
-      position: relative;
+    .hero-fv-bar-label {
       font-size: 10px;
-      font-weight: 600;
-      color: #F66A00;
-      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.65);
+      flex-shrink: 0;
     }
 
-    .hero-fv-ring-note sup {
-      position: absolute;
-      right: -14px;
-      top: -3px;
-      font-size: 7px;
+    .hero-fv-bar-value {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .hero-fv-bar-value .star {
+      color: var(--color-accent-yellow);
+      margin-right: 2px;
+    }
+
+    .hero-fv-bar-value small {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      margin-left: 4px;
     }
 
     .hero-note {
@@ -2700,18 +2661,20 @@
       <span class="trust-item">損害保険加入済み</span>
     </div>
   </div>
-  <!-- FV実績バッジ：左＝対応エリア／右＝くらしのマーケット評価 -->
-  <div class="hero-fv-badge hero-fv-badge--area">
-    <span class="hero-fv-badge-caption">対応エリア</span>
-    <span class="hero-fv-badge-location">世田谷｜目黒｜渋谷｜品川｜港区</span>
-  </div>
-  <div class="hero-fv-badge hero-fv-badge--ring">
-    <img class="hero-fv-ring-logo" src="/assets/uploads/2025/09/logo_tate.png" alt="くらしのマーケット">
-    <span class="hero-fv-ring-rank"><span class="rank-star">★</span>4.92</span>
-    <span class="hero-fv-ring-note">口コミ560件<sup>※1</sup></span>
+  <!-- FV情報バー：対応エリア＋くらしのマーケット評価 -->
+  <div class="hero-fv-bar">
+    <div class="hero-fv-bar-row">
+      <span class="hero-fv-bar-label">対応エリア</span>
+      <span class="hero-fv-bar-value">世田谷・目黒・渋谷・品川・港区</span>
+    </div>
+    <div class="hero-fv-bar-divider"></div>
+    <div class="hero-fv-bar-row">
+      <span class="hero-fv-bar-label">くらしのマーケット</span>
+      <span class="hero-fv-bar-value"><span class="star">★</span>4.92<small>（口コミ560件）</small></span>
+    </div>
   </div>
 </section>
-<p class="hero-note">※1 2026年7月現在、くらしのマーケットに寄せられた口コミの件数・平均評価より。</p>
+<p class="hero-note">※ 2026年7月現在、くらしのマーケットに寄せられた口コミの件数・平均評価より。</p>
 
 <!-- TROUBLE：こんなとき頼めます -->
 <section class="trouble-section">
