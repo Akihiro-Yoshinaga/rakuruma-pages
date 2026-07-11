@@ -33,6 +33,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/rakuruma-style.css?v=20260326">
 <style>
+/* ===== このページ専用: レイアウト統一 ===== */
+/* 600〜1024px幅で横スクロールが発生する問題の解消（共通CSSの min-width:1024px を打ち消し） */
+.main {
+    min-width: 0;
+}
+/* コンテンツの左右余白を統一（画面端に文字が接触するのを防ぐ） */
+@media (min-width: 600px) {
+    .main section.area_s, .main section.area_m, .main section.area_l,
+    .main section .area_s, .main section .area_m {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+
 /* エリアマップ */
 .map img {
     width: 100%;
@@ -311,7 +325,7 @@
         <p class="hero__note">※1 2025年10月現在、くらしのマーケット出張洗車カテゴリーにおいてエリア内口コミ24件中すべて★5の評価を獲得。</p>
         <!-- くらしのマーケット口コミヘッダー -->
         <section class="reviews" style="padding: 60px 0; background-color: #f8fafe;">
-            <div class="area_s" style="max-width: 1600px;">
+            <div class="area_s">
                 <div style="padding: 40px 40px; background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.08);">
                     <!-- ヘッダー部分 -->
                     <!-- くらしのマーケットで評価表示（横並び） -->
@@ -334,12 +348,12 @@
                     <!-- サブテキスト -->
                     <p style="font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 40px; text-align: center;">
                         出張洗車サービスの口コミ24件すべてで最高評価をいただいています<br>
-                        <span style="font-size: 12px; color: #999;">※2025年10月時点</span>
+                        <span style="font-size: 12px; color: #767676;">※2025年10月時点</span>
                     </p>
 
                     <!-- お客様の声＆ビフォーアフター統合カード -->
                 <!-- 口コミ＋ビフォーアフター統合カード -->
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 760px; margin: 0 auto;">
                     
                     <!-- カード1 -->
                     <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); border: 1px solid rgba(0, 59, 139, 0.05); display: flex; flex-direction: column;">
@@ -507,11 +521,9 @@
                 </div>
                 
                 <!-- メッセージ -->
-                <div style="max-width: 500px; margin: 0 auto; padding: 0 20px; text-align: left;">
-                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 8px; font-weight: 400;">もう洗車場に行く必要はありません。</p>
-                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 8px; font-weight: 400;">仕事中や家でくつろいでいる間に、プロが愛車をピカピカに。</p>
-                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 8px; font-weight: 400;">Web予約はたった1分。定期プランなら予約も不要。</p>
-                    <p style="font-size: 16px; line-height: 1.6; color: #2c3e50; margin-bottom: 0; font-weight: 400;">愛車の「使っていない時間」が、最高のメンテナンスタイムに。</p>
+                <div style="max-width: 500px; margin: 0 auto; padding: 0 20px; text-align: center;">
+                    <p style="font-size: 16px; line-height: 1.8; color: #2c3e50; margin-bottom: 12px; font-weight: 400;">仕事中や家でくつろいでいる間に、<br>プロが愛車をピカピカに。</p>
+                    <p style="font-size: 16px; line-height: 1.8; color: #2c3e50; margin-bottom: 0; font-weight: 400;">Web予約はたった1分。<br>定期プランなら予約も不要です。</p>
                 </div>
             </div>
         </section>
@@ -602,227 +614,151 @@
 
         <!-- 料金・時間比較セクション -->
         <section class="comparison" style="padding: 80px 0; background-color: #f8fafe;">
-            <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <style>
+                .comparison__inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+                .cmp-table-wrap { background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); overflow: hidden; }
+                .cmp-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+                .cmp-table th, .cmp-table td { text-align: center; vertical-align: middle; padding: 18px 8px; border-bottom: 1px solid #eef1f5; }
+                .cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: none; }
+                .cmp-table tbody th { width: 19%; background: #f0f2f5; font-size: 13px; font-weight: 700; color: #333; padding: 18px 6px; }
+                .cmp-col-raku { width: 31%; background: rgba(0, 59, 139, 0.08); }
+                .cmp-table thead th.cmp-col-raku { background: #003B8B; padding: 12px 8px; }
+                .cmp-table thead th { background: #f8f9fa; }
+                .cmp-table thead th:first-child { background: #f0f2f5; }
+                .cmp-head-logo { height: 40px; width: auto; display: block; margin: 0 auto; }
+                .cmp-head-other { font-size: 13px; color: #555; font-weight: 700; line-height: 1.4; }
+                .cmp-mark { display: block; font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+                .cmp-mark--best { color: #003B8B; }
+                .cmp-mark--good { color: #4C7DC4; }
+                .cmp-mark--fair { color: #D97706; }
+                .cmp-mark--bad { color: #D93025; }
+                .cmp-value { font-size: 15px; font-weight: 700; color: #444; line-height: 1.4; }
+                .cmp-col-raku .cmp-value { font-size: 17px; color: #003B8B; }
+                .cmp-note { display: block; font-size: 12px; font-weight: 500; color: #767676; margin-top: 4px; line-height: 1.5; }
+                .cmp-col-raku .cmp-note { color: #3d5a8a; }
+                .cmp-legend { text-align: center; font-size: 12px; color: #767676; margin-top: 14px; line-height: 1.8; }
+                .cmp-legend b { font-weight: 700; }
+                @media (max-width: 768px) {
+                    .comparison__inner { padding: 0 12px; }
+                    .cmp-table th, .cmp-table td { padding: 14px 4px; }
+                    .cmp-table tbody th { width: 17%; font-size: 12px; padding: 14px 3px; }
+                    .cmp-col-raku { width: 33%; }
+                    .cmp-head-logo { height: 32px; }
+                    .cmp-head-other { font-size: 12px; }
+                    .cmp-mark { font-size: 22px; }
+                    .cmp-value { font-size: 13px; }
+                    .cmp-col-raku .cmp-value { font-size: 15px; }
+                    .cmp-note { font-size: 12px; }
+                }
+            </style>
+            <div class="comparison__inner">
                 <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 50px;">本当にお得？<span class="colorfont_b">他社サービスと徹底比較</span></h2>
-                
-                <!-- レスポンシブ対応：デスクトップはテーブル、モバイルはカード形式 -->
-                <div style="background: white; border-radius: 16px; padding: 20px 0; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08);">
-                    
-                    <!-- デスクトップ版テーブル -->
-                    <div class="desktop-table" style="display: block;">
-                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
-                            <thead>
-                                <tr>
-                                    <th style="padding: 8px 5px; text-align: center; width: 20%; background: #F8F9FA; border-radius: 8px 0 0 0; vertical-align: middle;"></th>
-                                    <th style="padding: 8px 10px; text-align: center; width: 30%; background: #003B8B; vertical-align: middle; overflow: visible;">
-                                        <img src="/assets/uploads/2025/09/0abf76b0235309b55979d1dcdca626cb.png" alt="ラクルマ" style="height: 45px; width: auto; display: block; margin: -8px auto;">
-                                    </th>
-                                    <th style="padding: 8px 10px; text-align: center; width: 25%; background: #F8F9FA; vertical-align: middle;">
-                                        <div style="font-size: 13px; color: #666; font-weight: 600; line-height: 1.3;">他社<br>出張洗車</div>
-                                    </th>
-                                    <th style="padding: 8px 10px; text-align: center; width: 25%; background: #F8F9FA; border-radius: 0 8px 0 0; vertical-align: middle;">
-                                        <div style="font-size: 13px; color: #666; font-weight: 600; line-height: 1.3;">ガソリンスタンド</div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="background: rgba(248, 249, 250, 0.5);">
-                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5;">料金</td>
-                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <polygon points="14,4 24,22 4,22" fill="#003B8B"/>
-                                                </svg>
-                                                <div style="font-size: 15px; color: #003B8B; font-weight: 700;">¥7,700〜</div>
-                                            </div>
-                                            <div style="font-size: 10px; color: rgba(0, 59, 139, 0.7); margin-top: 2px;">Mサイズ</div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
-                                                </svg>
-                                                <div style="font-size: 14px; color: #666; font-weight: 600;">¥9,500〜</div>
-                                            </div>
-                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">Mサイズ</div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
-                                                    <circle cx="14" cy="14" r="6" fill="white"/>
-                                                </svg>
-                                                <div style="font-size: 14px; color: #666; font-weight: 600;">¥3,000〜</div>
-                                            </div>
-                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">Mサイズ</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td style="padding: clamp(10px, 2vw, 12px) clamp(6px, 1.5vw, 8px); font-size: clamp(11px, 1.5vw, 13px); color: #333; font-weight: 700; background: #F0F2F5; white-space: nowrap;">拘束時間</td>
-                                    <td style="padding: clamp(10px, 2vw, 16px) clamp(4px, 1vw, 8px); text-align: center; background: rgba(0, 59, 139, 0.12);">
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="14" cy="14" r="12" fill="#003B8B"/>
-                                                <circle cx="14" cy="14" r="6" fill="white"/>
-                                            </svg>
-                                            <div style="font-size: clamp(22px, 4vw, 32px); color: #003B8B; font-weight: 900; line-height: 1; letter-spacing: -0.02em;">0分</div>
-                                            <div style="font-size: clamp(9px, 1.2vw, 10px); color: rgba(0, 59, 139, 0.7);">完全にお任せ</div>
-                                            <div style="margin-top: 4px; background: #003B8B; color: #fff; font-size: clamp(9px, 1.2vw, 11px); font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; line-height: 1.4;">＋100分の自由時間</div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: clamp(10px, 2vw, 16px) clamp(4px, 1vw, 8px); text-align: center;">
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
-                                            </svg>
-                                            <div style="font-size: clamp(12px, 2vw, 14px); color: #666; font-weight: 600;">10分</div>
-                                            <div style="font-size: clamp(9px, 1.2vw, 10px); color: #bbb;">立会い必要</div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: clamp(10px, 2vw, 16px) clamp(4px, 1vw, 8px); text-align: center;">
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                                <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                            </svg>
-                                            <div style="font-size: clamp(12px, 2vw, 14px); color: #666; font-weight: 600;">100分</div>
-                                            <div style="font-size: clamp(9px, 1.2vw, 10px); color: #bbb;">移動＋待ち</div>
-                                            <div style="margin-top: 4px; background: #FFF0F0; color: #C53030; font-size: clamp(8px, 1.1vw, 10px); font-weight: 700; padding: 3px 6px; border-radius: 6px; line-height: 1.4; text-align: center;">休日が<br>潰れる</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <tr style="background: rgba(248, 249, 250, 0.5);">
-                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5; white-space: nowrap;">駐車場代</td>
-                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
-                                                    <circle cx="14" cy="14" r="6" fill="white"/>
-                                                </svg>
-                                                <div style="font-size: 15px; color: #003B8B; font-weight: 700;">¥0</div>
-                                                <div style="font-size: 10px; color: rgba(0, 59, 139, 0.7); margin-top: 2px;">バイク訪問</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                                    <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                                </svg>
-                                                <div style="font-size: 14px; color: #666; font-weight: 600;">¥1,500</div>
-                                                <div style="font-size: 10px; color: #bbb; margin-top: 2px;">料金上乗せ</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="14" cy="14" r="12" fill="#003B8B"/>
-                                                <circle cx="14" cy="14" r="6" fill="white"/>
-                                            </svg>
-                                            <div style="font-size: 14px; color: #666; font-weight: 600;">¥0</div>
-                                            <div style="font-size: 10px; color: #bbb; margin-top: 2px;">-</div>
-                                        </div>
-                                    </div>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5; white-space: nowrap;">サブスク</td>
-                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
-                                                    <circle cx="14" cy="14" r="6" fill="white"/>
-                                                </svg>
-                                                <div style="font-size: 15px; color: #003B8B; font-weight: 700;">¥6,900〜</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
-                                            </svg>
-                                            <div style="font-size: 14px; color: #666; font-weight: 600;">¥9,900〜</div>
-                                        </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                                <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                            </svg>
-                                            <div style="font-size: 14px; color: #666; font-weight: 600;">なし</div>
-                                        </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <tr style="background: rgba(248, 249, 250, 0.5);">
-                                    <td style="padding: 12px 8px; font-size: 13px; color: #333; font-weight: 700; background: #F0F2F5;">利便性</td>
-                                    <td style="padding: 12px 5px; text-align: center; background: rgba(0, 59, 139, 0.12);">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="14" cy="14" r="12" fill="#003B8B"/>
-                                                    <circle cx="14" cy="14" r="6" fill="white"/>
-                                                </svg>
-                                                <div style="font-size: 14px; color: #003B8B; font-weight: 700;">どこでも可能</div>
-                                                <div style="font-size: 10px; color: rgba(0, 59, 139, 0.7); margin-top: 2px;">水なし洗車で場所を選ばない</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <polygon points="14,4 24,22 4,22" fill="#FF9500"/>
-                                                </svg>
-                                                <div style="font-size: 14px; color: #666; font-weight: 600;">制限あり</div>
-                                                <div style="font-size: 10px; color: #bbb; margin-top: 2px;">水を使える場所など制限あり</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 12px 5px; text-align: center;">
-                                        <div style="text-align: center;">
-                                            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <line x1="6" y1="6" x2="22" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                                    <line x1="22" y1="6" x2="6" y2="22" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
-                                                </svg>
-                                                <div style="font-size: 14px; color: #666; font-weight: 600;">店舗へ移動</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    </div>
-                    
-                <!-- モバイル対応のメディアクエリ -->
-                    <style>
-                        @media (max-width: 768px) {
-                            .desktop-table {
-                                display: none;
-                            }
-                        }
-                    </style>
+
+                <div class="cmp-table-wrap">
+                    <table class="cmp-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th class="cmp-col-raku">
+                                    <img src="/assets/uploads/2025/09/0abf76b0235309b55979d1dcdca626cb.png" alt="ラクルマ" class="cmp-head-logo">
+                                </th>
+                                <th><div class="cmp-head-other">他社<br>出張洗車</div></th>
+                                <th><div class="cmp-head-other">ガソリン<br>スタンド</div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>料金<br>（1回）</th>
+                                <td class="cmp-col-raku">
+                                    <span class="cmp-mark cmp-mark--good">○</span>
+                                    <span class="cmp-value">¥7,700〜</span>
+                                    <span class="cmp-note">Mサイズ<br>出張費込み</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--fair">△</span>
+                                    <span class="cmp-value">¥9,500〜</span>
+                                    <span class="cmp-note">Mサイズ</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--best">◎</span>
+                                    <span class="cmp-value">¥3,000〜</span>
+                                    <span class="cmp-note">Mサイズ</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>拘束時間</th>
+                                <td class="cmp-col-raku">
+                                    <span class="cmp-mark cmp-mark--best">◎</span>
+                                    <span class="cmp-value">0分</span>
+                                    <span class="cmp-note">完全にお任せ<br>その間は自由時間</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--fair">△</span>
+                                    <span class="cmp-value">10分</span>
+                                    <span class="cmp-note">立会い必要</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--bad">✕</span>
+                                    <span class="cmp-value">約100分</span>
+                                    <span class="cmp-note">移動と待ち時間</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>駐車場代</th>
+                                <td class="cmp-col-raku">
+                                    <span class="cmp-mark cmp-mark--best">◎</span>
+                                    <span class="cmp-value">¥0</span>
+                                    <span class="cmp-note">バイクで訪問</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--bad">✕</span>
+                                    <span class="cmp-value">¥1,500</span>
+                                    <span class="cmp-note">料金上乗せ</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--best">◎</span>
+                                    <span class="cmp-value">¥0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>定期プラン</th>
+                                <td class="cmp-col-raku">
+                                    <span class="cmp-mark cmp-mark--best">◎</span>
+                                    <span class="cmp-value">6,900円〜</span>
+                                    <span class="cmp-note">月額</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--fair">△</span>
+                                    <span class="cmp-value">9,900円〜</span>
+                                    <span class="cmp-note">月額</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--bad">✕</span>
+                                    <span class="cmp-value">なし</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>施工場所</th>
+                                <td class="cmp-col-raku">
+                                    <span class="cmp-mark cmp-mark--best">◎</span>
+                                    <span class="cmp-value">どこでも可能</span>
+                                    <span class="cmp-note">水なし洗車で<br>場所を選ばない</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--fair">△</span>
+                                    <span class="cmp-value">制限あり</span>
+                                    <span class="cmp-note">水が使える場所のみ</span>
+                                </td>
+                                <td>
+                                    <span class="cmp-mark cmp-mark--bad">✕</span>
+                                    <span class="cmp-value">店舗へ移動</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
+                <p class="cmp-legend"><b>◎</b> とても良い　<b>○</b> 良い　<b>△</b> 条件つき　<b>✕</b> 不向き<br>※比較内容は一般的なサービス内容をもとにした当社調べです。</p>
             </div>
         </section>
 
@@ -843,7 +779,7 @@
                         <div style="padding: 30px; text-align: center;">
                             <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">月極駐車場</h3>
                             <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0 0 8px 0;">水や泡を使わないので、隣の車や床を汚さずに洗浄が可能</p>
-                            <p style="font-size: 11px; color: #999; line-height: 1.4; margin: 0;">※事前に許可を取る必要があります。</p>
+                            <p style="font-size: 12px; color: #767676; line-height: 1.5; margin: 0;">※事前に許可を取る必要があります。</p>
                         </div>
                     </div>
                     
@@ -855,7 +791,7 @@
                         <div style="padding: 30px; text-align: center;">
                             <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">マンション駐車場</h3>
                             <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0 0 8px 0;">機械式・地下駐車場もOK。狭い場所でも丁寧に施工</p>
-                            <p style="font-size: 11px; color: #999; line-height: 1.4; margin: 0;">※事前に許可を取る必要があります。</p>
+                            <p style="font-size: 12px; color: #767676; line-height: 1.5; margin: 0;">※事前に許可を取る必要があります。</p>
                         </div>
                     </div>
                     
@@ -895,18 +831,18 @@
                                 </video>
                             </div>
                             </div>
-                            <p style="font-size: 13px; color: #666; text-align: center; margin-top: 10px; line-height: 1.5;">
+                            <p style="font-size: 14px; color: #555; text-align: center; margin-top: 10px; line-height: 1.6;">
                                 潤滑成分が汚れを浮かせて<br>
                                 摩擦を最小限に抑える技術
                             </p>
-                            <p style="font-size: 11px; color: #999; text-align: center; margin-top: 5px;">
+                            <p style="font-size: 12px; color: #767676; text-align: center; margin-top: 5px;">
                                 ※aguamirai professionalを採用
                             </p>
                         </div>
 
                         <!-- 動画2: 傷がつかない実証動画 -->
                         <div style="display: flex; flex-direction: column; align-items: center;">
-                            <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">1年間使い続けても傷ゼロ<span style="font-size: 8px; margin-left: 4px;">※1</span></h4>
+                            <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">1年間使い続けても傷ゼロ<span style="font-size: 11px; margin-left: 4px;">※1</span></h4>
                             <div style="position: relative; width: 90%;">
                             <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                 <video id="why-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
@@ -918,14 +854,14 @@
                                 </video>
                             </div>
                             </div>
-                            <p style="font-size: 13px; color: #666; text-align: center; margin-top: 10px; line-height: 1.5;">
+                            <p style="font-size: 14px; color: #555; text-align: center; margin-top: 10px; line-height: 1.6;">
                                 1年間毎月水なし洗車をしても<br>
                                 傷ついていない様子
                             </p>
-                            <p style="font-size: 11px; color: #999; text-align: center; margin-top: 5px;">
+                            <p style="font-size: 12px; color: #767676; text-align: center; margin-top: 5px;">
                                 車種：Jeep ラングラー
                             </p>
-                            <p style="font-size: 10px; color: #999; text-align: center; margin-top: 5px;">
+                            <p style="font-size: 12px; color: #767676; text-align: center; margin-top: 5px;">
                                 ※1 コーティングの状態によって変わる場合がございます
                             </p>
                         </div>
@@ -955,7 +891,7 @@
 
         <!-- くらしのマーケット口コミ（写真・口コミカード） -->
         <section class="reviews" style="padding: 60px 0; background-color: #f8fafe;">
-            <div style="max-width: 1600px; margin: 0 auto; padding: 0 20px;">
+            <div style="max-width: 1080px; margin: 0 auto; padding: 0 20px;">
                 <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 50px;">実際にご利用いただいた<span class="colorfont_b">お客様の声</span></h2>
 
                 <!-- 口コミスクロール -->
@@ -1010,7 +946,7 @@
                                 <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                         <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年1月</span>
+                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年1月</span>
                                     </div>
                                     <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">初回利用でしたが丁寧な対応で安心してお任せできました。仕上がりもとても綺麗で、ガソリンスタンドより確実に満足できるサービスです！</p>
                                 </div>
@@ -1019,7 +955,7 @@
                                 <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                         <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年5月</span>
+                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年5月</span>
                                     </div>
                                     <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">こまめに連絡をいただいてスムーズにお願いできました。洗車も、黄砂がタップリのっかったボディをピカピカにしていただきました。ありがとうございます。</p>
                                 </div>
@@ -1028,7 +964,7 @@
                                 <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                         <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年3月</span>
+                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年3月</span>
                                     </div>
                                     <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">事前のやりとりから丁寧かつスムーズで安心してお願いできました。マンションの狭い駐車場でも問題なく対応していただき、40分ほどでピカピカに。またぜひ利用したいと思います。</p>
                                 </div>
@@ -1037,7 +973,7 @@
                                 <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                         <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年9月</span>
+                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年9月</span>
                                     </div>
                                     <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">これまで利用した洗車サービスの中で1番綺麗にしてくれました。立ち会いできませんでしたが、妥協なくピカピカに！間違いなくリピートします。</p>
                                 </div>
@@ -1046,7 +982,7 @@
                                 <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                         <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2025年2月</span>
+                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2025年2月</span>
                                     </div>
                                     <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">対応もとても爽やかで、かなり綺麗に仕上げていただきました！ありがとうございます！</p>
                                 </div>
@@ -1055,7 +991,7 @@
                                 <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
                                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
                                         <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #999; white-space: nowrap;">2024年10月</span>
+                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年10月</span>
                                     </div>
                                     <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">綺麗に車の内外をお掃除してくださいました。ありがとうございます。リピート確定です！よろしくお願い致します。</p>
                                 </div>
@@ -1274,7 +1210,7 @@
             <p class="fontss">※サービス内容・目安時間はお車の大きさ・特徴・汚れ具合によって変わります。</p>
 
             <!-- 料金一覧と初回お試し価格の統合セクション -->
-            <div style="text-align: center; margin: 30px auto 50px auto; padding: 0; max-width: 1400px;">
+            <div style="text-align: center; margin: 30px auto 50px auto; padding: 0; max-width: 1080px;">
                 <!-- 料金一覧 -->
                 <div style="padding: 35px 45px; background: white; border-radius: 16px; border: 2px solid #e0e0e0; display: inline-block;">
                     <h3 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 20px;">通常料金</h3>
@@ -1298,8 +1234,8 @@
                             </div>
                         </div>
                         <div style="text-align: center; padding-top: 15px; border-top: 2px solid #f0f0f0;">
-                            <div style="color: #999; font-size: 14px; margin-bottom: 8px;">通常価格</div>
-                            <div class="fontl bold" style="color: #999;">9,900円</div>
+                            <div style="color: #767676; font-size: 14px; margin-bottom: 8px;">通常価格</div>
+                            <div class="fontl bold" style="color: #767676;">9,900円</div>
                         </div>
                     </div>
                 </div>
@@ -2039,18 +1975,18 @@
                         <div class="plan_middle flexbox">
                             <div class="plan_box plan_box--regular bk_w" style="text-align:center; padding:20px 16px;">
                                 <p class="fontm bold colorfont_b" style="margin-bottom:4px;">月2回プラン</p>
-                                <p class="fontss" style="color:#999; margin-bottom:12px;">（月額）</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:12px;">（月額）</p>
                                 <p class="fontll bold">13,000円〜<span class="fontss"></span></p>
-                                <p class="fontss" style="color:#999; margin-top:4px;">（6,500円/1回）</p>
+                                <p class="fontss" style="color:#767676; margin-top:4px;">（6,500円/1回）</p>
                             </div>
                             <div class="plan_box plan_box--regular bk_w" style="text-align:center; padding:20px 16px;">
                                 <p class="fontm bold colorfont_b" style="margin-bottom:4px;">月１回プラン</p>
-                                <p class="fontss" style="color:#999; margin-bottom:12px;">（月額）</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:12px;">（月額）</p>
                                 <p class="fontll bold">6,900円〜</p>
                             </div>
                             <div class="plan_box plan_box--regular bk_w" style="text-align:center; padding:20px 16px;">
                                 <p class="fontm bold colorfont_b" style="margin-bottom:4px;">２ヶ月に１回プラン</p>
-                                <p class="fontss" style="color:#999; margin-bottom:12px;">（2ヶ月に1回決済）</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:12px;">（2ヶ月に1回決済）</p>
                                 <p class="fontll bold">7,900円〜</p>
                             </div>
                         </div>
@@ -2062,17 +1998,17 @@
                         <div class="plan_middle flexbox">
                             <div class="plan_box plan_box--single bk_w">
                                 <p class="plan_box__size montserrat colorfont_b" style="font-size:48px; font-weight:900; line-height:1; margin-bottom:8px;">S</p>
-                                <p class="fontss" style="color:#999; margin-bottom:8px;">軽自動車・コンパクト</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:8px;">軽自動車・コンパクト</p>
                                 <p class="fontll bold">6,600円<span class="fontss">（税込）</span></p>
                             </div>
                             <div class="plan_box plan_box--single bk_w">
                                 <p class="plan_box__size montserrat colorfont_b" style="font-size:48px; font-weight:900; line-height:1; margin-bottom:8px;">M</p>
-                                <p class="fontss" style="color:#999; margin-bottom:8px;">セダン・ミニバン</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:8px;">セダン・ミニバン</p>
                                 <p class="fontll bold">7,700円<span class="fontss">（税込）</span></p>
                             </div>
                             <div class="plan_box plan_box--single bk_w">
                                 <p class="plan_box__size montserrat colorfont_b" style="font-size:48px; font-weight:900; line-height:1; margin-bottom:8px;">L</p>
-                                <p class="fontss" style="color:#999; margin-bottom:8px;">SUV・大型車</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:8px;">SUV・大型車</p>
                                 <p class="fontll bold">8,800円<span class="fontss">（税込）</span></p>
                             </div>
                         </div>
