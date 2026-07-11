@@ -128,6 +128,140 @@ a[href^="https://lin.ee"]:hover {
     box-shadow: 0 8px 22px rgba(37, 99, 168, 0.45);
 }
 
+/* ===== PC用ファーストビュー（整備ページ方式: 動画全面＋オーバーレイ＋中央コンテンツ） ===== */
+.hero__pc-content {
+    display: none;
+}
+@media (min-width: 600px) {
+    /* 動画を全面に敷く（共通CSSの中央340px配置を上書き） */
+    .hero--wp {
+        display: block;
+        min-height: 620px;
+    }
+    .hero--wp .hero__media {
+        position: absolute;
+        inset: 0;
+        width: auto;
+        z-index: 0;
+    }
+    .hero--wp .hero__video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+    }
+    /* 濃紺の半透明オーバーレイ */
+    .hero--wp::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(8, 18, 36, 0.62);
+        z-index: 1;
+        pointer-events: none;
+    }
+    /* スマホ用のオーバーレイ要素（縦書きコピー・バッジ）はPCでは使わない */
+    .hero--wp .hero__copy,
+    .hero--wp .hero__badge--area,
+    .hero--wp .hero__badge--rank {
+        display: none;
+    }
+    /* 中央コンテンツ */
+    .hero__pc-content {
+        position: relative;
+        z-index: 2;
+        min-height: 620px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 90px 24px 70px;
+        gap: 26px;
+    }
+    .hero__pc-sub-top {
+        font-size: clamp(15px, 1.6vw, 18px);
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 0.12em;
+        margin: 0;
+    }
+    .hero__pc-title {
+        font-size: clamp(36px, 4.5vw, 54px);
+        font-weight: 900;
+        color: #ffffff;
+        line-height: 1.4;
+        letter-spacing: 0.03em;
+        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+        margin: 0;
+    }
+    .hero__pc-title .hero__pc-highlight {
+        color: #FFD700;
+    }
+    .hero__pc-cta {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 6px;
+    }
+    .hero__pc-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 17px 38px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 800;
+        text-decoration: none;
+        letter-spacing: 0.02em;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .hero__pc-btn:hover {
+        transform: translateY(-3px);
+    }
+    .hero__pc-btn--primary {
+        background: linear-gradient(135deg, #FFDF3D 0%, #F6C90E 100%);
+        color: #0d1f3c;
+        box-shadow: 0 6px 24px rgba(246, 201, 14, 0.4);
+    }
+    .hero__pc-btn--primary:hover {
+        box-shadow: 0 10px 32px rgba(246, 201, 14, 0.5);
+    }
+    .hero__pc-btn--line {
+        background: linear-gradient(135deg, #0bd463 0%, #06B34C 100%);
+        color: #fff;
+        box-shadow: 0 6px 24px rgba(6, 199, 85, 0.35);
+    }
+    .hero__pc-btn--line:hover {
+        box-shadow: 0 10px 32px rgba(6, 199, 85, 0.45);
+    }
+    .hero__pc-trust {
+        display: flex;
+        gap: 12px 28px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 8px;
+    }
+    .hero__pc-trust span {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.92);
+        letter-spacing: 0.04em;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+    .hero__pc-trust span::before {
+        content: '✓';
+        color: #FFD700;
+        font-weight: 900;
+    }
+    .hero__pc-trust sup {
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
 /* ===== 追従CTA（下部固定バー・このページ専用の表示制御） ===== */
 .button_area {
     transform: translateY(110%);
@@ -446,6 +580,21 @@ a[href^="https://lin.ee"]:hover {
                     <span class="hero__badge-ring-note">獲得</span>
                     <span class="hero__badge-note hero__badge-note--absolute">※1</span>
                 </span>
+            </div>
+
+            <!-- PC用の中央コンテンツ（スマホでは非表示） -->
+            <div class="hero__pc-content">
+                <p class="hero__pc-sub-top">国家1級整備士が監修の出張洗車</p>
+                <p class="hero__pc-title">洗車は行くから、<br><span class="hero__pc-highlight">来てもらう</span>時代へ。</p>
+                <div class="hero__pc-cta">
+                    <a href="#calendar-container" class="hero__pc-btn hero__pc-btn--primary">初回お試し 6,000円で予約する</a>
+                    <a href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener noreferrer" class="hero__pc-btn hero__pc-btn--line">LINEで相談する</a>
+                </div>
+                <div class="hero__pc-trust">
+                    <span>世田谷・目黒・渋谷 エリア口コミNo.1<sup>※1</sup></span>
+                    <span>くらしのマーケット 第1位<sup>※1</sup></span>
+                    <span>拘束時間0分・完全おまかせ</span>
+                </div>
             </div>
         </section>
 

@@ -381,5 +381,17 @@
   <p class="rk-sitefooter__copy">© ラクルマ｜世田谷区・目黒区・渋谷区の出張洗車・整備・パーツ取付</p>
 </footer>
 
+<script>
+(function() {
+    // スマホ用: 固定バーはFV通過後に表示（.activeで共通CSSのtransformが解除される）
+    var bar = document.querySelector('.button_area');
+    if (!bar) return;
+    function onScroll() {
+        bar.classList.toggle('active', window.scrollY > window.innerHeight * 0.7);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+})();
+</script>
 </body>
 </html>
