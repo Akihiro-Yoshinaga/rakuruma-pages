@@ -2290,27 +2290,31 @@
       }
     }
 
-    /* ===== HOW TO ===== */
+    /* ===== HOW TO（洗車LPと同型：全幅写真＋円形STEP） ===== */
     .steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
       position: relative;
     }
 
     .step {
-      position: relative;
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      min-height: 250px;
+      min-height: 280px;
       background-size: cover;
       background-position: center;
+      background-color: rgba(0, 0, 0, 0.38);
+      background-blend-mode: overlay;
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      text-align: left;
-      padding: 18px 18px 20px;
-      box-shadow: var(--shadow-medium);
+      align-items: center;
+      justify-content: center;
+      gap: 56px;
+      padding: 32px 24px;
+      color: #fff;
+    }
+
+    .step:first-child {
+      border-radius: 140px 0 0 0;
+    }
+
+    .step:last-child {
+      border-radius: 0 0 140px 0;
     }
 
     .step:nth-child(1) { background-image: url(/assets/images/step1.jpg); }
@@ -2318,53 +2322,66 @@
     .step:nth-child(3) { background-image: url(/assets/images/step3.jpg); }
     .step:nth-child(4) { background-image: url(/assets/images/step4.jpg); }
 
-    .step::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(8, 18, 36, 0.88) 0%, rgba(8, 18, 36, 0.35) 55%, rgba(8, 18, 36, 0.05) 100%);
+    .step-head {
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 6px;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: #fff;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
     }
 
-    .step > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .step-num {
+    .step-head span {
       font-family: var(--font-secondary);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      color: var(--color-accent-mint);
-      margin-bottom: 6px;
-    }
-
-    .step h3 {
-      font-size: var(--font-size-base);
-      font-weight: var(--font-weight-bold);
-      color: var(--color-text-white);
-      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
     }
 
     .step p {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.85);
-      line-height: 1.7;
+      max-width: 44%;
+      font-size: 14px;
+      line-height: 2;
+      color: rgba(255, 255, 255, 0.92);
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
     }
 
-    @media (max-width: 900px) {
-      .steps {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 480px) {
-      .steps {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
+    @media (max-width: 600px) {
       .step {
-        min-height: 190px;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+        min-height: 340px;
+        padding: 36px 24px;
+      }
+      .step:first-child {
+        border-radius: 90px 0 0 0;
+      }
+      .step:last-child {
+        border-radius: 0 0 90px 0;
+      }
+      .step-head {
+        width: 150px;
+        height: 150px;
+        font-size: 15px;
+      }
+      .step-head span {
+        font-size: 12px;
+      }
+      .step p {
+        max-width: 100%;
+        font-size: 13px;
+        line-height: 1.9;
       }
       .step:nth-child(1) { background-image: url(/assets/images/step1_sp.jpg); }
       .step:nth-child(2) { background-image: url(/assets/images/step2_sp.jpg); }
@@ -3295,23 +3312,19 @@
     <p class="section-desc">LINEで相談するだけ。あとはお任せください。</p>
     <div class="steps">
       <div class="step">
-        <div class="step-num">STEP 1</div>
-        <h3>LINEで相談・予約</h3>
+        <div class="step-head"><span>STEP 1</span>LINEで相談・予約</div>
         <p>車種・依頼内容・ご都合を教えてください。スムーズに日程調整できます。</p>
       </div>
       <div class="step">
-        <div class="step-num">STEP 2</div>
-        <h3>整備士が自宅に訪問</h3>
+        <div class="step-head"><span>STEP 2</span>整備士が自宅に訪問</div>
         <p>ご自宅の駐車場へ伺います。鍵の受け渡しのみでOK。作業中は外出・在宅どちらでも。</p>
       </div>
       <div class="step">
-        <div class="step-num">STEP 3</div>
-        <h3>作業・説明</h3>
+        <div class="step-head"><span>STEP 3</span>作業・説明</div>
         <p>作業完了後、整備士が直接ご説明。何をしたか、今後気をつける点を丁寧にお伝えします。</p>
       </div>
       <div class="step">
-        <div class="step-num">STEP 4</div>
-        <h3>レポート＆お支払い</h3>
+        <div class="step-head"><span>STEP 4</span>レポート＆お支払い</div>
         <p>作業内容の写真つきレポートをLINEで送付。お支払いはキャッシュレス対応です。</p>
       </div>
     </div>
