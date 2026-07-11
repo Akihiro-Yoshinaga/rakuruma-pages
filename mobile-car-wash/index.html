@@ -47,6 +47,87 @@
     }
 }
 
+/* ===== CTAボタン共通（整備ページと同型のホバー） ===== */
+.wash-cta {
+    text-align: center;
+    margin: 48px auto 0;
+    padding: 0 20px;
+}
+.wash-cta__micro {
+    display: block;
+    font-size: 14px;
+    font-weight: 800;
+    color: #003B8B;
+    letter-spacing: 0.04em;
+    margin-bottom: 14px;
+    line-height: 1;
+}
+.wash-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #1355b8 0%, #003B8B 100%);
+    color: #fff;
+    text-decoration: none;
+    padding: 18px 44px;
+    border-radius: 50px;
+    box-shadow: 0 6px 24px rgba(0, 59, 139, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.wash-cta__btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(0, 59, 139, 0.45);
+}
+.wash-cta__btn--line {
+    background: linear-gradient(135deg, #0bd463 0%, #06B34C 100%);
+    box-shadow: 0 6px 24px rgba(6, 199, 85, 0.35);
+}
+.wash-cta__btn--line:hover {
+    box-shadow: 0 10px 32px rgba(6, 199, 85, 0.45);
+}
+.wash-cta__icon {
+    font-size: 22px;
+    line-height: 1;
+}
+.wash-cta__main {
+    display: block;
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+}
+.wash-cta__sub {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.85;
+    margin-top: 3px;
+    letter-spacing: 0.03em;
+}
+@media (max-width: 768px) {
+    .wash-cta__btn {
+        width: 100%;
+        max-width: 340px;
+        padding: 17px 24px;
+    }
+}
+/* 既存のLINEボタン・予約送信ボタンにもホバーを追加 */
+a[href^="https://lin.ee"] {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+a[href^="https://lin.ee"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(6, 199, 85, 0.45) !important;
+}
+#rakuruma-form-wrap .rf-submit-btn {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+#rakuruma-form-wrap .rf-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(37, 99, 168, 0.45);
+}
+
 /* エリアマップ */
 .map img {
     width: 100%;
@@ -759,6 +840,16 @@
                 </div>
 
                 <p class="cmp-legend"><b>◎</b> とても良い　<b>○</b> 良い　<b>△</b> 条件つき　<b>✕</b> 不向き<br>※比較内容は一般的なサービス内容をもとにした当社調べです。</p>
+
+                <div class="wash-cta">
+                <span class="wash-cta__micro">＼ 拘束時間0分・駐車場代0円 ／</span>
+                <a href="#calendar-container" class="wash-cta__btn">
+                    <span>
+                        <span class="wash-cta__main">初回お試し 6,000円で予約する</span>
+                        <span class="wash-cta__sub">全サイズ均一・予約は30秒で完了</span>
+                    </span>
+                </a>
+            </div>
             </div>
         </section>
 
@@ -1007,6 +1098,16 @@
                             <span class="review-indicator" data-index="4" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
                             <span class="review-indicator" data-index="5" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
                         </div>
+
+                        <div class="wash-cta">
+                <span class="wash-cta__micro">＼ 口コミ24件すべて★5 ／</span>
+                <a href="#calendar-container" class="wash-cta__btn">
+                    <span>
+                        <span class="wash-cta__main">空き状況を確認して予約する</span>
+                        <span class="wash-cta__sub">初回限定・全サイズ6,000円</span>
+                    </span>
+                </a>
+            </div>
 
                         <!-- 自動スクロール制御 -->
                         <script>
@@ -1950,6 +2051,16 @@
                     <p class="fonts">現金、PayPay、各種カード、タッチ決済をご使用いただけます。<br class="pc">※非対面の場合はオンラインカード決済をご利用いただけます。</p>
                 </li>
             </ol>
+
+            <div class="wash-cta">
+                <span class="wash-cta__micro">＼ 予約はWebで完結 ／</span>
+                <a href="#calendar-container" class="wash-cta__btn">
+                    <span>
+                        <span class="wash-cta__main">カレンダーで空き状況を見る</span>
+                        <span class="wash-cta__sub">初回限定・全サイズ6,000円</span>
+                    </span>
+                </a>
+            </div>
         </section>
 
         <section class="map area_s">
@@ -2016,6 +2127,16 @@
                     </div>
 
                     <p class="fontss attention" style="margin-top: 0;">※税込み・出張費込み<br>※料金表の詳細は<a href="/price_list">こちら</a></p>
+
+                <div class="wash-cta">
+                <span class="wash-cta__micro">＼ 定期プランは体験後に選べます ／</span>
+                <a href="#calendar-container" class="wash-cta__btn">
+                    <span>
+                        <span class="wash-cta__main">まずは初回6,000円でお試し</span>
+                        <span class="wash-cta__sub">全サイズ均一価格</span>
+                    </span>
+                </a>
+            </div>
                 </div>
             </div>
         </section>
@@ -2056,6 +2177,17 @@
                         <dd class="fonts">万が一破損などのトラブルがあった場合は、損害保険に加入しているので、保険適用の範囲内にて保証いたします。トラブルを事前に防ぐためにも、貴重品や手を触れてほしくない物などはお客様の責任において厳重な管理をお願いいたします。（詳細は利用規約をご確認ください。）</dd>
                     </dl>
                 </div>
+
+                <div class="wash-cta">
+                <span class="wash-cta__micro">＼ 疑問・不安はお気軽に ／</span>
+                <a href="https://lin.ee/r0BAZkR0" class="wash-cta__btn wash-cta__btn--line" target="_blank" rel="noopener noreferrer">
+                    <span class="wash-cta__icon">💬</span>
+                    <span>
+                        <span class="wash-cta__main">LINEで質問する</span>
+                        <span class="wash-cta__sub">無料・お気軽にどうぞ</span>
+                    </span>
+                </a>
+            </div>
             </div>
         </section>
 
