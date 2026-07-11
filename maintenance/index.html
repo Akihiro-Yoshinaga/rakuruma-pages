@@ -1726,21 +1726,51 @@
     .rak-list {
       display: flex;
       flex-direction: column;
-      gap: 0;
+      gap: 44px;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 24px 56px;
     }
 
     .rak-item {
-      overflow: hidden;
-    }
-
-    .rak-body {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 24px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
     }
 
     .rak-item:nth-child(even) {
-      background: var(--color-bg-gray);
+      flex-direction: row-reverse;
+    }
+
+    .rak-img {
+      flex: 0 0 42%;
+      aspect-ratio: 4 / 3;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-medium);
+    }
+
+    .rak-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .rak-body {
+      flex: 1;
+    }
+
+    @media (max-width: 700px) {
+      .rak-item,
+      .rak-item:nth-child(even) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+      .rak-img {
+        flex: none;
+        width: 100%;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1754,11 +1784,12 @@
     }
 
     .rak-num {
+      font-family: var(--font-secondary);
       font-size: var(--font-size-xs);
       font-weight: var(--font-weight-bold);
       letter-spacing: 3px;
-      color: var(--color-accent-mint);
-      margin-bottom: var(--spacing-md);
+      color: var(--color-primary-blue);
+      margin-bottom: 10px;
     }
 
     .rak-title {
@@ -2616,29 +2647,8 @@
         padding: 60px 20px;
       }
 
-      .rak-item {
-        grid-template-columns: 1fr;
-        direction: ltr !important;
-      }
-
       .member-two-col {
         grid-template-columns: 1fr !important;
-      }
-
-      .rak-item:nth-child(even) {
-        direction: ltr;
-      }
-
-      .rak-item:nth-child(even) > * {
-        direction: ltr;
-      }
-
-      .rak-body {
-        padding: 32px 24px;
-      }
-
-      .rak-img {
-        min-height: 200px;
       }
 
       .voice-card {
@@ -3166,26 +3176,29 @@
   <div class="rak-list">
 
     <div class="rak-item">
+      <div class="rak-img"><img src="/assets/images/works-diagnosis.jpg" alt="国家1級整備士による点検作業" loading="lazy"></div>
       <div class="rak-body">
-        <div class="rak-num">MERIT 01</div>
+        <div class="rak-num">POINT 1</div>
         <h3 class="rak-title">診るのは、<span class="rak-keyword">いつもの担当者</span></h3>
-        <p class="rak-desc">毎回同じ国家1級整備士が伺います。前回あなたの車を触った担当者だから、状態を把握したうえで話が早く、提案も的確です。</p>
+        <p class="rak-desc">毎回同じ国家1級整備士が担当します。</p>
       </div>
     </div>
 
     <div class="rak-item">
+      <div class="rak-img"><img src="/assets/images/step1.jpg" alt="LINEで届く写真つき作業レポート" loading="lazy"></div>
       <div class="rak-body">
-        <div class="rak-num">MERIT 02</div>
+        <div class="rak-num">POINT 2</div>
         <h3 class="rak-title">履歴は<span class="rak-keyword">LINEのカルテ</span>に残る</h3>
-        <p class="rak-desc">パーツ取付も、整備も、車検も。作業内容は写真つきレポートでLINEに記録されます。「前回いつ何をやったっけ？」を思い出す必要はありません。</p>
+        <p class="rak-desc">写真つきレポートで作業内容を記録。</p>
       </div>
     </div>
 
     <div class="rak-item">
+      <div class="rak-img"><img src="/assets/images/toppic_2.jpg" alt="ラクルマの担当整備士" loading="lazy"></div>
       <div class="rak-body">
-        <div class="rak-num">MERIT 03</div>
+        <div class="rak-num">POINT 3</div>
         <h3 class="rak-title"><span class="rak-keyword">"どこに頼むか"</span>で悩まなくなる</h3>
-        <p class="rak-desc">見積もり比較や店探しに、時間を使わなくてよくなります。困ったら、いつもの担当者にLINEで聞くだけ。それだけで済むようになります。</p>
+        <p class="rak-desc">困ったら、いつもの担当者に聞くだけ。</p>
       </div>
     </div>
 
