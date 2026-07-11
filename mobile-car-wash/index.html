@@ -128,6 +128,52 @@ a[href^="https://lin.ee"]:hover {
     box-shadow: 0 8px 22px rgba(37, 99, 168, 0.45);
 }
 
+/* ===== 追従CTA（下部固定バー・このページ専用の表示制御） ===== */
+.button_area {
+    transform: translateY(110%);
+    transition: transform 0.3s ease;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+.button_area.is-visible {
+    transform: translateY(0);
+}
+.button_area .flexbox .button_b,
+.button_area .flexbox .button_g {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.button_area .flexbox .button_b:hover,
+.button_area .flexbox .button_g:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+@media (max-width: 599px) {
+    .button_area {
+        height: auto;
+        padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, 0.96);
+        border-top: 1px solid #EAEAEA;
+        transform: translateY(110%);
+    }
+    .button_area.is-visible {
+        transform: translateY(0);
+    }
+    .button_area .flexbox {
+        padding: 0;
+        gap: 8px;
+    }
+    .button_area .flexbox .button_b,
+    .button_area .flexbox .button_g {
+        width: 50%;
+        padding: 14px 4px;
+    }
+    .button_area .flexbox .button_b a,
+    .button_area .flexbox .button_g a {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+}
+
 /* エリアマップ */
 .map img {
     width: 100%;
@@ -2713,5 +2759,35 @@ a[href^="https://lin.ee"]:hover {
       </nav>
       <p class="rk-sitefooter__copy">© ラクルマ｜世田谷区・目黒区・渋谷区の出張洗車・整備・パーツ取付</p>
     </footer>
+
+    <!-- 追従CTA（FV通過後に出現、予約フォーム表示中は隠れる） -->
+    <div class="button_area bk_w" id="wash-fixed-cta">
+        <div class="flexbox">
+            <div class="button_b fonts bold"><a href="#calendar-container">初回6,000円で予約する</a></div>
+            <div class="button_g fonts bold"><a href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener noreferrer">無料LINE相談</a></div>
+        </div>
+    </div>
+    <script>
+    (function() {
+        var bar = document.getElementById('wash-fixed-cta');
+        var form = document.getElementById('calendar-container');
+        var pastFV = false;
+        var formVisible = false;
+        function update() {
+            bar.classList.toggle('is-visible', pastFV && !formVisible);
+        }
+        function onScroll() {
+            pastFV = window.scrollY > window.innerHeight * 0.7;
+            if (form) {
+                var r = form.getBoundingClientRect();
+                formVisible = r.top < window.innerHeight && r.bottom > 0;
+            }
+            update();
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll, { passive: true });
+        onScroll();
+    })();
+    </script>
 </body>
 </html>
