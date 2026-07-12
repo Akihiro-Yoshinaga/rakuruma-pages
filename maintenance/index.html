@@ -1952,93 +1952,86 @@
       background: var(--color-bg-gray);
     }
 
-    /* 担当者：写真＋安心根拠の2カラム */
-    .member-layout {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 32px;
-      align-items: start;
-      max-width: 900px;
-      margin-top: 8px;
-    }
-
-    .member-photo-card {
-      border-radius: var(--card-radius);
-      overflow: hidden;
+    /* 担当者：プロフィールカード（洗車LPと同型） */
+    .prof-card {
       background: #fff;
+      border: 1px solid var(--color-border-light);
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      max-width: 860px;
+      margin-top: 8px;
       box-shadow: var(--shadow-light);
     }
 
-    .member-photo-card img {
+    .prof-pic {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .prof-pic img {
       width: 100%;
-      aspect-ratio: 4/5;
+      height: 100%;
       object-fit: cover;
       object-position: center 20%;
-      display: block;
     }
 
-    .member-photo-caption {
-      padding: 14px 18px 16px;
-    }
-
-    .member-photo-name {
+    .prof-name {
       font-size: 17px;
       font-weight: 800;
-      color: var(--color-text-primary);
-      letter-spacing: 0.02em;
+      color: var(--color-primary-blue);
+      margin-bottom: 12px;
     }
 
-    .member-photo-role {
-      font-size: 12px;
+    .prof-lead {
+      font-size: 15px;
       font-weight: 700;
-      color: var(--color-primary-blue);
-      margin-top: 4px;
-    }
-
-    .member-reasons {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .member-reason {
-      background: #fff;
-      border-left: 3px solid var(--color-primary-blue);
-      border-radius: 0 var(--card-radius) var(--card-radius) 0;
-      padding: 18px 20px;
-      box-shadow: var(--shadow-light);
-    }
-
-    .member-reason-label {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      color: var(--color-primary-blue);
-      margin-bottom: 6px;
-    }
-
-    .member-reason-title {
-      font-size: 17px;
-      font-weight: 800;
       color: var(--color-text-primary);
-      line-height: 1.5;
-      margin-bottom: 6px;
+      line-height: 1.8;
+      margin-bottom: 14px;
     }
 
-    .member-reason-desc {
-      font-size: 13px;
-      color: var(--color-text-secondary);
+    .prof-dl {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      font-size: 14px;
       line-height: 1.7;
     }
 
-    @media (max-width: 768px) {
-      .member-layout {
-        grid-template-columns: 1fr;
-        gap: 22px;
+    .prof-dl dt {
+      color: #999;
+      padding: 9px 0;
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    .prof-dl dd {
+      padding: 9px 0;
+      border-top: 1px solid var(--color-border-light);
+      color: var(--color-text-primary);
+    }
+
+    @media (max-width: 700px) {
+      .prof-card {
+        flex-direction: column;
+        align-items: center;
+        padding: 28px 18px;
+        gap: 18px;
       }
-      .member-photo-card {
-        max-width: 300px;
-        margin: 0 auto;
+      .prof-pic {
+        width: 180px;
+        height: 180px;
+      }
+      .prof-name {
+        text-align: center;
+      }
+      .prof-dl {
+        grid-template-columns: 56px 1fr;
+        font-size: 13px;
       }
     }
 
@@ -3312,35 +3305,23 @@
 <!-- MEMBER -->
 <section class="member-section">
   <div class="section-inner">
-    <div class="section-label">TEAM</div>
+    <div class="section-label">SERVICE CREW</div>
     <h2 class="section-title">すべての作業を、<br>国家1級整備士が監修。</h2>
     <p class="section-desc">
       資格・保険・作業報告。安心の根拠を揃えてお迎えします。
     </p>
-    <div class="member-layout">
-      <div class="member-photo-card">
-        <img src="/assets/images/team-yoshinaga.jpg" alt="ラクルマ 国家1級自動車整備士 吉永" loading="lazy">
-        <div class="member-photo-caption">
-          <div class="member-photo-name">吉永 明拓</div>
-          <div class="member-photo-role">国家1級自動車整備士 / 自動車検査員</div>
-        </div>
+    <div class="prof-card">
+      <div class="prof-pic">
+        <img src="/assets/images/team-yoshinaga.jpg" alt="ラクルマ代表 国家1級自動車整備士 吉永明拓" loading="lazy">
       </div>
-      <div class="member-reasons">
-        <div class="member-reason">
-          <div class="member-reason-label">整備品質</div>
-          <div class="member-reason-title">国家1級整備士・検査員が作業</div>
-          <p class="member-reason-desc">輸入車・国産車を問わず、妥協なく丁寧に。</p>
-        </div>
-        <div class="member-reason">
-          <div class="member-reason-label">お客様対応</div>
-          <div class="member-reason-title">作業内容は写真つきでLINE報告</div>
-          <p class="member-reason-desc">何をしたかが一目でわかり、はじめてでも安心。</p>
-        </div>
-        <div class="member-reason">
-          <div class="member-reason-label">安心の保証</div>
-          <div class="member-reason-title">損害保険加入済み・出張費無料</div>
-          <p class="member-reason-desc">万が一の際も保険で対応します。</p>
-        </div>
+      <div class="prof-text">
+        <div class="prof-name">吉永 明拓［代表］</div>
+        <p class="prof-lead">国家一級整備士として、必要なことだけを誠実にお届けし、安心して頼れる存在を目指します。</p>
+        <dl class="prof-dl">
+          <dt>出身</dt><dd>埼玉県越谷市生まれ／埼玉自動車大学校 卒</dd>
+          <dt>経歴</dt><dd>元HONDA正規ディーラー8年勤務・自動車検査員</dd>
+          <dt>趣味</dt><dd>レース観戦（F1・SUPER GT）、ダーツ、テニス</dd>
+        </dl>
       </div>
     </div>
   </div>
