@@ -9,13 +9,151 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/rakuruma-style.css">
 <link rel="stylesheet" href="/price_list/price_list_style.css">
+<style>
+/* ===== 固定ヘッダー＋ハンバーガーメニュー（洗車LP・整備ページと同型） ===== */
+/* 共通CSSの html,body{height:100%} だと sticky が1画面目以降で効かないため解除 */
+html, body {
+    height: auto;
+}
+body {
+    background: #ffffff;
+}
+.rk-header {
+    position: sticky;
+    top: 0;
+    z-index: 1200;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
+}
+.rk-header__logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+}
+.rk-menu-btn {
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+}
+.rk-menu-btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #003B8B;
+    border-radius: 2px;
+    transition: transform 0.25s, opacity 0.25s;
+}
+body.rk-menu-open .rk-menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.rk-menu-open .rk-menu-btn span:nth-child(2) { opacity: 0; }
+body.rk-menu-open .rk-menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.rk-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 20, 40, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 1198;
+}
+body.rk-menu-open .rk-menu-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+.rk-menu-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(300px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    background: #fff;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
+    padding: 80px 28px 32px;
+    overflow-y: auto;
+    transform: translateX(105%);
+    transition: transform 0.3s ease;
+    z-index: 1199;
+}
+body.rk-menu-open .rk-menu-panel {
+    transform: translateX(0);
+}
+.rk-menu-panel a {
+    display: block;
+    padding: 13px 4px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-decoration: none;
+    border-bottom: 1px solid #edf0f4;
+}
+.rk-menu-panel a:hover {
+    color: #003B8B;
+}
+.rk-menu-divider {
+    margin: 18px 0 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8a94a3;
+    letter-spacing: 0.08em;
+}
+.rk-menu-panel a.rk-menu-line-btn {
+    background: #06C755;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 14px;
+    border-bottom: none;
+}
+/* アンカー着地位置を固定ヘッダー分下げる */
+[id] {
+    scroll-margin-top: 70px;
+}
+</style>
 </head>
 <body>
+<!-- 固定ヘッダー -->
+<header class="rk-header">
+    <a href="/" class="rk-header__logo" aria-label="ラクルマ トップページ">
+        <img src="/assets/images/logo.svg" alt="ラクルマ">
+    </a>
+    <button class="rk-menu-btn" aria-label="メニューを開閉" onclick="rkToggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+<div class="rk-menu-overlay" onclick="rkToggleMenu()"></div>
+<nav class="rk-menu-panel" aria-label="ページ内メニュー">
+    <div class="rk-menu-divider">このページ</div>
+    <a href="#plans" onclick="rkToggleMenu()">３つのプラン</a>
+    <a href="#size" onclick="rkToggleMenu()">サイズ区分</a>
+    <a href="#package" onclick="rkToggleMenu()">パッケージ内容</a>
+    <a href="#option" onclick="rkToggleMenu()">オプション一覧</a>
+    <a href="#howto" onclick="rkToggleMenu()">利用方法</a>
+    <a href="#terms" onclick="rkToggleMenu()">利用規約</a>
+    <div class="rk-menu-divider">その他のサービス</div>
+    <a href="/mobile-car-wash/">出張洗車</a>
+    <a href="/maintenance/">出張整備・パーツ取付</a>
+    <a href="/blog/">作業実績ブログ</a>
+    <a href="https://lin.ee/r0BAZkR0" class="rk-menu-line-btn" target="_blank" rel="noopener noreferrer">💬 LINEで相談</a>
+</nav>
+<script>function rkToggleMenu() { document.body.classList.toggle('rk-menu-open'); }</script>
+
 <section class="page_head">
 <h2 class="bold">定期利用プラン料金</h2>
 <p class="fonts">定期利用プランとは、サブスクリプションで利用<br class="sp">できる洗車・車両の点検サービスです。<br />通常料金(単発)よりもお得に利用できます。</p>
 </section>
-<section class="about_choice bk_lb">
+<section class="about_choice bk_lb" id="plans">
 <div class="area_s">
 <h2 class="headline fontxl bold"><span class="colorfont_b">３つのプラン</span>から選択</h2>
 <ul class="flexbox fontm bold">
@@ -116,7 +254,7 @@
 <p class="fontss">※すべて税込み・出張費込み</p>
 </div>
 </section>
-<section class="about_size area_s">
+<section class="about_size area_s" id="size">
 <h2 class="headline fontxl bold">サイズ区分</h2>
 <table>
 <tbody>
@@ -138,7 +276,7 @@
 </tbody>
 </table>
 </section>
-<section class="about_package area_s">
+<section class="about_package area_s" id="package">
 <h2 class="headline fontxl bold">パッケージ内容（共通）</h2>
 <ul class="flexbox grid_box">
 <li class="box_child">
@@ -175,7 +313,7 @@
 </li>
 </ul>
 </section>
-<section class="about_clean area_s">
+<section class="about_clean area_s" id="option">
 <h2 class="headline fontxl bold">クリーニングオプション一覧</h2>
 <div class="fonts">快適にお乗りいただけるお勧め項目</div>
 <ul class="flexbox grid_box">
@@ -203,7 +341,7 @@
 </section>
 
 <!-- 定期利用プランの利用方法 -->
-<section class="howtouse_plan bk_lb">
+<section class="howtouse_plan bk_lb" id="howto">
 <div class="area_s">
 <h2 class="headline fontxl bold">定期利用プランの利用方法</h2>
 <ol>
@@ -346,5 +484,16 @@
 </div>
 </div>
 
+<script>
+(function() {
+    var bar = document.querySelector('.button_area');
+    if (!bar) return;
+    function onScroll() {
+        bar.classList.toggle('active', window.scrollY > window.innerHeight * 0.7);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+})();
+</script>
 </body>
 </html>
