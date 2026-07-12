@@ -759,20 +759,11 @@
 
     /* ===== WORKS セクション ===== */
     .works-section {
-      background: var(--color-primary-blue);
-      color: var(--color-text-white);
+      background: var(--color-bg-light-blue);
     }
 
     .works-section .section-label {
-      color: rgba(255,255,255,0.5);
-    }
-
-    .works-section .section-title {
-      color: var(--color-text-white);
-    }
-
-    .works-section .section-desc {
-      color: rgba(255,255,255,0.75);
+      color: var(--color-primary-blue);
     }
 
     .works-headline {
@@ -780,18 +771,18 @@
       font-weight: var(--font-weight-bold);
       line-height: 1.35;
       margin-bottom: var(--spacing-md);
-      color: var(--color-text-white);
+      color: var(--color-text-primary);
     }
 
     .works-headline span {
-      color: var(--color-accent-mint);
+      color: var(--color-primary-blue);
     }
 
     /* 車種で絞り込むチップ */
     .works-filter-label {
       font-size: 14px;
       font-weight: var(--font-weight-bold);
-      color: rgba(255,255,255,0.7);
+      color: var(--color-text-secondary);
       margin-top: var(--spacing-xl);
       margin-bottom: 10px;
     }
@@ -801,9 +792,9 @@
       flex-wrap: wrap;
     }
     .works-filter-chip {
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.88);
+      border: 1.5px solid rgba(26, 82, 160, 0.25);
+      background: #fff;
+      color: var(--color-primary-blue);
       border-radius: 999px;
       padding: 9px 18px;
       font-size: 14px;
@@ -813,24 +804,24 @@
       white-space: nowrap;
       transition: all 0.15s;
     }
-    .works-filter-chip:hover { background: rgba(255,255,255,0.18); }
+    .works-filter-chip:hover { background: #eef4fc; }
     .works-filter-chip.active {
-      background: var(--color-accent-mint);
-      color: var(--color-primary-blue);
-      border-color: var(--color-accent-mint);
+      background: var(--color-primary-blue);
+      color: #fff;
+      border-color: var(--color-primary-blue);
     }
     /* 車種行（メーカー選択時のみ表示）はメーカー行と区別して一段小さく */
     .works-filter-model { margin-top: 10px; }
     .works-filter-model .works-filter-chip {
       padding: 7px 15px;
       font-size: 13px;
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.22);
+      background: #f7fafd;
+      border-color: rgba(26, 82, 160, 0.18);
     }
     .works-filter-model .works-filter-chip.active {
-      background: var(--color-accent-mint);
-      color: var(--color-primary-blue);
-      border-color: var(--color-accent-mint);
+      background: var(--color-primary-blue);
+      color: #fff;
+      border-color: var(--color-primary-blue);
     }
 
     /* works carousel */
@@ -853,9 +844,10 @@
     .works-track::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
     .work-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-top: 3px solid var(--color-accent-mint);
+      background: #fff;
+      border: 1px solid var(--color-border-light);
+      border-top: 3px solid var(--color-primary-blue);
+      box-shadow: var(--shadow-light);
       border-radius: var(--card-radius);
       overflow: hidden;
       transition: var(--transition-smooth);
@@ -872,12 +864,12 @@
     .work-card-img {
       width: 100%;
       aspect-ratio: 4/3;
-      background: rgba(255,255,255,0.08);
+      background: var(--color-bg-light-blue);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 36px;
-      color: rgba(255,255,255,0.3);
+      color: rgba(26, 82, 160, 0.3);
       overflow: hidden;
     }
 
@@ -893,7 +885,7 @@
 
     .work-card-date {
       font-size: var(--font-size-xs);
-      color: var(--color-accent-mint);
+      color: var(--color-primary-blue);
       font-weight: var(--font-weight-bold);
       letter-spacing: 0.5px;
       margin-bottom: 6px;
@@ -902,18 +894,18 @@
     .work-card-title {
       font-size: var(--font-size-sm);
       font-weight: var(--font-weight-bold);
-      color: var(--color-text-white);
+      color: var(--color-text-primary);
       line-height: var(--line-height-normal);
     }
 
     .work-card-tag {
       display: inline-block;
       margin-top: var(--spacing-sm);
-      background: rgba(255,255,255,0.1);
+      background: var(--color-bg-light-blue);
       border-radius: var(--radius-sm);
       padding: 3px 10px;
       font-size: var(--font-size-xs);
-      color: rgba(255,255,255,0.7);
+      color: var(--color-text-secondary);
     }
 
     .work-card.is-link { display: block; text-decoration: none; cursor: pointer; }
@@ -922,7 +914,7 @@
       margin-top: var(--spacing-sm);
       font-size: var(--font-size-xs);
       font-weight: var(--font-weight-bold);
-      color: var(--color-accent-mint);
+      color: var(--color-primary-blue);
     }
 
     /* ===== TROUBLE セクション ===== */
@@ -1957,16 +1949,7 @@
 
     /* ===== MEMBER セクション ===== */
     .member-section {
-      background: var(--color-primary-blue);
-      color: var(--color-text-white);
-    }
-
-    .member-section .section-label {
-      color: rgba(255,255,255,0.5);
-    }
-
-    .member-section .section-title {
-      color: var(--color-text-white);
+      background: var(--color-bg-gray);
     }
 
     /* 担当者：写真＋安心根拠の2カラム */
@@ -1982,8 +1965,8 @@
     .member-photo-card {
       border-radius: var(--card-radius);
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: #fff;
+      box-shadow: var(--shadow-light);
     }
 
     .member-photo-card img {
@@ -2001,14 +1984,14 @@
     .member-photo-name {
       font-size: 17px;
       font-weight: 800;
-      color: #fff;
+      color: var(--color-text-primary);
       letter-spacing: 0.02em;
     }
 
     .member-photo-role {
       font-size: 12px;
       font-weight: 700;
-      color: var(--color-accent-mint);
+      color: var(--color-primary-blue);
       margin-top: 4px;
     }
 
@@ -2023,6 +2006,7 @@
       border-left: 3px solid var(--color-primary-blue);
       border-radius: 0 var(--card-radius) var(--card-radius) 0;
       padding: 18px 20px;
+      box-shadow: var(--shadow-light);
     }
 
     .member-reason-label {
@@ -3081,7 +3065,7 @@
   <div class="section-inner">
     <div class="section-label">WORKS · REPORT</div>
     <h2 class="works-headline">作業実績、<span>すべて公開中。</span></h2>
-    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
+    <p class="section-desc">
       すべての作業を記録し、ブログで公開しています。
     </p>
     <div class="works-filter-label" id="worksFilterLabel" style="display:none;">メーカーで絞り込む</div>
@@ -3093,7 +3077,7 @@
         <div class="work-card" style="justify-content:center;align-items:center;min-height:200px;">
           <div class="work-card-body" style="text-align:center;padding:40px 20px;">
             <div style="font-size:24px;margin-bottom:12px;">⏳</div>
-            <div style="color:rgba(255,255,255,0.5);font-size:14px;">読み込み中...</div>
+            <div style="color:var(--color-text-muted);font-size:14px;">読み込み中...</div>
           </div>
         </div>
       </div>
@@ -3330,7 +3314,7 @@
   <div class="section-inner">
     <div class="section-label">TEAM</div>
     <h2 class="section-title">すべての作業を、<br>国家1級整備士が監修。</h2>
-    <p class="section-desc" style="color:rgba(255,255,255,0.75);">
+    <p class="section-desc">
       資格・保険・作業報告。安心の根拠を揃えてお迎えします。
     </p>
     <div class="member-layout">
@@ -3704,7 +3688,7 @@
   function buildWorkCards(works) {
     const track = document.getElementById('worksTrack');
     if (!works || works.length === 0) {
-      track.innerHTML = '<div class="work-card" style="min-width:300px;max-width:300px;"><div class="work-card-body"><div class="work-card-title" style="color:rgba(255,255,255,0.5);">この車種の実績はまだありません</div></div></div>';
+      track.innerHTML = '<div class="work-card" style="min-width:300px;max-width:300px;"><div class="work-card-body"><div class="work-card-title" style="color:var(--color-text-muted);">この車種の実績はまだありません</div></div></div>';
     } else {
       track.innerHTML = works.map(function(w) {
         const img = w.photo
