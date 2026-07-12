@@ -947,80 +947,46 @@ a[href^="https://lin.ee"]:hover {
             </div>
         </section>
 
-        <section class="point" id="points" style="padding: 80px 0 70px; background-color: #ffffff;">
-            <style>
-                .rk-points-inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-                .rk-points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-                .rk-point-card {
-                    background: #fff;
-                    border: 1px solid #e8edf4;
-                    border-radius: 16px;
-                    overflow: hidden;
-                    box-shadow: 0 8px 28px rgba(0, 59, 139, 0.08);
-                }
-                .rk-point-card__img { height: 170px; overflow: hidden; }
-                .rk-point-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-                .rk-point-card__body { padding: 22px 20px 26px; text-align: center; }
-                .rk-point-card__label {
-                    font-family: 'Montserrat', sans-serif;
-                    font-size: 12px; font-weight: 700; color: #8a94a3;
-                    letter-spacing: 0.14em; margin-bottom: 8px;
-                }
-                .rk-point-card__title { font-size: 22px; font-weight: 900; color: #003B8B; line-height: 1.35; margin-bottom: 10px; }
-                .rk-point-card__desc { font-size: 14px; color: #555; line-height: 1.7; margin: 0; }
-                .rk-points-hint { display: none; }
-                @media (max-width: 768px) {
-                    /* スマホ: 横スワイプのカルーセル */
-                    .rk-points {
-                        display: flex;
-                        overflow-x: auto;
-                        scroll-snap-type: x mandatory;
-                        gap: 14px;
-                        margin: 0 -24px;
-                        padding: 4px 24px 16px;
-                        -webkit-overflow-scrolling: touch;
-                        scrollbar-width: none;
-                    }
-                    .rk-points::-webkit-scrollbar { display: none; }
-                    .rk-point-card { flex: 0 0 78%; max-width: 300px; scroll-snap-align: center; }
-                    .rk-point-card__img { height: 150px; }
-                    .rk-point-card__title { font-size: 20px; }
-                    .rk-points-hint {
-                        display: block; text-align: center;
-                        font-size: 12px; color: #8a94a3; margin: 6px 0 0;
-                    }
-                }
-            </style>
-            <div class="rk-points-inner">
-                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 44px;">ラクルマが選ばれる<span class="colorfont_b">3つのポイント</span></h2>
-                <div class="rk-points">
-                    <div class="rk-point-card">
-                        <div class="rk-point-card__img"><img src="/assets/uploads/2025/09/IMG_8034-scaled.jpg" alt="バイクで訪問するスタッフ" loading="lazy"></div>
-                        <div class="rk-point-card__body">
-                            <div class="rk-point-card__label">POINT 1</div>
-                            <div class="rk-point-card__title">駐車場代 ¥0</div>
-                            <p class="rk-point-card__desc">バイクで伺うから、狭い駐車場や月極駐車場でもそのまま施工できます。</p>
-                        </div>
+        <section class="point area_l" id="points">
+            <h2 class="headline fontxl bold">ラクルマが選ばれる<span class="colorfont_b">3つのポイント</span></h2>
+            <ul class="content_container">
+                <li class="flexbox">
+                    <div class="image_frame">
+                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_8034-scaled.jpg); background-size: cover; background-position: center;"></div>
                     </div>
-                    <div class="rk-point-card">
-                        <div class="rk-point-card__img"><img src="/assets/uploads/2025/08/479529b40188fb49868caf63883b5f8a.png" alt="スマホで簡単予約" loading="lazy" style="object-position: center 40%;"></div>
-                        <div class="rk-point-card__body">
-                            <div class="rk-point-card__label">POINT 2</div>
-                            <div class="rk-point-card__title">予約は30秒、<br>スマホで完結</div>
-                            <p class="rk-point-card__desc">立ち会い不要。洗車中の時間は、まるごと自由時間に。</p>
+                    <div class="textarea">
+                        <div class="subhead fontll bold">
+                            <div class="montserrat colorfont_b">POINT 1</div>
+                            <div class="smallhead">駐車場代 ¥0</div>
                         </div>
+                        <div class="fonts">バイクで伺うから、狭い駐車場や月極駐車場でもそのまま施工できます。</div>
                     </div>
-                    <div class="rk-point-card">
-                        <div class="rk-point-card__img"><img src="/assets/uploads/2025/09/IMG_4869.jpg" alt="整備士による無料点検" loading="lazy"></div>
-                        <div class="rk-point-card__body">
-                            <div class="rk-point-card__label">POINT 3</div>
-                            <div class="rk-point-card__title">整備士の<br>無料点検つき</div>
-                            <p class="rk-point-card__desc">タイヤ・オイル・ライトまで、国家1級整備士がチェックします。</p>
+                </li>
+                <li class="flexbox">
+                    <div class="textarea">
+                        <div class="subhead fontll bold">
+                            <div class="montserrat colorfont_b">POINT 2</div>
+                            <div class="smallhead">予約は30秒、スマホで完結</div>
                         </div>
+                        <div class="fonts">立ち会い不要。洗車中の時間は、まるごと自由時間に。</div>
                     </div>
-                </div>
-                <p class="rk-points-hint">横にスワイプできます →</p>
-            </div>
+                    <div class="image_frame">
+                        <img src="/assets/uploads/2025/08/479529b40188fb49868caf63883b5f8a.png" alt="スマホで簡単予約" class="image_pic img_r" style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;">
+                    </div>
+                </li>
+                <li class="flexbox">
+                    <div class="image_frame">
+                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_4869.jpg); background-size: cover; background-position: center;"></div>
+                    </div>
+                    <div class="textarea">
+                        <div class="subhead fontll bold">
+                            <div class="montserrat colorfont_b">POINT 3</div>
+                            <div class="smallhead">整備士の無料点検つき</div>
+                        </div>
+                        <div class="fonts">タイヤ・オイル・ライトまで、国家1級整備士が無料でチェックします。</div>
+                    </div>
+                </li>
+            </ul>
         </section>
 
         <!-- 料金・時間比較セクション -->
