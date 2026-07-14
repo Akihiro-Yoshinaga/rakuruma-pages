@@ -480,10 +480,6 @@ function submitPhone() {
   var token = getToken();
   if (token) { fetchHistory('token=' + encodeURIComponent(token)); return; }
 
-  // 旧OAuth経路（後方互換：history-callback.html 由来のcode）
-  var code = params.get('code');
-  if (code) { fetchHistory('code=' + encodeURIComponent(code)); return; }
-
   // それ以外はLIFFで認証（LINEアプリ内なら自動ログイン）
   startLiff();
 })();
