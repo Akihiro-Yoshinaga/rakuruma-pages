@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <title>ラクルマ｜作業履歴</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -275,8 +276,7 @@ body {
 
 <script>
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
-var LINE_LOGIN_CHANNEL_ID = '2004330318';
-var CALLBACK_URL = 'https://rakuruma.com/history-callback.html';
+var LIFF_ID = '2004330318-vS44KWOy';
 var LS_KEY = 'rk_hist_token';
 
 var params = new URLSearchParams(window.location.search);
@@ -293,15 +293,35 @@ function show(id) {
   if (id === 'content') document.getElementById('footer').classList.remove('hidden');
 }
 
+// 再ログインが必要になったらLIFF認証をやり直す
 function goLineLogin() {
   clearToken();
-  var url = 'https://access.line.me/oauth2/v2.1/authorize'
-    + '?response_type=code'
-    + '&client_id=' + LINE_LOGIN_CHANNEL_ID
-    + '&redirect_uri=' + encodeURIComponent(CALLBACK_URL)
-    + '&state=history'
-    + '&scope=profile';
-  window.location.href = url;
+  startLiff();
+}
+
+// LIFFで認証してLINEのIDトークンを取得 → GASへ（LINEアプリ内なら自動ログイン＝パスワード不要）
+function startLiff() {
+  show('loading');
+  if (typeof liff === 'undefined') {
+    showError('LINEの読み込みに失敗しました。<br>通信環境の良い場所で、もう一度お試しください。');
+    return;
+  }
+  liff.init({ liffId: LIFF_ID })
+    .then(function() {
+      if (!liff.isLoggedIn()) {
+        liff.login({ redirectUri: location.href }); // 未ログイン時のみ（LINEアプリ内では通常発生しない）
+        return;
+      }
+      var idToken = liff.getIDToken();
+      if (!idToken) {
+        showError('ログイン情報を取得できませんでした。<br>もう一度お試しください。');
+        return;
+      }
+      fetchHistory('idToken=' + encodeURIComponent(idToken));
+    })
+    .catch(function(e) {
+      showError('LINEログインに失敗しました。<br><small style="color:#aaa;">' + (e && e.message ? e.message : '') + '</small>');
+    });
 }
 
 function escapeHtml(s) {
@@ -453,19 +473,19 @@ function submitPhone() {
 
 // 初期化
 (function init() {
-  document.getElementById('loginBtn').addEventListener('click', function(ev) { ev.preventDefault(); goLineLogin(); });
+  document.getElementById('loginBtn').addEventListener('click', function(ev) { ev.preventDefault(); startLiff(); });
   document.getElementById('phoneBtn').addEventListener('click', submitPhone);
 
-  var code = params.get('code');
-  var error = params.get('error');
-
-  if (error) { goLineLogin(); return; }
-  if (code)  { fetchHistory('code=' + encodeURIComponent(code)); return; }
-
-  // パラメータなし → 有効なトークンがあればそれで取得、なければログイン
+  // 有効な署名トークンがキャッシュされていれば、LIFFを通さず即取得（高速・2回目以降）
   var token = getToken();
   if (token) { fetchHistory('token=' + encodeURIComponent(token)); return; }
-  show('login');
+
+  // 旧OAuth経路（後方互換：history-callback.html 由来のcode）
+  var code = params.get('code');
+  if (code) { fetchHistory('code=' + encodeURIComponent(code)); return; }
+
+  // それ以外はLIFFで認証（LINEアプリ内なら自動ログイン）
+  startLiff();
 })();
 </script>
 </body>
