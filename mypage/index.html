@@ -64,6 +64,7 @@ body {
   text-decoration: none;
   color: inherit;
   transition: transform 0.15s;
+  cursor: pointer;
 }
 .card:active { transform: scale(0.98); }
 .card-thumb {
@@ -178,6 +179,46 @@ body {
 .panel button:disabled { opacity: 0.6; }
 .err { color: #c53030; font-size: 13px; margin-top: 14px; }
 
+/* ライトボックス（写真拡大） */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 24px 12px 40px;
+}
+.lightbox-inner {
+  background: #fff;
+  border-radius: 14px;
+  max-width: 480px;
+  width: 100%;
+  padding: 16px;
+  position: relative;
+}
+.lightbox-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #edf2f7;
+  color: #4a5568;
+  font-size: 20px;
+  line-height: 36px;
+  cursor: pointer;
+}
+.lightbox-date { font-size: 13px; color: #718096; }
+.lightbox-menu { font-size: 16px; font-weight: 700; color: #1a202c; margin: 2px 0 4px; }
+.lightbox-note { font-size: 13px; color: #4a5568; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
+.lightbox-photos img { width: 100%; border-radius: 8px; margin-bottom: 8px; display: block; }
+.lightbox-empty { text-align: center; color: #a0aec0; padding: 24px; font-size: 14px; }
+
 .hidden { display: none; }
 </style>
 </head>
@@ -222,6 +263,16 @@ body {
 
 <div id="footer" class="footer hidden">ラクルマ &copy; 2026</div>
 
+<div id="lightbox" class="lightbox hidden" onclick="closeLightbox(event)">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="閉じる">×</button>
+    <div class="lightbox-date" id="lbDate"></div>
+    <div class="lightbox-menu" id="lbMenu"></div>
+    <div class="lightbox-note" id="lbNote"></div>
+    <div class="lightbox-photos" id="lbPhotos"></div>
+  </div>
+</div>
+
 <script>
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 var LINE_LOGIN_CHANNEL_ID = '2004330318';
@@ -259,6 +310,27 @@ function escapeHtml(s) {
   });
 }
 
+// 履歴カードのタップで、その作業の写真をその場で拡大表示（GASページに飛ばない）
+function openLightbox(idx) {
+  var r = (window._reports || [])[idx];
+  if (!r) return;
+  document.getElementById('lbDate').textContent = r.date || '';
+  document.getElementById('lbMenu').textContent = r.menu || '出張洗車';
+  var noteEl = document.getElementById('lbNote');
+  noteEl.textContent = r.workNote || '';
+  noteEl.style.display = r.workNote ? 'block' : 'none';
+  var photos = r.photoUrls || (r.photoUrl ? [r.photoUrl] : []);
+  document.getElementById('lbPhotos').innerHTML = photos.length
+    ? photos.map(function(u) { return '<img src="' + escapeHtml(u) + '" alt="作業写真" loading="lazy">'; }).join('')
+    : '<div class="lightbox-empty">この作業の写真はありません</div>';
+  document.getElementById('lightbox').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+  document.getElementById('lightbox').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
 function render(data) {
   saveToken(data.token);
 
@@ -281,17 +353,18 @@ function render(data) {
   }
 
   var reports = data.reports || [];
+  window._reports = reports;
   if (reports.length > 0) {
     html += '<div class="count-bar">過去の作業：<span>' + reports.length + '件</span></div>';
     html += '<div class="list">';
-    reports.forEach(function(r) {
+    reports.forEach(function(r, idx) {
       var thumb = r.photoUrl
         ? '<img src="' + escapeHtml(r.photoUrl) + '" alt="作業写真">'
         : '<div class="card-thumb-placeholder">🚗</div>';
       var note = r.workNote
         ? '<div class="card-note">' + escapeHtml(r.workNote) + '</div>'
         : '';
-      html += '<a class="card" href="' + escapeHtml(r.viewUrl) + '">'
+      html += '<div class="card" onclick="openLightbox(' + idx + ')">'
         + '<div class="card-thumb">' + thumb + '</div>'
         + '<div class="card-body">'
         + '<div class="card-date">' + escapeHtml(r.date) + '</div>'
@@ -300,7 +373,7 @@ function render(data) {
         + '<div class="card-staff">担当：' + escapeHtml(r.staffName || '－') + '</div>'
         + '</div>'
         + '<div class="card-arrow">›</div>'
-        + '</a>';
+        + '</div>';
     });
     html += '</div>';
   } else {
