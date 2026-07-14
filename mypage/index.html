@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ラクルマ｜作業履歴</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  background: #f0f4f8;
+  min-height: 100vh;
+  color: #1a202c;
+}
+
+/* ヘッダー */
+.header {
+  background: #003B8B;
+  color: #fff;
+  padding: 20px 16px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-logo { font-size: 20px; font-weight: 800; letter-spacing: 0.05em; }
+.header-sub  { font-size: 12px; opacity: 0.75; margin-top: 2px; }
+
+/* 挨拶 */
+.greeting {
+  background: #fff;
+  padding: 18px 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.greeting-name { font-size: 16px; font-weight: 700; color: #1a202c; }
+.greeting-sub  { font-size: 13px; color: #718096; margin-top: 4px; }
+
+/* 車検満了日 */
+.insp {
+  background: #fff;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.insp-icon { font-size: 22px; }
+.insp-label { font-size: 12px; color: #718096; font-weight: 600; }
+.insp-date { font-size: 16px; font-weight: 800; color: #003B8B; }
+
+/* 件数 */
+.count-bar { padding: 12px 16px; font-size: 13px; color: #4a5568; }
+.count-bar span { font-weight: 700; color: #003B8B; }
+
+/* カードリスト */
+.list { padding: 0 12px 40px; }
+.card {
+  background: #fff;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s;
+}
+.card:active { transform: scale(0.98); }
+.card-thumb {
+  width: 96px;
+  min-height: 96px;
+  background: #e2e8f0;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.card-thumb-placeholder { font-size: 28px; color: #a0aec0; }
+.card-body { padding: 14px 14px 12px; flex: 1; min-width: 0; }
+.card-date { font-size: 13px; color: #718096; margin-bottom: 4px; }
+.card-menu {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-note {
+  font-size: 12px;
+  color: #4a5568;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-staff { font-size: 12px; color: #718096; }
+.card-arrow {
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+  color: #cbd5e0;
+  font-size: 18px;
+}
+
+/* 空状態 */
+.empty { text-align: center; padding: 60px 20px; color: #718096; }
+.empty-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-text { font-size: 14px; line-height: 1.7; }
+
+/* フッター */
+.footer { text-align: center; padding: 24px 16px; font-size: 11px; color: #a0aec0; }
+
+/* 中央パネル（ローディング・ログイン・電話入力・エラー） */
+.center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.panel {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 24px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
+  text-align: center;
+}
+.panel .logo { font-size: 24px; font-weight: 800; color: #003B8B; margin-bottom: 8px; }
+.panel p { color: #4a5568; font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #003B8B;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 20px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn-line {
+  display: block;
+  background: #06C755;
+  color: #fff;
+  text-decoration: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.icon-big { font-size: 40px; margin-bottom: 12px; }
+.panel input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1.5px solid #cbd5e0;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+.panel input:focus { outline: none; border-color: #06C755; }
+.panel button {
+  width: 100%;
+  padding: 13px;
+  background: #003B8B;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.panel button:disabled { opacity: 0.6; }
+.err { color: #c53030; font-size: 13px; margin-top: 14px; }
+
+.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div id="loading" class="center">
+  <div class="panel">
+    <div class="logo">ラクルマ</div>
+    <div class="spinner"></div>
+    <div class="msg" style="font-size:14px;color:#718096;">読み込み中...</div>
+  </div>
+</div>
+
+<div id="login" class="center hidden">
+  <div class="panel">
+    <div class="logo">ラクルマ</div>
+    <p>過去の作業履歴を確認するには<br>LINEログインが必要です。</p>
+    <a class="btn-line" id="loginBtn" href="#">LINEでログイン</a>
+  </div>
+</div>
+
+<div id="phone" class="center hidden">
+  <div class="panel">
+    <div class="icon-big">📱</div>
+    <p style="font-weight:700;color:#1a202c;font-size:16px;margin-bottom:8px;">初回のみ電話番号を入力してください</p>
+    <p>ラクルマにご登録済みの電話番号を入力すると、<br>過去の作業履歴を確認できます。</p>
+    <input type="tel" id="phoneInput" placeholder="09012345678" inputmode="numeric">
+    <button id="phoneBtn">確認する</button>
+    <div class="err hidden" id="phoneErr"></div>
+  </div>
+</div>
+
+<div id="error" class="center hidden">
+  <div class="panel">
+    <div class="logo">ラクルマ</div>
+    <p id="errorMsg">エラーが発生しました。<br>もう一度お試しください。</p>
+    <a class="btn-line" style="background:#003B8B;" href="/mypage/">最初からやり直す</a>
+  </div>
+</div>
+
+<div id="content" class="hidden"></div>
+
+<div id="footer" class="footer hidden">ラクルマ &copy; 2026</div>
+
+<script>
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+var LINE_LOGIN_CHANNEL_ID = '2004330318';
+var CALLBACK_URL = 'https://rakuruma.com/history-callback.html';
+var LS_KEY = 'rk_hist_token';
+
+var params = new URLSearchParams(window.location.search);
+
+function getToken()   { try { return localStorage.getItem(LS_KEY) || ''; } catch (e) { return ''; } }
+function saveToken(t) { try { if (t) localStorage.setItem(LS_KEY, t); } catch (e) {} }
+function clearToken() { try { localStorage.removeItem(LS_KEY); } catch (e) {} }
+
+function show(id) {
+  ['loading', 'login', 'phone', 'error', 'content', 'footer'].forEach(function(x) {
+    document.getElementById(x).classList.add('hidden');
+  });
+  document.getElementById(id).classList.remove('hidden');
+  if (id === 'content') document.getElementById('footer').classList.remove('hidden');
+}
+
+function goLineLogin() {
+  clearToken();
+  var url = 'https://access.line.me/oauth2/v2.1/authorize'
+    + '?response_type=code'
+    + '&client_id=' + LINE_LOGIN_CHANNEL_ID
+    + '&redirect_uri=' + encodeURIComponent(CALLBACK_URL)
+    + '&state=history'
+    + '&scope=profile';
+  window.location.href = url;
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function render(data) {
+  saveToken(data.token);
+
+  var html = ''
+    + '<div class="header">'
+    + '  <div class="header-logo">ラクルマ</div>'
+    + '  <div class="header-sub">作業履歴</div>'
+    + '</div>'
+    + '<div class="greeting">'
+    + '  <div class="greeting-name">' + escapeHtml(data.customerName) + ' 様</div>'
+    + '  <div class="greeting-sub">いつもご利用いただきありがとうございます。</div>'
+    + '</div>';
+
+  if (data.inspExpiry) {
+    html += '<div class="insp">'
+      + '<div class="insp-icon">🔧</div>'
+      + '<div><div class="insp-label">次回車検満了日</div>'
+      + '<div class="insp-date">' + escapeHtml(data.inspExpiry) + '</div></div>'
+      + '</div>';
+  }
+
+  var reports = data.reports || [];
+  if (reports.length > 0) {
+    html += '<div class="count-bar">過去の作業：<span>' + reports.length + '件</span></div>';
+    html += '<div class="list">';
+    reports.forEach(function(r) {
+      var thumb = r.photoUrl
+        ? '<img src="' + escapeHtml(r.photoUrl) + '" alt="作業写真">'
+        : '<div class="card-thumb-placeholder">🚗</div>';
+      var note = r.workNote
+        ? '<div class="card-note">' + escapeHtml(r.workNote) + '</div>'
+        : '';
+      html += '<a class="card" href="' + escapeHtml(r.viewUrl) + '">'
+        + '<div class="card-thumb">' + thumb + '</div>'
+        + '<div class="card-body">'
+        + '<div class="card-date">' + escapeHtml(r.date) + '</div>'
+        + '<div class="card-menu">' + escapeHtml(r.menu || '出張洗車') + '</div>'
+        + note
+        + '<div class="card-staff">担当：' + escapeHtml(r.staffName || '－') + '</div>'
+        + '</div>'
+        + '<div class="card-arrow">›</div>'
+        + '</a>';
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="empty">'
+      + '<div class="empty-icon">📋</div>'
+      + '<div class="empty-text">まだ作業履歴がありません。<br>初回作業後にこちらに表示されます。</div>'
+      + '</div>';
+  }
+
+  document.getElementById('content').innerHTML = html;
+  show('content');
+  // URLからcode/lineIdを消す（リロード時は使用済みcodeではなくキャッシュのlineIdで再取得される）
+  if (window.location.search) {
+    try { history.replaceState(null, '', '/mypage/'); } catch (e) {}
+  }
+}
+
+function showError(msg) {
+  document.getElementById('errorMsg').innerHTML = msg || 'エラーが発生しました。<br>もう一度お試しください。';
+  show('error');
+}
+
+// GASから履歴データを取得（code＝ログイン直後 または token＝発行済み）
+function fetchHistory(query) {
+  show('loading');
+  fetch(GAS_URL + '?action=historyData&' + query)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) {
+        render(d);
+      } else if (d.needPhone) {
+        saveToken(d.token);   // 紐付け用トークンを保持
+        show('phone');
+      } else if (d.expired) {
+        clearToken();
+        goLineLogin();        // 期限切れ・不正 → 再ログイン
+      } else {
+        clearToken();
+        showError('情報を取得できませんでした。<br>もう一度LINEログインからお試しください。');
+      }
+    })
+    .catch(function() {
+      showError('通信エラーが発生しました。<br>電波の良い場所で再度お試しください。');
+    });
+}
+
+// 電話番号でLINEを紐付け（トークン経由。生のLINE IDは扱わない）
+function submitPhone() {
+  var phone = document.getElementById('phoneInput').value.replace(/[-\s]/g, '');
+  var errEl = document.getElementById('phoneErr');
+  errEl.classList.add('hidden');
+  if (!phone) { errEl.textContent = '電話番号を入力してください'; errEl.classList.remove('hidden'); return; }
+  var token = getToken();
+  if (!token) { goLineLogin(); return; }
+  var btn = document.getElementById('phoneBtn');
+  btn.disabled = true;
+  fetch(GAS_URL + '?action=historyLink&token=' + encodeURIComponent(token) + '&phone=' + encodeURIComponent(phone))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) {
+        render(d);
+      } else if (d.expired) {
+        clearToken();
+        goLineLogin();
+      } else {
+        errEl.textContent = d.error || '電話番号が見つかりませんでした。ラクルマにご登録の番号をお試しください。';
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+      }
+    })
+    .catch(function() {
+      errEl.textContent = '通信エラーが発生しました。';
+      errEl.classList.remove('hidden');
+      btn.disabled = false;
+    });
+}
+
+// 初期化
+(function init() {
+  document.getElementById('loginBtn').addEventListener('click', function(ev) { ev.preventDefault(); goLineLogin(); });
+  document.getElementById('phoneBtn').addEventListener('click', submitPhone);
+
+  var code = params.get('code');
+  var error = params.get('error');
+
+  if (error) { goLineLogin(); return; }
+  if (code)  { fetchHistory('code=' + encodeURIComponent(code)); return; }
+
+  // パラメータなし → 有効なトークンがあればそれで取得、なければログイン
+  var token = getToken();
+  if (token) { fetchHistory('token=' + encodeURIComponent(token)); return; }
+  show('login');
+})();
+</script>
+</body>
+</html>

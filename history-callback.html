@@ -47,8 +47,6 @@ body {
 </div>
 
 <script>
-var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
-
 var params = new URLSearchParams(window.location.search);
 var code  = params.get('code');
 var error = params.get('error');
@@ -56,8 +54,9 @@ var error = params.get('error');
 if (error || !code) {
   showError('LINEログインがキャンセルされました。もう一度お試しください。');
 } else {
-  var redirectUrl = GAS_URL + '?action=historyCallback&code=' + encodeURIComponent(code);
-  window.location.href = redirectUrl;
+  // 認可コードを rakuruma.com/mypage/ に渡す（表示はドメイン側で行う）
+  var redirectUrl = 'https://rakuruma.com/mypage/?code=' + encodeURIComponent(code);
+  window.location.replace(redirectUrl);
 }
 
 function showError(msg) {
