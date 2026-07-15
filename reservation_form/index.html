@@ -870,6 +870,15 @@
           <p style="font-size:11px;color:#888;margin-top:8px;text-align:center;">※ 以前に連携ボタンを押してLINE IDを登録済みの方は<br>このページを閉じて構いません</p>
         </div>
 
+        <!-- 自動連携の結果待ち（LIFF経由のときだけJSから表示。赤字の「連携が必要」を一瞬見せないため） -->
+        <div class="step-item" id="step-line-checking" style="display:none;">
+          <div class="step-badge" style="background:var(--gray-200);color:var(--gray-400);">…</div>
+          <div class="step-content">
+            <div class="step-label">確認中</div>
+            <div class="step-title">LINE連携を確認しています</div>
+          </div>
+        </div>
+
         <!-- STEP 3: 待機中（STEP2を隠した場合はJSから「2」に振り直す） -->
         <div class="step-item">
           <div class="step-badge" id="step3-badge" style="background:var(--gray-200);color:var(--gray-400);">3</div>
@@ -980,7 +989,22 @@
       });
   }
 
-  // 自動連携できた場合の表示：STEP2（連携）を消してSTEP3を繰り上げる
+  // 連携の結果を待っている間の表示。赤字の「連携が必要です」を一瞬も見せないため、
+  // 自動連携する見込みがある時点（IDトークンあり）で先にSTEP2を隠しておく
+  function setCheckingState() {
+    const t = document.getElementById('success-title');
+    if (t) {
+      t.textContent = '予約リクエストを送信しました';
+      t.style.color = '#1a202c';
+      t.style.whiteSpace = 'normal';
+    }
+    const s2 = document.getElementById('step-line-link');
+    if (s2) s2.style.display = 'none';
+    const ck = document.getElementById('step-line-checking');
+    if (ck) ck.style.display = '';
+  }
+
+  // 自動連携できた場合：STEP2（連携）を消してSTEP3を繰り上げる
   function markAutoLinked() {
     const t = document.getElementById('success-title');
     if (t) {
@@ -990,10 +1014,25 @@
     }
     const s2 = document.getElementById('step-line-link');
     if (s2) s2.style.display = 'none';
+    const ck = document.getElementById('step-line-checking');
+    if (ck) ck.style.display = 'none';
     const b3 = document.getElementById('step3-badge');
     if (b3) b3.textContent = '2';
     const l3 = document.getElementById('step3-label');
     if (l3) l3.textContent = 'STEP 2 待機中';
+  }
+
+  // 自動連携を試したが失敗した場合：従来どおり連携ボタンを出す（紐付かないまま終わらせない）
+  function revealStep2() {
+    const t = document.getElementById('success-title');
+    if (t) {
+      t.textContent = '友達登録とは別に、LINE連携が必要です';
+      t.style.color = '#e53e3e';
+    }
+    const ck = document.getElementById('step-line-checking');
+    if (ck) ck.style.display = 'none';
+    const s2 = document.getElementById('step-line-link');
+    if (s2) s2.style.display = '';
   }
   // ============================================================
   // ▲▲▲ 設定ここまで ▲▲▲
@@ -1469,9 +1508,14 @@
     const btnStep2 = document.getElementById('line-login-btn-step2');
     if (btnStep2) btnStep2.href = liffUrl;
 
-    // LINEアプリ内から予約された場合は裏で自動連携し、成功したら連携ステップを消す。
-    // 失敗時は何もしない＝従来どおり連携ボタンが残るので、紐付かないまま終わることはない
-    autoLinkLine(phone).then(function(ok) { if (ok) markAutoLinked(); });
+    // LINEアプリ内から予約された場合は裏で自動連携する。
+    // 結果が出るまでSTEP2を隠しておき（赤字の警告を一瞬も見せない）、失敗したときだけ出す。
+    // Web(トークン無し)は最初から従来表示なので、待ち表示にはしない
+    if (LINE_ID_TOKEN) setCheckingState();
+    autoLinkLine(phone).then(function(ok) {
+      if (ok) markAutoLinked();
+      else if (LINE_ID_TOKEN) revealStep2(); // 自動連携に失敗 → 手動の連携ボタンへフォールバック
+    });
   }
 </script>
 </body>
