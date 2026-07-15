@@ -839,7 +839,7 @@
   <!-- 完了画面 -->
   <div id="success-screen">
     <div class="success-card">
-      <div class="success-title" style="font-size:18px;color:#e53e3e;white-space:nowrap;">友達登録とは別に、LINE連携が必要です</div>
+      <div class="success-title" id="success-title" style="font-size:18px;color:#e53e3e;white-space:nowrap;">友達登録とは別に、LINE連携が必要です</div>
       <div class="success-divider"></div>
 
       <div class="step-flow">
@@ -852,8 +852,8 @@
           </div>
         </div>
 
-        <!-- STEP 2: 要対応 -->
-        <div class="step-item step-active" style="flex-direction:column;align-items:stretch;">
+        <!-- STEP 2: 要対応（LIFF経由で自動連携できた場合はJSから非表示にする） -->
+        <div class="step-item step-active" id="step-line-link" style="flex-direction:column;align-items:stretch;">
           <div style="display:flex;align-items:flex-start;gap:12px;">
             <div class="step-badge active">2</div>
             <div class="step-content">
@@ -869,11 +869,11 @@
           <p style="font-size:11px;color:#888;margin-top:8px;text-align:center;">※ 以前に連携ボタンを押してLINE IDを登録済みの方は<br>このページを閉じて構いません</p>
         </div>
 
-        <!-- STEP 3: 待機中 -->
+        <!-- STEP 3: 待機中（STEP2を隠した場合はJSから「2」に振り直す） -->
         <div class="step-item">
-          <div class="step-badge" style="background:var(--gray-200);color:var(--gray-400);">3</div>
+          <div class="step-badge" id="step3-badge" style="background:var(--gray-200);color:var(--gray-400);">3</div>
           <div class="step-content">
-            <div class="step-label">STEP 3 待機中</div>
+            <div class="step-label" id="step3-label">STEP 3 待機中</div>
             <div class="step-title">予約確定のご連絡</div>
             <div class="step-desc">通常24時間以内にLINEでお知らせします</div>
           </div>
@@ -887,11 +887,58 @@
 
 </div><!-- /container -->
 
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script>
   // ============================================================
   // ▼▼▼ 設定：GASのWebアプリURLをここに貼り付けてください ▼▼▼
   // ============================================================
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+
+  // ===== LIFF（リッチメニュー経由でLINEアプリ内から開かれた場合のみ、LINE IDを自動取得）=====
+  // LINEアプリ内なら本人が自動で分かるので「LINEと連携する」ステップを省略できる。
+  // Webブラウザから開かれた場合は何もせず、従来どおり連携ボタンを出す（LINEログインは強制しない）。
+  const LIFF_ID = '2004330318-2HNHD3N6';
+  let LINE_ID_TOKEN = null; // 取得できたら予約後の自動連携に使う
+
+  (function initLiff() {
+    if (typeof liff === 'undefined') return;
+    liff.init({ liffId: LIFF_ID })
+      .then(function() {
+        if (!liff.isInClient() || !liff.isLoggedIn()) return; // LINEアプリ外は対象外
+        LINE_ID_TOKEN = liff.getIDToken();
+        if (LINE_ID_TOKEN) {
+          // LINE内から予約する人には「連携」の文言を見せない
+          const b = document.getElementById('submit-btn');
+          if (b) b.textContent = '予約する';
+        }
+      })
+      .catch(function(e) { /* 失敗しても従来フロー（連携ボタン）で継続 */ });
+  })();
+
+  // 予約後にIDトークンで自動連携する。成功したらtrueを返す
+  function autoLinkLine(phone) {
+    if (!LINE_ID_TOKEN) return Promise.resolve(false);
+    return fetch(GAS_URL + '?action=linkByIdToken&idToken=' + encodeURIComponent(LINE_ID_TOKEN) + '&phone=' + encodeURIComponent(phone || ''))
+      .then(function(r) { return r.json(); })
+      .then(function(d) { return !!(d && d.ok); })
+      .catch(function() { return false; });
+  }
+
+  // 自動連携できた場合の表示：STEP2（連携）を消してSTEP3を繰り上げる
+  function markAutoLinked() {
+    const t = document.getElementById('success-title');
+    if (t) {
+      t.textContent = '予約リクエストを受け付けました';
+      t.style.color = '#2f855a';
+      t.style.whiteSpace = 'normal';
+    }
+    const s2 = document.getElementById('step-line-link');
+    if (s2) s2.style.display = 'none';
+    const b3 = document.getElementById('step3-badge');
+    if (b3) b3.textContent = '2';
+    const l3 = document.getElementById('step3-label');
+    if (l3) l3.textContent = 'STEP 2 待機中';
+  }
   // ============================================================
   // ▲▲▲ 設定ここまで ▲▲▲
   // ============================================================
@@ -1270,7 +1317,7 @@
     })
     .catch(() => {
       btn.disabled = false;
-      btn.textContent = '次のステップへ → LINE連携';
+      btn.textContent = LINE_ID_TOKEN ? '予約する' : '次のステップへ → LINE連携';
       alert('送信に失敗しました。通信状況を確認して再度お試しください。');
     });
   });
@@ -1359,12 +1406,16 @@
     document.getElementById('success-screen').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // LIFF URL（電話番号をphoneパラメータで渡す）
+    // フォールバック用のLIFF URL（電話番号をphoneパラメータで渡す）
     const liffUrl = `https://liff.line.me/2004330318-mPsaNrNY?phone=${encodeURIComponent(phone || '')}`;
     const btn = document.getElementById('line-login-btn');
     btn.href = liffUrl;
     const btnStep2 = document.getElementById('line-login-btn-step2');
     if (btnStep2) btnStep2.href = liffUrl;
+
+    // LINEアプリ内から予約された場合は裏で自動連携し、成功したら連携ステップを消す。
+    // 失敗時は何もしない＝従来どおり連携ボタンが残るので、紐付かないまま終わることはない
+    autoLinkLine(phone).then(function(ok) { if (ok) markAutoLinked(); });
   }
 </script>
 </body>
