@@ -830,7 +830,8 @@
     <!-- 送信ボタン -->
     <button type="submit" class="submit-btn" id="submit-btn">次のステップへ → LINE連携</button>
 
-    <p style="text-align:center;font-size:12px;color:var(--gray-400);margin-top:12px;">
+    <!-- LIFF（LINEアプリ内）から開かれた場合は自動連携されるため、この注意文はJSから非表示にする -->
+    <p id="line-link-note" style="text-align:center;font-size:12px;color:var(--gray-400);margin-top:12px;">
       ※ LINE友達登録済みの方も必要な手順です
     </p>
 
@@ -932,10 +933,12 @@
         LINE_ID_TOKEN = liff.getIDToken();
         liffDebug('IDトークン: ' + (LINE_ID_TOKEN ? ('取得OK (長さ' + LINE_ID_TOKEN.length + ')') : 'null ← openidスコープの同意が必要かも'));
         if (LINE_ID_TOKEN) {
-          // LINE内から予約する人には「連携」の文言を見せない
+          // LINE内から予約する人には「連携」の文言を一切見せない（自動で紐付くため）
           const b = document.getElementById('submit-btn');
           if (b) b.textContent = '予約する';
-          liffDebug('→ 自動連携モード（ボタンを「予約する」に変更）');
+          const note = document.getElementById('line-link-note');
+          if (note) note.style.display = 'none';
+          liffDebug('→ 自動連携モード（ボタン変更＋連携の注意文を非表示）');
         }
       })
       .catch(function(e) {
