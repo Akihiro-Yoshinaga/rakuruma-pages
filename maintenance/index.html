@@ -235,6 +235,13 @@
       object-fit: cover;
     }
 
+    /* 縦動画=スマホ / 横動画=PC で出し分け */
+    .hero-video-wrap .v-pc { display: none; }
+    @media (min-width: 768px) {
+      .hero-video-wrap .v-sp { display: none; }
+      .hero-video-wrap .v-pc { display: block; }
+    }
+
     /* 動画上の半透明オーバーレイ */
     .hero-overlay {
       position: absolute;
@@ -2600,7 +2607,37 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-video-wrap">
-    <video autoplay loop muted playsinline preload="auto" src="/assets/uploads/2025/10/FV-movie1-opt.mp4"></video>
+    <video class="v-sp" loop muted playsinline preload="auto"
+           poster="/assets/uploads/2025/10/hero-seibi-sp-poster.jpg"
+           data-src="/assets/uploads/2025/10/hero-seibi-sp.mp4"></video>
+    <video class="v-pc" loop muted playsinline preload="auto"
+           poster="/assets/uploads/2025/10/hero-seibi-pc-poster.jpg"
+           data-src="/assets/uploads/2025/10/hero-seibi-pc.mp4"></video>
+    <script>
+      (function () {
+        // 表示される側の動画だけを読み込む（src未設定なら通信は発生しない）。
+        // 両方にsrcを書くと display:none 側もダウンロードされ、通信量が倍になる。
+        var mq = window.matchMedia('(min-width: 768px)');
+        var SEAM = 0.8; // 先頭0.8秒はループ継ぎ目用に末尾から移植した部分。初回のみ飛ばす
+
+        function activate(v) {
+          if (!v || v.src) return;
+          v.src = v.dataset.src;
+          v.addEventListener('loadedmetadata', function () {
+            try { v.currentTime = SEAM; } catch (e) {}
+          }, { once: true });
+          var p = v.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+        function sync() {
+          activate(document.querySelector(mq.matches ? '.v-pc' : '.v-sp'));
+        }
+        sync();
+        // 画面幅が境界をまたいだ時だけ、もう片方を遅れて読み込む
+        if (mq.addEventListener) mq.addEventListener('change', sync);
+        else if (mq.addListener) mq.addListener(sync);
+      })();
+    </script>
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
