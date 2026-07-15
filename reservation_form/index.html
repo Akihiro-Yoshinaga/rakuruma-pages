@@ -900,19 +900,48 @@
   const LIFF_ID = '2004330318-2HNHD3N6';
   let LINE_ID_TOKEN = null; // 取得できたら予約後の自動連携に使う
 
+  // ?debug=1 を付けた時だけ画面下部にLIFFの状態を表示する（原因切り分け用。通常は何も出ない）
+  function liffDebug(msg) {
+    try {
+      if (new URLSearchParams(location.search).get('debug') !== '1') return;
+      let el = document.getElementById('liff-debug');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'liff-debug';
+        el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#000;color:#0f0;'
+          + 'font:12px monospace;padding:10px;z-index:99999;max-height:45vh;overflow:auto;white-space:pre-wrap;';
+        document.body.appendChild(el);
+      }
+      el.textContent += msg + '\n';
+    } catch (_) {}
+  }
+
   (function initLiff() {
+    liffDebug('--- LIFF診断 ---');
+    liffDebug('SDK読込: ' + (typeof liff !== 'undefined' ? 'OK' : '失敗(未読込)'));
     if (typeof liff === 'undefined') return;
     liff.init({ liffId: LIFF_ID })
       .then(function() {
-        if (!liff.isInClient() || !liff.isLoggedIn()) return; // LINEアプリ外は対象外
+        liffDebug('init: OK');
+        liffDebug('isInClient(LINEアプリ内?): ' + liff.isInClient());
+        liffDebug('isLoggedIn: ' + liff.isLoggedIn());
+        if (!liff.isInClient() || !liff.isLoggedIn()) {
+          liffDebug('→ LINEアプリ外と判定。従来フロー（連携ボタン）で継続');
+          return; // LINEアプリ外は対象外
+        }
         LINE_ID_TOKEN = liff.getIDToken();
+        liffDebug('IDトークン: ' + (LINE_ID_TOKEN ? ('取得OK (長さ' + LINE_ID_TOKEN.length + ')') : 'null ← openidスコープの同意が必要かも'));
         if (LINE_ID_TOKEN) {
           // LINE内から予約する人には「連携」の文言を見せない
           const b = document.getElementById('submit-btn');
           if (b) b.textContent = '予約する';
+          liffDebug('→ 自動連携モード（ボタンを「予約する」に変更）');
         }
       })
-      .catch(function(e) { /* 失敗しても従来フロー（連携ボタン）で継続 */ });
+      .catch(function(e) {
+        liffDebug('init失敗: ' + (e && (e.message || e.code) ? (e.code || '') + ' ' + (e.message || '') : e));
+        /* 失敗しても従来フロー（連携ボタン）で継続 */
+      });
   })();
 
   // 予約後にIDトークンで自動連携する。成功したらtrueを返す
