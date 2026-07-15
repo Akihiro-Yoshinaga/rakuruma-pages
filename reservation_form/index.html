@@ -926,6 +926,20 @@
         liffDebug('init: OK');
         liffDebug('isInClient(LINEアプリ内?): ' + liff.isInClient());
         liffDebug('isLoggedIn: ' + liff.isLoggedIn());
+
+        // リッチメニューが通常URLのままだと、LINEの内蔵ブラウザで開かれてLIFFとして扱われない。
+        // その場合はLIFF URLへ自動で開き直して自動連携を成立させる（リッチメニューの設定に依存しないための保険）。
+        // Webブラウザ（LINE外）では何もしない＝従来フローのまま。
+        const params = new URLSearchParams(location.search);
+        const inLineApp = /Line\//i.test(navigator.userAgent);
+        if (!liff.isInClient() && inLineApp && params.get('liffredir') !== '1') {
+          params.set('liffredir', '1'); // 二重リダイレクト防止
+          const target = 'https://liff.line.me/' + LIFF_ID + '?' + params.toString();
+          liffDebug('→ LINE内蔵ブラウザと判定。LIFF URLへ開き直します: ' + target);
+          location.replace(target);
+          return;
+        }
+
         if (!liff.isInClient() || !liff.isLoggedIn()) {
           liffDebug('→ LINEアプリ外と判定。従来フロー（連携ボタン）で継続');
           return; // LINEアプリ外は対象外
