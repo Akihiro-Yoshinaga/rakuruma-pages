@@ -946,11 +946,21 @@
 
   // 予約後にIDトークンで自動連携する。成功したらtrueを返す
   function autoLinkLine(phone) {
-    if (!LINE_ID_TOKEN) return Promise.resolve(false);
+    if (!LINE_ID_TOKEN) {
+      liffDebug('自動連携: スキップ（IDトークン無し＝LINEアプリ外から開かれた）');
+      return Promise.resolve(false);
+    }
+    liffDebug('自動連携: 実行 phone=' + phone);
     return fetch(GAS_URL + '?action=linkByIdToken&idToken=' + encodeURIComponent(LINE_ID_TOKEN) + '&phone=' + encodeURIComponent(phone || ''))
       .then(function(r) { return r.json(); })
-      .then(function(d) { return !!(d && d.ok); })
-      .catch(function() { return false; });
+      .then(function(d) {
+        liffDebug('自動連携の結果: ' + JSON.stringify(d));
+        return !!(d && d.ok);
+      })
+      .catch(function(e) {
+        liffDebug('自動連携: 通信エラー ' + (e && e.message));
+        return false;
+      });
   }
 
   // 自動連携できた場合の表示：STEP2（連携）を消してSTEP3を繰り上げる
