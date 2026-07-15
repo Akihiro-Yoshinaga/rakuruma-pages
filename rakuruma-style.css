@@ -759,16 +759,16 @@ howtouse
     list-style: none;
 }
 .howtouse ol.step_list li:nth-child(1){
-    background-image: url(/assets/images/step1.jpg);
+    background-image: url(/assets/images/step1.webp);
 }
 .howtouse ol.step_list li:nth-child(2){
-    background-image: url(/assets/images/step2.jpg);
+    background-image: url(/assets/images/step2.webp);
 }
 .howtouse ol.step_list li:nth-child(3){
-    background-image: url(/assets/images/step3.jpg);
+    background-image: url(/assets/images/step3.webp);
 }
 .howtouse ol.step_list li:nth-child(4){
-    background-image: url(/assets/images/step4.jpg);
+    background-image: url(/assets/images/step4.webp);
 }
 .howtouse ol.step_list li{
     height: 280px;
@@ -1435,17 +1435,17 @@ for smartphone
         max-width: 100%;
     }
     .howtouse ol.step_list li:nth-child(1){
-        background-image: url(/assets/images/step1_sp.jpg);
+        background-image: url(/assets/images/step1_sp.webp);
         border-radius: 80px 0 0 0;
     }
     .howtouse ol.step_list li:nth-child(2){
-        background-image: url(/assets/images/step2_sp.jpg);
+        background-image: url(/assets/images/step2_sp.webp);
     }
     .howtouse ol.step_list li:nth-child(3){
-        background-image: url(/assets/images/step3_sp.jpg);
+        background-image: url(/assets/images/step3_sp.webp);
     }
     .howtouse ol.step_list li:nth-child(4){
-        background-image: url(/assets/images/step4_sp.jpg);        
+        background-image: url(/assets/images/step4_sp.webp);        
         border-radius: 0 0 80px 0;
     }
     .howtouse ol.step_list li .subhead{

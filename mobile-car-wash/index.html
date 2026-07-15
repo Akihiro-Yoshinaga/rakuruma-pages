@@ -31,7 +31,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/rakuruma-style.css?v=20260326">
+<link rel="stylesheet" href="/rakuruma-style.css?v=20260715">
 <style>
 /* ===== このページ専用: レイアウト統一 ===== */
 /* 600〜1024px幅で横スクロールが発生する問題の解消（共通CSSの min-width:1024px を打ち消し） */
@@ -670,7 +670,7 @@ a[href^="https://lin.ee"]:hover {
     <!-- 固定ヘッダー -->
     <header class="rk-header">
         <a href="/" class="rk-header__logo" aria-label="ラクルマ トップページ">
-            <img src="/assets/images/logo.svg" alt="ラクルマ">
+            <img src="/assets/images/logo.svg" alt="ラクルマ" loading="lazy" decoding="async">
         </a>
         <button class="rk-menu-btn" aria-label="メニューを開閉" onclick="rkToggleMenu()">
             <span></span><span></span><span></span>
@@ -702,7 +702,7 @@ a[href^="https://lin.ee"]:hover {
             </div>
 
             <div class="hero__logo">
-                <img src="/assets/uploads/2025/09/0abf76b0235309b55979d1dcdca626cb.png" alt="ラクルマ ロゴ">
+                <img src="/assets/uploads/2025/09/0abf76b0235309b55979d1dcdca626cb.png" alt="ラクルマ ロゴ" loading="lazy" decoding="async">
             </div>
 
             <div class="hero__copy">
@@ -750,7 +750,7 @@ a[href^="https://lin.ee"]:hover {
                     <!-- くらしのマーケットで評価表示（横並び） -->
                     <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
                         <a href="https://curama.jp/" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center;">
-                            <img src="/assets/uploads/2025/09/logo.png" alt="くらしのマーケット" style="height: 40px; width: auto;">
+                            <img src="/assets/uploads/2025/09/logo.png" alt="くらしのマーケット" style="height: 40px; width: auto;" loading="lazy" decoding="async">
                         </a>
                         <span style="color: #333; font-size: 16px; font-weight: 600;">で</span>
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -781,8 +781,8 @@ a[href^="https://lin.ee"]:hover {
                             <div style="position: relative; width: 100%; margin: 0 auto;">
                                 <!-- 9:16の縦長動画コンテナ -->
                                 <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                                    <video id="voice1-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
-                                        <source src="/assets/uploads/2025/10/voice-1-opt.mp4" type="video/mp4">
+                                    <video id="voice1-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline preload="none">
+                                        <source data-src="/assets/uploads/2025/10/voice-1-opt.mp4" type="video/mp4">
                                         <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
                                         <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
                                             <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
@@ -796,7 +796,7 @@ a[href^="https://lin.ee"]:hover {
                             <div style="display: flex; align-items: center; margin-bottom: 18px;">
                                 <div style="width: 50px; height: 50px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
                                     <a href="https://curama.jp/car-wash/SER695652993/review/?sort=top-review" target="_blank" rel="noopener noreferrer" style="display: block; width: 100%; height: 100%;">
-                                        <img src="/assets/uploads/2025/09/logo_ora_square.jpg" alt="くらしのマーケット" style="width: 100%; height: 100%; object-fit: cover;">
+                                        <img src="/assets/uploads/2025/09/logo_ora_square.webp" alt="くらしのマーケット" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                                     </a>
                                 </div>
                                 <div>
@@ -820,8 +820,8 @@ a[href^="https://lin.ee"]:hover {
                             <div style="position: relative; width: 100%; margin: 0 auto;">
                                 <!-- 9:16の縦長動画コンテナ -->
                                 <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                                    <video id="voice2-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
-                                        <source src="/assets/uploads/2025/10/voice-2-opt.mp4" type="video/mp4">
+                                    <video id="voice2-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline preload="none">
+                                        <source data-src="/assets/uploads/2025/10/voice-2-opt.mp4" type="video/mp4">
                                         <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
                                         <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
                                             <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
@@ -834,7 +834,7 @@ a[href^="https://lin.ee"]:hover {
                         <div style="padding: 30px;">
                             <div style="display: flex; align-items: center; margin-bottom: 18px;">
                                 <div style="width: 50px; height: 50px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
-                                    <img src="/assets/uploads/2025/09/5edb8eac356b5a48b908e5a6b928991e.png" alt="Google" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/09/5edb8eac356b5a48b908e5a6b928991e.png" alt="Google" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
                                 <div>
                                     <p style="font-weight: 600; color: #003B8B; margin: 0; font-size: 15px;">20代・フリーランス</p>
@@ -874,7 +874,7 @@ a[href^="https://lin.ee"]:hover {
                     <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
                         <!-- 悩み画像 -->
                         <div style="margin: 0 auto 20px;">
-                            <img src="/assets/uploads/2025/09/4806d4f7c9f1a6a7f76f22b87ee35cf5.png" alt="時間がない" style="width: 100%; height: auto; border-radius: 12px;">
+                            <img src="/assets/uploads/2025/09/4806d4f7c9f1a6a7f76f22b87ee35cf5.webp" alt="時間がない" style="width: 100%; height: auto; border-radius: 12px;" loading="lazy" decoding="async">
                         </div>
                         <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">洗車する時間がない</h3>
                         <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">車の汚れが気になっても、週末は子どもとの予定でいっぱい...</p>
@@ -887,7 +887,7 @@ a[href^="https://lin.ee"]:hover {
                     <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
                         <!-- 悩み画像 -->
                         <div style="margin: 0 auto 20px;">
-                            <img src="/assets/uploads/2025/09/f6cd1d34891c018219673427fbd04d56.png" alt="予約が取れない" style="width: 100%; height: auto; border-radius: 12px;">
+                            <img src="/assets/uploads/2025/09/f6cd1d34891c018219673427fbd04d56.webp" alt="予約が取れない" style="width: 100%; height: auto; border-radius: 12px;" loading="lazy" decoding="async">
                         </div>
                         <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">予約が取れない</h3>
                         <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">洗車できる時に限って混雑している...</p>
@@ -900,7 +900,7 @@ a[href^="https://lin.ee"]:hover {
                     <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
                         <!-- 悩み画像 -->
                         <div style="margin: 0 auto 20px;">
-                            <img src="/assets/uploads/2025/09/2cbc9d58c7099e251fc783685ce3f5fa.png" alt="手間がかかる" style="width: 100%; height: auto; border-radius: 12px;">
+                            <img src="/assets/uploads/2025/09/2cbc9d58c7099e251fc783685ce3f5fa.webp" alt="手間がかかる" style="width: 100%; height: auto; border-radius: 12px;" loading="lazy" decoding="async">
                         </div>
                         <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">待つのが面倒</h3>
                         <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">待っている間、他のことができるわけでもなく中途半端...</p>
@@ -930,13 +930,13 @@ a[href^="https://lin.ee"]:hover {
                 <!-- 横並びのメッセージ -->
                 <div style="margin-bottom: 30px;">
                     <p style="font-size: 28px; color: #003B8B; margin: 0 0 8px; font-weight: 600;">そんなお悩みを</p>
-                    <img src="/assets/images/logo.svg" alt="ラクルマ" style="max-width: 220px; height: auto; display: block; margin: 0 auto 8px;">
+                    <img src="/assets/images/logo.svg" alt="ラクルマ" style="max-width: 220px; height: auto; display: block; margin: 0 auto 8px;" loading="lazy" decoding="async">
                     <p style="font-size: 28px; color: #003B8B; margin: 0; font-weight: 600;">なら解決します。</p>
                 </div>
                 
                 <!-- 画像 -->
                 <div style="max-width: 400px; margin: 0 auto 25px; border-radius: 12px; overflow: hidden;">
-                    <img src="/assets/uploads/2025/09/YOSH0212.jpg" alt="プロの洗車作業" style="width: 100%; height: auto; display: block;">
+                    <img src="/assets/uploads/2025/09/YOSH0212.webp" alt="プロの洗車作業" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
                 </div>
                 
                 <!-- メッセージ -->
@@ -952,7 +952,7 @@ a[href^="https://lin.ee"]:hover {
             <ul class="content_container">
                 <li class="flexbox">
                     <div class="image_frame">
-                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_8034-scaled.jpg); background-size: cover; background-position: center;"></div>
+                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_8034-scaled.webp); background-size: cover; background-position: center;"></div>
                     </div>
                     <div class="textarea">
                         <div class="subhead fontll bold">
@@ -971,12 +971,12 @@ a[href^="https://lin.ee"]:hover {
                         <div class="fonts">立ち会い不要。洗車中の時間は、まるごと自由時間に。</div>
                     </div>
                     <div class="image_frame">
-                        <img src="/assets/uploads/2025/08/479529b40188fb49868caf63883b5f8a.png" alt="スマホで簡単予約" class="image_pic img_r" style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;">
+                        <img src="/assets/uploads/2025/08/479529b40188fb49868caf63883b5f8a.webp" alt="スマホで簡単予約" class="image_pic img_r" style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;" loading="lazy" decoding="async">
                     </div>
                 </li>
                 <li class="flexbox">
                     <div class="image_frame">
-                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_4869.jpg); background-size: cover; background-position: center;"></div>
+                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_4869.webp); background-size: cover; background-position: center;"></div>
                     </div>
                     <div class="textarea">
                         <div class="subhead fontll bold">
@@ -1161,7 +1161,7 @@ a[href^="https://lin.ee"]:hover {
                     <!-- 月極駐車場 -->
                     <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
                         <div style="width: 100%; height: 200px; overflow: hidden;">
-                            <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.jpg" alt="月極駐車場" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.webp" alt="月極駐車場" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                         </div>
                         <div style="padding: 30px; text-align: center;">
                             <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">月極駐車場</h3>
@@ -1173,7 +1173,7 @@ a[href^="https://lin.ee"]:hover {
                     <!-- マンション駐車場 -->
                     <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
                         <div style="width: 100%; height: 200px; overflow: hidden;">
-                            <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.jpg" alt="マンション駐車場" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.webp" alt="マンション駐車場" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                         </div>
                         <div style="padding: 30px; text-align: center;">
                             <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">マンション駐車場</h3>
@@ -1185,7 +1185,7 @@ a[href^="https://lin.ee"]:hover {
                     <!-- ご自宅の駐車場 -->
                     <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
                         <div style="width: 100%; height: 200px; overflow: hidden;">
-                            <img src="/assets/uploads/2025/11/IMG_8600.jpg" alt="ご自宅の駐車場" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="/assets/uploads/2025/11/IMG_8600.webp" alt="ご自宅の駐車場" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                         </div>
                         <div style="padding: 30px; text-align: center;">
                             <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">ご自宅の駐車場</h3>
@@ -1209,8 +1209,8 @@ a[href^="https://lin.ee"]:hover {
                             <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">特殊な洗浄成分で水なし洗車を実現</h4>
                             <div style="position: relative; width: 90%;">
                             <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                                <video id="reason-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
-                                    <source src="/assets/uploads/2025/09/reason3.mp4" type="video/mp4">
+                                <video id="reason-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline preload="none">
+                                    <source data-src="/assets/uploads/2025/09/reason3.mp4" type="video/mp4">
                                     <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
                                     <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
                                         <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
@@ -1232,8 +1232,8 @@ a[href^="https://lin.ee"]:hover {
                             <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">1年間使い続けても傷ゼロ<span style="font-size: 11px; margin-left: 4px;">※1</span></h4>
                             <div style="position: relative; width: 90%;">
                             <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                                <video id="why-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline autoplay preload="none">
-                                    <source src="/assets/uploads/2025/09/why.mp4" type="video/mp4">
+                                <video id="why-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline preload="none">
+                                    <source data-src="/assets/uploads/2025/09/why.mp4" type="video/mp4">
                                     <!-- フォールバック: 動画が読み込めない場合の静的表示 -->
                                     <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center;">
                                         <span style="color: #666; font-size: 14px;">動画を読み込み中...</span>
@@ -1288,39 +1288,39 @@ a[href^="https://lin.ee"]:hover {
                             <div class="scroll-left-to-right" style="display: flex; gap: 8px; animation: scrollLeftToRight 20s linear infinite;">
                                 <!-- 写真2 -->
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                                 <!-- 写真3 -->
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                                 <!-- 写真4 -->
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/74f7d0941b02809f624ce02bd5ad3f9c.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/74f7d0941b02809f624ce02bd5ad3f9c.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                                 <!-- 写真5 -->
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/3dc2184cbcdd4511563dd7bfa9ac1d77.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/3dc2184cbcdd4511563dd7bfa9ac1d77.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                                 <!-- 複製写真セット1（無限ループ用） -->
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/74f7d0941b02809f624ce02bd5ad3f9c.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/74f7d0941b02809f624ce02bd5ad3f9c.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                                 <div style="width: 350px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
-                                    <img src="/assets/uploads/2025/10/3dc2184cbcdd4511563dd7bfa9ac1d77.jpg" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;">
+                                    <img src="/assets/uploads/2025/10/3dc2184cbcdd4511563dd7bfa9ac1d77.webp" alt="洗車作業" style="width: 100%; height: 180px; object-fit: cover;" loading="lazy" decoding="async">
                                 </div>
 
                             </div>
@@ -1547,59 +1547,59 @@ a[href^="https://lin.ee"]:hover {
             <h2 class="headline headline_br bold"><span class="fontxl montserrat">BASIC PLAN</span><span class="colorfont_b fontm">サービス内容について</span></h2>
             <ul class="service_list">
                 <li class="flexbox bk_lb">
-                    <div class="smallhead flexbox colorfont_b fontll bold">洗車<br><span><img src="/assets/images/stopwatch.svg">30〜40分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 7,700円（Mサイズ）</span></div>
+                    <div class="smallhead flexbox colorfont_b fontll bold">洗車<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">30〜40分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 7,700円（Mサイズ）</span></div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_5.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_5.webp);"></div>
                         <p class="colorfont_w fontm bold">洗車</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_6.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_6.webp);"></div>
                         <p class="colorfont_w fontm bold">ステップ清掃</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_7.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_7.webp);"></div>
                         <p class="colorfont_w fontm bold">ホイール清掃</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_8.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_8.webp);"></div>
                         <p class="colorfont_w fontm bold">タイヤワックス</p>
                     </div>
                 </li>
                 <li class="flexbox bk_lb">
-                    <div class="smallhead flexbox colorfont_b fontll bold">室内清掃<br><span><img src="/assets/images/stopwatch.svg">20〜30分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 2,200円</span></div>
+                    <div class="smallhead flexbox colorfont_b fontll bold">室内清掃<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">20〜30分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 2,200円</span></div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_13.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_13.webp);"></div>
                         <p class="colorfont_w fontm bold">内窓清掃</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_10.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_10.webp);"></div>
                         <p class="colorfont_w fontm bold">掃除機</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_11.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_11.webp);"></div>
                         <p class="colorfont_w fontm bold">ハンドルまわり</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_15.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_15.webp);"></div>
                         <p class="colorfont_w fontm bold">ナビゲーション</p>
                     </div>
                 </li>
                 <li class="flexbox bk_lb">
-                    <div class="smallhead flexbox colorfont_b fontll bold">安心点検（選択可）<br><span><img src="/assets/images/stopwatch.svg">10〜20分</span></div>
+                    <div class="smallhead flexbox colorfont_b fontll bold">安心点検（選択可）<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">10〜20分</span></div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_1.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_1.webp);"></div>
                         <p class="colorfont_w fontm bold">バッテリー点検</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_2.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_2.webp);"></div>
                         <p class="colorfont_w fontm bold">ウォッシャー液補充</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_3.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_3.webp);"></div>
                         <p class="colorfont_w fontm bold">空気圧調整</p>
                     </div>
                     <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_4.jpg);"></div>
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_4.webp);"></div>
                         <p class="colorfont_w fontm bold">ライトの点検</p>
                     </div>
                 </li>
@@ -2167,7 +2167,7 @@ a[href^="https://lin.ee"]:hover {
                             </p>
 
                             <a href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 10px; margin: 0 auto; padding: 14px 60px; background: #06C755; color: white; text-decoration: none; border-radius: 30px; font-size: 14px; font-weight: bold; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
-                                <img src="/assets/uploads/2025/10/LINE_APP_iOS.png" alt="LINE" width="24" height="24" style="display: block;">
+                                <img src="/assets/uploads/2025/10/LINE_APP_iOS.png" alt="LINE" width="24" height="24" style="display: block;" loading="lazy" decoding="async">
                                 お友達追加
                             </a>
                         </div>
@@ -2268,18 +2268,18 @@ a[href^="https://lin.ee"]:hover {
                     <!-- スクロールガイドの表示制御JavaScript -->
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            console.log('DOM loaded, searching for elements...);
+                            console.log('DOM loaded, searching for elements...');
                             
                             // 少し遅延させて要素を取得
                             setTimeout(() => {
-                                const scrollGuide = document.querySelector('.scroll-guide);
-                                const calendarContainer = document.querySelector('#calendar-container);
+                                const scrollGuide = document.querySelector('.scroll-guide');
+                                const calendarContainer = document.querySelector('#calendar-container');
                                 
                                 console.log('ScrollGuide element:', scrollGuide);
                                 console.log('Calendar container:', calendarContainer);
                                 
                                 if (scrollGuide && calendarContainer) {
-                                    console.log('Both elements found, setting up observer...);
+                                    console.log('Both elements found, setting up observer...');
                                     
                                     // Intersection Observer の設定
                                     const observerOptions = {
@@ -2292,9 +2292,9 @@ a[href^="https://lin.ee"]:hover {
                                         entries.forEach(entry => {
                                             console.log('Intersection detected:', entry.isIntersecting);
                                             if (entry.isIntersecting) {
-                                                console.log('Adding active class to scroll guide);
+                                                console.log('Adding active class to scroll guide');
                                                 // カレンダーが見えたらアニメーション開始
-                                                scrollGuide.classList.add('active);
+                                                scrollGuide.classList.add('active');
                                                 
                                                 // 8秒後に非表示（フェードアウト効果と連動）
                                                 setTimeout(() => {
@@ -2306,9 +2306,9 @@ a[href^="https://lin.ee"]:hover {
                                     
                                     // カレンダーコンテナを監視
                                     observer.observe(calendarContainer);
-                                    console.log('Observer set up successfully);
+                                    console.log('Observer set up successfully');
                                 } else {
-                                    console.error('Required elements not found);
+                                    console.error('Required elements not found');
                                 }
                             }, 500); // 500ms遅延
                         });
@@ -2362,7 +2362,7 @@ a[href^="https://lin.ee"]:hover {
         <section class="map area_s">
             <h2 class="headline headline_br bold"><span class="fontxl montserrat">AREA</span><span class="colorfont_b fontm">サービス提供エリア</span></h2>
             <p class="discription fonts"><span class="bold">世田谷区/目黒区/渋谷区</span><br>サービス提供エリアは順次拡大中です。利用時間・日時によっては対応できないエリアもございますので、詳細はお問い合わせくださいませ。</p>
-            <img src="/assets/images/map.png" alt="エリアマップ">
+            <img src="/assets/images/map.png" alt="エリアマップ" loading="lazy" decoding="async">
         </section>
 
 
@@ -2442,7 +2442,7 @@ a[href^="https://lin.ee"]:hover {
             <p class="discription fonts">国家一級整備士による安心の訪問サービスで、愛車にふさわしいケアを。</p>
             <div class="prof_box flexbox">
                 <div class="prof_pic image_frame">
-                    <div class="image_pic" style="background-image: url(/assets/images/profile2.jpg);"></div>
+                    <div class="image_pic" style="background-image: url(/assets/images/profile2.webp);"></div>
                 </div>
                 <div class="prof_text">
                     <div class="fontm bold prof_name"><span class="colorfont_b">吉永 明拓［代表］</span></div>
@@ -2537,7 +2537,7 @@ a[href^="https://lin.ee"]:hover {
         <p class="rk-crosslink__sub">洗車だけじゃない。クルマのことは、まとめてラクルマへ。</p>
         <div class="rk-crosslink__row">
             <a class="rk-banner" href="/maintenance/">
-                <div class="rk-banner__img"><img src="/assets/images/works-diagnosis.jpg" alt="国家1級整備士による出張整備・点検" loading="lazy"></div>
+                <div class="rk-banner__img"><img src="/assets/images/works-diagnosis.webp" alt="国家1級整備士による出張整備・点検" loading="lazy"></div>
                 <div class="rk-banner__overlay"></div>
                 <div class="rk-banner__body">
                     <span class="rk-banner__tag">国家1級整備士が対応</span>
@@ -2547,7 +2547,7 @@ a[href^="https://lin.ee"]:hover {
                 </div>
             </a>
             <a class="rk-banner" href="/blog/">
-                <div class="rk-banner__img"><img src="/assets/images/voice-mirror-dashcam.jpg" alt="車種別の作業実績" loading="lazy"></div>
+                <div class="rk-banner__img"><img src="/assets/images/voice-mirror-dashcam.webp" alt="車種別の作業実績" loading="lazy"></div>
                 <div class="rk-banner__overlay"></div>
                 <div class="rk-banner__body">
                     <span class="rk-banner__tag">施工事例を随時更新</span>
@@ -2608,7 +2608,7 @@ a[href^="https://lin.ee"]:hover {
             }
 
             // 1つ目の動画（why-video）: 通常速度、音声ミュート
-            const whyVideo = document.getElementById('why-video);
+            const whyVideo = document.getElementById('why-video');
             if (whyVideo) {
                 whyVideo.playbackRate = 1.0;  // 通常速度
                 whyVideo.muted = true;  // 音声をミュート
@@ -2622,7 +2622,7 @@ a[href^="https://lin.ee"]:hover {
             }
             
             // 2つ目の動画（reason-video）: 1.2倍速、音声ミュート
-            const reasonVideo = document.getElementById('reason-video);
+            const reasonVideo = document.getElementById('reason-video');
             if (reasonVideo) {
                 reasonVideo.playbackRate = 1.2;  // 1.2倍速
                 reasonVideo.muted = true;  // 音声をミュート
@@ -2642,11 +2642,30 @@ a[href^="https://lin.ee"]:hover {
                 threshold: 0.3  // 30%見えたら再生開始
             };
             
+            // source[data-src] を実際に読み込む（可視になるまで通信させない）
+            const loadVideoSrc = (video) => {
+                if (video.dataset.srcLoaded) return;
+                const pending = video.querySelectorAll('source[data-src]');
+                if (!pending.length) return;
+                video.dataset.srcLoaded = '1';
+                pending.forEach((s) => {
+                    s.src = s.dataset.src;
+                    s.removeAttribute('data-src');
+                });
+                // load()直後のplay()は「まだ読めていない」で失敗するため、
+                // 再生可能になった時点で改めて再生する
+                video.addEventListener('loadeddata', () => {
+                    video.play().catch(() => {});
+                }, { once: true });
+                video.load();
+            };
+
             const videoObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const video = entry.target;
                     if (entry.isIntersecting) {
-                        // 画面に入ったら再生
+                        // 画面に入ったら読み込んで再生
+                        loadVideoSrc(video);
                         video.play().catch(err => {
                             console.log('Video play failed:', err);
                         });
@@ -2657,6 +2676,21 @@ a[href^="https://lin.ee"]:hover {
                 });
             }, observerOptions);
             
+            // 読み込み専用の監視（しきい値0・先読み400px）。
+            // 再生用の監視(threshold 0.3)とは独立させ、読み込みが取りこぼされないようにする。
+            const lazyLoadObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    loadVideoSrc(entry.target);
+                    lazyLoadObserver.unobserve(entry.target);
+                });
+            }, { root: null, rootMargin: '400px', threshold: 0 });
+
+            ['voice1-video', 'voice2-video', 'reason-video', 'why-video'].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) lazyLoadObserver.observe(el);
+            });
+
             // 動画を監視対象に追加
             if (whyVideo) {
                 videoObserver.observe(whyVideo);
@@ -2666,7 +2700,7 @@ a[href^="https://lin.ee"]:hover {
             }
             
             // お客様の声動画の設定（voice1-video）: 10倍速
-            const voice1Video = document.getElementById('voice1-video);
+            const voice1Video = document.getElementById('voice1-video');
             if (voice1Video) {
                 voice1Video.playbackRate = 10.0;  // 10倍速
                 voice1Video.muted = true;  // 音声をミュート
@@ -2682,7 +2716,7 @@ a[href^="https://lin.ee"]:hover {
             }
 
             // お客様の声動画2の設定（voice2-video）: 10倍速
-            const voice2Video = document.getElementById('voice2-video);
+            const voice2Video = document.getElementById('voice2-video');
             if (voice2Video) {
                 voice2Video.playbackRate = 10.0;  // 10倍速
                 voice2Video.muted = true;  // 音声をミュート
@@ -2700,10 +2734,10 @@ a[href^="https://lin.ee"]:hover {
 
         // Testimonials Carousel Functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const track = document.getElementById('testimonials-track);
-            const prevBtn = document.getElementById('prev-btn);
-            const nextBtn = document.getElementById('next-btn);
-            const indicators = document.querySelectorAll('.indicator);
+            const track = document.getElementById('testimonials-track');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const indicators = document.querySelectorAll('.indicator');
             
             let currentSlide = 0;
             const totalSlides = 3; // 6 cards / 2 cards per slide on mobile, 3 slides for desktop
@@ -2766,7 +2800,7 @@ a[href^="https://lin.ee"]:hover {
             });
             
             // Keyboard navigation for carousel
-            const carousel = document.querySelector('.testimonials-carousel);
+            const carousel = document.querySelector('.testimonials-carousel');
             carousel.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
@@ -2821,8 +2855,8 @@ a[href^="https://lin.ee"]:hover {
         
         // くらしのマーケット口コミスライダー
         document.addEventListener('DOMContentLoaded', function() {
-            const reviewSlider = document.querySelector('.review-slider);
-            const reviewIndicators = document.querySelectorAll('.review-indicator);
+            const reviewSlider = document.querySelector('.review-slider');
+            const reviewIndicators = document.querySelectorAll('.review-indicator');
             
             if (!reviewSlider) return;
             
@@ -2855,7 +2889,7 @@ a[href^="https://lin.ee"]:hover {
                 settings = getResponsiveSettings();
                 
                 // カードのサイズを動的に調整
-                const cards = document.querySelectorAll('.review-card);
+                const cards = document.querySelectorAll('.review-card');
                 cards.forEach(card => {
                     card.style.width = `${settings.cardWidth}px`;
                     card.style.minWidth = `${settings.cardWidth}px`;
