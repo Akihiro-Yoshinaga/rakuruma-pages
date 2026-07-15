@@ -2702,12 +2702,12 @@ a[href^="https://lin.ee"]:hover {
             // お客様の声動画の設定（voice1-video）: 10倍速
             const voice1Video = document.getElementById('voice1-video');
             if (voice1Video) {
-                voice1Video.playbackRate = 10.0;  // 10倍速
+                voice1Video.playbackRate = 1.0;  // 等倍（素材自体がスロー映像のため）
                 voice1Video.muted = true;  // 音声をミュート
                 voice1Video.volume = 0;     // ボリュームも0に設定
                 voice1Video.pause();  // 初期状態では停止
                 voice1Video.addEventListener('loadedmetadata', function() {
-                    voice1Video.playbackRate = 10.0;
+                    voice1Video.playbackRate = 1.0;
                     voice1Video.muted = true;
                     voice1Video.volume = 0;
                 });
@@ -2718,12 +2718,12 @@ a[href^="https://lin.ee"]:hover {
             // お客様の声動画2の設定（voice2-video）: 10倍速
             const voice2Video = document.getElementById('voice2-video');
             if (voice2Video) {
-                voice2Video.playbackRate = 10.0;  // 10倍速
+                voice2Video.playbackRate = 1.0;  // 等倍（素材自体がスロー映像のため）
                 voice2Video.muted = true;  // 音声をミュート
                 voice2Video.volume = 0;     // ボリュームも0に設定
                 voice2Video.pause();  // 初期状態では停止
                 voice2Video.addEventListener('loadedmetadata', function() {
-                    voice2Video.playbackRate = 10.0;
+                    voice2Video.playbackRate = 1.0;
                     voice2Video.muted = true;
                     voice2Video.volume = 0;
                 });
