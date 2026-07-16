@@ -183,10 +183,13 @@
       .fv-area {
         font-size: 12px;
       }
+      /* スマホはコピーが写真の下に流れるため、ratioボックスをやめて写真自体に高さを持たせる */
       .fv-image::before {
-        padding-top: 66.66%;
+        display: none;
       }
       .fv-image-pic {
+        position: static;
+        aspect-ratio: 3 / 2;
         background-image: url(/assets/images/image_top_sp.jpg);
         border-radius: 0;
       }
