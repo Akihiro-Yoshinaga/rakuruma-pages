@@ -163,45 +163,191 @@
       margin-right: 2px;
     }
 
+    /* PC＝旧デザインFV／スマホ＝動画ヒーロー の出し分け */
     @media (max-width: 767px) {
       .fv-top {
-        border-radius: 0;
-      }
-      .fv-top-inner {
-        padding: 0 0 44px;
-      }
-      .fv-top-header {
-        height: 72px;
-        padding-top: 10px;
-        padding-left: 15px;
-        padding-right: 15px;
-        gap: 12px;
-      }
-      .fv-logo {
-        width: 100px;
-      }
-      .fv-area {
-        font-size: 12px;
-      }
-      /* スマホはコピーが写真の下に流れるため、ratioボックスをやめて写真自体に高さを持たせる */
-      .fv-image::before {
         display: none;
       }
-      .fv-image-pic {
-        position: static;
-        aspect-ratio: 3 / 2;
-        background-image: url(/assets/images/image_top_sp.jpg);
-        border-radius: 0;
-      }
-      .fv-copy {
-        position: static;
-        padding: 26px 15px 0;
-      }
-      .fv-head {
-        font-size: 30px;
-      }
-      .fv-second {
-        font-size: 15px;
+    }
+
+    /* ===== スマホ用ヘッダー（白・ロゴ＋ハンバーガー） ===== */
+    .sp-header {
+      background: var(--color-bg-white);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: var(--z-index-fixed);
+      box-shadow: var(--shadow-light);
+    }
+
+    .sp-header .menu-btn span {
+      background: var(--color-primary-blue);
+    }
+
+    /* ===== スマホ用HERO（動画） ===== */
+    .hero {
+      position: relative;
+      min-height: calc(88vh - 64px);
+      min-height: calc(88svh - 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: #0d1a2e;
+    }
+
+    .hero-video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 18, 36, 0.58);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 760px;
+      width: 100%;
+      padding: 40px var(--spacing-lg) 150px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .hero-content .hero-title {
+      font-family: var(--font-primary);
+      font-size: clamp(28px, 5.5vw, 52px);
+      font-weight: 900;
+      line-height: 1.35;
+      color: var(--color-text-white);
+      margin-bottom: var(--spacing-xl);
+      letter-spacing: -0.01em;
+    }
+
+    .hero-sub {
+      font-family: var(--font-primary);
+      font-size: clamp(14px, 1.8vw, 17px);
+      color: rgba(255,255,255,0.85);
+      line-height: 1.85;
+      margin-bottom: var(--spacing-2xl);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-trust {
+      display: flex;
+      gap: 8px 10px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .trust-item + .trust-item::before {
+      content: '';
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--color-accent-mint);
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
+    /* FV情報バー（対応エリア＋くらしのマーケット評価） */
+    .hero-fv-bar {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: clamp(14px, 3vw, 28px);
+      width: min(440px, calc(100% - 40px));
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 6px 20px;
+      z-index: 10;
+    }
+
+    .hero-fv-bar-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 9px 0;
+    }
+
+    .hero-fv-bar-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .hero-fv-bar-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.65);
+      flex-shrink: 0;
+    }
+
+    .hero-fv-bar-value {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .hero-fv-bar-value .star {
+      color: var(--color-accent-yellow);
+      margin-right: 2px;
+    }
+
+    .hero-fv-bar-value small {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      margin-left: 4px;
+    }
+
+    .hero-note {
+      margin: 12px clamp(20px, 6vw, 48px) 0;
+      color: var(--color-text-muted);
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    /* PCではスマホ用ヘッダー・動画ヒーローを出さない */
+    @media (min-width: 768px) {
+      .sp-header,
+      .hero,
+      .hero-note {
+        display: none;
       }
     }
 
@@ -1018,6 +1164,16 @@
 </head>
 <body>
 
+<!-- スマホ用ヘッダー（PC非表示） -->
+<header class="sp-header">
+  <a href="https://rakuruma.com">
+    <img src="/assets/images/logo.svg" alt="ラクルマ" style="height:32px;width:auto;">
+  </a>
+  <button class="menu-btn" aria-label="メニューを開閉" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
 <!-- ハンバーガーメニュー -->
 <div class="menu-overlay" onclick="toggleMenu()"></div>
 <nav class="menu-panel" aria-label="サイトメニュー">
@@ -1054,6 +1210,41 @@
     </div>
   </div>
 </section>
+
+<!-- スマホ用HERO：動画（PC非表示） -->
+<section class="hero">
+  <div class="hero-video-wrap">
+    <video class="v-sp" loop muted playsinline preload="none"
+           poster="/assets/uploads/2025/10/hero-seibi-sp-poster.jpg"
+           data-src="/assets/uploads/2025/10/hero-seibi-sp.mp4"></video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-title">クルマの管理を、<br>まるごとラクに。</p>
+    <p class="hero-sub">
+      洗車も、整備も、ふだんの点検も。<br>
+      国家1級整備士が、ご自宅へ伺います。
+    </p>
+    <div class="hero-trust">
+      <span class="trust-item">出張費無料</span>
+      <span class="trust-item">国家1級整備士</span>
+      <span class="trust-item">損害保険加入済み</span>
+    </div>
+  </div>
+  <!-- FV情報バー：対応エリア＋くらしのマーケット評価 -->
+  <div class="hero-fv-bar">
+    <div class="hero-fv-bar-row">
+      <span class="hero-fv-bar-label">対応エリア</span>
+      <span class="hero-fv-bar-value">世田谷・目黒・渋谷・品川・港区</span>
+    </div>
+    <div class="hero-fv-bar-divider"></div>
+    <div class="hero-fv-bar-row">
+      <span class="hero-fv-bar-label">くらしのマーケット</span>
+      <span class="hero-fv-bar-value"><span class="star">★</span>4.92<small>（口コミ560件）</small></span>
+    </div>
+  </div>
+</section>
+<p class="hero-note">※ 2026年7月現在、くらしのマーケットに寄せられた口コミの件数・平均評価より。</p>
 
 <!-- SERVICES：2枚の振り分けカード -->
 <section class="services-section" id="services">
@@ -1219,6 +1410,29 @@
     document.body.classList.toggle('menu-open');
   }
 
+  // スマホ用FV動画：スマホ表示の時だけ読み込む（PCは旧デザインFVなので通信させない）
+  (function () {
+    var mq = window.matchMedia('(max-width: 767px)');
+    var SEAM = 0.8; // 先頭0.8秒はループ継ぎ目用に末尾から移植した部分。初回のみ飛ばす
+
+    function activate() {
+      var v = document.querySelector('.hero video.v-sp');
+      if (!v || v.src) return;
+      v.src = v.dataset.src;
+      v.addEventListener('loadedmetadata', function () {
+        try { v.currentTime = SEAM; } catch (e) {}
+      }, { once: true });
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+    function sync() {
+      if (mq.matches) activate();
+    }
+    sync();
+    if (mq.addEventListener) mq.addEventListener('change', sync);
+    else if (mq.addListener) mq.addListener(sync);
+  })();
+
   // カルーセル共通
   function initCarousel({ trackId, dotsId, prevId, nextId, cardSelector }) {
     const track = document.getElementById(trackId);
@@ -1337,15 +1551,22 @@
       buildWorkCards([]);
     });
 
-  // FV表示中はLINEフローティングボタンを隠す
+  // FV表示中はLINEフローティングボタンを隠す（PC=旧FV／スマホ=動画ヒーローの両方を監視）
   (function() {
     var floatBtn = document.querySelector('.float-line');
-    var fv = document.querySelector('.fv-top');
-    if (floatBtn && fv && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function(entries) {
-        floatBtn.classList.toggle('is-hidden', entries[0].isIntersecting);
-      }, { threshold: 0.2 }).observe(fv);
-    }
+    if (!floatBtn || !('IntersectionObserver' in window)) return;
+    var visible = new Set();
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) visible.add(e.target);
+        else visible.delete(e.target);
+      });
+      floatBtn.classList.toggle('is-hidden', visible.size > 0);
+    }, { threshold: 0.2 });
+    ['.fv-top', '.hero'].forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) io.observe(el);
+    });
   })();
 </script>
 </body>
