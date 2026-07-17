@@ -515,14 +515,48 @@
 
     /* ===== SCENES：逆引き「こんなとき」 ===== */
     .scenes-section {
-      padding-top: 56px;
+      background: var(--color-bg-light-blue);
+    }
+
+    .scene-group {
+      margin-top: var(--spacing-xl);
+    }
+
+    .scene-group + .scene-group {
+      margin-top: var(--spacing-2xl);
+    }
+
+    .scene-group-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .scene-group-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      letter-spacing: 0.02em;
+    }
+
+    .scene-group-link {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .scene-group-link:hover {
+      text-decoration: underline;
     }
 
     .scene-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
-      margin-top: var(--spacing-xl);
     }
 
     @media (max-width: 700px) {
@@ -547,59 +581,27 @@
       box-shadow: var(--shadow-medium);
     }
 
-    .scene-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      border-radius: 40px;
-      padding: 4px 12px;
-      margin-bottom: 10px;
-    }
-
-    .scene-tag--wash {
-      background: var(--color-bg-light-blue);
-      color: var(--color-primary-blue);
-    }
-
-    .scene-tag--seibi {
-      background: var(--color-primary-blue);
-      color: #fff;
-    }
-
-    .scene-tag--consult {
-      background: rgba(60, 196, 122, 0.14);
-      color: #1a8a4a;
-    }
-
     .scene-quote {
       font-size: 15px;
       font-weight: 800;
       color: var(--color-text-primary);
       line-height: 1.7;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .scene-answer {
       font-size: 13px;
       color: var(--color-text-secondary);
-      line-height: 1.75;
-    }
-
-    .scene-more {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--color-primary-blue);
+      line-height: 1.7;
     }
 
     .scene-fallback {
-      margin-top: 24px;
-      background: var(--color-bg-light-blue);
+      margin-top: 28px;
+      background: #fff;
       border-radius: var(--card-radius);
       padding: 28px 22px;
       text-align: center;
+      box-shadow: var(--shadow-light);
     }
 
     .scene-fallback p {
@@ -610,70 +612,111 @@
       margin-bottom: 16px;
     }
 
-    /* ===== HOWTO：頼み方 ===== */
+    /* ===== HOWTO：頼み方（旧HOW TO USEデザイン） ===== */
     .howto-section {
-      background: var(--color-bg-light-blue);
+      background: var(--color-bg-white);
     }
 
-    .howto-steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: var(--spacing-xl);
+    .step-list {
+      list-style: none;
+      margin: 40px 0 0;
+      padding: 0;
     }
 
-    @media (max-width: 700px) {
-      .howto-steps {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .howto-step {
-      background: #fff;
-      border-radius: var(--card-radius);
-      padding: 26px 20px;
-      box-shadow: var(--shadow-light);
-      text-align: center;
-    }
-
-    .howto-step-num {
-      display: inline-flex;
-      align-items: center;
+    .step-list li {
+      display: flex;
       justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--color-primary-blue);
+      align-items: center;
+      gap: 60px;
+      height: 280px;
+      background-size: cover;
+      background-position: center;
+      background-color: rgba(0, 0, 0, 0.38);
+      background-blend-mode: overlay;
       color: #fff;
-      font-size: 15px;
-      font-weight: 800;
-      margin-bottom: 12px;
     }
 
-    .howto-step-title {
-      font-size: 16px;
+    .step-list li:first-child {
+      border-radius: 160px 0 0 0;
+    }
+
+    .step-list li:last-child {
+      border-radius: 0 0 160px 0;
+    }
+
+    .step-1 { background-image: url(/assets/images/step1.webp); }
+    .step-2 { background-image: url(/assets/images/step4.webp); }
+    .step-3 { background-image: url(/assets/images/step3.webp); }
+
+    .step-badge {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      font-size: 21px;
       font-weight: 800;
-      color: var(--color-text-primary);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .step-badge span {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
       margin-bottom: 8px;
     }
 
-    .howto-step-desc {
-      font-size: 13px;
-      color: var(--color-text-secondary);
-      line-height: 1.8;
+    .step-list li p {
+      width: 41%;
+      font-size: 15px;
+      line-height: 2;
       text-align: left;
     }
 
+    @media (max-width: 700px) {
+      .step-list li {
+        flex-direction: column;
+        gap: 0;
+        height: auto;
+        padding: 34px 20px;
+      }
+      .step-list li:first-child {
+        border-radius: 80px 0 0 0;
+      }
+      .step-list li:last-child {
+        border-radius: 0 0 80px 0;
+      }
+      .step-1 { background-image: url(/assets/images/step1_sp.webp); }
+      .step-2 { background-image: url(/assets/images/step4_sp.webp); }
+      .step-3 { background-image: url(/assets/images/step3_sp.webp); }
+      .step-badge {
+        width: 150px;
+        height: 150px;
+        font-size: 17px;
+      }
+      .step-list li p {
+        width: 100%;
+        margin-top: 16px;
+        font-size: 14px;
+        line-height: 1.9;
+      }
+    }
+
     .howto-note {
-      margin-top: 20px;
-      background: #fff;
+      margin-top: 24px;
+      background: var(--color-bg-light-blue);
       border-left: 3px solid var(--color-primary-blue);
       border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
       padding: 18px 22px;
       font-size: 14px;
       color: var(--color-text-primary);
       line-height: 1.9;
-      box-shadow: var(--shadow-light);
     }
 
     /* ===== CONCEPT：点検がついてくる（圧縮版） ===== */
@@ -1199,89 +1242,80 @@
     <div class="section-label">SCENE</div>
     <h2 class="section-title">こんなとき、思い出してください。</h2>
     <p class="section-desc">
-      実際にお客様からいただいたご依頼・ご相談です。ぜんぶ、ご自宅で解決できます。
+      実際にいただいたご依頼から。ぜんぶ、ご自宅で解決できます。
     </p>
-    <div class="scene-grid">
-      <a class="scene-card" href="/maintenance/">
-        <span class="scene-tag scene-tag--seibi">整備・取付</span>
-        <div class="scene-quote">「ネットで買ったパーツ、取付だけお願いしたい」</div>
-        <div class="scene-answer">持ち込み歓迎です。「この型番、うちの車に合う？」の確認からお手伝いします。</div>
-        <span class="scene-more">整備のページへ →</span>
-      </a>
-      <a class="scene-card" href="/maintenance/">
-        <span class="scene-tag scene-tag--seibi">整備・取付</span>
-        <div class="scene-quote">「車を乗り換えた。ドラレコを載せ替えたい」</div>
-        <div class="scene-answer">取り外しから再取付までご自宅で完結。納車直後のご依頼、実は一番多いです。</div>
-        <span class="scene-more">整備のページへ →</span>
-      </a>
-      <a class="scene-card" href="/maintenance/">
-        <span class="scene-tag scene-tag--seibi">整備・取付</span>
-        <div class="scene-quote">「車検、今年どうしよう」</div>
-        <div class="scene-answer">お車の引き取りから返車まで、お任せで完結します。工場に行く必要はありません。</div>
-        <span class="scene-more">整備のページへ →</span>
-      </a>
-      <a class="scene-card" href="/maintenance/">
-        <span class="scene-tag scene-tag--seibi">整備・取付</span>
-        <div class="scene-quote">「エアコンの効きが悪い気がする」</div>
-        <div class="scene-answer">ガス補充で改善するケースが多いです。点検からお気軽にどうぞ。</div>
-        <span class="scene-more">整備のページへ →</span>
-      </a>
-      <a class="scene-card" href="/maintenance/">
-        <span class="scene-tag scene-tag--seibi">整備・取付</span>
-        <div class="scene-quote">「バックカメラやミラーの調子が悪い」</div>
-        <div class="scene-answer">不調の切り分けから、交換・取付し直しまで対応します。</div>
-        <span class="scene-more">整備のページへ →</span>
-      </a>
-      <a class="scene-card" href="/mobile-car-wash/">
-        <span class="scene-tag scene-tag--wash">洗車</span>
-        <div class="scene-quote">「洗車したいけど、行く時間がない」</div>
-        <div class="scene-answer">ご自宅の駐車場で外装も車内もまるごと。立ち会い不要なので、その時間は自由です。</div>
-        <span class="scene-more">洗車のページへ →</span>
-      </a>
-      <a class="scene-card" href="/mobile-car-wash/">
-        <span class="scene-tag scene-tag--wash">洗車</span>
-        <div class="scene-quote">「車内を一度リセットしたい」</div>
-        <div class="scene-answer">お子様の食べこぼしも、ペットの毛も。車内清掃までセットできれいにします。</div>
-        <span class="scene-more">洗車のページへ →</span>
-      </a>
-      <a class="scene-card" href="https://lin.ee/r0BAZkR0">
-        <span class="scene-tag scene-tag--consult">相談だけでもOK</span>
-        <div class="scene-quote">「どれを買えばいいか、買う前に聞きたい」</div>
-        <div class="scene-answer">型番選びのご相談だけでも歓迎です。プロの目で「その車ならこれ」をお答えします。</div>
-        <span class="scene-more">LINEで聞いてみる →</span>
-      </a>
+    <div class="scene-group">
+      <div class="scene-group-head">
+        <div class="scene-group-title">🔧 整備・パーツ取付</div>
+        <a class="scene-group-link" href="/maintenance/">整備のページへ →</a>
+      </div>
+      <div class="scene-grid">
+        <a class="scene-card" href="/maintenance/">
+          <div class="scene-quote">「ネットで買ったパーツ、取付だけお願いしたい」</div>
+          <div class="scene-answer">持ち込み歓迎。型番の相談からどうぞ。</div>
+        </a>
+        <a class="scene-card" href="/maintenance/">
+          <div class="scene-quote">「車を乗り換えた。ドラレコを載せ替えたい」</div>
+          <div class="scene-answer">取り外しから再取付まで、ご自宅で。</div>
+        </a>
+        <a class="scene-card" href="/maintenance/">
+          <div class="scene-quote">「車検、今年どうしよう」</div>
+          <div class="scene-answer">引き取りから返車まで、お任せで。</div>
+        </a>
+        <a class="scene-card" href="/maintenance/">
+          <div class="scene-quote">「エアコンの効きが悪い気がする」</div>
+          <div class="scene-answer">ガス補充で改善するケースが多いです。</div>
+        </a>
+        <a class="scene-card" href="/maintenance/">
+          <div class="scene-quote">「なんだか、車の調子が悪い」</div>
+          <div class="scene-answer">原因の切り分けから対応します。</div>
+        </a>
+      </div>
+    </div>
+    <div class="scene-group">
+      <div class="scene-group-head">
+        <div class="scene-group-title">🚿 洗車</div>
+        <a class="scene-group-link" href="/mobile-car-wash/">洗車のページへ →</a>
+      </div>
+      <div class="scene-grid">
+        <a class="scene-card" href="/mobile-car-wash/">
+          <div class="scene-quote">「洗車したいけど、行く時間がない」</div>
+          <div class="scene-answer">駐車場で外も中も。立ち会い不要です。</div>
+        </a>
+        <a class="scene-card" href="/mobile-car-wash/">
+          <div class="scene-quote">「車内を一度リセットしたい」</div>
+          <div class="scene-answer">食べこぼしも、ペットの毛も。</div>
+        </a>
+      </div>
     </div>
     <div class="scene-fallback">
-      <p>当てはまらなくても、大丈夫。<br class="sp-only">「これって頼める？」も、写真を撮って聞いてください。</p>
+      <p>当てはまらなくても、大丈夫。<br class="sp-only">「これって頼める？」「どれを買えばいい？」も、<br class="sp-only">写真を撮って聞いてください。</p>
       <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで相談する（無料）</a>
     </div>
   </div>
 </section>
 
-<!-- HOWTO：頼み方 -->
+<!-- HOWTO：頼み方（旧HOW TO USEデザイン） -->
 <section class="howto-section" id="howto">
   <div class="section-inner">
     <div class="section-label">HOW TO</div>
     <h2 class="section-title">頼み方は、写真を送るだけ。</h2>
-    <div class="howto-steps">
-      <div class="howto-step">
-        <div class="howto-step-num">1</div>
-        <div class="howto-step-title">LINEで相談</div>
-        <div class="howto-step-desc">車種と気になるところを送ってください。写真があればスムーズです。相談・見積りは無料。</div>
-      </div>
-      <div class="howto-step">
-        <div class="howto-step-num">2</div>
-        <div class="howto-step-title">見積りと日程</div>
-        <div class="howto-step-desc">内容を確認して、金額とお伺いできる日時をご返信します。納得できたら日程確定です。</div>
-      </div>
-      <div class="howto-step">
-        <div class="howto-step-num">3</div>
-        <div class="howto-step-title">ご自宅で作業</div>
-        <div class="howto-step-desc">駐車場にお伺いして、その場で完結。作業内容はご説明のうえ、記録に残します。</div>
-      </div>
-    </div>
+    <ol class="step-list">
+      <li class="step-1">
+        <div class="step-badge"><span>STEP 1</span>LINEで相談</div>
+        <p>車種と気になるところを送ってください。写真があればスムーズ。相談・見積りは無料です。</p>
+      </li>
+      <li class="step-2">
+        <div class="step-badge"><span>STEP 2</span>見積りと日程</div>
+        <p>金額とお伺いできる日時をご返信します。納得できたら日程確定です。</p>
+      </li>
+      <li class="step-3">
+        <div class="step-badge"><span>STEP 3</span>ご自宅で作業</div>
+        <p>駐車場にお伺いして、その場で完結。作業内容はご説明のうえ、記録に残します。</p>
+      </li>
+    </ol>
     <div class="howto-note">
-      💬 やりとりはぜんぶLINEに残ります。2回目からは<strong>「この前の件で」だけで話が通じます</strong>し、作業の記録もカルテとしていつでも見返せます。
+      💬 やりとりはLINEに残るので、2回目からは<strong>「この前の件で」だけで話が通じます</strong>。作業の記録も、いつでも見返せます。
     </div>
   </div>
 </section>
