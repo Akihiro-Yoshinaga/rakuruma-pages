@@ -513,132 +513,172 @@
       margin-bottom: var(--spacing-3xl);
     }
 
-    /* ===== SERVICES：2枚の振り分けカード ===== */
-    .services-section {
+    /* ===== SCENES：逆引き「こんなとき」 ===== */
+    .scenes-section {
       padding-top: 56px;
     }
 
-    .services-grid {
+    .scene-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
       margin-top: var(--spacing-xl);
     }
 
     @media (max-width: 700px) {
-      .services-grid {
+      .scene-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    .service-card {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      min-height: 380px;
-      border-radius: 20px;
-      overflow: hidden;
+    .scene-card {
+      display: block;
+      background: #fff;
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--card-radius);
+      padding: 20px 22px;
       text-decoration: none;
-      color: #fff;
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.14);
-      transition: transform 0.18s, box-shadow 0.18s;
-      padding: 26px 24px;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition-smooth);
     }
 
-    .service-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(8, 18, 36, 0.88) 0%, rgba(8, 18, 36, 0.35) 55%, rgba(8, 18, 36, 0.05) 100%);
+    .scene-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-medium);
     }
 
-    .service-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
-    }
-
-    .service-card--wash {
-      background-image: url(/assets/images/image_top_sp.jpg);
-    }
-
-    .service-card--seibi {
-      background-image: url(/assets/images/works-diagnosis.jpg);
-      background-position: center 30%;
-    }
-
-    .service-card-badge {
+    .scene-tag {
       display: inline-block;
-      align-self: flex-start;
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.12em;
-      color: var(--color-accent-mint);
-      border: 1px solid rgba(126, 217, 196, 0.55);
+      letter-spacing: 0.06em;
       border-radius: 40px;
-      padding: 5px 14px;
-      margin-bottom: 14px;
-      background: rgba(8, 18, 36, 0.35);
+      padding: 4px 12px;
+      margin-bottom: 10px;
     }
 
-    .service-card-name {
-      font-size: clamp(22px, 3vw, 27px);
-      font-weight: 900;
-      margin-bottom: 8px;
-      letter-spacing: 0.01em;
+    .scene-tag--wash {
+      background: var(--color-bg-light-blue);
+      color: var(--color-primary-blue);
     }
 
-    .service-card-copy {
-      font-size: 14px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.95);
-      margin-bottom: 6px;
+    .scene-tag--seibi {
+      background: var(--color-primary-blue);
+      color: #fff;
+    }
+
+    .scene-tag--consult {
+      background: rgba(60, 196, 122, 0.14);
+      color: #1a8a4a;
+    }
+
+    .scene-quote {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--color-text-primary);
       line-height: 1.7;
+      margin-bottom: 8px;
     }
 
-    .service-card-desc {
+    .scene-answer {
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.82);
+      color: var(--color-text-secondary);
       line-height: 1.75;
+    }
+
+    .scene-more {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+    }
+
+    .scene-fallback {
+      margin-top: 24px;
+      background: var(--color-bg-light-blue);
+      border-radius: var(--card-radius);
+      padding: 28px 22px;
+      text-align: center;
+    }
+
+    .scene-fallback p {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      line-height: 1.8;
       margin-bottom: 16px;
     }
 
-    .service-card-more {
-      display: inline-flex;
-      align-items: center;
-      align-self: flex-start;
-      gap: 6px;
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--color-primary-blue);
-      background: #fff;
-      border-radius: 40px;
-      padding: 11px 22px;
-      box-shadow: var(--shadow-light);
-      transition: var(--transition-fast);
-    }
-
-    .service-card:hover .service-card-more {
-      transform: translateX(3px);
-    }
-
-    /* ===== CONCEPT：ラクルマという名前の理由 ===== */
-    .concept-section {
+    /* ===== HOWTO：頼み方 ===== */
+    .howto-section {
       background: var(--color-bg-light-blue);
     }
 
-    .concept-title-note {
-      font-size: 14px;
-      font-weight: 700;
+    .howto-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: var(--spacing-xl);
+    }
+
+    @media (max-width: 700px) {
+      .howto-steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .howto-step {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 26px 20px;
+      box-shadow: var(--shadow-light);
+      text-align: center;
+    }
+
+    .howto-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary-blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .howto-step-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      margin-bottom: 8px;
+    }
+
+    .howto-step-desc {
+      font-size: 13px;
       color: var(--color-text-secondary);
-      margin-bottom: var(--spacing-2xl);
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .howto-note {
+      margin-top: 20px;
+      background: #fff;
+      border-left: 3px solid var(--color-primary-blue);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      padding: 18px 22px;
+      font-size: 14px;
+      color: var(--color-text-primary);
+      line-height: 1.9;
+      box-shadow: var(--shadow-light);
+    }
+
+    /* ===== CONCEPT：点検がついてくる（圧縮版） ===== */
+    .concept-section {
+      background: var(--color-bg-white);
     }
 
     .concept-body {
@@ -651,12 +691,11 @@
 
     .concept-promise {
       max-width: 620px;
-      background: var(--color-bg-white);
+      background: var(--color-bg-light-blue);
       border-left: 3px solid var(--color-primary-blue);
       border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
       padding: 18px 22px;
       margin-bottom: var(--spacing-lg);
-      box-shadow: var(--shadow-light);
     }
 
     .concept-promise strong {
@@ -672,99 +711,10 @@
       line-height: 1.8;
     }
 
-    .concept-close {
-      font-size: 15px;
-      line-height: 2.05;
-      color: var(--color-text-primary);
-      max-width: 620px;
-      margin-bottom: var(--spacing-3xl);
-    }
-
-    /* 循環フロー図 */
-    .concept-loop {
-      display: flex;
-      align-items: stretch;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .loop-step {
-      flex: 1 1 130px;
-      background: var(--color-bg-white);
-      border: 1px solid rgba(26, 82, 160, 0.15);
-      border-radius: var(--card-radius);
-      padding: 18px 14px;
-      text-align: center;
-      box-shadow: var(--shadow-light);
-      position: relative;
-    }
-
-    .loop-step-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: var(--color-primary-blue);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .loop-step-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--color-text-primary);
-      margin-bottom: 5px;
-    }
-
-    .loop-step-desc {
+    .concept-origin {
       font-size: 12px;
-      color: var(--color-text-secondary);
-      line-height: 1.65;
-    }
-
-    .loop-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--color-primary-blue);
-      flex: 0 0 auto;
-    }
-
-    @media (max-width: 700px) {
-      .concept-loop {
-        flex-direction: column;
-        gap: 8px;
-      }
-      .loop-step {
-        flex-basis: auto;
-      }
-      .loop-arrow {
-        transform: rotate(90deg);
-        padding: 2px 0;
-      }
-    }
-
-    .loop-result {
-      margin-top: 18px;
-      background: var(--color-primary-blue);
-      color: #fff;
-      border-radius: var(--card-radius);
-      padding: 18px 22px;
-      text-align: center;
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-    }
-
-    .loop-result span {
-      color: var(--color-accent-mint);
-      margin-right: 8px;
+      color: var(--color-text-muted);
+      line-height: 1.8;
     }
 
     /* ===== MEMBER：担当者 ===== */
@@ -1155,10 +1105,6 @@
       section {
         padding: 60px 20px;
       }
-
-      .service-card {
-        min-height: 320px;
-      }
     }
   </style>
 </head>
@@ -1182,7 +1128,8 @@
   <a href="/maintenance/">出張整備・パーツ取付</a>
   <a href="/price_list/">料金表</a>
   <div class="menu-divider">このページ</div>
-  <a href="#services" onclick="toggleMenu()">サービス一覧</a>
+  <a href="#scenes" onclick="toggleMenu()">こんなとき、頼めます</a>
+  <a href="#howto" onclick="toggleMenu()">頼み方</a>
   <a href="#concept" onclick="toggleMenu()">ラクルマとは</a>
   <a href="#works" onclick="toggleMenu()">作業実績</a>
   <div class="menu-divider">その他</div>
@@ -1246,77 +1193,114 @@
 </section>
 <p class="hero-note">※ 2026年7月現在、くらしのマーケットに寄せられた口コミの件数・平均評価より。</p>
 
-<!-- SERVICES：2枚の振り分けカード -->
-<section class="services-section" id="services">
+<!-- SCENES：逆引き「こんなとき」 -->
+<section class="scenes-section" id="scenes">
   <div class="section-inner">
-    <div class="section-label">SERVICE</div>
-    <h2 class="section-title">どちらのご用件ですか？</h2>
-    <div class="services-grid">
-      <a class="service-card service-card--wash" href="/mobile-car-wash/">
-        <span class="service-card-badge">CAR WASH</span>
-        <div class="service-card-name">出張洗車</div>
-        <div class="service-card-copy">洗車は行くから、来てもらう時代へ。</div>
-        <div class="service-card-desc">ご自宅の駐車場で、車内外をまるごと洗浄。定期プランで愛車をきれいに保ちます。</div>
-        <span class="service-card-more">洗車のページを見る →</span>
+    <div class="section-label">SCENE</div>
+    <h2 class="section-title">こんなとき、思い出してください。</h2>
+    <p class="section-desc">
+      実際にお客様からいただいたご依頼・ご相談です。ぜんぶ、ご自宅で解決できます。
+    </p>
+    <div class="scene-grid">
+      <a class="scene-card" href="/maintenance/">
+        <span class="scene-tag scene-tag--seibi">整備・取付</span>
+        <div class="scene-quote">「ネットで買ったパーツ、取付だけお願いしたい」</div>
+        <div class="scene-answer">持ち込み歓迎です。「この型番、うちの車に合う？」の確認からお手伝いします。</div>
+        <span class="scene-more">整備のページへ →</span>
       </a>
-      <a class="service-card service-card--seibi" href="/maintenance/">
-        <span class="service-card-badge">MAINTENANCE</span>
-        <div class="service-card-name">出張整備・パーツ取付</div>
-        <div class="service-card-copy">車検・オイル交換・ドラレコ取付まで。</div>
-        <div class="service-card-desc">工場へ行かずに、自宅で完結。国家1級整備士が出張で対応します。</div>
-        <span class="service-card-more">整備のページを見る →</span>
+      <a class="scene-card" href="/maintenance/">
+        <span class="scene-tag scene-tag--seibi">整備・取付</span>
+        <div class="scene-quote">「車を乗り換えた。ドラレコを載せ替えたい」</div>
+        <div class="scene-answer">取り外しから再取付までご自宅で完結。納車直後のご依頼、実は一番多いです。</div>
+        <span class="scene-more">整備のページへ →</span>
       </a>
+      <a class="scene-card" href="/maintenance/">
+        <span class="scene-tag scene-tag--seibi">整備・取付</span>
+        <div class="scene-quote">「車検、今年どうしよう」</div>
+        <div class="scene-answer">お車の引き取りから返車まで、お任せで完結します。工場に行く必要はありません。</div>
+        <span class="scene-more">整備のページへ →</span>
+      </a>
+      <a class="scene-card" href="/maintenance/">
+        <span class="scene-tag scene-tag--seibi">整備・取付</span>
+        <div class="scene-quote">「エアコンの効きが悪い気がする」</div>
+        <div class="scene-answer">ガス補充で改善するケースが多いです。点検からお気軽にどうぞ。</div>
+        <span class="scene-more">整備のページへ →</span>
+      </a>
+      <a class="scene-card" href="/maintenance/">
+        <span class="scene-tag scene-tag--seibi">整備・取付</span>
+        <div class="scene-quote">「バックカメラやミラーの調子が悪い」</div>
+        <div class="scene-answer">不調の切り分けから、交換・取付し直しまで対応します。</div>
+        <span class="scene-more">整備のページへ →</span>
+      </a>
+      <a class="scene-card" href="/mobile-car-wash/">
+        <span class="scene-tag scene-tag--wash">洗車</span>
+        <div class="scene-quote">「洗車したいけど、行く時間がない」</div>
+        <div class="scene-answer">ご自宅の駐車場で外装も車内もまるごと。立ち会い不要なので、その時間は自由です。</div>
+        <span class="scene-more">洗車のページへ →</span>
+      </a>
+      <a class="scene-card" href="/mobile-car-wash/">
+        <span class="scene-tag scene-tag--wash">洗車</span>
+        <div class="scene-quote">「車内を一度リセットしたい」</div>
+        <div class="scene-answer">お子様の食べこぼしも、ペットの毛も。車内清掃までセットできれいにします。</div>
+        <span class="scene-more">洗車のページへ →</span>
+      </a>
+      <a class="scene-card" href="https://lin.ee/r0BAZkR0">
+        <span class="scene-tag scene-tag--consult">相談だけでもOK</span>
+        <div class="scene-quote">「どれを買えばいいか、買う前に聞きたい」</div>
+        <div class="scene-answer">型番選びのご相談だけでも歓迎です。プロの目で「その車ならこれ」をお答えします。</div>
+        <span class="scene-more">LINEで聞いてみる →</span>
+      </a>
+    </div>
+    <div class="scene-fallback">
+      <p>当てはまらなくても、大丈夫。<br class="sp-only">「これって頼める？」も、写真を撮って聞いてください。</p>
+      <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで相談する（無料）</a>
     </div>
   </div>
 </section>
 
-<!-- CONCEPT：ラクルマという名前の理由 -->
+<!-- HOWTO：頼み方 -->
+<section class="howto-section" id="howto">
+  <div class="section-inner">
+    <div class="section-label">HOW TO</div>
+    <h2 class="section-title">頼み方は、写真を送るだけ。</h2>
+    <div class="howto-steps">
+      <div class="howto-step">
+        <div class="howto-step-num">1</div>
+        <div class="howto-step-title">LINEで相談</div>
+        <div class="howto-step-desc">車種と気になるところを送ってください。写真があればスムーズです。相談・見積りは無料。</div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-step-num">2</div>
+        <div class="howto-step-title">見積りと日程</div>
+        <div class="howto-step-desc">内容を確認して、金額とお伺いできる日時をご返信します。納得できたら日程確定です。</div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-step-num">3</div>
+        <div class="howto-step-title">ご自宅で作業</div>
+        <div class="howto-step-desc">駐車場にお伺いして、その場で完結。作業内容はご説明のうえ、記録に残します。</div>
+      </div>
+    </div>
+    <div class="howto-note">
+      💬 やりとりはぜんぶLINEに残ります。2回目からは<strong>「この前の件で」だけで話が通じます</strong>し、作業の記録もカルテとしていつでも見返せます。
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPT：点検がついてくる（圧縮版） -->
 <section class="concept-section" id="concept">
   <div class="section-inner">
     <div class="section-label">CONCEPT</div>
-    <h2 class="section-title">洗うたびに、診る。</h2>
-    <p class="concept-title-note">——「ラクルマ」という名前の理由</p>
+    <h2 class="section-title">頼んだ作業だけで、終わらない。</h2>
     <p class="concept-body">
-      ラクルマは、「クルマの管理をラクに」から名づけました。<br><br>
-      私たちの洗車には、国家1級整備士の目がついてきます。<br>
-      ボディを磨きながら、タイヤの減り、バッテリー、灯火類——<br class="pc-only">
-      気になる箇所があれば、写真つきでご報告します。
+      洗車でも、整備でも。作業のあいだに国家1級整備士の目で、<br class="pc-only">
+      タイヤの減り・バッテリー・灯火類をあわせてチェックしています。<br>
+      気になる箇所があれば、写真つきでご報告。<strong>追加料金はありません。</strong>
     </p>
     <div class="concept-promise">
       <strong>直すかどうかを決めるのは、お客様です。</strong>
       <span>私たちから無理におすすめすることはありません。</span>
     </div>
-    <p class="concept-close">
-      洗うたびに診てもらえるから、気づいたときには<br class="pc-only">
-      あなたの車は、いつもベストコンディション。<br>
-      それが、ラクルマの考える「クルマの管理」です。
-    </p>
-    <div class="concept-loop">
-      <div class="loop-step">
-        <div class="loop-step-num">1</div>
-        <div class="loop-step-title">洗車</div>
-        <div class="loop-step-desc">ご自宅の駐車場で車内外をきれいに</div>
-      </div>
-      <div class="loop-arrow">→</div>
-      <div class="loop-step">
-        <div class="loop-step-num">2</div>
-        <div class="loop-step-title">ついで点検</div>
-        <div class="loop-step-desc">整備士の目でタイヤ・バッテリー等を確認</div>
-      </div>
-      <div class="loop-arrow">→</div>
-      <div class="loop-step">
-        <div class="loop-step-num">3</div>
-        <div class="loop-step-title">写真つきでご報告</div>
-        <div class="loop-step-desc">気になる箇所はLINEでお知らせ</div>
-      </div>
-      <div class="loop-arrow">→</div>
-      <div class="loop-step">
-        <div class="loop-step-num">4</div>
-        <div class="loop-step-title">お客様が判断</div>
-        <div class="loop-step-desc">直すかどうかはお客様が決める</div>
-      </div>
-    </div>
-    <div class="loop-result"><span>↻</span>この循環で、車はいつもベストコンディション</div>
+    <p class="concept-origin">※「クルマの管理をラクに」——それが「ラクルマ」という名前の由来です。</p>
   </div>
 </section>
 
@@ -1376,15 +1360,13 @@
 
 <!-- CTA -->
 <section class="cta-section">
-  <h2>まずは、LINEで気軽にご相談ください。</h2>
+  <h2>車のことで迷ったら、まずLINEへ。</h2>
   <p>
-    「うちの車もできる？」「料金はどのくらい？」<br>
-    どんな小さな疑問でもお気軽に。無料でお答えします。
+    今すぐの用事がなくても、登録だけしておけば<br>
+    困ったとき、写真を送るだけですぐ相談できます。
   </p>
   <div class="cta-buttons">
-    <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで無料相談する</a>
-    <a href="/mobile-car-wash/" class="btn-primary">洗車のページを見る</a>
-    <a href="/maintenance/" class="btn-primary">整備のページを見る</a>
+    <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで友だち追加する</a>
   </div>
 </section>
 
