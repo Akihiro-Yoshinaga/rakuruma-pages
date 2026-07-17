@@ -541,18 +541,6 @@
       letter-spacing: 0.02em;
     }
 
-    .scene-group-link {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--color-primary-blue);
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .scene-group-link:hover {
-      text-decoration: underline;
-    }
-
     .scene-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -593,6 +581,63 @@
       font-size: 13px;
       color: var(--color-text-secondary);
       line-height: 1.7;
+    }
+
+    /* 続きを見るカード（写真型・LPクロスリンクと同型） */
+    .scene-lp-card {
+      grid-column: 1 / -1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 150px;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      text-decoration: none;
+      color: #fff;
+      background-size: cover;
+      background-position: center;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition-smooth);
+      padding: 18px 22px;
+    }
+
+    .scene-lp-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8, 18, 36, 0.85) 0%, rgba(8, 18, 36, 0.3) 60%, rgba(8, 18, 36, 0.05) 100%);
+    }
+
+    .scene-lp-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .scene-lp-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .scene-lp-card--seibi {
+      background-image: url(/assets/images/works-diagnosis.jpg);
+      background-position: center 30%;
+    }
+
+    .scene-lp-card--wash {
+      background-image: url(/assets/images/image_top_sp.jpg);
+    }
+
+    .scene-lp-card-teaser {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.65;
+      margin-bottom: 5px;
+    }
+
+    .scene-lp-card-link {
+      font-size: 15px;
+      font-weight: 800;
     }
 
     .scene-fallback {
@@ -1236,7 +1281,6 @@
     <div class="scene-group">
       <div class="scene-group-head">
         <div class="scene-group-title">🔧 整備・パーツ取付</div>
-        <a class="scene-group-link" href="/maintenance/">整備のページへ →</a>
       </div>
       <div class="scene-grid">
         <a class="scene-card" href="/maintenance/">
@@ -1255,12 +1299,15 @@
           <div class="scene-quote">「なんだか、車の調子が悪い」</div>
           <div class="scene-answer">原因の切り分けから対応します。</div>
         </a>
+        <a class="scene-lp-card scene-lp-card--seibi" href="/maintenance/">
+          <div class="scene-lp-card-teaser">オイル交換・タイヤ・バッテリー・テレビキャンセラーなど、できることは他にもたくさん。</div>
+          <div class="scene-lp-card-link">整備のページで全部見る →</div>
+        </a>
       </div>
     </div>
     <div class="scene-group">
       <div class="scene-group-head">
         <div class="scene-group-title">🚿 洗車</div>
-        <a class="scene-group-link" href="/mobile-car-wash/">洗車のページへ →</a>
       </div>
       <div class="scene-grid">
         <a class="scene-card" href="/mobile-car-wash/">
@@ -1270,6 +1317,10 @@
         <a class="scene-card" href="/mobile-car-wash/">
           <div class="scene-quote">「車内を一度リセットしたい」</div>
           <div class="scene-answer">食べこぼしも、ペットの毛も。</div>
+        </a>
+        <a class="scene-lp-card scene-lp-card--wash" href="/mobile-car-wash/">
+          <div class="scene-lp-card-teaser">料金プラン・仕上がり写真・定期プランの詳細は、こちらで。</div>
+          <div class="scene-lp-card-link">洗車のページで全部見る →</div>
         </a>
       </div>
     </div>
