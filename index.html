@@ -659,21 +659,110 @@
       font-weight: 800;
     }
 
-    .scene-fallback {
-      margin-top: 28px;
-      background: #fff;
-      border-radius: var(--card-radius);
-      padding: 28px 22px;
+    /* LINE相談CTA（整備LPのprice-cta-blockと同型） */
+    .price-cta-block {
+      margin-top: 40px;
       text-align: center;
-      box-shadow: var(--shadow-light);
     }
 
-    .scene-fallback p {
+    .price-cta-micro {
+      display: inline-block;
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 900;
+      color: var(--color-primary-green);
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+
+    .price-cta-card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-medium);
+      border-top: 3px solid var(--color-primary-green);
+      text-align: left;
+    }
+
+    .price-cta-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .price-cta-title {
+      font-size: 16px;
+      font-weight: 800;
       color: var(--color-text-primary);
-      line-height: 1.8;
-      margin-bottom: 16px;
+      margin-bottom: 6px;
+    }
+
+    .price-cta-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+
+    .price-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--gradient-button-green);
+      color: #fff;
+      text-decoration: none;
+      padding: 18px 36px;
+      border-radius: 50px;
+      box-shadow: 0 6px 24px rgba(60,196,122,0.45);
+      transition: var(--transition-smooth);
+      flex-shrink: 0;
+    }
+
+    .price-cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+    }
+
+    .price-cta-btn-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .price-cta-btn-main {
+      display: block;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .price-cta-btn-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.85;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 600px) {
+      .price-cta-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+        text-align: center;
+      }
+      .price-cta-text {
+        text-align: center;
+      }
+      .price-cta-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 18px 24px;
+      }
     }
 
     /* ===== HOWTO：頼み方（旧HOW TO USEデザイン） ===== */
@@ -1299,7 +1388,7 @@
     </p>
     <div class="scene-group">
       <div class="scene-group-head">
-        <div class="scene-group-title">🔧 整備・パーツ取付</div>
+        <div class="scene-group-title">整備・パーツ取付</div>
       </div>
       <div class="scene-grid">
         <a class="scene-card" href="/maintenance/">
@@ -1326,7 +1415,7 @@
     </div>
     <div class="scene-group">
       <div class="scene-group-head">
-        <div class="scene-group-title">🚿 洗車</div>
+        <div class="scene-group-title">洗車</div>
       </div>
       <div class="scene-grid">
         <a class="scene-card" href="/mobile-car-wash/">
@@ -1343,9 +1432,21 @@
         </a>
       </div>
     </div>
-    <div class="scene-fallback">
-      <p>当てはまらなくても、大丈夫。<br class="sp-only">「これって頼める？」「どれを買えばいい？」も、<br class="sp-only">写真を撮って聞いてください。</p>
-      <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで相談する（無料）</a>
+    <div class="price-cta-block">
+      <p class="price-cta-micro">＼ まずはスマホで写真を送るだけ！ ／</p>
+      <div class="price-cta-card">
+        <div class="price-cta-text">
+          <div class="price-cta-title">一覧にないメニューもお気軽にご相談ください</div>
+          <div class="price-cta-desc">「こんな作業もできる？」「料金はどのくらい？」<br>どんな小さなことでも、LINEで無料でお答えします。</div>
+        </div>
+        <a href="https://lin.ee/r0BAZkR0" class="price-cta-btn">
+          <span class="price-cta-btn-icon">💬</span>
+          <span>
+            <span class="price-cta-btn-main">LINEで相談する</span>
+            <span class="price-cta-btn-sub">無料・返信は最短当日</span>
+          </span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
