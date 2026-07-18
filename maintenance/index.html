@@ -1337,150 +1337,34 @@
       }
     }
 
-    /* ── メニュー一覧（2カラム） ── */
-    .service-two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-2xl);
-    }
-
-    .service-col {
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-medium);
-    }
-
-    .service-col-head {
-      padding: 28px 28px 20px;
-      color: var(--color-text-white);
-    }
-
-    .service-col-head.visit {
-      background: var(--gradient-button-blue);
-    }
-
-    .service-col-head.pickup {
-      background: linear-gradient(135deg, #1b2a44 0%, #2a4568 100%);
-    }
-
-    .service-col-badge {
-      display: inline-block;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.35);
-      border-radius: var(--radius-sm);
-      padding: 4px 14px;
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-bold);
-      letter-spacing: 1px;
-      margin-bottom: var(--spacing-md);
-    }
-
-    .service-col-head h3 {
-      font-size: var(--font-size-lg);
-      font-weight: var(--font-weight-bold);
-      margin-bottom: 6px;
-      line-height: var(--line-height-normal);
-    }
-
-    .service-col-head p {
-      font-size: var(--font-size-sm);
-      color: rgba(255,255,255,0.8);
-      line-height: var(--line-height-relaxed);
-    }
-
-    .service-col-body {
-      background: var(--color-bg-white);
-      padding: var(--spacing-2xl) 28px;
-    }
-
-    .service-menu-group {
-      margin-bottom: var(--spacing-xl);
-    }
-
-    .service-menu-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .service-menu-group-title {
-      font-size: 14px;
+    .service-killer-price {
+      margin-top: 10px;
+      font-size: 13px;
       font-weight: 800;
       color: var(--color-primary-blue);
-      margin-bottom: 10px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--color-bg-light-blue);
-      line-height: 1.4;
+      line-height: 1.7;
     }
 
-    .service-menu-group-title .title-sub {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--color-text-muted);
-      letter-spacing: 0.05em;
-      margin-top: 2px;
-    }
-
-    .service-menu-group-title.green {
-      color: #2a4568;
-      border-bottom-color: rgba(42, 69, 104, 0.18);
-    }
-
-    .rank-badge {
-      display: inline-block;
-      background: var(--color-accent-yellow);
-      color: #6b5200;
+    /* 料金カテゴリの対応区分バッジ */
+    .acc-badge {
       font-size: 10px;
       font-weight: 800;
       letter-spacing: 0.05em;
-      padding: 2px 8px;
       border-radius: 20px;
-      margin-left: 6px;
-      vertical-align: 1px;
+      padding: 3px 10px;
+      margin-left: 8px;
+      white-space: nowrap;
+      vertical-align: middle;
     }
 
-    .service-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .service-tag {
-      background: var(--color-bg-white);
-      color: var(--color-primary-blue);
-      padding: 7px 14px;
-      border-radius: 40px;
-      font-size: 13px;
-      font-weight: 600;
-      border: 1.5px solid var(--color-bg-light-blue);
-      transition: var(--transition-smooth);
-      cursor: default;
-    }
-
-    .service-tag:hover {
+    .acc-badge--visit {
       background: var(--color-bg-light-blue);
-      border-color: var(--color-primary-blue);
+      color: var(--color-primary-blue);
     }
 
-    .service-tag.green {
-      color: #2a4568;
-      border-color: rgba(42, 69, 104, 0.25);
-    }
-
-    .service-tag.green:hover {
-      background: rgba(42, 69, 104, 0.06);
-      border-color: #2a4568;
-    }
-
-    .service-tag.highlight {
-      background: var(--color-primary-blue);
-      color: var(--color-text-white);
-      border-color: var(--color-primary-blue);
-    }
-
-    .service-tag.highlight.green {
-      background: #2a4568;
-      color: var(--color-text-white);
-      border-color: #2a4568;
+    .acc-badge--pickup {
+      background: rgba(60, 196, 122, 0.15);
+      color: #1a8a4a;
     }
 
     .service-consult-cta {
@@ -1708,9 +1592,6 @@
     }
 
     @media (max-width: 768px) {
-      .service-two-col {
-        grid-template-columns: 1fr;
-      }
 
       .tesla-section::before {
         font-size: 80px;
@@ -2742,76 +2623,39 @@
 <!-- SERVICE OVERVIEW：サービス全体像 -->
 <section class="service-overview" id="service-overview">
   <div class="section-inner">
-    <div class="section-label">SERVICE OVERVIEW</div>
-    <h2 class="section-title">ラクルマでできること、<br>全部お見せします。</h2>
-    <p class="section-desc">整備・パーツ取付・消耗品交換まで、幅広く対応しています。</p>
+    <div class="section-label">BEST 3</div>
+    <h2 class="section-title">よく頼まれる作業、<br>BEST3。</h2>
+    <p class="section-desc">全メニューと料金は、下の<a href="#price" style="color:var(--color-primary-blue);font-weight:700;">料金表</a>でご覧いただけます。</p>
 
-    <!-- メニュー全体一覧 -->
-    <div class="service-two-col">
+    <div class="service-killer-grid">
 
-      <!-- 出張でできること -->
-      <div class="service-col">
-        <div class="service-col-head visit">
-          <div class="service-col-badge">出張対応</div>
-          <h3>自宅の駐車場で<br>そのまま完結</h3>
-        </div>
-        <div class="service-col-body">
-          <div class="service-menu-group">
-            <div class="service-menu-group-title">
-              カーナビ・AV・電装系<span class="rank-badge">人気 No.1</span>
-            </div>
-            <div class="service-tags">
-              <span class="service-tag highlight">ドライブレコーダー</span>
-              <span class="service-tag highlight">デジタルインナーミラー</span>
-              <span class="service-tag">カーナビ取付</span>
-              <span class="service-tag">エンジンスターター</span>
-              <span class="service-tag">テレビキャンセラー</span>
-              <span class="service-tag highlight">社外パーツ全般</span>
-            </div>
-          </div>
-          <div class="service-menu-group">
-            <div class="service-menu-group-title">
-              消耗品・メンテナンス<span class="rank-badge">人気 No.2</span>
-            </div>
-            <div class="service-tags">
-              <span class="service-tag">バッテリー交換</span>
-              <span class="service-tag">タイヤ履き替え</span>
-              <span class="service-tag">エアコンフィルター</span>
-              <span class="service-tag">ワイパー交換</span>
-              <span class="service-tag">エンジンオイル</span>
-              <span class="service-tag">電球・ライト</span>
-            </div>
-          </div>
+      <div class="service-killer-card">
+        <img class="service-killer-img" src="/assets/images/voice-mirror-dashcam.jpg" alt="ドライブレコーダー取付の作業写真" loading="lazy">
+        <div class="service-killer-body">
+          <span class="service-killer-label">人気 No.1</span>
+          <div class="service-killer-title">ドラレコ・ナビ・テレビキャンセラー取付</div>
+          <p class="service-killer-desc">ネットで買ったパーツの持ち込み大歓迎。輸入車や「ディーラーで断られた」もご相談ください。</p>
+          <p class="service-killer-price">ドラレコ ¥8,800〜 ／ テレビキャンセラー ¥5,500〜 ／ ナビ ¥16,500〜</p>
         </div>
       </div>
 
-      <!-- 引き取り納車でできること -->
-      <div class="service-col">
-        <div class="service-col-head pickup">
-          <div class="service-col-badge">引き取り納車対応</div>
-          <h3>自宅まで引き取りに来て、<br>整備後にお届け</h3>
+      <div class="service-killer-card">
+        <img class="service-killer-img" src="/assets/images/works-diagnosis.jpg" alt="バッテリー交換など消耗品交換の作業写真" loading="lazy">
+        <div class="service-killer-body">
+          <span class="service-killer-label">人気 No.2</span>
+          <div class="service-killer-title">バッテリー・タイヤなど消耗品交換</div>
+          <p class="service-killer-desc">店舗へ行く手間ゼロ。ご自宅の駐車場で、そのまま交換が完了します。</p>
+          <p class="service-killer-price">バッテリー ¥11,000〜 ／ タイヤ交換(4本) ¥8,800〜 ／ オイル ¥5,500〜</p>
         </div>
-        <div class="service-col-body">
-          <div class="service-menu-group">
-            <div class="service-menu-group-title green">
-              点検・車検<span class="rank-badge">人気 No.3</span>
-            </div>
-            <div class="service-tags">
-              <span class="service-tag green highlight">車検（24ヶ月点検込み）</span>
-              <span class="service-tag green">法定点検</span>
-              <span class="service-tag green">診断・故障調査</span>
-            </div>
-          </div>
-          <div class="service-menu-group">
-            <div class="service-menu-group-title green">
-              重整備・修理
-            </div>
-            <div class="service-tags">
-              <span class="service-tag green">タイヤ交換（4本）</span>
-              <span class="service-tag green">ブレーキパッド交換</span>
-              <span class="service-tag green highlight">その他重整備</span>
-            </div>
-          </div>
+      </div>
+
+      <div class="service-killer-card">
+        <img class="service-killer-img" src="/assets/images/image_4.jpg" alt="車検・点検の作業写真" loading="lazy">
+        <div class="service-killer-body">
+          <span class="service-killer-label">人気 No.3</span>
+          <div class="service-killer-title">車検（引き取り納車）</div>
+          <p class="service-killer-desc">ご自宅までお車を引き取りに伺い、車検完了後にお届け。貴重な休日を潰しません。</p>
+          <p class="service-killer-price">車検（24ヶ月点検込み） ¥33,000〜＋法定費用</p>
         </div>
       </div>
 
@@ -2879,7 +2723,7 @@
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
           <div class="accordion-trigger-left">
             <span style="font-size:20px;">🛢️</span>
-            <span class="accordion-trigger-title">定期メンテナンス <span class="accordion-trigger-count">6メニュー</span></span>
+            <span class="accordion-trigger-title">定期メンテナンス<span class="acc-badge acc-badge--visit">出張対応</span> <span class="accordion-trigger-count">6メニュー</span></span>
           </div>
           <span class="accordion-icon">▼</span>
         </button>
@@ -2903,7 +2747,7 @@
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
           <div class="accordion-trigger-left">
             <span style="font-size:20px;">🔍</span>
-            <span class="accordion-trigger-title">車検・点検 <span class="accordion-trigger-count">3メニュー</span></span>
+            <span class="accordion-trigger-title">車検・点検<span class="acc-badge acc-badge--pickup">引き取り納車</span> <span class="accordion-trigger-count">3メニュー</span></span>
           </div>
           <span class="accordion-icon">▼</span>
         </button>
@@ -2924,7 +2768,7 @@
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
           <div class="accordion-trigger-left">
             <span style="font-size:20px;">📱</span>
-            <span class="accordion-trigger-title">カーナビ・AV・電装パーツ取付 <span class="accordion-trigger-count">10メニュー</span></span>
+            <span class="accordion-trigger-title">カーナビ・AV・電装パーツ取付<span class="acc-badge acc-badge--visit">出張対応</span> <span class="accordion-trigger-count">10メニュー</span></span>
           </div>
           <span class="accordion-icon">▼</span>
         </button>
@@ -2952,7 +2796,7 @@
         <button class="accordion-trigger" onclick="toggleAccordion(this)">
           <div class="accordion-trigger-left">
             <span style="font-size:20px;">⚡</span>
-            <span class="accordion-trigger-title">テスラ専用パーツ取付 <span class="accordion-trigger-count">4メニュー</span></span>
+            <span class="accordion-trigger-title">テスラ専用パーツ取付<span class="acc-badge acc-badge--visit">出張対応</span> <span class="accordion-trigger-count">4メニュー</span></span>
           </div>
           <span class="accordion-icon">▼</span>
         </button>
