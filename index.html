@@ -187,15 +187,13 @@
       background: var(--color-primary-blue);
     }
 
-    /* ===== スマホ用HERO（動画） ===== */
+    /* ===== スマホ用HERO（動画・B-1デザイン） ===== */
     .hero {
       position: relative;
-      min-height: calc(88vh - 64px);
-      min-height: calc(88svh - 64px);
+      min-height: calc(100svh - 64px);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      flex-direction: column;
+      justify-content: flex-end;
       overflow: hidden;
       background: #0d1a2e;
     }
@@ -215,124 +213,130 @@
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(8, 18, 36, 0.58);
+      background: linear-gradient(to top,
+        rgba(3, 24, 54, 0.96) 0%,
+        rgba(3, 24, 54, 0.82) 34%,
+        rgba(4, 28, 62, 0.45) 62%,
+        rgba(8, 30, 64, 0.18) 100%);
       z-index: 1;
       pointer-events: none;
     }
 
-    .hero-content {
-      position: relative;
-      z-index: 10;
-      max-width: 760px;
-      width: 100%;
-      padding: 40px var(--spacing-lg) 150px;
-      color: #fff;
-      text-align: center;
+    .hero-area-badge {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      z-index: 2;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.05em;
+      background: rgba(4, 24, 54, 0.45);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 40px;
+      padding: 5px 12px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      white-space: nowrap;
     }
 
-    .hero-content .hero-title {
-      font-family: var(--font-primary);
-      font-size: clamp(28px, 5.5vw, 52px);
+    .hero-bottom {
+      position: relative;
+      z-index: 2;
+      padding: 0 22px 26px;
+      color: #fff;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: #8fe6cf;
+      margin-bottom: 13px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 26px;
+      height: 2px;
+      background: #8fe6cf;
+      border-radius: 2px;
+    }
+
+    .hero-title {
+      font-size: clamp(30px, 8.6vw, 38px);
       font-weight: 900;
-      line-height: 1.35;
-      color: var(--color-text-white);
-      margin-bottom: var(--spacing-xl);
-      letter-spacing: -0.01em;
+      line-height: 1.42;
+      color: #fff;
+      letter-spacing: 0.01em;
+      margin-bottom: 12px;
     }
 
     .hero-sub {
-      font-family: var(--font-primary);
-      font-size: clamp(14px, 1.8vw, 17px);
-      color: rgba(255,255,255,0.85);
-      line-height: 1.85;
-      margin-bottom: var(--spacing-2xl);
-      letter-spacing: 0.02em;
+      font-size: 13.5px;
+      line-height: 1.9;
+      color: rgba(255,255,255,0.88);
+      margin-bottom: 24px;
     }
 
-    .hero-trust {
-      display: flex;
-      gap: 8px 10px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .trust-item {
-      font-size: 12px;
-      color: rgba(255,255,255,0.72);
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
+    .hero-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
+      margin-bottom: 18px;
     }
 
-    .trust-item + .trust-item::before {
-      content: '';
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: var(--color-accent-mint);
-      opacity: 0.9;
-      flex-shrink: 0;
-    }
-
-    /* FV情報バー（対応エリア＋くらしのマーケット評価） */
-    .hero-fv-bar {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: clamp(14px, 3vw, 28px);
-      width: min(440px, calc(100% - 40px));
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 16px;
+    .hero-card {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 14px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      padding: 6px 20px;
-      z-index: 10;
+      padding: 15px 14px 13px;
+      text-decoration: none;
+      display: block;
     }
 
-    .hero-fv-bar-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 9px 0;
-    }
-
-    .hero-fv-bar-divider {
-      height: 1px;
-      background: rgba(255, 255, 255, 0.18);
-    }
-
-    .hero-fv-bar-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.65);
-      flex-shrink: 0;
-    }
-
-    .hero-fv-bar-value {
-      font-size: 14px;
+    .hero-card-name {
+      font-size: 15.5px;
       font-weight: 800;
       color: #fff;
       letter-spacing: 0.02em;
-      white-space: nowrap;
     }
 
-    .hero-fv-bar-value .star {
-      color: var(--color-accent-yellow);
-      margin-right: 2px;
-    }
-
-    .hero-fv-bar-value small {
+    .hero-card-desc {
       font-size: 11px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.75);
-      margin-left: 4px;
+      color: rgba(255,255,255,0.78);
+      margin-top: 4px;
     }
+
+    .hero-card-arrow {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #8fe6cf;
+    }
+
+    .hero-rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      border-top: 1px solid rgba(255,255,255,0.18);
+      padding-top: 16px;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-rating .star { color: var(--color-accent-yellow); }
+    .hero-rating .num { font-size: 16px; font-weight: 900; color: #fff; }
+    .hero-rating small { font-weight: 600; color: rgba(255,255,255,0.72); }
 
     .hero-note {
       margin: 12px clamp(20px, 6vw, 48px) 0;
@@ -1338,7 +1342,7 @@
   </div>
 </section>
 
-<!-- スマホ用HERO：動画（PC非表示） -->
+<!-- スマホ用HERO：動画（PC非表示・B-1デザイン） -->
 <section class="hero">
   <div class="hero-video-wrap">
     <video class="v-sp" loop muted playsinline preload="none"
@@ -1346,28 +1350,26 @@
            data-src="/assets/uploads/2025/10/hero-top-sp-v5.mp4"></video>
   </div>
   <div class="hero-overlay"></div>
-  <div class="hero-content">
+  <span class="hero-area-badge">世田谷・目黒・渋谷・品川・港区</span>
+  <div class="hero-bottom">
+    <div class="hero-eyebrow">出張洗車 × 出張整備</div>
     <p class="hero-title">クルマの管理を、<br>まるごとラクに。</p>
-    <p class="hero-sub">
-      洗車も、整備も、ふだんの点検も。<br>
-      国家1級整備士が、ご自宅へ伺います。
-    </p>
-    <div class="hero-trust">
-      <span class="trust-item">出張費無料</span>
-      <span class="trust-item">国家1級整備士</span>
-      <span class="trust-item">損害保険加入済み</span>
+    <p class="hero-sub">洗車も、整備も、ふだんの点検も。<br>国家1級整備士が、ご自宅へ伺います。</p>
+    <div class="hero-cards">
+      <a class="hero-card" href="/mobile-car-wash/">
+        <div class="hero-card-name">出張洗車</div>
+        <div class="hero-card-desc">外も中も、駐車場で</div>
+        <span class="hero-card-arrow">くわしく →</span>
+      </a>
+      <a class="hero-card" href="/maintenance/">
+        <div class="hero-card-name">出張整備</div>
+        <div class="hero-card-desc">車検・修理・取付</div>
+        <span class="hero-card-arrow">くわしく →</span>
+      </a>
     </div>
-  </div>
-  <!-- FV情報バー：対応エリア＋くらしのマーケット評価 -->
-  <div class="hero-fv-bar">
-    <div class="hero-fv-bar-row">
-      <span class="hero-fv-bar-label">対応エリア</span>
-      <span class="hero-fv-bar-value">世田谷・目黒・渋谷・品川・港区</span>
-    </div>
-    <div class="hero-fv-bar-divider"></div>
-    <div class="hero-fv-bar-row">
-      <span class="hero-fv-bar-label">くらしのマーケット</span>
-      <span class="hero-fv-bar-value"><span class="star">★</span>4.92<small>（口コミ560件）</small></span>
+    <div class="hero-rating">
+      <span><span class="star">★</span><span class="num">4.92</span></span>
+      <small>くらしのマーケット 口コミ560件</small>
     </div>
   </div>
 </section>
