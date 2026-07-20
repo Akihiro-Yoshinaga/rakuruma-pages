@@ -68,6 +68,28 @@ body {
     padding: 12px 20px;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
 }
+.rk-header__brand {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+.rk-page-label {
+    margin-left: 14px;
+    padding-left: 14px;
+    border-left: 1px solid #e2e8f0;
+    font-size: 13px;
+    font-weight: 800;
+    color: #003B8B;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+@media (max-width: 480px) {
+    .rk-page-label {
+        font-size: 11px;
+        margin-left: 10px;
+        padding-left: 10px;
+    }
+}
 .rk-header__logo img {
     height: 32px;
     width: auto;
@@ -669,9 +691,12 @@ a[href^="https://lin.ee"]:hover {
 <body>
     <!-- 固定ヘッダー -->
     <header class="rk-header">
-        <a href="/" class="rk-header__logo" aria-label="ラクルマ トップページ">
-            <img src="/assets/images/logo.svg" alt="ラクルマ" loading="lazy" decoding="async">
-        </a>
+        <div class="rk-header__brand">
+            <a href="/" class="rk-header__logo" aria-label="ラクルマ トップページ">
+                <img src="/assets/images/logo.svg" alt="ラクルマ" loading="lazy" decoding="async">
+            </a>
+            <span class="rk-page-label">出張洗車</span>
+        </div>
         <button class="rk-menu-btn" aria-label="メニューを開閉" onclick="rkToggleMenu()">
             <span></span><span></span><span></span>
         </button>
