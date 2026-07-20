@@ -28,177 +28,6 @@ body {
 }
 
 /* ============================================================
-   案A：ブランドグラデ＋フォトカード
-   ============================================================ */
-.fv-a {
-  position: relative;
-  min-height: 100svh;
-  background: linear-gradient(160deg, #A2D1DA 0%, #3d74ad 42%, #003B8B 78%, #002a63 100%);
-  border-radius: 0 0 0 64px;
-  display: flex;
-  flex-direction: column;
-  padding: 0 22px 30px;
-  overflow: hidden;
-}
-
-/* 奥行き用の淡い光 */
-.fv-a::before {
-  content: '';
-  position: absolute;
-  top: -120px;
-  right: -120px;
-  width: 340px;
-  height: 340px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 68%);
-  pointer-events: none;
-}
-
-.fv-a-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 0 0;
-}
-
-.fv-a-header img {
-  width: 104px;
-  display: block;
-}
-
-.fv-a-area {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  letter-spacing: 0.05em;
-  border: 1px solid rgba(255,255,255,0.35);
-  border-radius: 40px;
-  padding: 5px 12px;
-  white-space: nowrap;
-}
-
-.fv-a-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 30px 0 24px;
-}
-
-.fv-a-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12.5px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  color: #8fe6cf;
-  margin-bottom: 14px;
-}
-
-.fv-a-eyebrow::before {
-  content: '';
-  width: 26px;
-  height: 2px;
-  background: #8fe6cf;
-  border-radius: 2px;
-}
-
-.fv-a h1 {
-  font-size: clamp(30px, 8.6vw, 38px);
-  font-weight: 900;
-  line-height: 1.42;
-  color: #fff;
-  letter-spacing: 0.01em;
-  margin-bottom: 14px;
-  text-shadow: 0 2px 18px rgba(0, 30, 70, 0.25);
-}
-
-.fv-a-sub {
-  font-size: 13.5px;
-  line-height: 1.9;
-  color: rgba(255,255,255,0.92);
-  margin-bottom: 26px;
-}
-
-.fv-a-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.fv-a-card {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  text-decoration: none;
-  box-shadow: 0 10px 28px rgba(0, 24, 60, 0.28);
-}
-
-.fv-a-card-pic {
-  width: 92px;
-  height: 76px;
-  flex-shrink: 0;
-  background-size: cover;
-  background-position: center;
-}
-
-.fv-a-card-pic--wash { background-image: url(/assets/images/image_solution.jpg); }
-.fv-a-card-pic--seibi { background-image: url(/assets/images/works-diagnosis.jpg); background-position: center 30%; }
-
-.fv-a-card-body {
-  flex: 1;
-  padding: 0 14px;
-  min-width: 0;
-}
-
-.fv-a-card-name {
-  font-size: 16px;
-  font-weight: 800;
-  color: #04264f;
-  letter-spacing: 0.02em;
-}
-
-.fv-a-card-desc {
-  font-size: 11px;
-  color: #6b7d92;
-  margin-top: 3px;
-}
-
-.fv-a-card-arrow {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--color-bg-light-blue);
-  color: var(--color-primary-blue);
-  font-size: 14px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 14px;
-  flex-shrink: 0;
-}
-
-.fv-a-rating {
-  margin-top: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.9);
-  letter-spacing: 0.03em;
-}
-
-.fv-a-rating .star { color: var(--color-accent-yellow); }
-.fv-a-rating .num { font-size: 16px; font-weight: 900; color: #fff; }
-.fv-a-rating small { font-weight: 600; color: rgba(255,255,255,0.75); }
-
-/* ============================================================
    案B：写真×ネイビースクリム
    ============================================================ */
 .fv-b {
@@ -344,48 +173,62 @@ body {
 .fv-b-rating .num { font-size: 16px; font-weight: 900; color: #fff; }
 .fv-b-rating small { font-weight: 600; color: rgba(255,255,255,0.72); }
 
+
+/* 案B動画版 */
+.fv-b--video { background: #0d1a2e; }
+.fv-b-videobg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.fv-b-videobg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.fv-b--video::before { z-index: 1; }
+.fv-b--video > .fv-b-header,
+.fv-b--video > .fv-b-body { z-index: 2; }
+
 /* PCで見る場合は幅を絞ってスマホ相当で確認 */
 @media (min-width: 500px) {
   .frame {
     max-width: 400px;
     margin: 0 auto;
   }
-  .fv-a, .fv-b { min-height: 780px; }
+  .fv-b { min-height: 780px; }
 }
 </style>
 </head>
 <body>
 
-<div class="variant-label">案A：ブランドグラデ＋フォトカード</div>
+<div class="variant-label">案B-1：動画background版</div>
 <div class="frame">
-<section class="fv-a">
-  <div class="fv-a-header">
-    <img src="/assets/images/logo_rakuruma_w.svg" alt="ラクルマ">
-    <span class="fv-a-area">世田谷・目黒・渋谷・品川・港区</span>
+<section class="fv-b fv-b--video">
+  <div class="fv-b-videobg">
+    <video src="/assets/uploads/2025/10/hero-top-sp-v5.mp4" autoplay loop muted playsinline></video>
   </div>
-  <div class="fv-a-body">
-    <div class="fv-a-eyebrow">出張洗車 × 出張整備</div>
+  <div class="fv-b-header">
+    <img src="/assets/images/logo_rakuruma_w.svg" alt="ラクルマ">
+    <span class="fv-b-area">世田谷・目黒・渋谷・品川・港区</span>
+  </div>
+  <div class="fv-b-body">
+    <div class="fv-b-eyebrow">出張洗車 × 出張整備</div>
     <h1>クルマの管理を、<br>まるごとラクに。</h1>
-    <p class="fv-a-sub">洗車も、整備も、ふだんの点検も。<br>国家1級整備士が、ご自宅へ伺います。</p>
-    <div class="fv-a-cards">
-      <a class="fv-a-card" href="/mobile-car-wash/">
-        <div class="fv-a-card-pic fv-a-card-pic--wash"></div>
-        <div class="fv-a-card-body">
-          <div class="fv-a-card-name">出張洗車</div>
-          <div class="fv-a-card-desc">ご自宅の駐車場で、外も中もきれいに</div>
-        </div>
-        <div class="fv-a-card-arrow">→</div>
+    <p class="fv-b-sub">洗車も、整備も、ふだんの点検も。<br>国家1級整備士が、ご自宅へ伺います。</p>
+    <div class="fv-b-cards">
+      <a class="fv-b-card" href="/mobile-car-wash/">
+        <div class="fv-b-card-name">出張洗車</div>
+        <div class="fv-b-card-desc">外も中も、駐車場で</div>
+        <span class="fv-b-card-arrow">くわしく →</span>
       </a>
-      <a class="fv-a-card" href="/maintenance/">
-        <div class="fv-a-card-pic fv-a-card-pic--seibi"></div>
-        <div class="fv-a-card-body">
-          <div class="fv-a-card-name">出張整備・パーツ取付</div>
-          <div class="fv-a-card-desc">車検・修理・取付を、工場に行かずに</div>
-        </div>
-        <div class="fv-a-card-arrow">→</div>
+      <a class="fv-b-card" href="/maintenance/">
+        <div class="fv-b-card-name">出張整備</div>
+        <div class="fv-b-card-desc">車検・修理・取付</div>
+        <span class="fv-b-card-arrow">くわしく →</span>
       </a>
     </div>
-    <div class="fv-a-rating">
+    <div class="fv-b-rating">
       <span><span class="star">★</span><span class="num">4.92</span></span>
       <small>くらしのマーケット 口コミ560件</small>
     </div>
@@ -393,7 +236,7 @@ body {
 </section>
 </div>
 
-<div class="variant-label">案B：写真×ネイビースクリム</div>
+<div class="variant-label">案B-2：写真版</div>
 <div class="frame">
 <section class="fv-b">
   <div class="fv-b-header">
