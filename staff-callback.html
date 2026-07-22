@@ -47,10 +47,9 @@ body {
 </div>
 
 <script>
-var GAS_URL        = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
-var CHANNEL_ID     = '2004330318';
-var CHANNEL_SECRET = '8c91804575d554a3d175d192d69ef161';
-var CALLBACK_URL   = 'https://rakuruma.com/staff-callback.html';
+// このページは公開されているため、チャンネルシークレットを置いてはいけない。
+// 認可コード → LINEユーザーIDの交換はGAS側（staffLineExchange）で行う。
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 
 var params = new URLSearchParams(window.location.search);
 var code  = params.get('code');
@@ -60,38 +59,22 @@ var error = params.get('error');
 if (error || !code) {
   showError('LINEログインがキャンセルされました。もう一度お試しください。');
 } else {
-  // トークン交換
-  var body = 'grant_type=authorization_code'
-    + '&code=' + encodeURIComponent(code)
-    + '&redirect_uri=' + encodeURIComponent(CALLBACK_URL)
-    + '&client_id=' + CHANNEL_ID
-    + '&client_secret=' + CHANNEL_SECRET;
-
-  fetch('https://api.line.me/oauth2/v2.1/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: body
-  })
+  fetch(GAS_URL + '?action=staffLineExchange&code=' + encodeURIComponent(code))
   .then(function(r) { return r.json(); })
-  .then(function(tokenData) {
-    if (!tokenData.access_token) { showError('LINEトークンの取得に失敗しました。'); return; }
-    // プロフィール取得
-    return fetch('https://api.line.me/v2/profile', {
-      headers: { 'Authorization': 'Bearer ' + tokenData.access_token }
-    });
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(profile) {
-    if (!profile.userId) { showError('プロフィールの取得に失敗しました。'); return; }
-    // GASにlineUserIdを渡す（stateからリダイレクト先を復元）
+  .then(function(d) {
+    if (!d || !d.ok || !d.token) {
+      showError((d && d.error) ? d.error : 'ログインに失敗しました。もう一度お試しください。');
+      return;
+    }
+    // stateからリダイレクト先を復元
     var parts  = state.split('__');
     var action = parts[0] || 'customers';
     var param  = parts[1] || '';
     var dest;
     if (action === 'customerDetailByPhone') {
-      dest = GAS_URL + '?action=customerDetailByPhone&phone=' + encodeURIComponent(param) + '&token=' + encodeURIComponent(profile.userId);
+      dest = GAS_URL + '?action=customerDetailByPhone&phone=' + encodeURIComponent(param) + '&token=' + encodeURIComponent(d.token);
     } else {
-      dest = GAS_URL + '?action=' + action + (param ? '&row=' + encodeURIComponent(param) : '') + '&token=' + encodeURIComponent(profile.userId);
+      dest = GAS_URL + '?action=' + action + (param ? '&row=' + encodeURIComponent(param) : '') + '&token=' + encodeURIComponent(d.token);
     }
     window.location.href = dest;
   })
