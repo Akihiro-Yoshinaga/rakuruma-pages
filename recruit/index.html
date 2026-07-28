@@ -197,6 +197,39 @@
     font-size: 14px; line-height: 1.7;
   }
   .sched-result b { color: var(--yellow); font-size: 18px; }
+  /* 週間タイムテーブル */
+  .sched-tt {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 12px; margin-bottom: 14px;
+  }
+  .tt-heads { display: flex; margin-bottom: 6px; }
+  .tt-corner { width: 36px; flex-shrink: 0; }
+  .tt-head { flex: 1; text-align: center; font-size: 12px; font-weight: 800; color: var(--blue); }
+  .tt-head.off { color: #c3c9d3; text-decoration: line-through; }
+  .tt-body { display: flex; position: relative; }
+  .tt-axis { width: 36px; flex-shrink: 0; position: relative; }
+  .tt-hour { position: absolute; right: 6px; transform: translateY(-50%); font-size: 9px; color: var(--muted); }
+  .tt-cols {
+    flex: 1; position: relative; display: flex;
+    background: repeating-linear-gradient(to bottom, #eef1f6 0, #eef1f6 1px, transparent 1px, transparent 36px);
+  }
+  .tt-col { flex: 1; position: relative; border-left: 1px solid #eef1f6; }
+  .tt-col:last-child { border-right: 1px solid #eef1f6; }
+  .tt-col.off { background: rgba(0,0,0,.03); }
+  .tt-offband {
+    position: absolute; left: 0; right: 0; z-index: 0;
+    background: repeating-linear-gradient(45deg, #f1f3f7 0 6px, #e8ebf1 6px 12px);
+  }
+  .tt-bar {
+    position: absolute; z-index: 1;
+    background: var(--blue); color: #fff;
+    border-radius: 4px;
+    font-size: 9px; font-weight: 700; line-height: 1.3; text-align: center;
+    padding-top: 3px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.18);
+  }
+  .tt-bar.ng { background: #c3c9d3; box-shadow: none; }
+
   .sched-days { display: flex; flex-direction: column; gap: 8px; }
   .sched-day {
     background: #fff; border: 1px solid var(--border); border-radius: 10px;
@@ -291,6 +324,7 @@
     </div>
 
     <div class="sched-result" id="schedResult" hidden></div>
+    <div class="sched-tt" id="schedTT" hidden></div>
     <div class="sched-days" id="schedDays">
       <p style="font-size:13px;color:var(--muted);">スケジュールを読み込み中です…</p>
     </div>
@@ -449,6 +483,7 @@
 
   var $days   = document.getElementById('schedDays');
   var $result = document.getElementById('schedResult');
+  var $tt     = document.getElementById('schedTT');
   var $dayChips  = document.getElementById('dayChips');
   var $slotChips = document.getElementById('slotChips');
 
@@ -473,8 +508,56 @@
 
   function isOk(day) { return state.okDow[day.dayOfWeek] && fitsSlots(day); }
 
+  // 週間タイムテーブル（縦9〜18時×横月〜日・稼働バー）
+  function renderTT() {
+    var TT_START = 540, TT_END = 1080, PPM = 36 / 60; // 1時間=36px
+    var bodyH = (TT_END - TT_START) * PPM;
+
+    var axis = '';
+    for (var h = 9; h <= 18; h++) {
+      axis += '<div class="tt-hour" style="top:' + ((h * 60 - TT_START) * PPM) + 'px">' + h + ':00</div>';
+    }
+
+    // 外した時間帯を斜線で塗る
+    var bands = SLOTS.map(function (s, i) {
+      if (state.okSlot[i]) return '';
+      return '<div class="tt-offband" style="top:' + ((s.start - TT_START) * PPM) +
+             'px;height:' + ((s.end - s.start) * PPM) + 'px"></div>';
+    }).join('');
+
+    var heads = DAY_ORDER.map(function (dow) {
+      return '<div class="tt-head' + (state.okDow[dow] ? '' : ' off') + '">' + DAY_LABELS[dow] + '</div>';
+    }).join('');
+
+    var cols = DAY_ORDER.map(function (dow) {
+      var ds = state.days.filter(function (d) { return d.dayOfWeek === dow; });
+      var bars = '';
+      if (ds.length) {
+        // 同じ曜日は1本にマージ（時間帯は合併・件数は合計）。日別の明細は下のリストで見せる
+        var start = Math.min.apply(null, ds.map(function (d) { return d.startMin; }));
+        var end   = Math.max.apply(null, ds.map(function (d) { return d.endMin; }));
+        var jobs  = ds.reduce(function (s, d) { return s + d.jobs; }, 0);
+        var ok    = ds.every(isOk);
+        var line1 = ds.length === 1 ? ds[0].dateLabel : ds.length + '日';
+        bars = '<div class="tt-bar' + (ok ? '' : ' ng') +
+               '" style="top:' + ((start - TT_START) * PPM) + 'px;height:' + ((end - start) * PPM) +
+               'px;left:2px;right:2px">' + line1 + '<br>' + jobs + '件</div>';
+      }
+      return '<div class="tt-col' + (state.okDow[dow] ? '' : ' off') + '">' + bars + '</div>';
+    }).join('');
+
+    $tt.hidden = false;
+    $tt.innerHTML =
+      '<div class="tt-heads"><div class="tt-corner"></div>' + heads + '</div>' +
+      '<div class="tt-body" style="height:' + bodyH + 'px">' +
+        '<div class="tt-axis">' + axis + '</div>' +
+        '<div class="tt-cols">' + bands + cols + '</div>' +
+      '</div>';
+  }
+
   function render() {
     if (!state.days) return;
+    renderTT();
     var okDays = 0, okJobs = 0, okPay = 0;
     var html = state.days.map(function (day) {
       var ok = isOk(day);
@@ -522,17 +605,26 @@
       function () { state.okSlot[i] = !state.okSlot[i]; }));
   });
 
-  fetch(API_URL)
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      if (!data.success || !data.days || !data.days.length) throw new Error(data.error || 'no data');
-      state.days = data.days;
-      state.monthLabel = data.monthLabel;
-      render();
-    })
-    .catch(function () {
-      $days.innerHTML = '<p style="font-size:13px;">スケジュールを読み込めませんでした。目安としては週2〜4日・1日1〜3件のペースで、毎月コンスタントにご依頼があります。詳しくはLINEでお気軽にお尋ねください。</p>';
-    });
+  // GASは稀に一時的なエラーを返すため、少し間を置いて最大3回試す
+  function loadSchedule(attempt) {
+    fetch(API_URL)
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (!data.success || !data.days || !data.days.length) throw new Error(data.error || 'no data');
+        state.days = data.days;
+        state.monthLabel = data.monthLabel;
+        render();
+      })
+      .catch(function (err) {
+        if (window.console && console.error) console.error('schedule load error (attempt ' + attempt + '):', err);
+        if (attempt < 3) {
+          setTimeout(function () { loadSchedule(attempt + 1); }, 1500 * attempt);
+          return;
+        }
+        $days.innerHTML = '<p style="font-size:13px;">スケジュールを読み込めませんでした。目安としては週2〜4日・1日1〜3件のペースで、毎月コンスタントにご依頼があります。詳しくはLINEでお気軽にお尋ねください。</p>';
+      });
+  }
+  loadSchedule(1);
 })();
 </script>
 
