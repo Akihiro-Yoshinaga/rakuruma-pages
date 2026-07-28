@@ -173,6 +173,48 @@
   .faq summary { font-weight: 700; color: var(--blue); cursor: pointer; }
   .faq details p { margin-top: 8px; font-size: 13px; }
 
+  /* ===== 実スケジュール照合 ===== */
+  .sched-filters {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 14px;
+  }
+  .sched-filter-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    border: 1.5px solid var(--blue); border-radius: 999px;
+    background: var(--blue); color: #fff;
+    font-size: 13px; font-weight: 700;
+    padding: 6px 14px; cursor: pointer; user-select: none;
+    font-family: inherit;
+  }
+  .chip.off {
+    background: #fff; color: #b0b6c0; border-color: #d5dae2;
+    text-decoration: line-through;
+  }
+  .sched-result {
+    background: var(--blue); color: #fff;
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+    font-size: 14px; line-height: 1.7;
+  }
+  .sched-result b { color: var(--yellow); font-size: 18px; }
+  .sched-days { display: flex; flex-direction: column; gap: 8px; }
+  .sched-day {
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px;
+  }
+  .sched-day.ng { opacity: .38; }
+  .sched-day .d-date {
+    flex-shrink: 0; width: 58px; text-align: center;
+    font-weight: 800; color: var(--blue); line-height: 1.3;
+  }
+  .sched-day .d-date small { display: block; font-size: 11px; font-weight: 600; }
+  .sched-day .d-info { flex: 1; line-height: 1.5; }
+  .sched-day .d-info .d-areas { color: var(--muted); font-size: 12px; }
+  .sched-day .d-pay { flex-shrink: 0; font-weight: 800; color: var(--blue); white-space: nowrap; }
+  .sched-note { font-size: 11px; color: var(--muted); margin-top: 12px; }
+
   /* ===== 最終CTA ===== */
   .cta {
     background: linear-gradient(150deg, #003B8B, #0a54b4);
@@ -231,6 +273,28 @@
       <div class="pay-point">直行直帰OK<span>シフトは相談して決定</span></div>
       <div class="pay-point">単発から可<span>継続歓迎・副業OK</span></div>
     </div>
+  </div>
+</section>
+
+<!-- 実スケジュール照合 -->
+<section id="schedule" style="background:#F7F7F7;">
+  <div class="inner">
+    <div class="section-tag">実際のスケジュール</div>
+    <h2>あなたの空き時間と合うか、実データで確認できます</h2>
+    <p style="font-size:13px;margin-bottom:16px;">学校や本業のシフトと両立できるか気になる方へ。<b>先月に実際にあった稼働日</b>をそのまま載せています。対応できない曜日・時間帯をタップして外すと、あなたの空き時間でどれだけ対応できたかが分かります。</p>
+
+    <div class="sched-filters">
+      <div class="sched-filter-label">対応できる曜日（できない曜日をタップして外す）</div>
+      <div class="chip-row" id="dayChips"></div>
+      <div class="sched-filter-label" style="margin-top:10px;">対応できる時間帯</div>
+      <div class="chip-row" id="slotChips"></div>
+    </div>
+
+    <div class="sched-result" id="schedResult" hidden></div>
+    <div class="sched-days" id="schedDays">
+      <p style="font-size:13px;color:var(--muted);">スケジュールを読み込み中です…</p>
+    </div>
+    <p class="sched-note">※ 先月の実績データ（自動更新）。エリアは区レベルで表示しています。実際の依頼件数は月によって変動します。</p>
   </div>
 </section>
 
@@ -367,6 +431,110 @@
 <footer class="footer">
   &copy; 2026 ラクルマ（RAKURUMA）｜<a href="https://rakuruma.com">rakuruma.com</a>
 </footer>
+
+<script>
+(function () {
+  var API_URL = 'https://script.google.com/macros/s/AKfycbzVx5DtYftGvIQ_s90Wf7TOWK8QDnYiEwVzFhO2X0LFObglgupMtrg2U5Er_WbLih5f/exec?api=schedule';
+
+  var DAY_ORDER = [1, 2, 3, 4, 5, 6, 0]; // 月〜日
+  var DAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'];
+  var SLOTS = [
+    { label: '午前（9〜12時）',  start: 540,  end: 720 },
+    { label: '午後（12〜15時）', start: 720,  end: 900 },
+    { label: '夕方（15〜18時）', start: 900,  end: 1080 }
+  ];
+
+  var state = { days: null, monthLabel: '', okDow: {}, okSlot: [true, true, true] };
+  DAY_ORDER.forEach(function (d) { state.okDow[d] = true; });
+
+  var $days   = document.getElementById('schedDays');
+  var $result = document.getElementById('schedResult');
+  var $dayChips  = document.getElementById('dayChips');
+  var $slotChips = document.getElementById('slotChips');
+
+  function fmtTime(min) {
+    return Math.floor(min / 60) + ':' + ('0' + (min % 60)).slice(-2);
+  }
+
+  // 選択中の時間帯の合併区間に稼働時間が収まるか
+  function fitsSlots(day) {
+    var ranges = SLOTS.filter(function (s, i) { return state.okSlot[i]; })
+                      .map(function (s) { return [s.start, s.end]; })
+                      .sort(function (a, b) { return a[0] - b[0]; });
+    if (!ranges.length) return false;
+    var merged = [ranges[0].slice()];
+    ranges.slice(1).forEach(function (r) {
+      var last = merged[merged.length - 1];
+      if (r[0] <= last[1]) last[1] = Math.max(last[1], r[1]);
+      else merged.push(r.slice());
+    });
+    return merged.some(function (r) { return day.startMin >= r[0] && day.endMin <= r[1]; });
+  }
+
+  function isOk(day) { return state.okDow[day.dayOfWeek] && fitsSlots(day); }
+
+  function render() {
+    if (!state.days) return;
+    var okDays = 0, okJobs = 0, okPay = 0;
+    var html = state.days.map(function (day) {
+      var ok = isOk(day);
+      if (ok) { okDays++; okJobs += day.jobs; okPay += day.pay; }
+      return '<div class="sched-day' + (ok ? '' : ' ng') + '">' +
+        '<div class="d-date">' + day.dateLabel + '<small>（' + day.dayLabel + '）</small></div>' +
+        '<div class="d-info">' + fmtTime(day.startMin) + '〜' + fmtTime(day.endMin) + '・' + day.jobs + '件' +
+          '<div class="d-areas">' + day.areas.join('・') + '</div></div>' +
+        '<div class="d-pay">¥' + day.pay.toLocaleString() + '</div></div>';
+    }).join('');
+    $days.innerHTML = html;
+
+    var total = state.days.length;
+    $result.hidden = false;
+    if (okDays === total) {
+      $result.innerHTML = state.monthLabel + 'の実績は<b>' + total + '日</b>の稼働で <b>¥' +
+        okPay.toLocaleString() + '</b>（' + okJobs + '件）でした。対応できない曜日・時間帯を外して、あなたの場合を確認してみてください。';
+    } else {
+      $result.innerHTML = 'あなたの空き時間なら、' + state.monthLabel + 'は <b>' + okDays + '日／' + total + '日</b> に対応でき、<b>¥' +
+        okPay.toLocaleString() + '</b>（' + okJobs + '件）のペースでした。';
+    }
+  }
+
+  function makeChip(label, getOn, toggle) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = label;
+    b.addEventListener('click', function () {
+      toggle();
+      b.classList.toggle('off', !getOn());
+      render();
+    });
+    return b;
+  }
+
+  DAY_ORDER.forEach(function (dow) {
+    $dayChips.appendChild(makeChip(DAY_LABELS[dow],
+      function () { return state.okDow[dow]; },
+      function () { state.okDow[dow] = !state.okDow[dow]; }));
+  });
+  SLOTS.forEach(function (slot, i) {
+    $slotChips.appendChild(makeChip(slot.label,
+      function () { return state.okSlot[i]; },
+      function () { state.okSlot[i] = !state.okSlot[i]; }));
+  });
+
+  fetch(API_URL)
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (!data.success || !data.days || !data.days.length) throw new Error(data.error || 'no data');
+      state.days = data.days;
+      state.monthLabel = data.monthLabel;
+      render();
+    })
+    .catch(function () {
+      $days.innerHTML = '<p style="font-size:13px;">スケジュールを読み込めませんでした。目安としては週2〜4日・1日1〜3件のペースで、毎月コンスタントにご依頼があります。詳しくはLINEでお気軽にお尋ねください。</p>';
+    });
+})();
+</script>
 
 </body>
 </html>
