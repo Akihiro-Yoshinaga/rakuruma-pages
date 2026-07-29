@@ -538,7 +538,7 @@
         var end   = Math.max.apply(null, ds.map(function (d) { return d.endMin; }));
         var jobs  = ds.reduce(function (s, d) { return s + d.jobs; }, 0);
         var ok    = ds.every(isOk);
-        var line1 = ds.length === 1 ? ds[0].dateLabel : ds.length + '日';
+        var line1 = ds.length + '日';
         bars = '<div class="tt-bar' + (ok ? '' : ' ng') +
                '" style="top:' + ((start - TT_START) * PPM) + 'px;height:' + ((end - start) * PPM) +
                'px;left:2px;right:2px">' + line1 + '<br>' + jobs + '件</div>';
@@ -548,6 +548,7 @@
 
     $tt.hidden = false;
     $tt.innerHTML =
+      '<p style="font-size:12px;color:var(--muted);margin-bottom:8px;">先月1ヶ月の稼働日を<b>曜日ごとに重ねた</b>表です（例：「2日・3件」＝その曜日に2日稼働・計3件）。日付ごとの明細は下の一覧をご覧ください。</p>' +
       '<div class="tt-heads"><div class="tt-corner"></div>' + heads + '</div>' +
       '<div class="tt-body" style="height:' + bodyH + 'px">' +
         '<div class="tt-axis">' + axis + '</div>' +
