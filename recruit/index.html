@@ -197,38 +197,26 @@
     font-size: 14px; line-height: 1.7;
   }
   .sched-result b { color: var(--yellow); font-size: 18px; }
-  /* 週間タイムテーブル */
-  .sched-tt {
+  /* 月間カレンダー */
+  .sched-cal {
     background: #fff; border: 1px solid var(--border); border-radius: 12px;
     padding: 14px 12px; margin-bottom: 14px;
   }
-  .tt-heads { display: flex; margin-bottom: 6px; }
-  .tt-corner { width: 36px; flex-shrink: 0; }
-  .tt-head { flex: 1; text-align: center; font-size: 12px; font-weight: 800; color: var(--blue); }
-  .tt-head.off { color: #c3c9d3; text-decoration: line-through; }
-  .tt-body { display: flex; position: relative; }
-  .tt-axis { width: 36px; flex-shrink: 0; position: relative; }
-  .tt-hour { position: absolute; right: 6px; transform: translateY(-50%); font-size: 9px; color: var(--muted); }
-  .tt-cols {
-    flex: 1; position: relative; display: flex;
-    background: repeating-linear-gradient(to bottom, #eef1f6 0, #eef1f6 1px, transparent 1px, transparent 36px);
+  .cal-caption { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .cal-heads { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 4px; }
+  .cal-head { text-align: center; font-size: 12px; font-weight: 800; color: var(--blue); }
+  .cal-head.off { color: #c3c9d3; text-decoration: line-through; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-cell { min-height: 58px; border: 1px solid #eef1f6; border-radius: 6px; padding: 2px 3px; background: #fff; }
+  .cal-cell.empty { border: none; background: transparent; }
+  .cal-cell.offday { background: #f6f7f9; }
+  .cal-date { font-size: 10px; font-weight: 700; color: var(--muted); }
+  .cal-job {
+    margin-top: 2px; background: var(--blue); color: #fff;
+    border-radius: 4px; padding: 3px 1px; text-align: center;
+    font-size: 9px; font-weight: 700; line-height: 1.35;
   }
-  .tt-col { flex: 1; position: relative; border-left: 1px solid #eef1f6; }
-  .tt-col:last-child { border-right: 1px solid #eef1f6; }
-  .tt-col.off { background: rgba(0,0,0,.03); }
-  .tt-offband {
-    position: absolute; left: 0; right: 0; z-index: 0;
-    background: repeating-linear-gradient(45deg, #f1f3f7 0 6px, #e8ebf1 6px 12px);
-  }
-  .tt-bar {
-    position: absolute; z-index: 1;
-    background: var(--blue); color: #fff;
-    border-radius: 4px;
-    font-size: 9px; font-weight: 700; line-height: 1.3; text-align: center;
-    padding-top: 3px; overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,.18);
-  }
-  .tt-bar.ng { background: #c3c9d3; box-shadow: none; }
+  .cal-job.ng { background: #c3c9d3; }
 
   .sched-days { display: flex; flex-direction: column; gap: 8px; }
   .sched-day {
@@ -324,7 +312,7 @@
     </div>
 
     <div class="sched-result" id="schedResult" hidden></div>
-    <div class="sched-tt" id="schedTT" hidden></div>
+    <div class="sched-cal" id="schedTT" hidden></div>
     <div class="sched-days" id="schedDays">
       <p style="font-size:13px;color:var(--muted);">スケジュールを読み込み中です…</p>
     </div>
@@ -508,57 +496,41 @@
 
   function isOk(day) { return state.okDow[day.dayOfWeek] && fitsSlots(day); }
 
-  // 週間タイムテーブル（縦9〜18時×横月〜日・稼働バー）
-  function renderTT() {
-    var TT_START = 540, TT_END = 1080, PPM = 36 / 60; // 1時間=36px
-    var bodyH = (TT_END - TT_START) * PPM;
-
-    var axis = '';
-    for (var h = 9; h <= 18; h++) {
-      axis += '<div class="tt-hour" style="top:' + ((h * 60 - TT_START) * PPM) + 'px">' + h + ':00</div>';
-    }
-
-    // 外した時間帯を斜線で塗る
-    var bands = SLOTS.map(function (s, i) {
-      if (state.okSlot[i]) return '';
-      return '<div class="tt-offband" style="top:' + ((s.start - TT_START) * PPM) +
-             'px;height:' + ((s.end - s.start) * PPM) + 'px"></div>';
-    }).join('');
+  // 先月の月間カレンダー（稼働日を青表示・月曜はじまり）
+  function renderCal() {
+    var byDate = {};
+    state.days.forEach(function (d) { byDate[parseInt(d.dateLabel.split('/')[1], 10)] = d; });
 
     var heads = DAY_ORDER.map(function (dow) {
-      return '<div class="tt-head' + (state.okDow[dow] ? '' : ' off') + '">' + DAY_LABELS[dow] + '</div>';
+      return '<div class="cal-head' + (state.okDow[dow] ? '' : ' off') + '">' + DAY_LABELS[dow] + '</div>';
     }).join('');
 
-    var cols = DAY_ORDER.map(function (dow) {
-      var ds = state.days.filter(function (d) { return d.dayOfWeek === dow; });
-      var bars = '';
-      if (ds.length) {
-        // 同じ曜日は1本にマージ（時間帯は合併・件数は合計）。日別の明細は下のリストで見せる
-        var start = Math.min.apply(null, ds.map(function (d) { return d.startMin; }));
-        var end   = Math.max.apply(null, ds.map(function (d) { return d.endMin; }));
-        var jobs  = ds.reduce(function (s, d) { return s + d.jobs; }, 0);
-        var ok    = ds.every(isOk);
-        var line1 = ds.length + '日';
-        bars = '<div class="tt-bar' + (ok ? '' : ' ng') +
-               '" style="top:' + ((start - TT_START) * PPM) + 'px;height:' + ((end - start) * PPM) +
-               'px;left:2px;right:2px">' + line1 + '<br>' + jobs + '件</div>';
+    var lead = (new Date(state.meta.year, state.meta.month - 1, 1).getDay() + 6) % 7;
+    var cells = '';
+    for (var i = 0; i < lead; i++) cells += '<div class="cal-cell empty"></div>';
+    for (var date = 1; date <= state.meta.daysInMonth; date++) {
+      var realDow = DAY_ORDER[(lead + date - 1) % 7];
+      var day = byDate[date];
+      var inner = '<div class="cal-date">' + date + '</div>';
+      if (day) {
+        inner += '<div class="cal-job' + (isOk(day) ? '' : ' ng') + '">' +
+                 fmtTime(day.startMin) + '<br>〜' + fmtTime(day.endMin) + '<br>' + day.jobs + '件</div>';
       }
-      return '<div class="tt-col' + (state.okDow[dow] ? '' : ' off') + '">' + bars + '</div>';
-    }).join('');
+      cells += '<div class="cal-cell' + (state.okDow[realDow] ? '' : ' offday') + '">' + inner + '</div>';
+    }
+    var tail = (lead + state.meta.daysInMonth) % 7;
+    if (tail) for (var j = tail; j < 7; j++) cells += '<div class="cal-cell empty"></div>';
 
     $tt.hidden = false;
     $tt.innerHTML =
-      '<p style="font-size:12px;color:var(--muted);margin-bottom:8px;">先月1ヶ月の稼働日を<b>曜日ごとに重ねた</b>表です（例：「2日・3件」＝その曜日に2日稼働・計3件）。日付ごとの明細は下の一覧をご覧ください。</p>' +
-      '<div class="tt-heads"><div class="tt-corner"></div>' + heads + '</div>' +
-      '<div class="tt-body" style="height:' + bodyH + 'px">' +
-        '<div class="tt-axis">' + axis + '</div>' +
-        '<div class="tt-cols">' + bands + cols + '</div>' +
-      '</div>';
+      '<p class="cal-caption">' + state.monthLabel + 'に実際にお仕事があった日のカレンダーです（青い日が稼働日）。</p>' +
+      '<div class="cal-heads">' + heads + '</div>' +
+      '<div class="cal-grid">' + cells + '</div>';
   }
 
   function render() {
-    if (!state.days) return;
-    renderTT();
+    if (!state.days || !state.meta) return;
+    renderCal();
     var okDays = 0, okJobs = 0, okPay = 0;
     var html = state.days.map(function (day) {
       var ok = isOk(day);
@@ -614,6 +586,7 @@
         if (!data.success || !data.days || !data.days.length) throw new Error(data.error || 'no data');
         state.days = data.days;
         state.monthLabel = data.monthLabel;
+        state.meta = { year: data.year, month: data.month, daysInMonth: data.daysInMonth };
         render();
       })
       .catch(function (err) {
