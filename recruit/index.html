@@ -234,6 +234,11 @@
   .sched-day .d-info { flex: 1; line-height: 1.5; }
   .sched-day .d-info .d-areas { color: var(--muted); font-size: 12px; }
   .sched-day .d-pay { flex-shrink: 0; font-weight: 800; color: var(--blue); white-space: nowrap; }
+  .sched-day.total {
+    background: var(--blue-light); border: 1.5px solid #cfe0f5;
+    font-weight: 700;
+  }
+  .sched-day.total .d-pay { font-size: 17px; }
   .sched-note { font-size: 11px; color: var(--muted); margin-top: 12px; }
 
   /* ===== 最終CTA ===== */
@@ -541,6 +546,12 @@
           '<div class="d-areas">' + day.areas.join('・') + '</div></div>' +
         '<div class="d-pay">¥' + day.pay.toLocaleString() + '</div></div>';
     }).join('');
+
+    var allSelected = okDays === state.days.length;
+    html += '<div class="sched-day total">' +
+      '<div class="d-date">合計</div>' +
+      '<div class="d-info">' + (allSelected ? '' : '対応できる分だけで ') + okDays + '日・' + okJobs + '件</div>' +
+      '<div class="d-pay">¥' + okPay.toLocaleString() + '</div></div>';
     $days.innerHTML = html;
 
     var total = state.days.length;
