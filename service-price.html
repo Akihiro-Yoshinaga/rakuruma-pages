@@ -335,6 +335,53 @@
       border-bottom: 1px solid #e8eef5;
     }
 
+    /* 変更履歴 */
+    .changelog-toggle {
+      width: 100%;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #666;
+      cursor: pointer;
+      text-align: left;
+    }
+    .changelog-chevron { font-size: 11px; transition: transform 0.25s; }
+    .changelog-toggle.open .changelog-chevron { transform: rotate(180deg); }
+    .changelog-body {
+      display: none;
+      background: #f5f5f5;
+      border-radius: 0 0 12px 12px;
+      padding: 0 20px 20px;
+      margin-bottom: 20px;
+    }
+    .changelog-body.open { display: block; }
+    .changelog-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .changelog-list li {
+      display: flex;
+      gap: 16px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+    }
+    .changelog-list li:last-child { border-bottom: none; }
+    .changelog-date {
+      color: #999;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .changelog-text { color: #444; }
+
     /* フッター */
     .footer {
       text-align: center;
@@ -458,6 +505,13 @@
       margin-top: 8px;
     }
   </style>
+<script type="text/javascript">
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "xwvd9yxire");
+</script>
 </head>
 <body>
 <div class="container">
@@ -623,7 +677,7 @@
   <div class="section-header">
     <div class="icon icon-parts">🔧</div>
     <div class="label">用品取り付け・整備</div>
-    <div class="updated">2026年5月28日更新</div>
+    <div class="updated">2026年7月13日更新</div>
   </div>
 
   <div class="card">
@@ -677,6 +731,10 @@
           <td>スピーカー左右交換（2箇所）</td>
           <td><strong>¥15,000</strong></td>
         </tr>
+        <tr>
+          <td>PIVOT クルーズコントロール取り付け</td>
+          <td><strong>¥27,000</strong></td>
+        </tr>
 
         <!-- ドラレコ -->
         <tr><td colspan="2" class="cat-label">ドライブレコーダー</td></tr>
@@ -729,6 +787,20 @@
 
       </tbody>
     </table>
+  </div>
+
+  <!-- 変更履歴 -->
+  <button class="changelog-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')" aria-expanded="false">
+    📋 変更履歴
+    <span class="changelog-chevron">▼</span>
+  </button>
+  <div class="changelog-body">
+    <ul class="changelog-list">
+      <li><span class="changelog-date">2026/07/13</span><span class="changelog-text">PIVOT クルーズコントロール取り付け を追加</span></li>
+      <li><span class="changelog-date">2026/05/28</span><span class="changelog-text">FLEX Re Classic フェイスチェンジキット取り付け（ハロゲン）を追加</span></li>
+      <li><span class="changelog-date">2026/05/28</span><span class="changelog-text">前後エンブレム交換 を追加</span></li>
+      <li><span class="changelog-date">2026/05/01</span><span class="changelog-text">用品取り付け・整備 料金表を更新</span></li>
+    </ul>
   </div>
 
   <!-- フッター -->
