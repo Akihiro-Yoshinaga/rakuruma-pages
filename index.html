@@ -595,7 +595,62 @@
       margin-top: 14px;
     }
 
+    /* 口コミの絞り込みタブ（依頼の種類ごとに読める＝段階②の不安解消） */
+    .voice-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .voice-tab {
+      appearance: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      background: var(--color-bg-white);
+      border: 1px solid var(--color-border-gray);
+      border-radius: 999px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .voice-tab:hover {
+      border-color: var(--color-primary-blue);
+      color: var(--color-primary-blue);
+    }
+
+    .voice-tab--active {
+      background: var(--color-primary-blue);
+      border-color: var(--color-primary-blue);
+      color: var(--color-text-white);
+    }
+
+    .voice-card.is-filtered {
+      display: none;
+    }
+
+    /* タブ末尾のLP誘導カード（SCENEと同じ写真カードの文法を流用） */
+    .voice-lp-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .voice-lp-row .scene-lp-card {
+      grid-column: auto;
+      grid-row: auto;
+      min-height: 132px;
+    }
+
     @media (max-width: 700px) {
+      .voice-lp-row {
+        grid-template-columns: 1fr;
+      }
+
       .voice-grid {
         display: flex;
         overflow-x: auto;
@@ -1375,6 +1430,89 @@
       transform: translateY(8px);
     }
 
+    /* ===== 固定バー（スマホのみ）：主＝LINE／副＝洗車・整備の振り分け ===== */
+    .fixbar {
+      display: none;
+    }
+
+    @media (max-width: 767px) {
+      /* スマホは固定バーに一本化する（右下の丸ボタンと二重にしない） */
+      .float-line {
+        display: none;
+      }
+
+      .fixbar {
+        display: block;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: var(--z-index-fixed);
+        background: var(--color-bg-white);
+        box-shadow: 0 -4px 20px rgba(15, 40, 80, 0.14);
+        padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+        transform: translateY(120%);
+        transition: transform 0.28s ease;
+      }
+
+      .fixbar.is-visible {
+        transform: translateY(0);
+      }
+
+      .fixbar-sub {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-bottom: 7px;
+      }
+
+      .fixbar-sub a {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--color-primary-blue);
+        text-decoration: none;
+      }
+
+      .fixbar-div {
+        color: var(--color-border-gray);
+        font-size: 11px;
+      }
+
+      .fixbar-cta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: var(--gradient-button-green);
+        color: var(--color-text-white);
+        border-radius: var(--button-radius);
+        padding: 10px 16px;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(94, 190, 134, 0.35);
+        text-align: center;
+      }
+
+      .fixbar-cta-main {
+        display: block;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .fixbar-cta-sub {
+        display: block;
+        font-size: 10.5px;
+        opacity: 0.92;
+        margin-top: 2px;
+      }
+
+      /* フッターが固定バーに隠れないよう逃がす */
+      body {
+        padding-bottom: 84px;
+      }
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       header {
@@ -1488,27 +1626,62 @@
       <span class="star">★</span><span class="voice-rating-num">4.92</span>
       <small>くらしのマーケット 口コミ560件の平均評価</small>
     </div>
-    <div class="voice-grid">
-      <div class="voice-card">
+    <div class="voice-tabs" id="voiceTabs" role="tablist" aria-label="口コミの絞り込み">
+      <button type="button" class="voice-tab voice-tab--active" data-cat="all" aria-selected="true">すべて</button>
+      <button type="button" class="voice-tab" data-cat="wash" aria-selected="false">洗車</button>
+      <button type="button" class="voice-tab" data-cat="seibi" aria-selected="false">整備・取付</button>
+    </div>
+    <div class="voice-grid" id="voiceGrid">
+      <div class="voice-card" data-cat="seibi">
         <div class="voice-stars">★★★★★</div>
         <p class="voice-text">ナビ・リアモニター・デジタルインナーミラー・ETCと、まとめて取付をお願いしました。別の業者さんのレスポンスの悪さに困っていましたが、こちらはやり取りが早く見積もりも明快。ストレスなく施工まで進みました。</p>
         <div class="voice-meta">ナビ・電装品まとめて取付（Google）</div>
       </div>
-      <div class="voice-card">
+      <div class="voice-card" data-cat="wash">
         <div class="voice-stars">★★★★★</div>
         <p class="voice-text">事前のやりとりから丁寧かつスムーズで安心してお願いできました。マンションの狭い駐車場でも問題なく対応していただき、40分ほどでピカピカに。またぜひ利用したいと思います。</p>
         <div class="voice-meta">出張洗車</div>
       </div>
-      <div class="voice-card">
+      <div class="voice-card" data-cat="wash">
         <div class="voice-stars">★★★★★</div>
         <p class="voice-text">3ヶ月放置していた車の洗車と、タイヤ空気圧・バッテリーの点検をお願いしました。かなり弱っていたバッテリーも充電してもらい、翌日にはすぐ運転できました。</p>
         <div class="voice-meta">洗車＋バッテリー・タイヤ点検（Google）</div>
       </div>
-      <div class="voice-card">
+      <div class="voice-card" data-cat="seibi">
         <div class="voice-stars">★★★★★</div>
         <p class="voice-text">事前に「できること・できないこと」を明確に説明してもらえて安心できました。仕上がりも細部まで綺麗で、費用以上の満足度。またお願いしたいと思います。</p>
         <div class="voice-meta">ドラレコ取付・国産車</div>
       </div>
+      <div class="voice-card" data-cat="seibi">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">取り付け済みのドラレコが駐車監視モードに移行せず、施工確認と修正をお願いしました。配線の間違いを見つけて施工し直していただき、正常に動くように。原因の説明も明瞭で、大変信頼できると感じました。</p>
+        <div class="voice-meta">ドラレコの施工確認・修正</div>
+      </div>
+      <div class="voice-card" data-cat="seibi">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">リピーターです。デジタルインナーミラーの取り付け以外にも、当日の追加作業を多数お願いしましたが、とても気持ち良く綺麗に作業をしていただきました。追加料金も良心的でした。リピート確定です。</p>
+        <div class="voice-meta">デジタルインナーミラー取付</div>
+      </div>
+      <div class="voice-card" data-cat="wash">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">初めて利用しましたが、とても綺麗になって大満足です。ありがとうございました。</p>
+        <div class="voice-meta">出張手洗い洗車</div>
+      </div>
+      <div class="voice-card" data-cat="seibi">
+        <div class="voice-stars">★★★★★</div>
+        <p class="voice-text">速やかに作業いただきました。説明も丁寧で、見積りから作業、会計まで、不安は一切ありませんでした。</p>
+        <div class="voice-meta">ディスプレイオーディオ取付</div>
+      </div>
+    </div>
+    <div class="voice-lp-row">
+      <a class="scene-lp-card scene-lp-card--seibi" href="/maintenance/#service-overview">
+        <div class="scene-lp-card-teaser">ドラレコ・ナビ取付から車検まで。持ち込みパーツも歓迎です。</div>
+        <div class="scene-lp-card-link">できること一覧と料金を見る →</div>
+      </a>
+      <a class="scene-lp-card scene-lp-card--wash" href="/mobile-car-wash/#plan">
+        <div class="scene-lp-card-teaser">単発6,600円〜・定期プランの料金と仕上がり写真は、こちらで。</div>
+        <div class="scene-lp-card-link">洗車の料金プランを見る →</div>
+      </a>
     </div>
     <p class="voice-note">※ くらしのマーケット・Googleに寄せられた口コミの一部を、編集のうえご紹介しています。</p>
   </div>
@@ -1706,8 +1879,24 @@
   <p style="margin-top:8px;font-size:11px;opacity:0.5;">最終更新：2026年7月</p>
 </footer>
 
-<!-- FLOATING LINE BUTTON -->
+<!-- FLOATING LINE BUTTON（PC用。スマホは下の固定バーに一本化） -->
 <a href="https://lin.ee/r0BAZkR0" class="float-line">💬 LINEで相談</a>
+
+<!-- 固定バー（スマホのみ表示。主＝LINE／副＝洗車・整備の振り分け） -->
+<div class="fixbar">
+  <div class="fixbar-sub">
+    <a href="/mobile-car-wash/">出張洗車</a>
+    <span class="fixbar-div">｜</span>
+    <a href="/maintenance/">整備・パーツ取付</a>
+  </div>
+  <a href="https://lin.ee/r0BAZkR0" class="fixbar-cta">
+    <span>💬</span>
+    <span>
+      <span class="fixbar-cta-main">LINEで相談する</span>
+      <span class="fixbar-cta-sub">無料・返信は最短当日</span>
+    </span>
+  </a>
+</div>
 
 <script>
   // ハンバーガーメニュー
@@ -1852,21 +2041,49 @@
       buildWorkCards([]);
     });
 
-  // FV表示中はLINEフローティングボタンを隠す（PC=旧FV／スマホ=動画ヒーローの両方を監視）
+  // FV表示中はLINEフローティングボタン・固定バーを隠す（PC=旧FV／スマホ=動画ヒーローの両方を監視）
   (function() {
     var floatBtn = document.querySelector('.float-line');
-    if (!floatBtn || !('IntersectionObserver' in window)) return;
+    var fixbar = document.querySelector('.fixbar');
+    if (!('IntersectionObserver' in window)) {
+      // 非対応環境では固定バーを常時表示にフォールバック
+      if (fixbar) fixbar.classList.add('is-visible');
+      return;
+    }
     var visible = new Set();
     var io = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
         if (e.isIntersecting) visible.add(e.target);
         else visible.delete(e.target);
       });
-      floatBtn.classList.toggle('is-hidden', visible.size > 0);
+      var inFv = visible.size > 0;
+      if (floatBtn) floatBtn.classList.toggle('is-hidden', inFv);
+      if (fixbar) fixbar.classList.toggle('is-visible', !inFv);
     }, { threshold: 0.2 });
     ['.fv-top', '.hero'].forEach(function(sel) {
       var el = document.querySelector(sel);
       if (el) io.observe(el);
+    });
+  })();
+
+  // VOICE：口コミの絞り込みタブ（依頼の種類で切り替え）
+  (function() {
+    var tabs = document.getElementById('voiceTabs');
+    var grid = document.getElementById('voiceGrid');
+    if (!tabs || !grid) return;
+    tabs.addEventListener('click', function(ev) {
+      var btn = ev.target.closest('.voice-tab');
+      if (!btn) return;
+      var cat = btn.dataset.cat;
+      tabs.querySelectorAll('.voice-tab').forEach(function(t) {
+        var active = (t === btn);
+        t.classList.toggle('voice-tab--active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      grid.querySelectorAll('.voice-card').forEach(function(card) {
+        card.classList.toggle('is-filtered', cat !== 'all' && card.dataset.cat !== cat);
+      });
+      grid.scrollLeft = 0; // スマホの横スクロールカルーセルを先頭に戻す
     });
   })();
 </script>
