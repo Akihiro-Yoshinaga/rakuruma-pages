@@ -256,6 +256,16 @@
       opacity: 0.75;
       display: block;
     }
+    /* 定休日（選択不可） */
+    .date-tab.closed {
+      background: var(--gray-100);
+      border-style: dashed;
+      border-color: var(--gray-200);
+      color: var(--gray-400);
+      cursor: not-allowed;
+    }
+    .date-tab.closed:active { transform: none; }
+    .date-tab.closed .weekday { opacity: 1; font-weight: 700; }
 
     /* 時間スロットボタン */
     .time-slots { display: block; }
@@ -602,7 +612,8 @@
       <!-- フォールバック通知 -->
       <div id="fallback-notice">
         ⚠️ 空き状況の自動取得ができませんでした。<br>
-        お手数ですが、希望日時を直接ご入力ください。
+        お手数ですが、希望日時を直接ご入力ください。<br>
+        ※火曜日は定休日のため、他の曜日をご指定ください。
       </div>
 
       <!-- === 空き状況ボタンUI === -->
@@ -1001,7 +1012,7 @@
 
   const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 
-  let availabilityData = []; // { date: "2026-03-16", slots: ["09:00", ...] }[]
+  let availabilityData = []; // { date: "2026-03-16", slots: ["09:00", ...], closed: false }[]
   let isFallbackMode = false;
 
   // 選択状態
@@ -1121,7 +1132,7 @@
     fetchOnce(timeoutMs)
       .then(data => {
         if (data.error) throw new Error(data.error);
-        availabilityData = data.availability || [];
+        availabilityData = buildDisplayDays(data);
         showForm(true);
         document.getElementById('slot-availability-note').style.display = 'block';
         renderSlotUI();
@@ -1164,10 +1175,24 @@
   // ============================================================
   // 空き状況ボタンUIを構築
   // ============================================================
+  // 空き枠のある日と定休日を日付順にマージする（定休日は選択不可タブとして表示）
+  function buildDisplayDays(data) {
+    const days = (data.availability || []).map(d => ({ date: d.date, slots: d.slots || [], closed: false }));
+    (data.closedDates || []).forEach(dt => days.push({ date: dt, slots: [], closed: true }));
+    days.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    return days;
+  }
+
   function renderSlotUI() {
-    if (availabilityData.length === 0) {
+    if (!availabilityData.some(d => !d.closed)) {
       showFallback();
       return;
+    }
+    // 定休日が先頭に来ても選択可能な日を初期表示にする
+    const firstOpen = availabilityData.findIndex(d => !d.closed);
+    if (availabilityData[activeDateIndex[1]] && availabilityData[activeDateIndex[1]].closed) {
+      activeDateIndex[1] = firstOpen;
+      activeDateIndex[2] = firstOpen;
     }
     [1, 2].forEach(pref => {
       renderDateTabs(pref);
@@ -1184,6 +1209,13 @@
       const wd = WEEKDAYS[d.getDay()];
       const tab = document.createElement('button');
       tab.type = 'button';
+      if (day.closed) {
+        tab.className = 'date-tab closed';
+        tab.disabled = true;
+        tab.innerHTML = `${mmdd}(${wd})<span class="weekday">定休日</span>`;
+        container.appendChild(tab);
+        return;
+      }
       tab.className = 'date-tab' + (idx === activeDateIndex[pref] ? ' active' : '');
       tab.innerHTML = `${mmdd}<span class="weekday">${wd}</span>`;
       tab.addEventListener('click', () => {
@@ -1199,6 +1231,10 @@
     const container = document.getElementById(`time-slots-${pref}`);
     container.innerHTML = '';
     const day = availabilityData[dateIdx];
+    if (day && day.closed) {
+      container.innerHTML = '<p style="font-size:13px;color:var(--gray-400);padding:8px 0;">この日は定休日のためご予約を承っておりません</p>';
+      return;
+    }
     if (!day || day.slots.length === 0) {
       container.innerHTML = '<p style="font-size:13px;color:var(--gray-400);padding:8px 0;">この日の空き枠はありません</p>';
       return;

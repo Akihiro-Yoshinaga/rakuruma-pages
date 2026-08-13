@@ -604,6 +604,12 @@ a[href^="https://lin.ee"]:hover {
 }
 #rakuruma-form-wrap .rf-date-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
 #rakuruma-form-wrap .rf-date-tab .rf-weekday { font-size: 10px; font-weight: 400; opacity: 0.75; display: block; }
+/* 定休日（選択不可） */
+#rakuruma-form-wrap .rf-date-tab.closed {
+    background: var(--gray-100); border-style: dashed; border-color: var(--gray-200);
+    color: var(--gray-400); cursor: not-allowed;
+}
+#rakuruma-form-wrap .rf-date-tab.closed .rf-weekday { opacity: 1; font-weight: 700; }
 #rakuruma-form-wrap .rf-time-slots { display: block; }
 #rakuruma-form-wrap .rf-slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 #rakuruma-form-wrap .rf-quick-btns { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
@@ -1742,7 +1748,7 @@ a[href^="https://lin.ee"]:hover {
                         <!-- 希望日時（最初に表示） -->
                         <div class="rf-card">
                           <div class="rf-section-label">ご希望日時</div>
-                          <div class="rf-fallback-notice" id="rf-fallback-notice">⚠️ 空き状況の自動取得ができませんでした。お手数ですが、希望日時を直接ご入力ください。</div>
+                          <div class="rf-fallback-notice" id="rf-fallback-notice">⚠️ 空き状況の自動取得ができませんでした。お手数ですが、希望日時を直接ご入力ください。※火曜日は定休日のため、他の曜日をご指定ください。</div>
 
                           <div id="rf-slot-ui">
                             <!-- 空き状況取得完了バッジ -->
@@ -1943,9 +1949,9 @@ a[href^="https://lin.ee"]:hover {
                         fetchOnce(ms)
                           .then(data => {
                             if (data.error) throw new Error();
-                            availabilityData = data.availability || [];
+                            availabilityData = buildDisplayDays(data);
                             showForm(true);
-                            if (availabilityData.length > 0) {
+                            if (availabilityData.some(d => !d.closed)) {
                               document.getElementById('rf-avail-note').style.display = 'block';
                               renderSlotUI();
                             } else { showFallback(); }
@@ -1979,7 +1985,21 @@ a[href^="https://lin.ee"]:hover {
                         document.getElementById('rf-fallback-ui').style.display = 'block';
                       }
 
+                      // 空き枠のある日と定休日を日付順にマージする（定休日は選択不可タブとして表示）
+                      function buildDisplayDays(data) {
+                        const days = (data.availability || []).map(d => ({ date: d.date, slots: d.slots || [], closed: false }));
+                        (data.closedDates || []).forEach(dt => days.push({ date: dt, slots: [], closed: true }));
+                        days.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+                        return days;
+                      }
+
                       function renderSlotUI() {
+                        // 定休日が先頭に来ても選択可能な日を初期表示にする
+                        const firstOpen = availabilityData.findIndex(d => !d.closed);
+                        if (availabilityData[activeDateIndex[1]] && availabilityData[activeDateIndex[1]].closed) {
+                          activeDateIndex[1] = firstOpen;
+                          activeDateIndex[2] = firstOpen;
+                        }
                         [1, 2].forEach(p => { renderDateTabs(p); renderTimeSlots(p, activeDateIndex[p]); });
                       }
                       function renderDateTabs(pref) {
@@ -1989,6 +2009,13 @@ a[href^="https://lin.ee"]:hover {
                           const d = new Date(day.date + 'T00:00:00');
                           const btn = document.createElement('button');
                           btn.type = 'button';
+                          if (day.closed) {
+                            btn.className = 'rf-date-tab closed';
+                            btn.disabled = true;
+                            btn.innerHTML = `${d.getMonth()+1}/${d.getDate()}(${WEEKDAYS[d.getDay()]})<span class="rf-weekday">定休日</span>`;
+                            c.appendChild(btn);
+                            return;
+                          }
                           btn.className = 'rf-date-tab' + (idx === activeDateIndex[pref] ? ' active' : '');
                           btn.innerHTML = `${d.getMonth()+1}/${d.getDate()}<span class="rf-weekday">${WEEKDAYS[d.getDay()]}</span>`;
                           btn.addEventListener('click', () => { activeDateIndex[pref] = idx; renderDateTabs(pref); renderTimeSlots(pref, idx); });
@@ -1999,6 +2026,10 @@ a[href^="https://lin.ee"]:hover {
                         const c = document.getElementById(`rf-time-slots-${pref}`);
                         c.innerHTML = '';
                         const day = availabilityData[dateIdx];
+                        if (day && day.closed) {
+                          c.innerHTML = '<p style="font-size:13px;color:#9aa3b2;grid-column:1/-1;padding:8px 0;">この日は定休日のためご予約を承っておりません</p>';
+                          return;
+                        }
                         if (!day || day.slots.length === 0) {
                           c.innerHTML = '<p style="font-size:13px;color:#9aa3b2;grid-column:1/-1;padding:8px 0;">この日の空き枠はありません</p>';
                           return;
