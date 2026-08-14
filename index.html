@@ -701,10 +701,6 @@
       margin-top: var(--spacing-xl);
     }
 
-    .service-flex--reverse .service-media {
-      order: -1;
-    }
-
     .service-media {
       margin: 0;
     }
@@ -751,6 +747,21 @@
 
     .ba-chip--after {
       background: var(--gold-line);
+    }
+
+    .ba-video {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      display: block;
+      background: var(--color-bg-gray);
+    }
+
+    /* スマホではテキスト（説明文）直下に動画、PCでは従来どおり右カラム */
+    @media (min-width: 768px) {
+      .service-flex--mediafirst .service-media {
+        order: 2;
+      }
     }
 
     .ba-caption {
@@ -831,10 +842,6 @@
       .service-flex {
         grid-template-columns: 1fr;
         gap: 22px;
-      }
-
-      .service-flex--reverse .service-media {
-        order: 0;
       }
 
       .service-foot {
@@ -1201,6 +1208,19 @@
       color: var(--color-text-primary);
       max-width: 620px;
       margin-bottom: var(--spacing-lg);
+    }
+
+    .concept-photo {
+      max-width: 400px;
+      margin: 0 0 var(--spacing-lg);
+    }
+
+    .concept-photo img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      display: block;
     }
 
     .concept-promise {
@@ -1816,7 +1836,22 @@
     <p class="section-desc">
       プロの手洗い洗車をご自宅で。立ち会いは不要なので、在宅ワークや家事のあいだに、外装も車内もまるごときれいになります。
     </p>
-    <div class="service-flex">
+    <div class="service-flex service-flex--mediafirst">
+      <figure class="service-media">
+        <div class="ba-grid">
+          <div class="ba-item">
+            <video class="ba-video" muted loop playsinline preload="none"
+                   poster="/assets/uploads/2025/10/voice-1-poster.jpg"
+                   data-src="/assets/uploads/2025/10/voice-1-opt.mp4"></video>
+          </div>
+          <div class="ba-item">
+            <video class="ba-video" muted loop playsinline preload="none"
+                   poster="/assets/uploads/2025/10/voice-2-poster.jpg"
+                   data-src="/assets/uploads/2025/10/voice-2-opt.mp4"></video>
+          </div>
+          <figcaption class="ba-caption">実際の作業前後（動画）</figcaption>
+        </div>
+      </figure>
       <div>
         <ul class="benefit-list">
           <li>立ち会い不要。駐車場から動かさず、その場で完結</li>
@@ -1831,13 +1866,6 @@
           <a class="service-link" href="/mobile-car-wash/">洗車の料金・詳細を見る →</a>
         </div>
       </div>
-      <figure class="service-media">
-        <div class="ba-grid">
-          <div class="ba-item"><span class="ba-chip">BEFORE</span><img src="/assets/images/service_wash_before.jpg" alt="洗車前。砂埃で覆われたリアガラス" loading="lazy"></div>
-          <div class="ba-item"><span class="ba-chip ba-chip--after">AFTER</span><img src="/assets/images/service_wash_after.jpg" alt="洗車後。景色が映り込むようになった同じリアガラス" loading="lazy"></div>
-          <figcaption class="ba-caption">実際の作業前後（同じお車）</figcaption>
-        </div>
-      </figure>
     </div>
   </div>
 </section>
@@ -1850,7 +1878,10 @@
     <p class="section-desc">
       車検は引き取りから返車まで、まるごと代行。「なんだか、車の調子が悪い」も、原因の切り分けから対応します。
     </p>
-    <div class="service-flex service-flex--reverse">
+    <div class="service-flex">
+      <figure class="service-media">
+        <img class="service-photo" src="/assets/images/service_shaken.jpg" alt="ご自宅の駐車場で点検作業をする整備士" loading="lazy">
+      </figure>
       <div>
         <ul class="benefit-list">
           <li>国家1級自動車整備士／自動車検査員が対応</li>
@@ -1861,9 +1892,6 @@
           <a class="service-link" href="/maintenance/">整備でできること・料金を見る →</a>
         </div>
       </div>
-      <figure class="service-media">
-        <img class="service-photo" src="/assets/images/service_shaken.jpg" alt="ご自宅の駐車場で点検作業をする整備士" loading="lazy">
-      </figure>
     </div>
   </div>
 </section>
@@ -1876,7 +1904,10 @@
     <p class="section-desc">
       ドラレコ、テレビキャンセラー、リアモニター。持ち込み歓迎です。型番選びの相談から、乗り換え時の載せ替えまで、ご自宅で。
     </p>
-    <div class="service-flex">
+    <div class="service-flex service-flex--mediafirst">
+      <figure class="service-media">
+        <img class="service-photo" src="/assets/images/service_parts.jpg" alt="取り付けたリアモニターの動作確認" loading="lazy">
+      </figure>
       <div>
         <ul class="benefit-list">
           <li>購入前の「これ、うちの車に付く？」もLINEで相談OK</li>
@@ -1887,9 +1918,6 @@
           <a class="service-link" href="/maintenance/#service-overview">取付メニューの一覧を見る →</a>
         </div>
       </div>
-      <figure class="service-media">
-        <img class="service-photo" src="/assets/images/service_parts.jpg" alt="取り付けたリアモニターの動作確認" loading="lazy">
-      </figure>
     </div>
     <div class="price-cta-block">
       <p class="price-cta-micro">＼ まずはスマホで写真を送るだけ！ ／</p>
@@ -1920,6 +1948,9 @@
       タイヤの減り・バッテリー・灯火類をあわせてチェックしています。<br>
       気になる箇所があれば、写真つきでご報告。<strong>追加料金はありません。</strong>
     </p>
+    <figure class="concept-photo">
+      <img src="/assets/images/concept.jpg" alt="作業のあいまにタイヤまわりを点検する整備士" loading="lazy">
+    </figure>
     <div class="concept-promise">
       <strong>直すかどうかを決めるのは、お客様です。</strong>
       <span>私たちから無理におすすめすることはありません。</span>
@@ -2141,6 +2172,28 @@
     sync();
     if (mq.addEventListener) mq.addEventListener('change', sync);
     else if (mq.addListener) mq.addListener(sync);
+  })();
+
+  // 洗車ビフォーアフター動画：画面に近づいたら読み込んで再生
+  (function () {
+    var vids = document.querySelectorAll('video.ba-video');
+    if (!vids.length) return;
+    function load(v) {
+      if (v.src) return;
+      v.src = v.dataset.src;
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(vids, load);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { load(e.target); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '200px 0px' });
+    Array.prototype.forEach.call(vids, function (v) { io.observe(v); });
   })();
 
   // カルーセル共通
