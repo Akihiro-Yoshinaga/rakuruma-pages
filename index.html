@@ -43,6 +43,15 @@
     }
 
     :root {
+      /* カタログ（パンフレットv2）トーン寄せ：design-tokens.css をこのページ内だけ上書き。
+         LINE CTAの緑（--color-primary-green）は機能色としてそのまま */
+      --color-primary-blue: #24395c;
+      --color-bg-light-blue: #f1eee6;
+      --color-accent-yellow: #c9ab6a;
+      --color-accent-gold: #a2854c;
+      --gold-line: #b89a5e;
+      --gradient-button-blue: linear-gradient(to left, #1c2e4d, #3d5578);
+
       --blue-dark:  var(--color-primary-blue);
       --blue-mid:   var(--color-accent-mint);
       --blue-pale:  var(--color-bg-light-blue);
@@ -264,7 +273,7 @@
       font-size: 12.5px;
       font-weight: 800;
       letter-spacing: 0.14em;
-      color: #8fe6cf;
+      color: #c9ab6a;
       margin-bottom: 13px;
     }
 
@@ -272,7 +281,7 @@
       content: '';
       width: 26px;
       height: 2px;
-      background: #8fe6cf;
+      background: #c9ab6a;
       border-radius: 2px;
     }
 
@@ -328,7 +337,7 @@
       margin-top: 10px;
       font-size: 12px;
       font-weight: 800;
-      color: #8fe6cf;
+      color: #c9ab6a;
     }
 
     .hero-rating {
@@ -506,7 +515,7 @@
       font-size: var(--font-size-xs);
       font-weight: var(--font-weight-bold);
       letter-spacing: 2px;
-      color: var(--color-primary-blue);
+      color: var(--color-accent-gold);
       text-transform: uppercase;
       margin-bottom: var(--spacing-sm);
     }
@@ -517,6 +526,18 @@
       line-height: var(--line-height-normal);
       margin-bottom: var(--spacing-md);
       color: var(--color-text-primary);
+    }
+
+    /* カタログと同じ、見出し下の短いゴールド罫 */
+    .section-title::after,
+    .works-headline::after {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 3px;
+      background: var(--gold-line);
+      border-radius: 2px;
+      margin-top: 14px;
     }
 
     .section-desc {
@@ -664,6 +685,165 @@
       .voice-card {
         flex: 0 0 82%;
         scroll-snap-align: center;
+      }
+    }
+
+    /* ===== SERVICE：カタログ型サービス紹介 ===== */
+    .service-section--alt {
+      background: var(--color-bg-light-blue);
+    }
+
+    .service-flex {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      margin-top: var(--spacing-xl);
+    }
+
+    .service-flex--reverse .service-media {
+      order: -1;
+    }
+
+    .service-media {
+      margin: 0;
+    }
+
+    .service-photo {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      border-radius: var(--radius-sm);
+    }
+
+    .ba-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .ba-item {
+      position: relative;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .ba-item img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ba-chip {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #fff;
+      background: rgba(28, 46, 77, 0.85);
+      border-radius: 4px;
+      padding: 4px 10px;
+    }
+
+    .ba-chip--after {
+      background: var(--gold-line);
+    }
+
+    .ba-caption {
+      grid-column: 1 / -1;
+      font-size: 12px;
+      color: var(--color-text-muted);
+      text-align: right;
+    }
+
+    .benefit-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .benefit-list li {
+      position: relative;
+      padding-left: 26px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--color-text-primary);
+    }
+
+    .benefit-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 2px;
+      color: var(--color-accent-gold);
+      font-weight: 800;
+    }
+
+    .service-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .service-price {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .service-price-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+    }
+
+    .service-price-note {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    .service-link {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      text-decoration: none;
+      border: 2px solid var(--color-primary-blue);
+      border-radius: 40px;
+      padding: 12px 26px;
+      transition: var(--transition-fast);
+    }
+
+    .service-link:hover {
+      background: var(--color-primary-blue);
+      color: #fff;
+    }
+
+    @media (max-width: 767px) {
+      .service-flex {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+
+      .service-flex--reverse .service-media {
+        order: 0;
+      }
+
+      .service-foot {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .service-link {
+        text-align: center;
       }
     }
 
@@ -1552,10 +1732,12 @@
   <a href="/maintenance/">出張整備・パーツ取付</a>
   <a href="/price_list/">料金表</a>
   <div class="menu-divider">このページ</div>
-  <a href="#voice" onclick="toggleMenu()">お客様の声</a>
-  <a href="#scenes" onclick="toggleMenu()">こんなとき、頼めます</a>
-  <a href="#howto" onclick="toggleMenu()">頼み方</a>
+  <a href="#wash" onclick="toggleMenu()">洗車</a>
+  <a href="#maintenance" onclick="toggleMenu()">車検・整備</a>
+  <a href="#parts" onclick="toggleMenu()">パーツ取付</a>
   <a href="#concept" onclick="toggleMenu()">ラクルマとは</a>
+  <a href="#howto" onclick="toggleMenu()">頼み方</a>
+  <a href="#voice" onclick="toggleMenu()">お客様の声</a>
   <a href="#works" onclick="toggleMenu()">作業実績</a>
   <div class="menu-divider">その他</div>
   <a href="/blog/">作業実績ブログ</a>
@@ -1618,10 +1800,160 @@
 <p class="hero-note">※ 2026年7月現在、くらしのマーケットに寄せられた口コミの件数・平均評価より。</p>
 
 <!-- VOICE：口コミ（ジャーニー段階②＝初回の不安を消す。FV直下に本文を露出） -->
+
+
+
+
+
+
+
+
+<!-- SERVICE 01：洗車 -->
+<section class="service-section" id="wash">
+  <div class="section-inner">
+    <div class="section-label">SERVICE 01｜洗車</div>
+    <h2 class="section-title">場所を選ばない、出張洗車。</h2>
+    <p class="section-desc">
+      プロの手洗い洗車をご自宅で。立ち会いは不要なので、在宅ワークや家事のあいだに、外装も車内もまるごときれいになります。
+    </p>
+    <div class="service-flex">
+      <div>
+        <ul class="benefit-list">
+          <li>立ち会い不要。駐車場から動かさず、その場で完結</li>
+          <li>車内清掃もおまかせ。食べこぼしも、ペットの毛も</li>
+          <li>洗車のあいだに国家1級整備士の目で点検。気になる箇所は写真つきでご報告（追加料金なし）</li>
+        </ul>
+        <div class="service-foot">
+          <div class="service-price">
+            <span class="service-price-num">7,700円〜</span>
+            <span class="service-price-note">SMサイズ 7,700円／LXサイズ 8,800円（税込）・定期プランあり</span>
+          </div>
+          <a class="service-link" href="/mobile-car-wash/">洗車の料金・詳細を見る →</a>
+        </div>
+      </div>
+      <figure class="service-media">
+        <div class="ba-grid">
+          <div class="ba-item"><span class="ba-chip">BEFORE</span><img src="/assets/images/service_wash_before.jpg" alt="洗車前。砂埃で覆われたリアガラス" loading="lazy"></div>
+          <div class="ba-item"><span class="ba-chip ba-chip--after">AFTER</span><img src="/assets/images/service_wash_after.jpg" alt="洗車後。景色が映り込むようになった同じリアガラス" loading="lazy"></div>
+          <figcaption class="ba-caption">実際の作業前後（同じお車）</figcaption>
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 02：車検・整備 -->
+<section class="service-section service-section--alt" id="maintenance">
+  <div class="section-inner">
+    <div class="section-label">SERVICE 02｜車検・整備</div>
+    <h2 class="section-title">車検も、バッテリー交換も、出張で。</h2>
+    <p class="section-desc">
+      車検は引き取りから返車まで、まるごと代行。「なんだか、車の調子が悪い」も、原因の切り分けから対応します。
+    </p>
+    <div class="service-flex service-flex--reverse">
+      <div>
+        <ul class="benefit-list">
+          <li>国家1級自動車整備士／自動車検査員が対応</li>
+          <li>オイル交換・タイヤ・バッテリー交換などの日常整備もご自宅の駐車場で</li>
+          <li>点検結果は写真つきでご報告。直すかどうかは、お客様が決められます</li>
+        </ul>
+        <div class="service-foot">
+          <a class="service-link" href="/maintenance/">整備でできること・料金を見る →</a>
+        </div>
+      </div>
+      <figure class="service-media">
+        <img class="service-photo" src="/assets/images/service_shaken.jpg" alt="ご自宅の駐車場で点検作業をする整備士" loading="lazy">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 03：パーツ取付 -->
+<section class="service-section" id="parts">
+  <div class="section-inner">
+    <div class="section-label">SERVICE 03｜パーツ取付</div>
+    <h2 class="section-title">車内エンタメも、ドラレコもお任せ。</h2>
+    <p class="section-desc">
+      ドラレコ、テレビキャンセラー、リアモニター。持ち込み歓迎です。型番選びの相談から、乗り換え時の載せ替えまで、ご自宅で。
+    </p>
+    <div class="service-flex">
+      <div>
+        <ul class="benefit-list">
+          <li>購入前の「これ、うちの車に付く？」もLINEで相談OK</li>
+          <li>取り外し〜再取付（載せ替え）も対応</li>
+          <li>取付済みパーツの「動かない・調子が悪い」の診断も</li>
+        </ul>
+        <div class="service-foot">
+          <a class="service-link" href="/maintenance/#service-overview">取付メニューの一覧を見る →</a>
+        </div>
+      </div>
+      <figure class="service-media">
+        <img class="service-photo" src="/assets/images/service_parts.jpg" alt="取り付けたリアモニターの動作確認" loading="lazy">
+      </figure>
+    </div>
+    <div class="price-cta-block">
+      <p class="price-cta-micro">＼ まずはスマホで写真を送るだけ！ ／</p>
+      <div class="price-cta-card">
+        <div class="price-cta-text">
+          <div class="price-cta-title">一覧にないメニューもお気軽にご相談ください</div>
+          <div class="price-cta-desc">「こんな作業もできる？」「料金はどのくらい？」<br>どんな小さなことでも、LINEで無料でお答えします。</div>
+        </div>
+        <a href="https://lin.ee/r0BAZkR0" class="price-cta-btn">
+          <span class="price-cta-btn-icon">💬</span>
+          <span>
+            <span class="price-cta-btn-main">LINEで相談する</span>
+            <span class="price-cta-btn-sub">無料・返信は最短当日</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPT：点検がついてくる（圧縮版） -->
+<section class="concept-section" id="concept">
+  <div class="section-inner">
+    <div class="section-label">CONCEPT</div>
+    <h2 class="section-title">頼んだ作業だけで、終わらない。</h2>
+    <p class="concept-body">
+      洗車でも、整備でも。作業のあいだに国家1級整備士の目で、<br class="pc-only">
+      タイヤの減り・バッテリー・灯火類をあわせてチェックしています。<br>
+      気になる箇所があれば、写真つきでご報告。<strong>追加料金はありません。</strong>
+    </p>
+    <div class="concept-promise">
+      <strong>直すかどうかを決めるのは、お客様です。</strong>
+      <span>私たちから無理におすすめすることはありません。</span>
+    </div>
+    <p class="concept-origin">※「クルマの管理をラクに」——それが「ラクルマ」という名前の由来です。</p>
+  </div>
+</section>
+
+<!-- HOWTO：頼み方（旧HOW TO USEデザイン） -->
+<section class="howto-section" id="howto">
+  <div class="section-inner">
+    <div class="section-label">FLOW</div>
+    <h2 class="section-title">次からは、写真を送るだけ。</h2>
+    <ol class="step-list">
+      <li class="step-1">
+        <div class="step-badge"><span>STEP 1</span>LINEで相談</div>
+        <p>車種と気になるところを送ってください。写真があればスムーズ。相談・見積りは無料です。</p>
+      </li>
+      <li class="step-2">
+        <div class="step-badge"><span>STEP 2</span>見積りと日程</div>
+        <p>金額とお伺いできる日時をご返信します。納得できたら日程確定です。</p>
+      </li>
+      <li class="step-3">
+        <div class="step-badge"><span>STEP 3</span>ご自宅で作業</div>
+        <p>駐車場にお伺いして、その場で完結。作業内容はご説明のうえ、記録に残します。</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
 <section class="voice-section" id="voice">
   <div class="section-inner">
     <div class="section-label">VOICE</div>
-    <h2 class="section-title">口コミ560件、いただきました。</h2>
+    <h2 class="section-title">お客様の声</h2>
     <div class="voice-rating-bar">
       <span class="star">★</span><span class="voice-rating-num">4.92</span>
       <small>くらしのマーケット 口コミ560件の平均評価</small>
@@ -1684,119 +2016,6 @@
       </a>
     </div>
     <p class="voice-note">※ くらしのマーケット・Googleに寄せられた口コミの一部を、編集のうえご紹介しています。</p>
-  </div>
-</section>
-
-<!-- SCENES：逆引き「こんなとき」 -->
-<section class="scenes-section" id="scenes">
-  <div class="section-inner">
-    <div class="section-label">SCENE</div>
-    <h2 class="section-title">こんなとき、頼めます。</h2>
-    <p class="section-desc">
-      実際にいただいたご依頼から。ぜんぶ、ご自宅で解決できます。
-    </p>
-    <div class="scene-group">
-      <div class="scene-group-head">
-        <div class="scene-group-title">整備・パーツ取付</div>
-      </div>
-      <div class="scene-grid">
-        <div class="scene-card">
-          <div class="scene-quote">「ネットで買ったパーツ、取付だけお願いしたい」</div>
-          <div class="scene-answer">持ち込み歓迎。型番の相談からどうぞ。</div>
-        </div>
-        <div class="scene-card">
-          <div class="scene-quote">「車を乗り換えた。ドラレコを載せ替えたい」</div>
-          <div class="scene-answer">取り外しから再取付まで、ご自宅で。</div>
-        </div>
-        <div class="scene-card">
-          <div class="scene-quote">「車検、今年どうしよう」</div>
-          <div class="scene-answer">引き取りから返車まで、お任せで。</div>
-        </div>
-        <div class="scene-card">
-          <div class="scene-quote">「なんだか、車の調子が悪い」</div>
-          <div class="scene-answer">原因の切り分けから対応します。</div>
-        </div>
-        <a class="scene-lp-card scene-lp-card--seibi" href="/maintenance/#service-overview">
-          <div class="scene-lp-card-teaser">オイル交換・タイヤ・バッテリー・テレビキャンセラーなど、できることは他にもたくさん。</div>
-          <div class="scene-lp-card-link">整備のページで全部見る →</div>
-        </a>
-      </div>
-    </div>
-    <div class="scene-group">
-      <div class="scene-group-head">
-        <div class="scene-group-title">洗車</div>
-      </div>
-      <div class="scene-grid">
-        <div class="scene-card">
-          <div class="scene-quote">「洗車したいけど、行く時間がない」</div>
-          <div class="scene-answer">駐車場で外も中も。立ち会い不要です。</div>
-        </div>
-        <div class="scene-card">
-          <div class="scene-quote">「車内を一度リセットしたい」</div>
-          <div class="scene-answer">食べこぼしも、ペットの毛も。</div>
-        </div>
-        <a class="scene-lp-card scene-lp-card--wash" href="/mobile-car-wash/#plan">
-          <div class="scene-lp-card-teaser">料金プラン・仕上がり写真・定期プランの詳細は、こちらで。</div>
-          <div class="scene-lp-card-link">洗車のページで全部見る →</div>
-        </a>
-      </div>
-    </div>
-    <div class="price-cta-block">
-      <p class="price-cta-micro">＼ まずはスマホで写真を送るだけ！ ／</p>
-      <div class="price-cta-card">
-        <div class="price-cta-text">
-          <div class="price-cta-title">一覧にないメニューもお気軽にご相談ください</div>
-          <div class="price-cta-desc">「こんな作業もできる？」「料金はどのくらい？」<br>どんな小さなことでも、LINEで無料でお答えします。</div>
-        </div>
-        <a href="https://lin.ee/r0BAZkR0" class="price-cta-btn">
-          <span class="price-cta-btn-icon">💬</span>
-          <span>
-            <span class="price-cta-btn-main">LINEで相談する</span>
-            <span class="price-cta-btn-sub">無料・返信は最短当日</span>
-          </span>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOWTO：頼み方（旧HOW TO USEデザイン） -->
-<section class="howto-section" id="howto">
-  <div class="section-inner">
-    <div class="section-label">HOW TO</div>
-    <h2 class="section-title">頼み方は、写真を送るだけ。</h2>
-    <ol class="step-list">
-      <li class="step-1">
-        <div class="step-badge"><span>STEP 1</span>LINEで相談</div>
-        <p>車種と気になるところを送ってください。写真があればスムーズ。相談・見積りは無料です。</p>
-      </li>
-      <li class="step-2">
-        <div class="step-badge"><span>STEP 2</span>見積りと日程</div>
-        <p>金額とお伺いできる日時をご返信します。納得できたら日程確定です。</p>
-      </li>
-      <li class="step-3">
-        <div class="step-badge"><span>STEP 3</span>ご自宅で作業</div>
-        <p>駐車場にお伺いして、その場で完結。作業内容はご説明のうえ、記録に残します。</p>
-      </li>
-    </ol>
-  </div>
-</section>
-
-<!-- CONCEPT：点検がついてくる（圧縮版） -->
-<section class="concept-section" id="concept">
-  <div class="section-inner">
-    <div class="section-label">CONCEPT</div>
-    <h2 class="section-title">頼んだ作業だけで、終わらない。</h2>
-    <p class="concept-body">
-      洗車でも、整備でも。作業のあいだに国家1級整備士の目で、<br class="pc-only">
-      タイヤの減り・バッテリー・灯火類をあわせてチェックしています。<br>
-      気になる箇所があれば、写真つきでご報告。<strong>追加料金はありません。</strong>
-    </p>
-    <div class="concept-promise">
-      <strong>直すかどうかを決めるのは、お客様です。</strong>
-      <span>私たちから無理におすすめすることはありません。</span>
-    </div>
-    <p class="concept-origin">※「クルマの管理をラクに」——それが「ラクルマ」という名前の由来です。</p>
   </div>
 </section>
 
