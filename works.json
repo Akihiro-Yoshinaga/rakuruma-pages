@@ -1,5 +1,41 @@
 [
   {
+    "id": "060dd415-d24b-409e-b3d4-7c746baa8fd4",
+    "date": "2026.08.16",
+    "maker": "",
+    "car": "",
+    "note": "\"レーダー探知機取り付け（ユピテル丨GS503L）\"",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=1dB0H_Y12yThBn8fnqKx-y10SO6U5XGSd&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=060dd415-d24b-409e-b3d4-7c746baa8fd4",
+    "review": "整備",
+    "rating": "0"
+  },
+  {
+    "id": "7f490165-570e-47dc-915e-959fcba0aacb",
+    "date": "2026.08.16",
+    "maker": "",
+    "car": "",
+    "note": "\"バッテリー交換\"",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=1AGqZwj5-MIT0O3zuPvIDTE0atIVMRHIq&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=7f490165-570e-47dc-915e-959fcba0aacb",
+    "review": "整備",
+    "rating": "0"
+  },
+  {
+    "id": "13207030-300c-4793-a0c1-39a96e8861ba",
+    "date": "2026.08.16",
+    "maker": "",
+    "car": "",
+    "note": "\"ドライブレコーダー取り付け（COMTEC丨ZDR-750D）\"",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=1C_Bw9Mtveq8klTXhiustd0FO6VIu4Alo&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=13207030-300c-4793-a0c1-39a96e8861ba",
+    "review": "整備",
+    "rating": "0"
+  },
+  {
     "id": "598e8c6c-b294-4ca0-94e8-1d004757d72b",
     "date": "2026.08.13",
     "maker": "",
