@@ -560,8 +560,10 @@ function sendShaken(row) {
   fetch(GAS_URL + '?action=mypageShaken&token=' + encodeURIComponent(getToken()) + '&row=' + encodeURIComponent(row))
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (d.ok && (d.handled === 'auto_sent')) {
+      if (d.ok && (d.handled === 'auto_sent' || d.handled === 'quick_sent')) {
         shakenStatus('概算お見積もりをLINEのトークにお送りしました。<br>ご確認ください。' + backToTalkHtml());
+      } else if (d.ok && d.handled === 'asked_age') {
+        shakenStatus('LINEのトークで、お車の年式をお選びください。<br>選ぶとすぐに概算をお送りします。' + backToTalkHtml());
       } else if (d.ok && d.handled === 'needs_review') {
         shakenStatus('お見積もりを担当が確認しています。<br>まもなくLINEのトークにお送りします。' + backToTalkHtml());
       } else if (d.ok && (d.handled === 'asked_photo' || d.handled === 'no_data')) {
