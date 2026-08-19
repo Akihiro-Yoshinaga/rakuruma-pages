@@ -414,9 +414,13 @@ var RM_TRACK_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2Me
 function trackRichMenuTap() {
     try {
       var src = new URLSearchParams(location.search).get('src') || '';
-      if (!/^rm_[a-z]+$/.test(src)) return;                 // リッチメニュー以外は記録しない
-      if (sessionStorage.getItem('rmTracked_' + src)) return; // 再読込での二重計上を防ぐ
-      sessionStorage.setItem('rmTracked_' + src, '1');
+      if (!/^rm_[a-z]+$/.test(src)) return;   // リッチメニュー以外は記録しない
+      // 二重計上ガードは「送信できた後」に立てる。先に立てると、送信に失敗したとき
+      // 旗だけ残って永久に記録されなくなる（2026-08-19に実際に起きた）。
+      // 60秒以内の再読込だけ弾く時間ベースにして、恒久的に詰まらないようにする。
+      var GKEY = 'rmSent_' + src;
+      var last = parseInt(sessionStorage.getItem(GKEY) || '0', 10);
+      if (last && Date.now() - last < 60000) return;
       var ua = navigator.userAgent || '';
       var dev = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
       var done = false;
@@ -424,16 +428,20 @@ function trackRichMenuTap() {
         if (done) return; done = true;
         var ping = RM_TRACK_ENDPOINT + '?track=' + encodeURIComponent(src) + '&d=' + dev
                  + (uid ? '&u=' + encodeURIComponent(uid) : '');
+        // sendBeaconはPOSTになるがGAS側はdoGet/doPost両方で ?track= を処理している。
+        // 念のため画像GETも撃つ（GAS側は同一キーでも1件ずつ記録するため、片方が失敗する前提で
+        // 二重にはしない＝beaconが成功したらGETは撃たない）。
         var sent = false;
         try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}
         if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
+        try { sessionStorage.setItem(GKEY, String(Date.now())); } catch (e) {}
       }
       // ① getContext() はスコープ追加なしでuserIdが取れる（LINEアプリ内のみ）
       try {
         var ctx = (liff.getContext && liff.getContext()) || null;
         if (ctx && ctx.userId) { send(ctx.userId); return; }
       } catch (e) {}
-      // ② 取れなければprofileを試す。ただし失敗・無応答でも「件数だけ」は必ず送る
+      // ② 取れなければprofileを試す。失敗・無応答でも「件数だけ」は必ず送る
       try {
         liff.getProfile().then(function (pf) { send(pf && pf.userId); })
                          .catch(function () { send(''); });
