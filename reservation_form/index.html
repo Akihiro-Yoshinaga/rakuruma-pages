@@ -706,6 +706,7 @@
         <label for="menu">ご希望のメニュー<span class="required-badge">必須</span></label>
         <select id="menu" name="menu">
           <option value="出張洗車" selected>出張洗車</option>
+          <option value="車検見積もり">車検見積もり（ご自宅・約15分・無料）</option>
           <option value="オイル交換">オイル交換</option>
           <option value="タイヤ履き替え">タイヤ履き替え</option>
           <option value="ドラレコ等パーツ取り付け">ドラレコ等パーツ取り付け</option>
@@ -1008,6 +1009,7 @@
           const note = document.getElementById('line-link-note');
           if (note) note.style.display = 'none';
           liffDebug('→ 自動連携モード（ボタン変更＋連携の注意文を非表示）');
+          prefillFromCustomer(); // 登録済みのお客様は入力の手間を省く
         }
       })
       .catch(function(e) {
@@ -1015,6 +1017,35 @@
         /* 失敗しても従来フロー（連携ボタン）で継続 */
       });
   })();
+
+  // 登録済みのお客様の情報を引いて、空欄だけ自動で埋める（2026-08-19）
+  // 個人情報を扱うのでGAS側でIDトークンを検証している。本人の行しか返らない。
+  function prefillFromCustomer() {
+    if (!LINE_ID_TOKEN) return;
+    fetch(GAS_URL + '?action=customerByIdToken&idToken=' + encodeURIComponent(LINE_ID_TOKEN))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        liffDebug('登録情報の取得: ' + JSON.stringify(d));
+        if (!d || !d.ok || !d.found) return;
+        var map = { name: d.name, address: d.address, phone: d.phone, email: d.email, car: d.car };
+        var filled = 0;
+        Object.keys(map).forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el && !el.value && map[id]) { el.value = map[id]; filled++; }
+        });
+        if (!filled) return;
+
+        var host = document.getElementById('name') && document.getElementById('name').closest('.card');
+        if (!host || document.getElementById('prefill-note')) return;
+        var box = document.createElement('div');
+        box.id = 'prefill-note';
+        box.style.cssText = 'margin:0 0 12px;padding:12px 14px;background:#EBF8FF;border:1px solid #BEE3F8;'
+          + 'border-radius:10px;font-size:13px;line-height:1.6;color:#2C5282;';
+        box.textContent = 'ご登録の情報を入れました。変更がある場合はそのまま書き換えてください。';
+        host.insertAdjacentElement('beforebegin', box);
+      })
+      .catch(function (e) { liffDebug('登録情報の取得に失敗: ' + (e && e.message)); });
+  }
 
   // 予約後にIDトークンで自動連携する。成功したらtrueを返す
   function autoLinkLine(phone) {
@@ -1106,6 +1137,17 @@
     if (!isWash) document.getElementById('heavily_dirty').checked = false;
   }
   document.getElementById('menu').addEventListener('change', updateMenuExtras);
+
+  // ?menu=車検見積もり のように指定されていれば、その項目を最初から選んでおく
+  // （LINEの概算カードから「正確なお見積もりを依頼する」で開かれたときに使う）
+  (function presetMenu() {
+    const want = new URLSearchParams(location.search).get('menu');
+    if (!want) return;
+    const sel = document.getElementById('menu');
+    const hit = Array.prototype.slice.call(sel.options).filter(function (o) { return o.value === want; })[0];
+    if (hit) sel.value = hit.value;
+  })();
+
   // 初期表示
   updateMenuExtras();
 
