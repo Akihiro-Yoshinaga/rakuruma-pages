@@ -410,25 +410,25 @@ function markRedirected() {
 // ===== リッチメニュー計測（2026-08-19）=====
 // リッチメニューから来た場合だけ ?src=rm_xxx が付く。LINEユーザーIDとセットで1件記録する。
 // 記録先はGASの「QR計測」シート（パンフQRと同じ仕組みを流用）。失敗しても本体の表示は止めない。
-function rmSrcQuery() {
+// ⚠️ render() の最後で history.replaceState によりクエリが消える。
+//    そのため src は「スクリプト読み込み直後」にここで確保しておくこと。
+var RM_SRC = (function () {
   try {
     var qs  = new URLSearchParams(location.search);
     var src = qs.get('src') || '';
-    // ⚠️ LIFFはクエリを ?liff.state=%3Fsrc%3D... にエンコードして渡す。
-    //    復元するのは liff.init() だが、キャッシュ経路では init を呼ばないので自前で読む。
-    if (!src) {
+    if (!src) {                       // LIFFは ?liff.state=%3Fsrc%3D... で渡してくることがある
       var st = qs.get('liff.state') || '';
-      if (st) {
-        try { src = new URLSearchParams(st.charAt(0) === '?' ? st.slice(1) : st).get('src') || ''; } catch (e) {}
-      }
+      if (st) { try { src = new URLSearchParams(st.charAt(0) === '?' ? st.slice(1) : st).get('src') || ''; } catch (e) {} }
     }
-    var ua  = navigator.userAgent || '';
-    var dev = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
-    // 何が届いたかをサーバー側に残す（srcが取れなかった原因を目で見て特定するため・一時的）
-    var dbg = '&rmdbg=' + encodeURIComponent((location.search || '(空)').slice(0, 100));
-    if (!/^rm_[a-z]+$/.test(src)) return dbg;
-    return '&src=' + encodeURIComponent(src) + '&d=' + dev + dbg;
+    return /^rm_[a-z]+$/.test(src) ? src : '';
   } catch (e) { return ''; }
+})();
+
+function rmSrcQuery() {
+  if (!RM_SRC) return '';
+  var ua  = navigator.userAgent || '';
+  var dev = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
+  return '&src=' + encodeURIComponent(RM_SRC) + '&d=' + dev;
 }
 
 function startLiff() {
@@ -586,8 +586,8 @@ function render(data) {
     + '  <div class="greeting-sub">いつもご利用いただきありがとうございます。</div>'
     + '</div>';
 
-  window._cars = data.cars || [];
-  if (data.inspExpiry || window._cars.length > 0) {
+  window._cars = data.cars || (window._pendingCars || []);
+  if (data.inspExpiry || window._cars.length > 0 || !window._carsDone) {
     html += '<div class="shaken">';
     if (data.inspExpiry) {
       html += '<div class="shaken-head">'
@@ -596,7 +596,13 @@ function render(data) {
         + '<div class="shaken-date">' + escapeHtml(data.inspExpiry) + daysLeftBadge(data.inspExpiry) + '</div></div>'
         + '</div>';
     }
-    if (window._cars.length > 0) {
+    if (window._cars.length === 0 && !window._carsDone) {
+      // 登録車の取得は重く15〜20秒かかることがある。空白のままだと存在に気づかれないため、
+      // 先に無効状態のボタンを出しておく（2026-08-19）
+      html += '<button class="shaken-btn" id="shakenBtn" disabled style="opacity:.55;">'
+        + '<span class="shaken-spinner"></span>車検の概算見積もりを準備しています…</button>'
+        + '<div class="shaken-note">ご登録のお車の情報を読み込んでいます。数十秒かかることがあります。</div>';
+    } else if (window._cars.length > 0) {
       html += '<button class="shaken-btn" id="shakenBtn" onclick="startShaken()">車検の概算見積もりを見る（無料）</button>'
         + '<div class="shaken-note">ご登録のお車の情報から概算を計算して、LINEのトークにお送りします。</div>'
         + '<div class="shaken-cars hidden" id="shakenCars"></div>'
@@ -656,21 +662,23 @@ function showError(msg) {
 
 // 登録車は履歴より重いので、履歴を描いたあとに取りに行く（初回表示を待たせない）
 function refreshCars() {
-  if (window._carsLoaded || !window._data) return;
+  if (window._carsLoaded) return;
   window._carsLoaded = true;
   var token = getToken();
   if (!token) return;
   fetch(GAS_URL + '?action=mypageShaken&token=' + encodeURIComponent(token))
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (!d.ok || !Array.isArray(d.cars)) return;
+      window._carsDone = true;
+      if (!d.ok || !Array.isArray(d.cars)) { if (window._data) render(window._data); return; }
+      if (!window._data) { window._pendingCars = d.cars; return; }
       var before = JSON.stringify(window._data.cars || []);
       if (before === JSON.stringify(d.cars)) return; // 変化なしなら描き直さない
       window._data.cars = d.cars;
       saveCachedData(window._data);
       render(window._data);
     })
-    .catch(function() {});
+    .catch(function() { window._carsDone = true; if (window._data) render(window._data); });
 }
 
 // GASから履歴データを取得（code＝ログイン直後 または token＝発行済み）
@@ -744,6 +752,7 @@ function submitPhone() {
   //    リッチメニュー計測(rmSrcQuery)は「必ず通る全経路」に付けること（2026-08-19の不具合）
   var token = getToken();
   if (token) {
+    refreshCars();   // 重い登録車の取得は描画を待たず先に走らせる（2026-08-19）
     // 前回の履歴が残っていれば、待たせずにそれを表示してから裏で最新に差し替える
     var cached = getCachedData();
     if (cached && cached.reports) {
