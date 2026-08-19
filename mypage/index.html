@@ -296,7 +296,8 @@ body {
   <div class="panel">
     <div class="logo">ラクルマ</div>
     <div class="spinner"></div>
-    <div class="msg" style="font-size:14px;color:#718096;">読み込み中...</div>
+    <div class="msg" id="loadMsg" style="font-size:14px;color:#1a202c;font-weight:700;">読み込み中...</div>
+    <div id="loadSub" style="font-size:12px;color:#718096;margin-top:6px;">&nbsp;</div>
   </div>
 </div>
 
@@ -347,10 +348,39 @@ var LIFF_ID = '2004330318-vS44KWOy';
 var LIFF_URL = 'https://liff.line.me/' + LIFF_ID;
 var LS_KEY = 'rk_hist_token';
 var LS_REDIRECT_KEY = 'rk_liff_redirected';
+var LS_DATA_KEY = 'rk_hist_data';   // 前回表示した履歴。次回は待たずにこれを先に描く
 
 var params = new URLSearchParams(window.location.search);
 
+// 進行状況の表示（GASは初回2〜20秒かかるため、いま何をしているかを出す）
+var loadTimer = null;
+function loadStep(msg) {
+  var el = document.getElementById('loadMsg');
+  if (el) el.textContent = msg;
+  if (loadTimer) return;
+  var t0 = Date.now();
+  loadTimer = setInterval(function() {
+    var sec = Math.floor((Date.now() - t0) / 1000);
+    var sub = document.getElementById('loadSub');
+    if (!sub) return;
+    sub.textContent = (sec < 8)
+      ? '経過 ' + sec + '秒'
+      : '経過 ' + sec + '秒／初回は少し時間がかかります';
+  }, 1000);
+}
+function loadDone() {
+  if (loadTimer) { clearInterval(loadTimer); loadTimer = null; }
+}
+
 function getToken()   { try { return localStorage.getItem(LS_KEY) || ''; } catch (e) { return ''; } }
+function getCachedData() { try { return JSON.parse(localStorage.getItem(LS_DATA_KEY) || 'null'); } catch (e) { return null; } }
+function saveCachedData(d) {
+  try {
+    localStorage.setItem(LS_DATA_KEY, JSON.stringify({
+      customerName: d.customerName, inspExpiry: d.inspExpiry, reports: d.reports, cars: d.cars || []
+    }));
+  } catch (e) {}
+}
 function saveToken(t) { try { if (t) localStorage.setItem(LS_KEY, t); } catch (e) {} }
 function clearToken() { try { localStorage.removeItem(LS_KEY); } catch (e) {} }
 
@@ -379,6 +409,7 @@ function markRedirected() {
 // LIFFで認証してLINEのIDトークンを取得 → GASへ（LINEアプリ内なら自動ログイン＝パスワード不要）
 function startLiff() {
   show('loading');
+  loadStep('LINEにログインしています');
   if (typeof liff === 'undefined') {
     showError('LINEの読み込みに失敗しました。<br>通信環境の良い場所で、もう一度お試しください。');
     return;
@@ -512,7 +543,10 @@ function sendShaken(row) {
 }
 
 function render(data) {
+  loadDone();
   saveToken(data.token);
+  window._data = data;
+  if (data.token) saveCachedData(data);
 
   var html = ''
     + '<div class="header">'
@@ -574,8 +608,13 @@ function render(data) {
       + '</div>';
   }
 
+  if (window._refreshing) {
+    html = '<div style="background:#EDF2F7;color:#4a5568;font-size:12px;padding:8px 16px;text-align:center;">'
+      + '最新の情報を確認しています…</div>' + html;
+  }
   document.getElementById('content').innerHTML = html;
   show('content');
+  refreshCars();
   // URLからcode/lineIdを消す（リロード時は使用済みcodeではなくキャッシュのlineIdで再取得される）
   if (window.location.search) {
     try { history.replaceState(null, '', '/mypage/'); } catch (e) {}
@@ -587,14 +626,38 @@ function showError(msg) {
   show('error');
 }
 
+// 登録車は履歴より重いので、履歴を描いたあとに取りに行く（初回表示を待たせない）
+function refreshCars() {
+  if (window._carsLoaded || !window._data) return;
+  window._carsLoaded = true;
+  var token = getToken();
+  if (!token) return;
+  fetch(GAS_URL + '?action=mypageShaken&token=' + encodeURIComponent(token))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.ok || !Array.isArray(d.cars)) return;
+      var before = JSON.stringify(window._data.cars || []);
+      if (before === JSON.stringify(d.cars)) return; // 変化なしなら描き直さない
+      window._data.cars = d.cars;
+      saveCachedData(window._data);
+      render(window._data);
+    })
+    .catch(function() {});
+}
+
 // GASから履歴データを取得（code＝ログイン直後 または token＝発行済み）
-function fetchHistory(query) {
-  show('loading');
+// silent=true のときは、すでに表示中のキャッシュを残したまま裏で更新する
+function fetchHistory(query, silent) {
+  if (!silent) { show('loading'); loadStep('作業履歴を読み込んでいます'); }
   fetch(GAS_URL + '?action=historyData&' + query)
     .then(function(r) { return r.json(); })
     .then(function(d) {
       if (d.ok) {
+        window._refreshing = false;
+        window._carsLoaded = false; // 最新の履歴に合わせて登録車も取り直す
         render(d);
+      } else if (silent) {
+        window._refreshing = false; // 裏更新の失敗は黙って捨てる（表示中のキャッシュを残す）
       } else if (d.needPhone) {
         saveToken(d.token);   // 紐付け用トークンを保持
         show('phone');
@@ -607,6 +670,7 @@ function fetchHistory(query) {
       }
     })
     .catch(function() {
+      if (silent) { window._refreshing = false; return; }
       showError('通信エラーが発生しました。<br>電波の良い場所で再度お試しください。');
     });
 }
@@ -649,7 +713,19 @@ function submitPhone() {
 
   // 有効な署名トークンがキャッシュされていれば、LIFFを通さず即取得（高速・2回目以降）
   var token = getToken();
-  if (token) { fetchHistory('token=' + encodeURIComponent(token)); return; }
+  if (token) {
+    // 前回の履歴が残っていれば、待たせずにそれを表示してから裏で最新に差し替える
+    var cached = getCachedData();
+    if (cached && cached.reports) {
+      window._refreshing = true;
+      render({ customerName: cached.customerName, inspExpiry: cached.inspExpiry,
+               reports: cached.reports, cars: cached.cars || [] });
+      fetchHistory('token=' + encodeURIComponent(token), true);
+      return;
+    }
+    fetchHistory('token=' + encodeURIComponent(token));
+    return;
+  }
 
   // それ以外はLIFFで認証（LINEアプリ内なら自動ログイン）
   startLiff();
