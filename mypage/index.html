@@ -407,6 +407,28 @@ function markRedirected() {
 }
 
 // LIFFで認証してLINEのIDトークンを取得 → GASへ（LINEアプリ内なら自動ログイン＝パスワード不要）
+// ===== リッチメニュー計測（2026-08-19）=====
+// リッチメニューから来た場合だけ ?src=rm_xxx が付く。LINEユーザーIDとセットで1件記録する。
+// 記録先はGASの「QR計測」シート（パンフQRと同じ仕組みを流用）。失敗しても本体の表示は止めない。
+var RM_TRACK_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+function trackRichMenuTap() {
+  try {
+    var src = new URLSearchParams(location.search).get('src') || '';
+    if (!/^rm_[a-z]+$/.test(src)) return;                 // リッチメニュー以外は記録しない
+    if (sessionStorage.getItem('rmTracked_' + src)) return; // 再読込での二重計上を防ぐ
+    sessionStorage.setItem('rmTracked_' + src, '1');
+    liff.getProfile().then(function (pf) {
+      var ua = navigator.userAgent || '';
+      var d = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
+      var ping = RM_TRACK_ENDPOINT + '?track=' + encodeURIComponent(src)
+               + '&d=' + d + '&u=' + encodeURIComponent(pf.userId);
+      var sent = false;
+      try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}
+      if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
+    }).catch(function () {});
+  } catch (e) {}
+}
+
 function startLiff() {
   show('loading');
   loadStep('LINEにログインしています');
@@ -433,6 +455,7 @@ function startLiff() {
         showError('ログイン情報を取得できませんでした。<br>もう一度お試しください。');
         return;
       }
+      trackRichMenuTap();
       fetchHistory('idToken=' + encodeURIComponent(idToken));
     })
     .catch(function(e) {
