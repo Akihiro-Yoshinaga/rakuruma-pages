@@ -344,7 +344,9 @@ body {
 <script>
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 var LIFF_ID = '2004330318-vS44KWOy';
+var LIFF_URL = 'https://liff.line.me/' + LIFF_ID;
 var LS_KEY = 'rk_hist_token';
+var LS_REDIRECT_KEY = 'rk_liff_redirected';
 
 var params = new URLSearchParams(window.location.search);
 
@@ -366,6 +368,14 @@ function goLineLogin() {
   startLiff();
 }
 
+// LIFFへの転送は1回だけ（転送が往復し続けるのを防ぐ。同じタブの間だけ覚える）
+function hasRedirected() {
+  try { return sessionStorage.getItem(LS_REDIRECT_KEY) === '1'; } catch (e) { return false; }
+}
+function markRedirected() {
+  try { sessionStorage.setItem(LS_REDIRECT_KEY, '1'); } catch (e) {}
+}
+
 // LIFFで認証してLINEのIDトークンを取得 → GASへ（LINEアプリ内なら自動ログイン＝パスワード不要）
 function startLiff() {
   show('loading');
@@ -376,7 +386,15 @@ function startLiff() {
   liff.init({ liffId: LIFF_ID })
     .then(function() {
       if (!liff.isLoggedIn()) {
-        liff.login({ redirectUri: location.href }); // 未ログイン時のみ（LINEアプリ内では通常発生しない）
+        // 普通のブラウザで直接開かれた場合（トークに貼ったURLをタップした等）は、
+        // LINEの専用入口へ1回だけ転送する。ウェブ版ログインに回ると
+        // 「ログインできませんでした」で止まってしまうため。
+        if (!liff.isInClient() && !hasRedirected()) {
+          markRedirected();
+          location.replace(LIFF_URL);
+          return;
+        }
+        liff.login({ redirectUri: location.href }); // 転送しても未ログインだった場合の最後の手段
         return;
       }
       var idToken = liff.getIDToken();
