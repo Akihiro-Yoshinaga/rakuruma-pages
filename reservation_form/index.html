@@ -933,43 +933,47 @@
   // リッチメニューから来た場合だけ ?src=rm_xxx が付く。LINEユーザーIDとセットで1件記録する。
   // 記録先はGASの「QR計測」シート（パンフQRと同じ仕組みを流用）。失敗しても予約フローは止めない。
   var RM_TRACK_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+  // ⚠️ src は「スクリプト読み込み直後」に確保する。
+  //    後から読むと、画面遷移やhistory操作でクエリが消えていることがある（マイページで実際に起きた）。
+  var RM_SRC = (function () {
+    try {
+      var qs  = new URLSearchParams(location.search);
+      var src = qs.get('src') || '';
+      if (!src) {   // LIFFは ?liff.state=%3Fsrc%3D... で渡してくることがある
+        var st = qs.get('liff.state') || '';
+        if (st) { try { src = new URLSearchParams(st.charAt(0) === '?' ? st.slice(1) : st).get('src') || ''; } catch (e) {} }
+      }
+      return /^rm_[a-z]+$/.test(src) ? src : '';
+    } catch (e) { return ''; }
+  })();
+
   function trackRichMenuTap() {
+    try {
+      if (!RM_SRC) return;
+      var GKEY = 'rmSent_' + RM_SRC;
+      var last = parseInt(sessionStorage.getItem(GKEY) || '0', 10);
+      if (last && Date.now() - last < 60000) return;   // 60秒以内の再読込だけ弾く
+      var ua  = navigator.userAgent || '';
+      var dev = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
+      var done = false;
+      function send(uid) {
+        if (done) return; done = true;
+        var ping = RM_TRACK_ENDPOINT + '?track=' + encodeURIComponent(RM_SRC) + '&d=' + dev
+                 + (uid ? '&u=' + encodeURIComponent(uid) : '');
+        var sent = false;
+        try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}
+        if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
+        try { sessionStorage.setItem(GKEY, String(Date.now())); } catch (e) {}   // 送信後に立てる
+      }
       try {
-        var src = new URLSearchParams(location.search).get('src') || '';
-        if (!/^rm_[a-z]+$/.test(src)) return;   // リッチメニュー以外は記録しない
-        // 二重計上ガードは「送信できた後」に立てる。先に立てると、送信に失敗したとき
-        // 旗だけ残って永久に記録されなくなる（2026-08-19に実際に起きた）。
-        // 60秒以内の再読込だけ弾く時間ベースにして、恒久的に詰まらないようにする。
-        var GKEY = 'rmSent_' + src;
-        var last = parseInt(sessionStorage.getItem(GKEY) || '0', 10);
-        if (last && Date.now() - last < 60000) return;
-        var ua = navigator.userAgent || '';
-        var dev = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
-        var done = false;
-        function send(uid) {
-          if (done) return; done = true;
-          var ping = RM_TRACK_ENDPOINT + '?track=' + encodeURIComponent(src) + '&d=' + dev
-                   + (uid ? '&u=' + encodeURIComponent(uid) : '');
-          // sendBeaconはPOSTになるがGAS側はdoGet/doPost両方で ?track= を処理している。
-          // 念のため画像GETも撃つ（GAS側は同一キーでも1件ずつ記録するため、片方が失敗する前提で
-          // 二重にはしない＝beaconが成功したらGETは撃たない）。
-          var sent = false;
-          try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}
-          if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
-          try { sessionStorage.setItem(GKEY, String(Date.now())); } catch (e) {}
-        }
-        // ① getContext() はスコープ追加なしでuserIdが取れる（LINEアプリ内のみ）
-        try {
-          var ctx = (liff.getContext && liff.getContext()) || null;
-          if (ctx && ctx.userId) { send(ctx.userId); return; }
-        } catch (e) {}
-        // ② 取れなければprofileを試す。失敗・無応答でも「件数だけ」は必ず送る
-        try {
-          liff.getProfile().then(function (pf) { send(pf && pf.userId); })
-                           .catch(function () { send(''); });
-        } catch (e) { send(''); }
-        setTimeout(function () { send(''); }, 1500);
+        var ctx = (liff.getContext && liff.getContext()) || null;
+        if (ctx && ctx.userId) { send(ctx.userId); return; }
       } catch (e) {}
+      try {
+        liff.getProfile().then(function (pf) { send(pf && pf.userId); }).catch(function () { send(''); });
+      } catch (e) { send(''); }
+      setTimeout(function () { send(''); }, 1500);
+    } catch (e) {}
   }
 
   (function initLiff() {
