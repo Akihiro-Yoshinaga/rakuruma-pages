@@ -25,8 +25,10 @@
   var ua = navigator.userAgent || '';
   var d = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
   var ping = "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec" + '?track=pamphlet_line&d=' + d;
-  try { if (navigator.sendBeacon) navigator.sendBeacon(ping); } catch (e) {}
-  try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {}
+  // sendBeaconが使えた場合はimgを撃たない（二重計上の防止）
+  var sent = false;
+  try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}
+  if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
   setTimeout(function () { location.replace(DEST); }, 300);
 })();
 </script>
