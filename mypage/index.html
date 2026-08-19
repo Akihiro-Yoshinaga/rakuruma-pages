@@ -729,6 +729,8 @@ function submitPhone() {
   document.getElementById('phoneBtn').addEventListener('click', submitPhone);
 
   // 有効な署名トークンがキャッシュされていれば、LIFFを通さず即取得（高速・2回目以降）
+  // ⚠️ 2回目以降はここで return するため startLiff() を通らない。
+  //    リッチメニュー計測(rmSrcQuery)は「必ず通る全経路」に付けること（2026-08-19の不具合）
   var token = getToken();
   if (token) {
     // 前回の履歴が残っていれば、待たせずにそれを表示してから裏で最新に差し替える
@@ -737,10 +739,10 @@ function submitPhone() {
       window._refreshing = true;
       render({ customerName: cached.customerName, inspExpiry: cached.inspExpiry,
                reports: cached.reports, cars: cached.cars || [] });
-      fetchHistory('token=' + encodeURIComponent(token), true);
+      fetchHistory('token=' + encodeURIComponent(token) + rmSrcQuery(), true);
       return;
     }
-    fetchHistory('token=' + encodeURIComponent(token));
+    fetchHistory('token=' + encodeURIComponent(token) + rmSrcQuery());
     return;
   }
 
