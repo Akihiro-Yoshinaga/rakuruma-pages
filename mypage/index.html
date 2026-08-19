@@ -412,11 +412,22 @@ function markRedirected() {
 // 記録先はGASの「QR計測」シート（パンフQRと同じ仕組みを流用）。失敗しても本体の表示は止めない。
 function rmSrcQuery() {
   try {
-    var src = new URLSearchParams(location.search).get('src') || '';
-    if (!/^rm_[a-z]+$/.test(src)) return '';
-    var ua = navigator.userAgent || '';
+    var qs  = new URLSearchParams(location.search);
+    var src = qs.get('src') || '';
+    // ⚠️ LIFFはクエリを ?liff.state=%3Fsrc%3D... にエンコードして渡す。
+    //    復元するのは liff.init() だが、キャッシュ経路では init を呼ばないので自前で読む。
+    if (!src) {
+      var st = qs.get('liff.state') || '';
+      if (st) {
+        try { src = new URLSearchParams(st.charAt(0) === '?' ? st.slice(1) : st).get('src') || ''; } catch (e) {}
+      }
+    }
+    var ua  = navigator.userAgent || '';
     var dev = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
-    return '&src=' + encodeURIComponent(src) + '&d=' + dev;
+    // 何が届いたかをサーバー側に残す（srcが取れなかった原因を目で見て特定するため・一時的）
+    var dbg = '&rmdbg=' + encodeURIComponent((location.search || '(空)').slice(0, 100));
+    if (!/^rm_[a-z]+$/.test(src)) return dbg;
+    return '&src=' + encodeURIComponent(src) + '&d=' + dev + dbg;
   } catch (e) { return ''; }
 }
 
