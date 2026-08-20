@@ -240,6 +240,19 @@
   }
   .sched-day.total .d-pay { font-size: 17px; }
   .sched-note { font-size: 11px; color: var(--muted); margin-top: 12px; }
+  .teiki-box { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:20px; }
+  .teiki-head { font-size:15px; font-weight:700; color:var(--blue); margin-bottom:8px; }
+  .teiki-lead { font-size:13px; margin-bottom:12px; }
+  .teiki-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .teiki-table { width:100%; border-collapse:collapse; font-size:14px; min-width:340px; }
+  .teiki-table th, .teiki-table td { padding:8px 6px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap; }
+  .teiki-table th { font-size:12px; color:var(--muted); font-weight:600; }
+  .teiki-table tr.is-strong td { background:var(--blue-light); }
+  .teiki-ex { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .teiki-ex-item { flex:1 1 150px; background:var(--blue-light); border-radius:8px; padding:10px; font-size:13px; }
+  .teiki-ex-item b { display:block; color:var(--blue); margin-bottom:2px; }
+  .teiki-ex-item span { color:var(--text); }
+  .teiki-note { font-size:11px; color:var(--muted); margin-top:12px; }
 
   /* ===== 最終CTA ===== */
   .cta {
@@ -298,7 +311,8 @@
     <h2>1件完結型。やった分だけ、しっかり収入に。</h2>
     <div class="pay-card">
       <div class="pay-main">1件 3,500〜4,000<small>円</small></div>
-      <div class="pay-sub">時給換算 <b>約1,600円〜</b>（車のサイズ・内容で変動）</div>
+      <div class="pay-sub">作業時給換算 <b>2,300〜3,000円</b>（1台60〜90分）<br>
+        <span style="font-size:13px;color:var(--muted);">移動時間まで含めた実質は 時給換算 約1,600円〜／車のサイズ・内容で変動</span></div>
     </div>
     <div class="pay-points">
       <div class="pay-point">月5〜15万円<span>件数に応じて（毎月コンスタントに依頼あり）</span></div>
@@ -315,6 +329,32 @@
     <div class="section-tag">実際のスケジュール</div>
     <h2>あなたの空き時間と合うか、実データで確認できます</h2>
     <p style="font-size:13px;margin-bottom:16px;">学校や本業のシフトと両立できるか気になる方へ。<b>先月に実際にあった稼働日</b>をそのまま載せています。対応できない曜日・時間帯をタップして外すと、あなたの空き時間でどれだけ対応できたかが分かります。</p>
+
+    <div class="teiki-box">
+      <div class="teiki-head">毎月かならず入っている「定期プラン」の枠</div>
+      <p class="teiki-lead">下は、契約でスケジュールが決まっているお仕事です。<b>ここは毎月かならず発生します。</b>この上に、単発のご依頼が乗ります。</p>
+      <div class="teiki-scroll">
+        <table class="teiki-table">
+          <thead><tr><th>曜日</th><th>時間</th><th>台数</th><th>頻度</th><th>エリア</th></tr></thead>
+          <tbody>
+            <tr class="is-strong"><td>木</td><td>10:00〜11:00</td><td>1台</td><td><b>毎週</b></td><td>品川区</td></tr>
+            <tr class="is-strong"><td>土</td><td>10:00〜12:00</td><td><b>4台</b></td><td>月1回</td><td>港区</td></tr>
+            <tr class="is-strong"><td>金</td><td>09:00〜11:00</td><td>2〜3台</td><td>月1回</td><td>世田谷区</td></tr>
+            <tr><td>月</td><td>12:00〜13:00</td><td>1台</td><td>月1回</td><td>世田谷区</td></tr>
+            <tr><td>水</td><td>10:00〜11:00</td><td>1台</td><td>月1回</td><td>目黒区</td></tr>
+            <tr><td>水</td><td>13:00〜14:00</td><td>1台</td><td>月2回</td><td>目黒区</td></tr>
+            <tr><td>木</td><td>11:30〜12:00</td><td>1台</td><td>月1〜2回</td><td>世田谷区</td></tr>
+            <tr><td>木</td><td>13:30〜14:30</td><td>1台</td><td>月1回</td><td>川崎市中原区</td></tr>
+            <tr><td>土</td><td>10:00〜11:00</td><td>1台</td><td>隔月</td><td>目黒区</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="teiki-ex">
+        <div class="teiki-ex-item"><b>土曜の午前だけ</b><span>2時間で4台＝14,000〜16,000円</span></div>
+        <div class="teiki-ex-item"><b>木曜の午前だけ</b><span>毎週1台＝月4件で14,000〜16,000円</span></div>
+      </div>
+      <p class="teiki-note">※ お客様の情報を守るため、車種・お名前・住所は掲載していません（エリアは区までの表示です）。<br>※ 2026年8月時点の契約分。増減することがあります。</p>
+    </div>
 
     <div class="sched-filters">
       <div class="sched-filter-label">対応できる曜日（できない曜日をタップして外す）</div>
