@@ -1,0 +1,3116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>出張車検（引き取り納車）｜鍵を渡すだけで車検が終わる・総額表示｜世田谷・目黒・渋谷｜ラクルマ</title>
+  <meta name="description" content="車検、家から一歩も出ずに。国家1級整備士・自動車検査員資格者がご自宅までお車を引き取りに伺い、車検完了後にご自宅へ納車します。LINEで車検証を撮って送るだけで概算見積もり。世田谷区・目黒区・渋谷区・品川区・港区対応。">
+  <meta name="keywords" content="出張車検,引き取り車検,車検 出張 東京,世田谷区 車検,目黒区 車検,渋谷区 車検,車検 引き取り納車,国家1級整備士,ラクルマ">
+
+  <!-- OGP -->
+  <meta property="og:title" content="出張車検｜鍵を渡すだけで車検が終わる｜ラクルマ">
+  <meta property="og:description" content="国家1級整備士がご自宅までお車を引き取り、車検完了後にご自宅へ納車。LINEで車検証を撮って送るだけで概算見積もり。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rakuruma.com/shaken/">
+  <link rel="canonical" href="https://rakuruma.com/shaken/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoRepair",
+    "name": "ラクルマ 出張車検",
+    "description": "国家1級自動車整備士・自動車検査員資格者がご自宅までお車を引き取り、提携工場で車検を実施。完了後はご自宅へ納車する出張引き取り車検サービス。",
+    "url": "https://rakuruma.com/shaken/",
+    "image": "https://rakuruma.com/assets/uploads/2023/02/rakuruma_ogp.jpg",
+    "areaServed": [
+      { "@type": "City", "name": "世田谷区" },
+      { "@type": "City", "name": "目黒区" },
+      { "@type": "City", "name": "渋谷区" },
+      { "@type": "City", "name": "品川区" },
+      { "@type": "City", "name": "港区" }
+    ],
+    "address": { "@type": "PostalAddress", "addressRegion": "東京都", "addressCountry": "JP" },
+    "sameAs": [ "https://lin.ee/r0BAZkR0" ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="https://rakuruma.com/design-tokens.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ── 公式トークンにない補完エイリアス ── */
+    :root {
+      --blue-dark:  var(--color-primary-blue);
+      --blue-mid:   var(--color-accent-mint);
+      --blue-pale:  var(--color-bg-light-blue);
+      --green-cta:  var(--color-primary-green);
+      --text-dark:  var(--color-text-primary);
+      --text-mid:   var(--color-text-secondary);
+      --white:      var(--color-bg-white);
+      --radius:     var(--card-radius);
+      --radius-sm:  var(--radius-xs);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-text-primary);
+      background: var(--color-bg-white);
+      line-height: var(--line-height-normal);
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--color-bg-white);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: var(--z-index-fixed);
+      box-shadow: var(--shadow-light);
+    }
+
+    /* 現在地ラベル（ヘッダー） */
+    .header-brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    @media (max-width: 480px) {
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      text-decoration: none;
+    }
+
+    .logo-text {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+      letter-spacing: -0.5px;
+    }
+
+    .logo-sub {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── ハンバーガーメニュー ── */
+    .menu-btn {
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      padding: 0;
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-primary-blue);
+      border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+
+    body.menu-open .menu-btn span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    body.menu-open .menu-btn span:nth-child(2) {
+      opacity: 0;
+    }
+
+    body.menu-open .menu-btn span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 40, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+      z-index: calc(var(--z-index-fixed) - 2);
+    }
+
+    body.menu-open .menu-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .menu-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(300px, 85vw);
+      height: 100vh;
+      height: 100dvh;
+      background: var(--color-bg-white);
+      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
+      padding: 88px 28px 32px;
+      overflow-y: auto;
+      transform: translateX(105%);
+      transition: transform 0.3s ease;
+      z-index: calc(var(--z-index-fixed) - 1);
+    }
+
+    body.menu-open .menu-panel {
+      transform: translateX(0);
+    }
+
+    .menu-panel a {
+      display: block;
+      padding: 13px 4px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--color-border-light);
+    }
+
+    .menu-panel a:hover {
+      color: var(--color-primary-blue);
+    }
+
+    .menu-divider {
+      margin: 18px 0 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .menu-divider:first-child {
+      margin-top: 0;
+    }
+
+    .menu-panel .menu-line-btn {
+      margin-top: 24px;
+      background: var(--gradient-button-green);
+      color: var(--color-text-white);
+      text-align: center;
+      border-radius: 50px;
+      padding: 14px;
+      border-bottom: none;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(60, 196, 122, 0.4);
+    }
+
+    .menu-panel .menu-line-btn:hover {
+      color: var(--color-text-white);
+      opacity: var(--opacity-hover);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 68px);
+      min-height: calc(100svh - 68px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: #0d1a2e;
+    }
+
+    .hero-video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 縦動画=スマホ / 横動画=PC で出し分け */
+    .hero-video-wrap .v-pc { display: none; }
+    @media (min-width: 768px) {
+      .hero-video-wrap .v-sp { display: none; }
+      .hero-video-wrap .v-pc { display: block; }
+    }
+
+    /* 動画上の半透明オーバーレイ */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 18, 36, 0.58);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 760px;
+      width: 100%;
+      padding: 40px var(--spacing-lg);
+      color: #fff;
+      text-align: center;
+    }
+
+    /* ── FV情報バー（対応エリア＋くらしのマーケット評価） ── */
+    .hero-fv-bar {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: clamp(14px, 3vw, 28px);
+      width: min(440px, calc(100% - 40px));
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 6px 20px;
+      z-index: 10;
+    }
+
+    .hero-fv-bar-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 9px 0;
+    }
+
+    .hero-fv-bar-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .hero-fv-bar-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.65);
+      flex-shrink: 0;
+    }
+
+    .hero-fv-bar-value {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .hero-fv-bar-value .star {
+      color: var(--color-accent-yellow);
+      margin-right: 2px;
+    }
+
+    .hero-fv-bar-value small {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      margin-left: 4px;
+    }
+
+    .hero-note {
+      margin: 12px clamp(20px, 6vw, 48px) 0;
+      color: var(--color-text-muted);
+      font-size: 10px;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    @media (max-width: 600px) {
+      .hero-content {
+        padding-bottom: 150px;
+      }
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-secondary);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-accent-mint);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .hero h1 {
+      font-family: var(--font-primary);
+      font-size: clamp(28px, 5.5vw, 52px);
+      font-weight: 900;
+      line-height: 1.35;
+      color: var(--color-text-white);
+      margin-bottom: var(--spacing-xl);
+      letter-spacing: -0.01em;
+    }
+
+    .hero-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--color-accent-mint);
+      margin: 0 auto var(--spacing-xl);
+      opacity: 0.8;
+    }
+
+    .hero-sub {
+      font-family: var(--font-primary);
+      font-size: clamp(14px, 1.8vw, 17px);
+      color: rgba(255,255,255,0.85);
+      line-height: 1.85;
+      margin-bottom: var(--spacing-3xl);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--spacing-5xl);
+    }
+
+    .btn-primary {
+      background: var(--color-bg-white);
+      color: var(--color-primary-blue);
+      border: none;
+      padding: 16px 32px;
+      border-radius: var(--button-radius);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition-smooth);
+      box-shadow: var(--shadow-light);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-line {
+      background: var(--gradient-button-green);
+      color: var(--color-text-white);
+      border: none;
+      padding: 16px 32px;
+      border-radius: var(--button-radius);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition-smooth);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .btn-line:hover {
+      transform: translateY(-2px);
+      opacity: var(--opacity-hover);
+    }
+
+    .hero-trust {
+      display: flex;
+      gap: 8px 16px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      font-size: 13px;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .trust-item + .trust-item::before {
+      content: '';
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--color-accent-mint);
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .trust-item {
+        font-size: 12px;
+        gap: 10px;
+      }
+      .hero-trust {
+        gap: 8px 10px;
+      }
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+      color: rgba(255,255,255,0.5);
+      font-size: var(--font-size-xs);
+      letter-spacing: 2px;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      animation: scrollLine 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0.5; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ===== SECTION COMMON ===== */
+    section {
+      padding: var(--section-padding-desktop) 24px;
+      scroll-margin-top: 80px;
+    }
+
+    .section-inner {
+      max-width: var(--container-sm);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 2px;
+      color: var(--color-accent-mint);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .section-title {
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-normal);
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text-primary);
+    }
+
+    .section-desc {
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    /* ===== COMPARE セクション ===== */
+    .compare-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .compare-section .section-label {
+      color: var(--color-primary-blue);
+    }
+
+    .compare-scroll-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -8px;
+      padding: 0 8px 12px;
+    }
+
+    .compare-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: var(--font-size-sm);
+    }
+
+    /* ヘッダー行 */
+    .compare-table thead tr th {
+      padding: 16px 14px;
+      font-weight: var(--font-weight-bold);
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      text-align: center;
+      vertical-align: middle;
+      border-bottom: 2px solid transparent;
+    }
+
+    .compare-table thead th:first-child {
+      text-align: left;
+      background: transparent;
+      border-bottom-color: #dde5f0;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+    }
+
+    .compare-table thead th.col-rakuruma {
+      background: var(--color-primary-blue);
+      color: #fff;
+      border-radius: 12px 12px 0 0;
+      border-bottom-color: var(--color-primary-blue);
+    }
+
+    .compare-table thead th.col-dealer {
+      background: #f0f0f0;
+      color: var(--color-text-secondary);
+      border-radius: 12px 12px 0 0;
+      border-bottom-color: #dde5f0;
+    }
+
+    .compare-table thead th.col-shop {
+      background: #f0f0f0;
+      color: var(--color-text-secondary);
+      border-radius: 12px 12px 0 0;
+      border-bottom-color: #dde5f0;
+    }
+
+    .compare-table thead th .col-badge {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      opacity: 0.75;
+    }
+
+    .compare-table thead th.col-rakuruma .col-badge {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ボディ行 */
+    .compare-table tbody tr td {
+      padding: 18px 14px;
+      vertical-align: top;
+      border-bottom: 1px solid #e8eef6;
+      line-height: 1.65;
+    }
+
+    .compare-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .compare-table tbody td:first-child {
+      font-weight: var(--font-weight-bold);
+      font-size: 13px;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      padding-right: 20px;
+    }
+
+    /* ラクルマ列のハイライト */
+    .compare-table td.col-rakuruma,
+    .compare-table th.col-rakuruma {
+      background: rgba(26, 82, 160, 0.06);
+      border-left: 2px solid var(--color-primary-blue);
+      border-right: 2px solid var(--color-primary-blue);
+    }
+
+    .compare-table thead th.col-rakuruma {
+      background: var(--color-primary-blue);
+      border-top: 2px solid var(--color-primary-blue);
+    }
+
+    .compare-table tbody tr:last-child td.col-rakuruma {
+      border-bottom: 2px solid var(--color-primary-blue);
+      border-radius: 0 0 8px 8px;
+    }
+
+    .compare-table td.col-rakuruma {
+      color: var(--color-primary-blue);
+      font-weight: var(--font-weight-bold);
+    }
+
+    /* ◎ / ◯ / × バッジ */
+    .cmp-best,
+    .cmp-ok,
+    .cmp-ng {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 900;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .cmp-best {
+      background: rgba(26, 82, 160, 0.12);
+      color: var(--color-primary-blue);
+    }
+
+    .cmp-ok {
+      background: rgba(60, 196, 122, 0.18);
+      color: #1a8a4a;
+    }
+
+    .cmp-ng {
+      background: rgba(200, 60, 60, 0.1);
+      color: #c0392b;
+    }
+
+    /* 弱み開示行：ラクルマ列のスタイル調整 */
+    .compare-table td.col-rakuruma.is-honest {
+      color: var(--color-text-secondary);
+      font-weight: 600;
+    }
+
+    .compare-table td.col-rakuruma.is-honest small {
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    /* スマホ：縦積みレイアウト */
+    @media (max-width: 600px) {
+      .compare-scroll-wrap {
+        overflow-x: visible;
+      }
+      .compare-table {
+        display: none;
+      }
+      /* スマホ：マトリクス表（行=項目、列=3社、セル=記号＋ひとこと） */
+      .compare-matrix {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: #fff;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-light);
+        table-layout: fixed;
+      }
+      .compare-matrix thead th {
+        padding: 12px 4px;
+        font-size: 11px;
+        font-weight: 800;
+        text-align: center;
+        color: var(--color-text-secondary);
+        background: #f0f4ff;
+        letter-spacing: 0.02em;
+      }
+      .compare-matrix thead th:first-child {
+        width: 78px;
+      }
+      .compare-matrix thead th.mx-rakuruma {
+        background: var(--color-primary-blue);
+        color: #fff;
+      }
+      .compare-matrix tbody th {
+        padding: 12px 6px 12px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        text-align: left;
+        line-height: 1.4;
+        border-bottom: 1px solid #f0f0f0;
+        vertical-align: middle;
+      }
+      .compare-matrix tbody td {
+        padding: 11px 4px 10px;
+        text-align: center;
+        border-bottom: 1px solid #f0f0f0;
+        vertical-align: top;
+      }
+      .compare-matrix tbody tr:last-child th,
+      .compare-matrix tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .compare-matrix td.mx-rakuruma {
+        background: rgba(26, 82, 160, 0.06);
+      }
+      .compare-matrix .cmp-best,
+      .compare-matrix .cmp-ok,
+      .compare-matrix .cmp-ng {
+        margin-right: 0;
+      }
+      .compare-matrix td small {
+        display: block;
+        font-size: 10px;
+        line-height: 1.35;
+        color: var(--color-text-muted);
+        margin-top: 4px;
+        font-weight: 600;
+      }
+      .compare-matrix td.mx-rakuruma small {
+        color: var(--color-primary-blue);
+      }
+    }
+
+    @media (min-width: 601px) {
+      .compare-cards {
+        display: none;
+      }
+    }
+
+    /* ===== WORKS セクション ===== */
+    .works-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .works-section .section-label {
+      color: var(--color-primary-blue);
+    }
+
+    .works-headline {
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: var(--font-weight-bold);
+      line-height: 1.35;
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text-primary);
+    }
+
+    .works-headline span {
+      color: var(--color-primary-blue);
+    }
+
+    /* 車種で絞り込むチップ */
+    .works-filter-label {
+      font-size: 14px;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-secondary);
+      margin-top: var(--spacing-xl);
+      margin-bottom: 10px;
+    }
+    .works-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .works-filter-chip {
+      border: 1.5px solid rgba(26, 82, 160, 0.25);
+      background: #fff;
+      color: var(--color-primary-blue);
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: var(--font-weight-bold);
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .works-filter-chip:hover { background: #eef4fc; }
+    .works-filter-chip.active {
+      background: var(--color-primary-blue);
+      color: #fff;
+      border-color: var(--color-primary-blue);
+    }
+    /* 車種行（メーカー選択時のみ表示）はメーカー行と区別して一段小さく */
+    .works-filter-model { margin-top: 10px; }
+    .works-filter-model .works-filter-chip {
+      padding: 7px 15px;
+      font-size: 13px;
+      background: #f7fafd;
+      border-color: rgba(26, 82, 160, 0.18);
+    }
+    .works-filter-model .works-filter-chip.active {
+      background: var(--color-primary-blue);
+      color: #fff;
+      border-color: var(--color-primary-blue);
+    }
+
+    /* works carousel */
+    .works-carousel-wrap {
+      position: relative;
+      margin-top: var(--spacing-xl);
+    }
+
+    .works-track {
+      display: flex;
+      gap: var(--spacing-lg);
+      /* 指でスワイプして横に流せるネイティブ横スクロール＋スナップ */
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      scrollbar-width: none;            /* Firefox */
+      padding-bottom: 4px;
+    }
+    .works-track::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+    .work-card {
+      background: #fff;
+      border: 1px solid var(--color-border-light);
+      border-top: 3px solid var(--color-primary-blue);
+      box-shadow: var(--shadow-light);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      transition: var(--transition-smooth);
+      min-width: 300px;
+      max-width: 300px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
+    .work-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .work-card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--color-bg-light-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: rgba(26, 82, 160, 0.3);
+      overflow: hidden;
+    }
+
+    .work-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .work-card-body {
+      padding: var(--spacing-md);
+    }
+
+    .work-card-date {
+      font-size: var(--font-size-xs);
+      color: var(--color-primary-blue);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .work-card-title {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      line-height: var(--line-height-normal);
+    }
+
+    .work-card-tag {
+      display: inline-block;
+      margin-top: var(--spacing-sm);
+      background: var(--color-bg-light-blue);
+      border-radius: var(--radius-sm);
+      padding: 3px 10px;
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+    }
+
+    .work-card.is-link { display: block; text-decoration: none; cursor: pointer; }
+    .work-card-more {
+      display: block;
+      margin-top: var(--spacing-sm);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+    }
+
+    /* ===== TROUBLE セクション ===== */
+    .trouble-section {
+      background: var(--color-bg-gray);
+      position: relative;
+    }
+
+    .trouble-headline {
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-normal);
+      color: var(--color-text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .trouble-headline span {
+      color: var(--color-primary-blue);
+    }
+
+    .trouble-sub {
+      font-size: var(--font-size-base);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-3xl);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .trouble-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      max-width: 800px;
+      margin-bottom: var(--spacing-5xl);
+    }
+
+    .trouble-card {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-medium);
+      position: relative;
+    }
+
+    .trouble-card::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 3px;
+      background: var(--color-primary-blue);
+      border-radius: 2px;
+      margin-bottom: 10px;
+      opacity: 0.4;
+    }
+
+    .trouble-card-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      line-height: 1.5;
+    }
+
+    .trouble-card p {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .trouble-grid {
+        gap: 10px;
+      }
+      .trouble-card {
+        padding: 16px 14px;
+      }
+      .trouble-card::before {
+        margin-bottom: 8px;
+      }
+      .trouble-card-title {
+        font-size: 15px;
+      }
+      .trouble-card p {
+        font-size: 11px;
+      }
+    }
+
+    .trouble-arrow {
+      text-align: center;
+      font-size: 36px;
+      color: var(--color-primary-blue);
+      margin: var(--spacing-sm) 0 var(--spacing-2xl);
+      line-height: 1;
+    }
+
+    /* ── LINEチャット風デモ ── */
+    .line-demo {
+      text-align: center;
+    }
+
+    .line-demo-title {
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 800;
+      color: var(--color-text-primary);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .line-demo-title span {
+      color: var(--color-primary-blue);
+    }
+
+    .line-demo-screen {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #8cabd9;
+      border-radius: 18px;
+      padding: 20px 14px 16px;
+      box-shadow: var(--shadow-medium);
+      text-align: left;
+    }
+
+    .line-msg {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .line-msg:last-child {
+      margin-bottom: 0;
+    }
+
+    .line-msg.user {
+      justify-content: flex-end;
+    }
+
+    .line-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      align-self: flex-start;
+    }
+
+    .line-bubble {
+      max-width: 72%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--color-text-primary);
+    }
+
+    .line-msg.rk .line-bubble {
+      background: #fff;
+      border-top-left-radius: 4px;
+    }
+
+    .line-msg.user .line-bubble {
+      background: #8de055;
+      border-top-right-radius: 4px;
+    }
+
+    .line-read {
+      font-size: 9px;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.4;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .line-demo-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      margin: 26px 0 12px;
+    }
+
+    .line-demo-step:first-of-type {
+      margin-top: 0;
+    }
+
+    .step-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--color-primary-blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* 予約システム風モック */
+    .booking-demo {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px 14px;
+      box-shadow: var(--shadow-medium);
+      text-align: left;
+    }
+
+    .booking-demo-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .booking-date-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .booking-date-tab {
+      flex: 1;
+      background: #f5f6f8;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 8px 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .booking-date-tab span {
+      display: block;
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    .booking-date-tab.active {
+      background: var(--color-primary-blue);
+      border-color: var(--color-primary-blue);
+      color: #fff;
+    }
+
+    .booking-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .booking-slot {
+      background: #f5f6f8;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      padding: 12px 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      text-align: center;
+    }
+
+    .booking-slot.selected {
+      background: var(--color-primary-blue);
+      border-color: var(--color-primary-blue);
+      color: #fff;
+    }
+
+    .booking-slot.disabled {
+      opacity: 0.35;
+    }
+
+    .line-demo-caption {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin: 16px 0 20px;
+      line-height: 1.7;
+    }
+
+    .line-demo-btn {
+      display: inline-block;
+      background: var(--gradient-button-green);
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 16px 40px;
+      border-radius: 50px;
+      box-shadow: 0 6px 24px rgba(60,196,122,0.45);
+      transition: var(--transition-smooth);
+    }
+
+    .line-demo-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+    }
+
+    .line-demo-btn small {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.9;
+      margin-top: 3px;
+    }
+
+    /* ===== SERVICE OVERVIEW ===== */
+    .service-overview {
+      background: var(--color-bg-white);
+    }
+
+    /* ── キラーカード（横長） ── */
+    .service-killer-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .service-killer-card {
+      display: flex;
+      align-items: stretch;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-medium);
+      background: #fff;
+      transition: var(--transition-smooth);
+      min-height: 140px;
+    }
+
+    .service-killer-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .service-killer-img {
+      width: 260px;
+      flex-shrink: 0;
+      object-fit: cover;
+      display: block;
+    }
+
+    .service-killer-img-placeholder {
+      width: 260px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #dde8f5 0%, #c8d9ee 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+    }
+
+    .service-killer-body {
+      flex: 1;
+      padding: 22px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .service-killer-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-primary-blue);
+      background: var(--color-bg-light-blue);
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      align-self: flex-start;
+    }
+
+    .service-killer-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .service-killer-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+      max-width: 520px;
+    }
+
+    @media (max-width: 600px) {
+      .service-killer-card {
+        flex-direction: column;
+        min-height: unset;
+      }
+      .service-killer-img,
+      .service-killer-img-placeholder {
+        width: 100%;
+        height: 160px;
+      }
+      .service-killer-body {
+        padding: 16px 18px 20px;
+      }
+      .service-killer-title {
+        font-size: 16px;
+      }
+    }
+
+    .service-killer-price {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      line-height: 1.7;
+    }
+
+    /* 料金カテゴリの対応区分バッジ */
+    .acc-badge {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      border-radius: 20px;
+      padding: 3px 10px;
+      margin-left: 8px;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .acc-badge--visit {
+      background: var(--color-bg-light-blue);
+      color: var(--color-primary-blue);
+    }
+
+    .acc-badge--pickup {
+      background: rgba(60, 196, 122, 0.15);
+      color: #1a8a4a;
+    }
+
+    .service-consult-cta {
+      margin-top: var(--spacing-2xl);
+      background: var(--color-bg-gray);
+      border-radius: var(--radius-xs);
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-left: 3px solid var(--color-primary-green);
+    }
+
+    .service-consult-text {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .service-consult-btn {
+      display: inline-block;
+      background: var(--color-primary-green);
+      color: var(--color-text-white);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      padding: 10px var(--spacing-xl);
+      border-radius: var(--button-radius);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .service-consult-btn:hover {
+      opacity: var(--opacity-hover);
+    }
+
+
+    /* ===== TESLA SECTION ===== */
+    .tesla-section {
+      background: var(--color-text-primary);
+      color: var(--color-text-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tesla-section::before {
+      content: 'TESLA';
+      position: absolute;
+      font-size: 180px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .tesla-inner {
+      max-width: var(--container-sm);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tesla-section .section-label {
+      color: rgba(255,255,255,0.4);
+    }
+
+    .tesla-headline {
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--line-height-normal);
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text-white);
+    }
+
+    .tesla-headline span {
+      color: var(--color-accent-mint);
+    }
+
+    .tesla-sub {
+      font-size: var(--font-size-base);
+      color: rgba(255,255,255,0.7);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--spacing-3xl);
+      max-width: 600px;
+    }
+
+    /* テスラ施工実例ギャラリー */
+    .tesla-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .tesla-shot {
+      margin: 0;
+      position: relative;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .tesla-shot img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tesla-shot figcaption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 26px 12px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+      background: linear-gradient(to top, rgba(8, 18, 36, 0.85), transparent);
+      letter-spacing: 0.03em;
+    }
+
+    @media (max-width: 600px) {
+      .tesla-gallery {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 10px;
+        margin: 0 -24px var(--spacing-2xl);
+        padding: 0 24px 8px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .tesla-gallery::-webkit-scrollbar {
+        display: none;
+      }
+      .tesla-shot {
+        flex: 0 0 78%;
+        scroll-snap-align: center;
+      }
+    }
+
+    .tesla-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .tesla-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--card-radius);
+      padding: var(--spacing-lg);
+      transition: var(--transition-fast);
+    }
+
+    .tesla-card:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .tesla-card-icon {
+      font-size: 28px;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .tesla-card h4 {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-white);
+      margin-bottom: 6px;
+      line-height: var(--line-height-normal);
+    }
+
+    .tesla-card p {
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.6);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .tesla-note {
+      background: rgba(244,209,16,0.1);
+      border: 1px solid rgba(244,209,16,0.3);
+      border-radius: var(--radius-xs);
+      padding: var(--spacing-md) var(--spacing-lg);
+      font-size: var(--font-size-sm);
+      color: rgba(255,255,255,0.85);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .tesla-note strong {
+      color: var(--color-accent-yellow);
+    }
+
+    /* ===== IMPORT CAR ===== */
+    .import-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .import-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-2xl);
+    }
+
+    .import-card {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      padding: var(--spacing-lg) var(--spacing-md);
+      text-align: center;
+      box-shadow: var(--shadow-light);
+    }
+
+    .import-card-brand {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+      margin-bottom: 4px;
+    }
+
+    .import-card-sub {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    @media (max-width: 768px) {
+
+      .tesla-section::before {
+        font-size: 80px;
+      }
+    }
+
+    /* ===== RAK POINTS セクション ===== */
+    .rak-section {
+      background: var(--color-bg-white);
+    }
+
+    .rak-section {
+      padding-left: 0;
+      padding-right: 0;
+      overflow: hidden;
+    }
+
+    .rak-list {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+      padding-bottom: 56px;
+    }
+
+    .rak-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .rak-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .rak-img {
+      flex: 0 0 54%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+
+    .rak-item:nth-child(odd) .rak-img {
+      border-radius: 0 160px 0 0;
+    }
+
+    .rak-item:nth-child(even) .rak-img {
+      border-radius: 160px 0 0 0;
+    }
+
+    .rak-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .rak-body {
+      flex: 1;
+      padding: 0 48px;
+    }
+
+    @media (max-width: 700px) {
+      .rak-item,
+      .rak-item:nth-child(even) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+      }
+      .rak-img {
+        flex: none;
+        width: 91%;
+      }
+      .rak-item:nth-child(odd) .rak-img {
+        align-self: flex-start;
+        border-radius: 0 80px 0 0;
+      }
+      .rak-item:nth-child(even) .rak-img {
+        align-self: flex-end;
+        border-radius: 80px 0 0 0;
+      }
+      .rak-body {
+        padding: 0 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .rak-title {
+        font-size: 18px;
+      }
+      .rak-section .section-title {
+        font-size: 20px;
+        letter-spacing: -0.01em;
+      }
+    }
+
+    .rak-num {
+      font-family: var(--font-secondary);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      letter-spacing: 3px;
+      color: var(--color-primary-blue);
+      margin-bottom: 10px;
+    }
+
+    .rak-title {
+      font-size: clamp(20px, 2.5vw, 26px);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      line-height: var(--line-height-normal);
+      margin-bottom: var(--spacing-md);
+      border-left: 4px solid var(--color-primary-blue);
+      padding-left: 14px;
+    }
+
+    .rak-title .rak-keyword {
+      color: var(--color-primary-blue);
+    }
+
+    .rak-desc {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* ===== VOICE カルーセル ===== */
+    .voice-section {
+      background: var(--color-bg-gray);
+      overflow: hidden;
+    }
+
+    .carousel-wrap {
+      position: relative;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: var(--spacing-lg);
+      /* 指でスワイプして横に流せるネイティブ横スクロール＋スナップ */
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+
+    .voice-card {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      padding: var(--spacing-2xl);
+      box-shadow: var(--shadow-medium);
+      border-top: 3px solid var(--color-primary-blue);
+      min-width: 300px;
+      max-width: 300px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
+    .voice-card-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--color-bg-light-blue);
+      border-radius: var(--radius-xs);
+      margin-bottom: 14px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--color-accent-mint);
+    }
+
+    .voice-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stars {
+      color: var(--color-accent-yellow);
+      font-size: var(--font-size-base);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .voice-text {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .voice-meta {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .carousel-controls {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    .carousel-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-round);
+      border: 2px solid var(--color-primary-blue);
+      background: var(--color-bg-white);
+      color: var(--color-primary-blue);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-fast);
+    }
+
+    .carousel-btn:hover {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: var(--spacing-sm);
+      justify-content: center;
+      margin-top: var(--spacing-lg);
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-round);
+      background: var(--color-border-gray);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .carousel-dot.active {
+      background: var(--color-primary-blue);
+    }
+
+    /* ===== MEMBER セクション ===== */
+    .member-section {
+      background: var(--color-bg-gray);
+    }
+
+    /* 担当者：プロフィールカード（洗車LPと同型） */
+    .prof-card {
+      background: #fff;
+      border: 1px solid var(--color-border-light);
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      max-width: 860px;
+      margin-top: 8px;
+      box-shadow: var(--shadow-light);
+    }
+
+    .prof-pic {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .prof-pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+
+    .prof-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      margin-bottom: 12px;
+    }
+
+    .prof-lead {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+
+    .prof-dl {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .prof-dl dt {
+      color: #999;
+      padding: 9px 0;
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    .prof-dl dd {
+      padding: 9px 0;
+      border-top: 1px solid var(--color-border-light);
+      color: var(--color-text-primary);
+    }
+
+    @media (max-width: 700px) {
+      .prof-card {
+        flex-direction: column;
+        align-items: center;
+        padding: 28px 18px;
+        gap: 18px;
+      }
+      .prof-pic {
+        width: 180px;
+        height: 180px;
+      }
+      .prof-name {
+        text-align: center;
+      }
+      .prof-dl {
+        grid-template-columns: 56px 1fr;
+        font-size: 13px;
+      }
+    }
+
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--spacing-2xl);
+      margin-top: var(--spacing-3xl);
+    }
+
+    .member-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+    }
+
+    .member-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      overflow: hidden;
+    }
+
+    .member-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .member-body {
+      padding: var(--spacing-lg);
+    }
+
+    .member-name {
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: 2px;
+    }
+
+    .member-role {
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .member-certs {
+      list-style: none;
+      margin-bottom: 14px;
+    }
+
+    .member-certs li {
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.8);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+      line-height: var(--line-height-normal);
+    }
+
+    .member-certs li::before {
+      content: '◉';
+      color: var(--color-primary-green);
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .member-quote {
+      background: rgba(255,255,255,0.08);
+      border-left: 3px solid var(--color-primary-green);
+      padding: var(--spacing-md) var(--spacing-md);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      font-size: var(--font-size-sm);
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* ===== PRICE ===== */
+    .price-section {
+      background: var(--color-bg-gray);
+    }
+
+    .price-note {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+      margin-bottom: var(--spacing-2xl);
+      padding: var(--spacing-md) var(--spacing-md);
+      background: var(--color-bg-white);
+      border-radius: var(--radius-xs);
+      border-left: 3px solid var(--color-primary-blue);
+    }
+
+    /* アコーディオン */
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .accordion-item {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: var(--spacing-lg) var(--spacing-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+      gap: var(--spacing-md);
+    }
+
+    .accordion-trigger:hover {
+      background: var(--color-bg-light-blue);
+    }
+
+    .accordion-trigger-left {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .accordion-trigger-title {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+    }
+
+    .accordion-trigger-count {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      font-weight: var(--font-weight-normal);
+    }
+
+    .accordion-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--color-bg-light-blue);
+      border-radius: var(--radius-round);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--color-primary-blue);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+
+    .accordion-item.open .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .accordion-item.open .accordion-body {
+      max-height: 1200px;
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--color-bg-white);
+    }
+
+    .price-table th {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+      padding: var(--spacing-md) var(--spacing-lg);
+      text-align: left;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .price-table td {
+      padding: 13px var(--spacing-lg);
+      border-bottom: 1px solid var(--color-border-light);
+      font-size: var(--font-size-sm);
+    }
+
+    .price-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .price-table tr:hover td {
+      background: var(--color-bg-light-blue);
+    }
+
+    .price {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-blue);
+    }
+
+    /* ===== PRICE CTA ===== */
+    .price-cta-block {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .price-cta-micro {
+      display: inline-block;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--color-primary-green);
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+
+    .price-cta-card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-medium);
+      border-top: 3px solid var(--color-primary-green);
+      text-align: left;
+    }
+
+    .price-cta-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .price-cta-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+      margin-bottom: 6px;
+    }
+
+    .price-cta-desc {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.75;
+    }
+
+    .price-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--gradient-button-green);
+      color: #fff;
+      text-decoration: none;
+      padding: 18px 36px;
+      border-radius: 50px;
+      box-shadow: 0 6px 24px rgba(60,196,122,0.45);
+      transition: var(--transition-smooth);
+      flex-shrink: 0;
+    }
+
+    .price-cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+    }
+
+    .price-cta-btn-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .price-cta-btn-main {
+      display: block;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+
+    .price-cta-btn-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.85;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 600px) {
+      .price-cta-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+        text-align: center;
+      }
+      .price-cta-text {
+        text-align: center;
+      }
+      .price-cta-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 18px 24px;
+      }
+    }
+
+    /* ===== FAQ ===== */
+    .faq-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .faq-item {
+      background: var(--color-bg-white);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+    }
+
+    .faq-q {
+      padding: var(--spacing-lg) var(--spacing-2xl);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-base);
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+      user-select: none;
+    }
+
+    .faq-q-mark {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-round);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      flex-shrink: 0;
+    }
+
+    .faq-a {
+      padding: 0 var(--spacing-2xl) var(--spacing-lg) 60px;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .faq-more-wrap {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .faq-more-wrap.open {
+      max-height: 2000px;
+    }
+
+    .faq-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin: var(--spacing-lg) auto 0;
+      background: none;
+      border: 2px solid var(--color-primary-blue);
+      color: var(--color-primary-blue);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      padding: var(--spacing-md) var(--spacing-2xl);
+      border-radius: var(--button-radius);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      font-family: var(--font-primary);
+    }
+
+    .faq-toggle-btn:hover {
+      background: var(--color-primary-blue);
+      color: var(--color-text-white);
+    }
+
+    .faq-toggle-icon {
+      font-size: 18px;
+      transition: transform 0.3s;
+      line-height: 1;
+    }
+
+    .faq-toggle-btn.open .faq-toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    /* ===== AREA ===== */
+    .area-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-lg);
+    }
+
+    .area-tag {
+      background: var(--color-bg-light-blue);
+      color: var(--color-primary-blue);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      background: var(--gradient-button-blue);
+      color: var(--color-text-white);
+      text-align: center;
+      padding: var(--section-padding-desktop) var(--spacing-lg);
+    }
+
+    .cta-section h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .cta-section p {
+      font-size: var(--font-size-base);
+      opacity: 0.9;
+      margin-bottom: var(--spacing-2xl);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--color-text-primary);
+      color: rgba(255,255,255,0.7);
+      padding: var(--spacing-3xl) var(--spacing-lg);
+      text-align: center;
+      font-size: var(--font-size-sm);
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: var(--spacing-2xl);
+      justify-content: center;
+      margin-bottom: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    /* ===== FLOATING LINE BTN ===== */
+    .float-line {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--gradient-button-green);
+      color: var(--color-text-white);
+      padding: 14px 22px;
+      border-radius: var(--button-radius);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      text-decoration: none;
+      box-shadow: var(--shadow-heavy);
+      z-index: var(--z-index-fixed);
+      transition: var(--transition-smooth);
+    }
+
+    .float-line:hover {
+      transform: scale(1.05);
+      opacity: var(--opacity-hover);
+    }
+
+    /* FV表示中はフローティングボタンを隠す（リングバッジと重なるため） */
+    .float-line.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 20px;
+      }
+
+      section {
+        padding: 60px 20px;
+      }
+
+      .member-two-col {
+        grid-template-columns: 1fr !important;
+      }
+
+      .voice-card {
+        min-width: 260px;
+        max-width: 260px;
+      }
+
+      .price-table {
+        font-size: var(--font-size-sm-mobile);
+      }
+
+      .price-table th,
+      .price-table td {
+        padding: var(--spacing-md) 14px;
+      }
+    }
+  </style>
+  <style>
+    /* ── 車検ページ専用の追加スタイル ── */
+    /* ざっくり概算ウィジェット */
+    .sq-toggle { display: flex; gap: 10px; justify-content: center; margin-top: 28px; }
+    .sq-toggle button {
+      padding: 11px 30px; border-radius: 40px; border: 2px solid var(--color-primary-blue);
+      background: #fff; color: var(--color-primary-blue); font-weight: 800; font-size: 14px; cursor: pointer;
+      font-family: inherit;
+    }
+    .sq-toggle button.active { background: var(--color-primary-blue); color: #fff; }
+    .sq-types { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+    .sq-types button {
+      padding: 9px 14px; border-radius: 40px; border: 1px solid var(--color-border-gray);
+      background: #fff; font-size: 12.5px; font-weight: 700; color: var(--color-text-secondary); cursor: pointer;
+      font-family: inherit;
+    }
+    .sq-types button.active {
+      border-color: var(--color-primary-blue); background: var(--color-bg-light-blue); color: var(--color-primary-blue);
+    }
+    .sq-ex { text-align: center; font-size: 12px; color: var(--color-text-muted); margin-top: 10px; min-height: 1.5em; }
+    .sq-card {
+      max-width: 560px; margin: 16px auto 0; background: #fff; border: 1px solid var(--color-border-light);
+      border-radius: 16px; padding: 24px 22px; box-shadow: 0 4px 14px rgba(0,0,0,.06);
+    }
+    .sq-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+    .sq-lines li { display: flex; justify-content: space-between; gap: 12px; font-size: 13.5px; color: var(--color-text-secondary); }
+    .sq-lines li .p { font-weight: 700; color: var(--color-text-primary); white-space: nowrap; }
+    .sq-total {
+      margin-top: 16px; padding-top: 14px; border-top: 2px solid var(--color-primary-blue);
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-weight: 900; color: var(--color-primary-blue); font-size: 15px;
+    }
+    .sq-total .n { font-size: 27px; }
+
+    /* 現在地タグ（ヘッダー・ヒーロー）：整備LPから飛んできても別ページと分かるように */
+    .page-tag {
+      display: inline-block; margin-left: 10px; font-size: 11px; font-weight: 800;
+      color: var(--color-primary-blue); background: var(--color-bg-light-blue);
+      border: 1px solid var(--color-primary-blue); border-radius: 40px; padding: 3px 10px;
+      white-space: nowrap;
+    }
+    .hero-page-tag {
+      display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .08em;
+      color: #fff; background: var(--color-primary-blue); border-radius: 40px;
+      padding: 6px 16px; margin-bottom: 18px;
+    }
+    .hero-img {
+      /* 人物が画像右側にいるため、スマホの縦切り抜きでも見切れない位置に寄せる */
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 30%;
+    }
+    /* 従来の車検 vs ラクルマ 比較タイムライン（スマホでも左右2列で見せる） */
+    .cmp-flow-grid { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
+    .cmp-flow-col { border-radius: 16px; padding: 18px 12px; display: flex; flex-direction: column; }
+    .cmp-flow-col--old { background: var(--color-bg-gray); border: 1px solid var(--color-border-light); }
+    .cmp-flow-col--new { background: var(--color-bg-light-blue); border: 2px solid var(--color-primary-blue); }
+    .cmp-flow-head { text-align: center; font-size: 13px; font-weight: 900; margin-bottom: 16px; }
+    .cmp-flow-col--old .cmp-flow-head { color: var(--color-text-secondary); }
+    .cmp-flow-col--new .cmp-flow-head { color: var(--color-primary-blue); }
+    /* 縦タイムライン */
+    .cmp-tl { list-style: none; margin: 0; padding: 0; }
+    .cmp-tl li { position: relative; padding: 0 0 18px 30px; }
+    .cmp-tl li::before {
+      content: ''; position: absolute; left: 10px; top: 20px; bottom: -2px; width: 2px;
+      background: var(--color-border-gray);
+    }
+    .cmp-tl li:last-child::before { display: none; }
+    .cmp-tl li:last-child { padding-bottom: 4px; }
+    .tl-dot {
+      position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900;
+      font-style: normal;
+    }
+    .cmp-tl--old .tl-dot { background: #fff; border: 1.5px solid #C9A0A4; color: #B9535A; }
+    .cmp-tl--old .tl-label { font-size: 11.5px; line-height: 1.55; color: var(--color-text-secondary); padding-top: 2px; }
+    .cmp-tl--new li { padding-bottom: 26px; }
+    .cmp-tl--new li::before { background: #9FBFE3; }
+    .cmp-tl--new .tl-dot { background: var(--color-primary-blue); color: #fff; }
+    .cmp-tl--new .tl-label { font-size: 11.5px; line-height: 1.5; font-weight: 700; color: var(--color-text-primary); }
+    .cmp-tl--new .tl-verb { display: block; font-size: 16px; font-weight: 900; color: var(--color-primary-blue); line-height: 1.3; margin-bottom: 2px; }
+    .cmp-tl--new .tl-label small { display: block; font-size: 10px; font-weight: 500; color: var(--color-text-secondary); margin-top: 2px; }
+    .tl-done {
+      margin: 6px auto 0; display: block; width: fit-content; font-size: 11.5px; font-weight: 900;
+      color: var(--color-primary-green); border: 1.5px solid var(--color-primary-green);
+      border-radius: 40px; padding: 4px 14px;
+    }
+    .cmp-flow-total {
+      margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--color-border-gray);
+      text-align: center; font-size: 11px; color: var(--color-text-secondary); line-height: 1.7;
+    }
+    .cmp-flow-total strong { font-size: 15px; display: block; }
+    .cmp-flow-total--new { border-top-color: var(--color-primary-blue); color: var(--color-text-primary); }
+    .cmp-flow-total--new strong { color: var(--color-primary-blue); font-size: 19px; }
+    @media (min-width: 768px) {
+      .cmp-flow-grid { gap: 18px; max-width: 720px; margin-left: auto; margin-right: auto; }
+      .cmp-flow-col { padding: 26px 24px; }
+      .cmp-flow-head { font-size: 16px; }
+      .cmp-tl--old .tl-label { font-size: 13px; }
+      .cmp-tl--new .tl-label { font-size: 13px; }
+      .cmp-tl--new .tl-verb { font-size: 19px; }
+      .cmp-flow-total { font-size: 12.5px; }
+      .cmp-flow-total strong { font-size: 17px; }
+      .cmp-flow-total--new strong { font-size: 22px; }
+    }
+    .cmp-flow-note { text-align: center; margin-top: 24px; font-size: 12.5px; color: var(--color-text-secondary); line-height: 2; }
+    .cmp-flow-note b { color: var(--color-primary-blue); }
+  </style>
+
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xwvd9yxire");
+  </script>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <a href="https://rakuruma.com" class="logo">
+      <img src="/assets/images/logo.svg" alt="ラクルマ" style="height:34px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <span class="logo-text" style="display:none;">ラクルマ</span>
+    </a>
+    <span class="page-tag">出張車検</span>
+  </div>
+  <button class="menu-btn" id="menuBtn" aria-label="メニューを開閉" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- ハンバーガーメニュー -->
+<div class="menu-overlay" onclick="toggleMenu()"></div>
+<nav class="menu-panel" aria-label="ページ内メニュー">
+  <div class="menu-divider">このページ（車検）</div>
+  <a href="#flow" onclick="toggleMenu()">ご利用の流れ</a>
+  <a href="#price" onclick="toggleMenu()">料金</a>
+  <a href="#voice" onclick="toggleMenu()">お客様の声</a>
+  <a href="#faq" onclick="toggleMenu()">よくある質問</a>
+  <div class="menu-divider">その他のサービス</div>
+  <a href="/maintenance/">出張整備・パーツ取付</a>
+  <a href="/mobile-car-wash/">出張洗車</a>
+  <a href="/blog/">ブログ</a>
+  <a href="https://lin.ee/r0BAZkR0" class="menu-line-btn">💬 LINEで相談</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video-wrap">
+    <img class="hero-img" src="/assets/images/works-diagnosis.jpg" alt="国家1級整備士がご自宅の駐車場で点検する様子">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-page-tag">出張車検</div>
+    <h1>鍵を渡すだけで、<br>車検が終わる。</h1>
+    <p class="hero-sub">
+      国家1級整備士がご自宅まで引き取りに伺い、車検を終えてお届け。<br>
+      車検総額 <span id="heroTotal">¥92,640</span>〜（点検・消耗品・法定費用ぜんぶ込み）
+    </p>
+    <div class="hero-cta">
+      <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで車検証を送って概算見積もり</a>
+    </div>
+    <div class="hero-trust">
+      <span class="trust-item">引き取り・納車 無料</span>
+      <span class="trust-item">毎回同じ1級整備士</span>
+      <span class="trust-item">追加整備は事前承諾制</span>
+    </div>
+  </div>
+  <!-- FV情報バー：対応エリア＋くらしのマーケット評価 -->
+  <div class="hero-fv-bar">
+    <div class="hero-fv-bar-row">
+      <span class="hero-fv-bar-label">対応エリア</span>
+      <span class="hero-fv-bar-value">世田谷・目黒・渋谷・品川・港区</span>
+    </div>
+    <div class="hero-fv-bar-divider"></div>
+    <div class="hero-fv-bar-row">
+      <span class="hero-fv-bar-label">くらしのマーケット</span>
+      <span class="hero-fv-bar-value"><span class="star">★</span>4.92<small>（口コミ560件）</small></span>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASE：車検の面倒＋LINEデモ -->
+<section class="trouble-section">
+  <div class="section-inner">
+    <div class="section-label">USE CASE</div>
+    <h2 class="trouble-headline">車検のたびに、<span>半日つぶれて</span><br>いませんか？</h2>
+    <div class="trouble-grid">
+      <div class="trouble-card">
+        <div class="trouble-card-title">店選び</div>
+        <p>「どこが安くて安心か、比べるのが面倒」</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-title">持ち込み・引き取り</div>
+        <p>「工場まで往復2回。休日が丸ごと消える」</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-title">見積もり</div>
+        <p>「電話やフォーム入力がそもそも億劫」</p>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-card-title">追加請求</div>
+        <p>「気づいたら知らない整備代が乗っている」</p>
+      </div>
+    </div>
+    <div class="trouble-arrow">↓</div>
+    <div class="line-demo">
+      <h3 class="line-demo-title">車検の見積もりは、<span>写真1枚。</span></h3>
+
+      <div class="line-demo-step"><span class="step-circle">1</span>車検証を撮って、LINEで送るだけ</div>
+      <div class="line-demo-screen">
+        <div class="line-msg user">
+          <span class="line-read">既読<br>10:02</span>
+          <div class="line-bubble">車検の見積もりをお願いしたいです</div>
+        </div>
+        <div class="line-msg rk">
+          <span class="line-avatar">🔧</span>
+          <div class="line-bubble">ありがとうございます！<br>車検証のお写真を1枚お送りください😊</div>
+        </div>
+        <div class="line-msg user">
+          <span class="line-read">既読<br>10:04</span>
+          <div class="line-bubble">📷（車検証の写真を送信）</div>
+        </div>
+        <div class="line-msg rk">
+          <span class="line-avatar">🔧</span>
+          <div class="line-bubble">確認しました！お客様のお車ですと総額◯◯円〜が目安です。ご希望の引き取り日時をお選びください👇</div>
+        </div>
+      </div>
+
+      <div class="line-demo-step"><span class="step-circle">2</span>引き取り日時を選んだら、あとは待つだけ</div>
+      <div class="booking-demo">
+        <div class="booking-demo-label">引き取りご希望日時を選択</div>
+        <div class="booking-date-tabs">
+          <div class="booking-date-tab">7/11<span>土</span></div>
+          <div class="booking-date-tab active">7/12<span>日</span></div>
+          <div class="booking-date-tab">7/13<span>月</span></div>
+        </div>
+        <div class="booking-slots">
+          <div class="booking-slot disabled">10:00</div>
+          <div class="booking-slot selected">14:00</div>
+          <div class="booking-slot">16:00</div>
+        </div>
+      </div>
+
+      <p class="line-demo-caption">お店に行くのは0回。ご自宅でお車と鍵をお預かりし、車検完了後にお届けします。作業内容は写真つきレポートがLINEに届きます。</p>
+      <a href="https://lin.ee/r0BAZkR0" class="line-demo-btn">💬 LINEで車検証を送ってみる<small>無料・返信は最短当日</small></a>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW COMPARE：これまでの車検 vs ラクルマの車検 -->
+<section id="flow">
+  <div class="section-inner">
+    <div class="section-label">FLOW</div>
+    <h2 class="section-title">もう、車検場に<br><span style="color: var(--color-primary-blue);">行かなくていい。</span></h2>
+    <p class="section-desc">これまでの車検と、ラクルマの車検。<br>「あなたがやること」を並べてみました。</p>
+
+    <div class="cmp-flow-grid">
+      <div class="cmp-flow-col cmp-flow-col--old">
+        <div class="cmp-flow-head">これまでの車検</div>
+        <ol class="cmp-tl cmp-tl--old">
+          <li><i class="tl-dot">✕</i><div class="tl-label">業者を探して比較</div></li>
+          <li><i class="tl-dot">✕</i><div class="tl-label">電話で見積もり依頼</div></li>
+          <li><i class="tl-dot">✕</i><div class="tl-label">工場へ持ち込み</div></li>
+          <li><i class="tl-dot">✕</i><div class="tl-label">代車を借りる・待合室で待つ</div></li>
+          <li><i class="tl-dot">✕</i><div class="tl-label">完了の連絡を待つ</div></li>
+          <li><i class="tl-dot">✕</i><div class="tl-label">もう一度、工場へ引き取りに</div></li>
+        </ol>
+        <div class="cmp-flow-total">お店へ行く回数 2回<strong>半日〜1日</strong></div>
+      </div>
+
+      <div class="cmp-flow-col cmp-flow-col--new">
+        <div class="cmp-flow-head">ラクルマの車検</div>
+        <ol class="cmp-tl cmp-tl--new">
+          <li><i class="tl-dot">1</i><div class="tl-label"><span class="tl-verb">送る</span>車検証の写真をLINEで<small>概算がすぐ届きます</small></div></li>
+          <li><i class="tl-dot">2</i><div class="tl-label"><span class="tl-verb">見る</span>お見積もりを確認<small>ご自宅で15分・無料</small></div></li>
+          <li><i class="tl-dot">3</i><div class="tl-label"><span class="tl-verb">渡す</span>当日、鍵を渡すだけ<small>車検を終えてご自宅へ</small></div></li>
+        </ol>
+        <div class="tl-done">あとは、ぜんぶラクルマ</div>
+        <div class="cmp-flow-total cmp-flow-total--new">お店へ行く回数 0回<strong>外出ゼロ</strong></div>
+      </div>
+    </div>
+
+    <p class="cmp-flow-note">正確な金額は、実際にお車を見ないと判断できません。だからこそ<b>お見積もりのための訪問（約15分）は無料</b>で、金額をご覧いただいてからご予約を決めていただけます。<br>工場への往復はラクルマが運転。<b>移動するのは車だけ、あなたはずっと家です。</b>追加整備が必要になった場合も、写真つきでLINEにご連絡し、ご承諾いただいてから作業します。承諾のない追加請求はありません。</p>
+  </div>
+</section>
+
+<!-- PRICE -->
+<section class="price-section" id="price">
+  <div class="section-inner">
+    <div class="section-label">PRICE</div>
+    <h2 class="section-title">料金</h2>
+    <p class="section-desc">
+      隠れた追加料金はありません。点検・消耗品・法定費用まで、ぜんぶ込みの総額でご案内します。<br>
+      お車のタイプを選ぶと、その場で概算が出ます。
+    </p>
+
+    <!-- ざっくり概算ウィジェット（金額は予約管理GASの設定シートから取得。失敗時は埋め込みの既定値） -->
+    <div class="sq-toggle" id="sqOrigin">
+      <button type="button" data-o="domestic" class="active">国産車</button>
+      <button type="button" data-o="import">輸入車</button>
+    </div>
+    <div class="sq-types" id="sqTypes"></div>
+    <p class="sq-ex" id="sqEx"></p>
+    <div class="sq-card">
+      <ul class="sq-lines" id="sqLines"></ul>
+      <div class="sq-total"><span>概算合計</span><span class="n"><span id="sqTotal">—</span>〜</span></div>
+    </div>
+
+    <div class="price-note" style="margin-top:18px;">
+      ※ 金額はすべて税込です。引き取り・納車は無料です。<br>
+      ※ 重量税はエコカー減税を含めない金額です。対象車はここから安くなります。初度登録から13年/18年を超えるお車は重量税が上がります。<br>
+      ※ 追加整備が必要な場合は、必ず事前にご連絡し、ご承諾いただいてから作業します。承諾のない追加請求はありません。<br>
+      ※ 正確な金額は、実際にお車を確認したうえでのお見積もり（訪問・約15分・無料）でご案内します。<br>
+      ※ スーパーカー、部品の調達が難しい車種、初度登録から13年以上経過したお車は、お受けできない場合がございます。
+    </div>
+
+    <div class="price-cta-block">
+      <p class="price-cta-micro">＼ うちの車はいくら？ ／</p>
+      <div class="price-cta-card">
+        <div class="price-cta-text">
+          <div class="price-cta-title">車検証の写真1枚で、概算見積もり</div>
+          <div class="price-cta-desc">面倒な入力は不要。LINEで車検証を撮って送るだけで、<br>お客様のお車の概算をお返しします。</div>
+        </div>
+        <a href="https://lin.ee/r0BAZkR0" class="price-cta-btn">
+          <span class="price-cta-btn-icon">💬</span>
+          <span>
+            <span class="price-cta-btn-main">LINEで概算見積もり</span>
+            <span class="price-cta-btn-sub">無料・返信は最短当日</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VOICE -->
+<section class="voice-section" id="voice">
+  <div class="section-inner">
+    <div class="section-label">VOICE · REVIEW</div>
+    <h2 class="section-title">お客様の声</h2>
+    <p class="section-desc">くらしのマーケット・Googleに寄せられた口コミの一部を、編集のうえご紹介します。</p>
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="voice-card">
+          <div class="voice-card-img">🔧</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">他社で取り付けたドラレコが正常に動かず、施工の確認と修正をお願いしました。配線ミスをすぐに特定して直していただき、原因の説明も明快。心から信頼できる方だと感じました。</p>
+          <div class="voice-meta">ドラレコ施工修正・輸入車</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🤝</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">事前に「できること・できないこと」を明確に説明してもらえて安心できました。仕上がりも細部まで綺麗で、費用以上の満足度。またお願いしたいと思います。</p>
+          <div class="voice-meta">ドラレコ取付・国産車</div>
+        </div>
+        <div class="voice-card">
+          <div class="voice-card-img">🔋</div>
+          <div class="stars">★★★★★</div>
+          <p class="voice-text">3ヶ月放置していた車の洗車と、タイヤ空気圧・バッテリーの点検をお願いしました。かなり弱っていたバッテリーも充電してもらい、翌日にはすぐ運転できました。</p>
+          <div class="voice-meta">洗車＋バッテリー・タイヤ点検（Google）</div>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:24px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://curama.jp/852811569/review/?sort=top-review" target="_blank" rel="noopener noreferrer" style="color:var(--color-primary-blue);font-weight:700;font-size:14px;">くらしのマーケットの口コミを見る →</a>
+      <a href="https://www.google.com/maps/search/%E3%83%A9%E3%82%AF%E3%83%AB%E3%83%9E+%E5%87%BA%E5%BC%B5%E6%B4%97%E8%BB%8A+%E6%95%B4%E5%82%99%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9+%E4%B8%96%E7%94%B0%E8%B0%B7%E5%8C%BA" target="_blank" rel="noopener noreferrer" style="color:var(--color-primary-blue);font-weight:700;font-size:14px;">Googleの口コミを見る →</a>
+    </p>
+    <p style="text-align:center;margin-top:10px;font-size:11px;color:var(--color-text-muted);">※ くらしのマーケット・Googleに投稿された口コミをもとに、一部編集して掲載しています。</p>
+  </div>
+</section>
+
+<!-- MEMBER -->
+<section class="member-section">
+  <div class="section-inner">
+    <div class="section-label">SERVICE CREW</div>
+    <h2 class="section-title">車検も、<br>国家1級整備士が担当。</h2>
+    <p class="section-desc">
+      資格・保険・作業報告。安心の根拠を揃えてお迎えします。
+    </p>
+    <div class="prof-card">
+      <div class="prof-pic">
+        <img src="/assets/images/team-yoshinaga.jpg" alt="ラクルマ代表 国家1級自動車整備士 吉永明拓" loading="lazy">
+      </div>
+      <div class="prof-text">
+        <div class="prof-name">吉永 明拓［代表］</div>
+        <p class="prof-lead">車検は「通すこと」がゴールではなく、次の2年を安心して乗るための健康診断。だからこそ、お預かりの前にその場でご説明し、やった作業はすべて写真でお見せします。</p>
+        <dl class="prof-dl">
+          <dt>資格</dt><dd>国家1級自動車整備士・自動車検査員</dd>
+          <dt>経歴</dt><dd>元HONDA正規ディーラー8年勤務</dd>
+          <dt>出身</dt><dd>埼玉県越谷市生まれ／埼玉自動車大学校 卒</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="section-inner">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">よくあるご質問</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          本当に家から出なくていいんですか？
+        </div>
+        <div class="faq-a">はい。お見積もりはLINE、お車の引き取りと納車はご自宅の駐車場で行います。車検証・自賠責保険証・納税証明書などの書類のご用意だけお願いしています。必要書類はLINEでご案内します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          車検はどこで行うのですか？
+        </div>
+        <div class="faq-a">お車の引き取り・点検・ご説明はラクルマ（国家1級整備士・自動車検査員資格者）が担当し、車検（継続検査）は提携の車検工場にて実施します。法令に則った正規の車検です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          預けている間、代車はありますか？
+        </div>
+        <div class="faq-a">代車が必要な場合はご相談ください。お預かり期間を最短にする日程調整も可能です。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          車検が切れてしまった車でも大丈夫ですか？
+        </div>
+        <div class="faq-a">対応できる場合がありますので、まずはLINEでご相談ください。状況に合わせて手配方法をご案内します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          輸入車・大型SUVもお願いできますか？
+        </div>
+        <div class="faq-a">はい、対応しています。テスラをはじめ輸入車の整備実績も豊富です。車種によってお受けできない場合もあるため、車検証のお写真とあわせてご確認ください。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          お受けできないお車はありますか？
+        </div>
+        <div class="faq-a">スーパーカー、部品の調達が難しい車種、初度登録から13年以上経過したお車は、お受けできない場合がございます。安全に責任を持ってお返しできる範囲でお引き受けしたいためです。まずはLINEでお車をお知らせください。可否をすぐにご返信します。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          お見積もりだけでも大丈夫ですか？
+        </div>
+        <div class="faq-a">もちろんです。ご自宅へお伺いしてのお見積もり（約15分・鍵をお預かりして状態を確認します）は無料です。金額をご覧いただいてから、ご予約を決めていただけます。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-mark">Q</span>
+          支払い方法は？
+        </div>
+        <div class="faq-a">キャッシュレスでのお支払いをお願いしています。作業前に料金をご確認いただいたうえで進めますので、追加費用が発生する場合は事前にご連絡します。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AREA -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">AREA</div>
+    <h2 class="section-title">サービス提供エリア</h2>
+    <p class="section-desc">エリア外の方も、まずはご相談ください。</p>
+    <div class="area-tags">
+      <span class="area-tag">世田谷区</span>
+      <span class="area-tag">目黒区</span>
+      <span class="area-tag">渋谷区</span>
+      <span class="area-tag">品川区</span>
+      <span class="area-tag">港区</span>
+      <span class="area-tag">周辺エリア（要相談）</span>
+    </div>
+    <img src="/assets/images/area-map.svg" alt="対応エリアマップ（世田谷区・目黒区・渋谷区・品川区・港区）" loading="lazy" style="display:block;width:100%;max-width:680px;margin-top:28px;">
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>まずは、車検証を撮って<br>送ってみてください。</h2>
+  <p>
+    概算見積もりは無料。金額を見てから決めていただいて大丈夫です。<br>
+    「まだ先だけど、いくらか知りたい」だけでも歓迎です。
+  </p>
+  <div class="cta-buttons">
+    <a href="https://lin.ee/r0BAZkR0" class="btn-line">LINEで概算見積もり（無料）</a>
+    <a href="https://lin.ee/r0BAZkR0" class="btn-primary">LINEで相談だけする</a>
+  </div>
+</section>
+
+<!-- 他サービスへの回遊リンク（内部リンク強化） -->
+<style>
+.rk-crosslink{max-width:760px;margin:0 auto;padding:28px 16px 44px;text-align:center;}
+.rk-crosslink__ttl{font-size:15px;font-weight:700;color:#003B8B;margin-bottom:14px;}
+.rk-crosslink__row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;}
+.rk-crosslink__card{position:relative;flex:1 1 260px;max-width:360px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;border-radius:14px;overflow:hidden;text-decoration:none;color:#fff;text-align:left;background-size:cover;background-position:center;box-shadow:0 6px 20px rgba(0,0,0,.12);transition:transform .15s,box-shadow .15s;padding:18px;}
+.rk-crosslink__card::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(8,18,36,.85) 0%,rgba(8,18,36,.3) 55%,rgba(8,18,36,.05) 100%);}
+.rk-crosslink__card>*{position:relative;z-index:1;}
+.rk-crosslink__card--wash{background-image:url(/assets/images/image_top_sp.jpg);}
+.rk-crosslink__card--seibi{background-image:url(/assets/images/works-diagnosis.jpg);background-position:center 30%;}
+.rk-crosslink__card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.2);}
+.rk-crosslink__name{font-size:17px;font-weight:800;}
+.rk-crosslink__desc{font-size:12px;color:rgba(255,255,255,.88);margin-top:5px;line-height:1.65;}
+.rk-crosslink__more{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.5);border-radius:40px;padding:6px 14px;}
+</style>
+<section class="rk-crosslink" aria-label="関連サービス">
+  <div class="rk-crosslink__ttl">あわせてチェック</div>
+  <div class="rk-crosslink__row">
+    <a class="rk-crosslink__card rk-crosslink__card--seibi" href="/maintenance/">
+      <div class="rk-crosslink__name">出張整備・パーツ取付</div>
+      <div class="rk-crosslink__desc">オイル交換からドラレコ取付まで。国家1級整備士がご自宅へ伺います。</div>
+      <span class="rk-crosslink__more">整備ページを見る →</span>
+    </a>
+    <a class="rk-crosslink__card rk-crosslink__card--wash" href="/mobile-car-wash/">
+      <div class="rk-crosslink__name">出張洗車</div>
+      <div class="rk-crosslink__desc">ご自宅で車内外をまるごと洗浄。定期プランで愛車をきれいに保てます。</div>
+      <span class="rk-crosslink__more">洗車ページを見る →</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-nav">
+    <a href="/">ホーム</a>
+    <a href="/maintenance/">出張整備</a>
+    <a href="/mobile-car-wash/">出張洗車</a>
+    <a href="/blog/">作業実績ブログ</a>
+    <a href="/price_list/">料金</a>
+    <a href="https://lin.ee/r0BAZkR0">LINE相談</a>
+  </div>
+  <p>© 2023 ラクルマ｜世田谷区・目黒区・渋谷区の出張整備・洗車サービス</p>
+  <p style="margin-top:8px;font-size:11px;opacity:0.5;">最終更新：2026年8月</p>
+</footer>
+
+<!-- FLOATING LINE BUTTON -->
+<a href="https://lin.ee/r0BAZkR0" class="float-line">💬 LINEで見積もり</a>
+
+<script>
+  // ハンバーガーメニュー
+  function toggleMenu() {
+    document.body.classList.toggle('menu-open');
+  }
+
+  // ── ざっくり概算ウィジェット ──
+  // 金額の正は予約管理GASの設定シート。ページ表示時にAPIから取得し、失敗時は下の既定値を使う
+  (function () {
+    var API = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=shakenQuickPrices';
+
+    // 既定値（2026-08-16時点のシート値のスナップショット）
+    var WORK = {
+      domestic: [['法定24ヶ月点検', 14300], ['ヘッドライト光軸調整', 4400], ['ブレーキオイル交換', 14300], ['検査代行手続料', 33000]],
+      import:   [['法定24ヶ月点検', 20900], ['ヘッドライト光軸調整', 4400], ['ブレーキオイル交換', 14300], ['検査代行手続料', 36300]]
+    };
+    var LEGAL = {
+      kei: [17540, 6600, 2500], c10: [17650, 16400, 2600], c15: [17650, 24600, 2600],
+      c20: [17650, 32800, 2600], c25: [17650, 41000, 2600]
+    };
+    var CLS_LABEL = { kei: '軽自動車', c10: 'コンパクト', c15: 'セダン・小型SUV', c20: 'ミニバン・SUV', c25: '大型ミニバン・SUV' };
+    var EXAMPLES = {
+      domestic: { kei: 'N-BOX、タント、ハスラー など', c10: 'ヤリス、フィット、アクア など', c15: 'プリウス、カローラ、C-HR など', c20: 'ノア、セレナ、ハリアー など', c25: 'アルファード、ランドクルーザー など' },
+      import:   { c10: 'フィアット500、スマート など', c15: 'ゴルフ、MINI、ベンツAクラス など', c20: 'BMW3シリーズ、ベンツC/Eクラス、テスラ モデル3 など', c25: 'BMW X5、カイエン、レンジローバー など' }
+    };
+    function fallbackMatrix() {
+      var m = { domestic: {}, import: {} };
+      ['domestic', 'import'].forEach(function (o) {
+        Object.keys(LEGAL).forEach(function (c) {
+          var lines = WORK[o].map(function (w) { return { name: w[0], price: w[1] }; });
+          lines.push({ name: '自賠責保険料（24ヶ月）', price: LEGAL[c][0] });
+          lines.push({ name: '重量税（13年未満・減税なしの標準額）', price: LEGAL[c][1] });
+          lines.push({ name: '印紙代', price: LEGAL[c][2] });
+          var total = lines.reduce(function (s, l) { return s + l.price; }, 0);
+          m[o][c] = { label: CLS_LABEL[c], lines: lines, total: total };
+        });
+      });
+      return m;
+    }
+
+    var matrix = fallbackMatrix();
+    var origin = 'domestic';
+    var cls = 'c15';
+    var yen = function (n) { return '¥' + Number(n).toLocaleString(); };
+
+    function render() {
+      // 輸入車は軽を出さない
+      var order = (origin === 'import') ? ['c10', 'c15', 'c20', 'c25'] : ['kei', 'c10', 'c15', 'c20', 'c25'];
+      if (order.indexOf(cls) === -1) cls = order[0];
+
+      var typesEl = document.getElementById('sqTypes');
+      typesEl.innerHTML = '';
+      order.forEach(function (c) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = (matrix[origin][c] && matrix[origin][c].label) || CLS_LABEL[c];
+        if (c === cls) b.className = 'active';
+        b.onclick = function () { cls = c; render(); };
+        typesEl.appendChild(b);
+      });
+
+      document.getElementById('sqEx').textContent = (EXAMPLES[origin] && EXAMPLES[origin][cls]) ? '例：' + EXAMPLES[origin][cls] : '';
+
+      var d = matrix[origin][cls];
+      if (!d) return;
+      var ul = document.getElementById('sqLines');
+      ul.innerHTML = '';
+      d.lines.forEach(function (l) {
+        var li = document.createElement('li');
+        var n = document.createElement('span'); n.textContent = l.name;
+        var p = document.createElement('span'); p.className = 'p'; p.textContent = yen(l.price);
+        li.appendChild(n); li.appendChild(p); ul.appendChild(li);
+      });
+      document.getElementById('sqTotal').textContent = yen(d.total);
+    }
+
+    document.querySelectorAll('#sqOrigin button').forEach(function (b) {
+      b.onclick = function () {
+        origin = b.getAttribute('data-o');
+        document.querySelectorAll('#sqOrigin button').forEach(function (x) { x.classList.toggle('active', x === b); });
+        render();
+      };
+    });
+
+    function updateHero() {
+      var el = document.getElementById('heroTotal');
+      if (el && matrix.domestic.kei) el.textContent = yen(matrix.domestic.kei.total);
+    }
+
+    render();
+    updateHero();
+
+    fetch(API).then(function (r) { return r.json(); }).then(function (d) {
+      if (d && d.ok && d.matrix && d.matrix.domestic) {
+        matrix = d.matrix;
+        render();
+        updateHero();
+      }
+    }).catch(function () { /* 既定値のまま表示 */ });
+  })();
+</script>
+
+</body>
+</html>
