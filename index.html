@@ -688,6 +688,105 @@
       }
     }
 
+    /* ===== INTRO：FV直下の導入帯（目次＋信頼の数字） ===== */
+    .intro-section {
+      background: var(--color-bg-light-blue);
+      padding-top: 44px;
+      padding-bottom: 48px;
+    }
+
+    .intro-lead {
+      font-size: clamp(16px, 2.4vw, 20px);
+      font-weight: 700;
+      line-height: 1.8;
+      color: var(--color-text-primary);
+      margin-bottom: 22px;
+    }
+
+    .intro-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .intro-card {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      background: var(--color-bg-white);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-xs);
+      padding: 16px 18px;
+      text-decoration: none;
+      transition: var(--transition-fast);
+    }
+
+    .intro-card:hover {
+      border-color: var(--color-primary-blue);
+    }
+
+    .intro-card-name {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+      white-space: nowrap;
+    }
+
+    .intro-card-desc {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    .intro-card-arrow {
+      margin-left: auto;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--color-accent-gold);
+    }
+
+    .intro-trust {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 18px;
+      border-top: 1px solid var(--color-border-light);
+      padding-top: 16px;
+    }
+
+    .intro-trust-item {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    .intro-trust-item .star {
+      color: var(--color-accent-yellow);
+      font-size: 14px;
+    }
+
+    .intro-trust-item strong {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--color-text-primary);
+    }
+
+    .intro-trust-item small {
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    @media (max-width: 767px) {
+      .intro-cards {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .intro-card {
+        padding: 13px 16px;
+      }
+    }
+
     /* ===== SERVICE：カタログ型サービス紹介 ===== */
     .service-section--alt {
       background: var(--color-bg-light-blue);
@@ -695,7 +794,7 @@
 
     .service-flex {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 40px;
       align-items: center;
       margin-top: var(--spacing-xl);
@@ -703,6 +802,11 @@
 
     .service-media {
       margin: 0;
+      min-width: 0;
+    }
+
+    .service-photo[hidden] {
+      display: none;
     }
 
     .service-photo {
@@ -840,7 +944,7 @@
 
     @media (max-width: 767px) {
       .service-flex {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 22px;
       }
 
@@ -852,6 +956,75 @@
       .service-link {
         text-align: center;
       }
+    }
+
+    /* ===== パーツ取付：実績がゆっくり流れる帯 ===== */
+    .parts-strip {
+      overflow: hidden;
+      max-width: 100%;
+      border-radius: var(--radius-sm);
+    }
+
+    .parts-strip-track {
+      display: flex;
+      width: max-content;
+      animation: parts-strip-flow 60s linear infinite;
+    }
+
+    .parts-strip:hover .parts-strip-track,
+    .parts-strip.is-paused .parts-strip-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes parts-strip-flow {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .parts-strip-track {
+        animation: none;
+      }
+    }
+
+    .parts-card {
+      width: 168px;
+      flex: none;
+      margin-right: 12px;
+      background: var(--color-bg-white);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-xs);
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+    }
+
+    .parts-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .parts-card-body {
+      padding: 10px 12px 12px;
+    }
+
+    .parts-card-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .parts-card-date {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
     }
 
     /* ===== SCENES：逆引き「こんなとき」 ===== */
@@ -1789,8 +1962,8 @@
 <section class="hero">
   <div class="hero-video-wrap">
     <video class="v-sp" loop muted playsinline preload="none"
-           poster="/assets/uploads/2025/10/hero-top-sp-v5-poster.jpg"
-           data-src="/assets/uploads/2025/10/hero-top-sp-v5.mp4"></video>
+           poster="/assets/uploads/2025/10/hero-top-sp-v6-poster.jpg"
+           data-src="/assets/uploads/2025/10/hero-top-sp-v6.mp4"></video>
   </div>
   <div class="hero-overlay"></div>
   <span class="hero-area-badge">世田谷・目黒・渋谷・品川・港区</span>
@@ -1827,6 +2000,35 @@
 
 
 
+
+<!-- INDEX：導入帯（表紙→目次→本編の橋渡し） -->
+<section class="intro-section" id="intro">
+  <div class="section-inner">
+    <p class="intro-lead">洗車も、整備も、パーツ取付も。<br class="sp-only">クルマの用事はぜんぶ、ご自宅の駐車場で。</p>
+    <nav class="intro-cards" aria-label="サービス目次">
+      <a class="intro-card" href="#wash">
+        <span class="intro-card-name">洗車</span>
+        <span class="intro-card-desc">外も中も、立ち会い不要</span>
+        <span class="intro-card-arrow">→</span>
+      </a>
+      <a class="intro-card" href="#maintenance">
+        <span class="intro-card-name">車検・整備</span>
+        <span class="intro-card-desc">引き取りから返車まで</span>
+        <span class="intro-card-arrow">→</span>
+      </a>
+      <a class="intro-card" href="#parts">
+        <span class="intro-card-name">パーツ取付</span>
+        <span class="intro-card-desc">持ち込み歓迎</span>
+        <span class="intro-card-arrow">→</span>
+      </a>
+    </nav>
+    <div class="intro-trust">
+      <span class="intro-trust-item"><span class="star">★</span><strong>4.92</strong><small>くらしのマーケット評価</small></span>
+      <span class="intro-trust-item"><strong>560件</strong><small>口コミ</small></span>
+      <span class="intro-trust-item"><strong>全件公開</strong><small>作業実績ブログ</small></span>
+    </div>
+  </div>
+</section>
 
 <!-- SERVICE 01：洗車 -->
 <section class="service-section" id="wash">
@@ -1906,7 +2108,11 @@
     </p>
     <div class="service-flex service-flex--mediafirst">
       <figure class="service-media">
-        <img class="service-photo" src="/assets/images/service_parts.jpg" alt="取り付けたリアモニターの動作確認" loading="lazy">
+        <div class="parts-strip" id="partsStrip" aria-label="パーツ取付の作業例">
+          <div class="parts-strip-track" id="partsStripTrack" style="animation-duration: 28s;">
+            <div class="parts-card"><img src="/assets/images/parts_entame.jpg" alt="テレビ・ナビの取り付けの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">テレビ・ナビの取り付け</div></div></div><div class="parts-card"><img src="/assets/images/service_parts.jpg" alt="後席フリップダウンモニターの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">後席フリップダウンモニター</div></div></div><div class="parts-card"><img src="/assets/images/parts_mirror.jpg" alt="デジタルインナーミラーの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">デジタルインナーミラー</div></div></div><div class="parts-card"><img src="/assets/images/parts_entame.jpg" alt="テレビ・ナビの取り付けの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">テレビ・ナビの取り付け</div></div></div><div class="parts-card"><img src="/assets/images/service_parts.jpg" alt="後席フリップダウンモニターの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">後席フリップダウンモニター</div></div></div><div class="parts-card"><img src="/assets/images/parts_mirror.jpg" alt="デジタルインナーミラーの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">デジタルインナーミラー</div></div></div>
+          </div>
+        </div>
       </figure>
       <div>
         <ul class="benefit-list">
@@ -1942,11 +2148,12 @@
 <section class="concept-section" id="concept">
   <div class="section-inner">
     <div class="section-label">CONCEPT</div>
-    <h2 class="section-title">頼んだ作業だけで、終わらない。</h2>
+    <h2 class="section-title">「クルマの管理をラクに」。だから、ラクルマ。</h2>
     <p class="concept-body">
-      洗車でも、整備でも。作業のあいだに国家1級整備士の目で、<br class="pc-only">
-      タイヤの減り・バッテリー・灯火類をあわせてチェックしています。<br>
-      気になる箇所があれば、写真つきでご報告。<strong>追加料金はありません。</strong>
+      洗車も、車検も、パーツ取付も。クルマの用事は、窓口ひとつでぜんぶご自宅で済む。<br class="pc-only">
+      それが「ラクルマ」という名前に込めた思想です。<br>
+      頼んだ作業のあいだには、国家1級整備士がタイヤの減り・バッテリー・灯火類まで目を通し、<br class="pc-only">
+      気になる箇所は写真つきでご報告します。<strong>追加料金はありません。</strong>
     </p>
     <figure class="concept-photo">
       <img src="/assets/images/concept.jpg" alt="作業のあいまにタイヤまわりを点検する整備士" loading="lazy">
@@ -1955,7 +2162,7 @@
       <strong>直すかどうかを決めるのは、お客様です。</strong>
       <span>私たちから無理におすすめすることはありません。</span>
     </div>
-    <p class="concept-origin">※「クルマの管理をラクに」——それが「ラクルマ」という名前の由来です。</p>
+    <p class="concept-origin">「困ったらラクルマさんに診てもらえばいい」——そんな愛車の主治医であり続けます。</p>
   </div>
 </section>
 
@@ -2124,6 +2331,7 @@
     <a href="/blog/">作業実績ブログ</a>
     <a href="/price_list/">料金</a>
     <a href="/company/">運営者情報</a>
+    <a href="/recruit/mobile-detailing/">出張洗車スタッフ募集</a>
     <a href="https://lin.ee/r0BAZkR0">LINE相談</a>
   </div>
   <p>© ラクルマ｜世田谷区・目黒区・渋谷区・品川区・港区の出張洗車・整備・パーツ取付</p>
@@ -2135,11 +2343,6 @@
 
 <!-- 固定バー（スマホのみ表示。主＝LINE／副＝洗車・整備の振り分け） -->
 <div class="fixbar">
-  <div class="fixbar-sub">
-    <a href="/mobile-car-wash/">出張洗車</a>
-    <span class="fixbar-div">｜</span>
-    <a href="/maintenance/">整備・パーツ取付</a>
-  </div>
   <a href="https://lin.ee/r0BAZkR0" class="fixbar-cta">
     <span>💬</span>
     <span>
@@ -2304,6 +2507,15 @@
       });
     }
   }
+
+  // パーツ取付の帯：指を置いている間だけ流れを止める
+  (function () {
+    var strip = document.getElementById('partsStrip');
+    if (!strip) return;
+    strip.addEventListener('pointerdown', function() { strip.classList.add('is-paused'); });
+    strip.addEventListener('pointerup', function() { strip.classList.remove('is-paused'); });
+    strip.addEventListener('pointercancel', function() { strip.classList.remove('is-paused'); });
+  })();
 
   fetch(GAS_URL + '?action=lpWorks')
     .then(function(r) { return r.json(); })
