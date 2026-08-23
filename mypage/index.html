@@ -100,6 +100,25 @@ body {
   margin-right: 8px;
 }
 .shaken-cars { margin-top: 12px; }
+
+/* お車の状態（季節点検の所見。確認日つき・3ヶ月でグレー化） */
+.cond { background: #fff; padding: 16px; border-bottom: 1px solid #e2e8f0; }
+.cond-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.cond-icon { font-size: 22px; }
+.cond-label { font-size: 12px; color: #718096; font-weight: 600; }
+.cond-title { font-size: 16px; font-weight: 800; color: #003B8B; }
+.cond-title.stale { color: #718096; }
+.cond-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cond-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 10px; background: #f7fafc; font-size: 14px; font-weight: 700; color: #1a202c; }
+.cond-item .st { font-size: 13px; font-weight: 800; padding: 3px 8px; border-radius: 999px; color: #fff; white-space: nowrap; }
+.st.good { background: #2f855a; } .st.adj { background: #1a56b0; } .st.warn { background: #dd6b20; } .st.bad { background: #e53e3e; }
+.cond.stale .st { background: #a0aec0; }
+.cond-note { margin-top: 10px; font-size: 13px; color: #4a5568; background: #f9f9f9; border-radius: 8px; padding: 10px 12px; line-height: 1.6; }
+.cond-meta { margin-top: 10px; font-size: 12px; color: #718096; line-height: 1.7; }
+.cond-next { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #EBF4FF; color: #003B8B; font-size: 13px; font-weight: 700; }
+.cond-stale-msg { margin-top: 8px; font-size: 13px; color: #718096; }
+.lightbox-cc { margin: 10px 0; }
+.lightbox-cc .cond-items { grid-template-columns: 1fr; }
 .shaken-car {
   display: block;
   width: 100%;
@@ -338,6 +357,7 @@ body {
     <div class="lightbox-date" id="lbDate"></div>
     <div class="lightbox-menu" id="lbMenu"></div>
     <div class="lightbox-note" id="lbNote"></div>
+<div class="lightbox-cc" id="lbCarCheck" style="display:none;"></div>
     <div class="lightbox-photos" id="lbPhotos"></div>
   </div>
 </div>
@@ -472,6 +492,44 @@ function escapeHtml(s) {
   });
 }
 
+// ===== お車の状態（季節点検） =====
+// 所見には必ず確認日を添える。3ヶ月以内＝色つき、3〜6ヶ月＝グレー（再確認待ち）、6ヶ月超＝最上段に出さない
+var INSPECTION_THEME = { 4: '冬明けチェック', 8: '猛暑チェック', 12: '冬支度チェック' };
+function statusClass(st) {
+  if (st === '良好') return 'good';
+  if (st === '良好（調整）') return 'adj';
+  if (st === '注意' || st === '要確認') return 'warn';
+  return 'bad';
+}
+function renderCondItems(items) {
+  return '<div class="cond-items">' + (items || []).map(function(it) {
+    return '<div class="cond-item"><span>' + escapeHtml(it.label) + '</span><span class="st ' + statusClass(it.status) + '">' + escapeHtml(it.status) + '</span></div>';
+  }).join('') + '</div>';
+}
+function renderCondition(ins) {
+  if (!ins) return '';
+  var nextTxt = ins.nextMonth ? '次回の季節点検：' + ins.nextMonth + '月（' + (INSPECTION_THEME[ins.nextMonth] || '') + '）' : '';
+  var h = '<div class="cond' + (ins.state === 'stale' ? ' stale' : '') + '">';
+  h += '<div class="cond-head"><div class="cond-icon">🩺</div><div>'
+     + '<div class="cond-label">お車の状態（1級整備士の所見）</div>';
+  if (ins.state === 'fresh' || ins.state === 'stale') {
+    h += '<div class="cond-title' + (ins.state === 'stale' ? ' stale' : '') + '">' + escapeHtml(ins.checkedAt) + ' 確認</div></div></div>';
+    h += renderCondItems(ins.items);
+    if (ins.note) h += '<div class="cond-note">' + escapeHtml(ins.note) + '</div>';
+    if (ins.state === 'stale') h += '<div class="cond-stale-msg">前回の確認から3ヶ月以上たっています。次回の点検で改めて確認します。</div>';
+  } else {
+    h += '<div class="cond-title stale">まだ点検の記録がありません</div></div></div>';
+    h += '<div class="cond-stale-msg">季節の変わり目に、洗車のついでにお車の状態をチェックして、ここに記録します。</div>';
+  }
+  var meta = [];
+  if (ins.odometer) meta.push('走行距離：' + escapeHtml(String(ins.odometer)) + ' km（' + escapeHtml(ins.odometerAt) + '）');
+  if (ins.staffName) meta.push('確認者：' + escapeHtml(ins.staffName));
+  if (meta.length) h += '<div class="cond-meta">' + meta.join('<br>') + '</div>';
+  if (nextTxt) h += '<div class="cond-next">' + escapeHtml(nextTxt) + '</div>';
+  h += '</div>';
+  return h;
+}
+
 // 履歴カードのタップで、その作業の写真をその場で拡大表示（GASページに飛ばない）
 function openLightbox(idx) {
   var r = (window._reports || [])[idx];
@@ -481,6 +539,19 @@ function openLightbox(idx) {
   var noteEl = document.getElementById('lbNote');
   noteEl.textContent = r.workNote || '';
   noteEl.style.display = r.workNote ? 'block' : 'none';
+  var ccEl = document.getElementById('lbCarCheck');
+  if (ccEl) {
+    if (r.carCheck && r.carCheck.items && r.carCheck.items.length) {
+      ccEl.innerHTML = '<div class="cond-label" style="margin-bottom:6px;">お車の状態（' + escapeHtml(r.carCheck.date || r.date) + ' 確認）</div>'
+        + renderCondItems(r.carCheck.items)
+        + (r.carCheck.note ? '<div class="cond-note">' + escapeHtml(r.carCheck.note) + '</div>' : '')
+        + (r.carCheck.odometer ? '<div class="cond-meta">走行距離：' + escapeHtml(String(r.carCheck.odometer)) + ' km</div>' : '');
+      ccEl.style.display = 'block';
+    } else {
+      ccEl.innerHTML = '';
+      ccEl.style.display = 'none';
+    }
+  }
   var photos = r.photoUrls || (r.photoUrl ? [r.photoUrl] : []);
   document.getElementById('lbPhotos').innerHTML = photos.length
     ? photos.map(function(u) { return '<img src="' + escapeHtml(u) + '" alt="作業写真" loading="lazy">'; }).join('')
@@ -610,6 +681,8 @@ function render(data) {
     }
     html += '</div>';
   }
+
+  html += renderCondition(data.inspection);
 
   var reports = data.reports || [];
   window._reports = reports;
