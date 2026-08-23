@@ -16,15 +16,34 @@
   }
   .wrap { max-width: 520px; margin: 0 auto; }
 
-  header { margin-bottom: 20px; }
+  header { display: flex; align-items: flex-start; margin-bottom: 20px; }
   .logo { font-size: 24px; font-weight: 800; color: #003B8B; }
   .sub { font-size: 14px; color: #6b7684; margin-top: 2px; }
+  .head-txt { flex: 1; }
+  .logout {
+    flex: 0 0 auto; font-size: 12px; font-weight: 700; color: #6b7684; background: #fff;
+    border: 1.5px solid #dde3ec; border-radius: 999px; padding: 6px 12px; cursor: pointer;
+    font-family: inherit; display: none;
+  }
 
+  /* ログイン前 */
+  .gate { display: none; text-align: center; background: #fff; border-radius: 16px; padding: 40px 24px; box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+  .gate p { font-size: 15px; color: #6b7684; margin-bottom: 24px; }
+  .btn-line {
+    display: block; background: #06C755; color: #fff; text-decoration: none;
+    padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 700;
+  }
+  .gate .note { font-size: 13px; color: #a3adbb; margin-top: 18px; margin-bottom: 0; line-height: 1.7; }
+
+  /* 読み込み中 */
+  .loading { text-align: center; padding: 60px 0; color: #a3adbb; font-size: 14px; }
+
+  /* ツール一覧 */
+  #tools { display: none; }
   .group-title {
     font-size: 12px; font-weight: 800; color: #6b7684; letter-spacing: .06em;
     margin: 22px 0 8px; padding-left: 2px;
   }
-
   a.tool {
     display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit;
     background: #fff; border-radius: 12px; padding: 16px 16px; margin-bottom: 10px;
@@ -47,6 +66,8 @@
     padding: 12px 14px; font-size: 13px; color: #44506b; margin-top: 24px;
   }
   .tip strong { color: #003B8B; }
+  .err { background: #fff4e6; border-left: 4px solid #d9480f; border-radius: 8px;
+         padding: 12px 14px; font-size: 13px; color: #7a3208; margin-bottom: 16px; display: none; }
   footer { text-align: center; font-size: 12px; color: #a3adbb; margin-top: 28px; }
 </style>
 </head>
@@ -54,78 +75,178 @@
 <div class="wrap">
 
   <header>
-    <div class="logo">ラクルマ</div>
-    <div class="sub">スタッフツール</div>
+    <div class="head-txt">
+      <div class="logo">ラクルマ</div>
+      <div class="sub">スタッフツール</div>
+    </div>
+    <button class="logout" id="logoutBtn" onclick="logout()">ログアウト</button>
   </header>
 
-  <div class="group-title">よく使う</div>
+  <div class="err" id="err"></div>
+  <div class="loading" id="loading">確認しています…</div>
 
-  <a class="tool" href="https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?page=links">
-    <div class="icon">🔗</div>
-    <div class="txt">
-      <div class="name">リンク集・定型文</div>
-      <div class="desc">決済リンク・お客様への定型文をコピー</div>
+  <div class="gate" id="gate">
+    <p>スタッフ専用のページです。<br>LINEでログインしてください。</p>
+    <a class="btn-line" id="loginBtn" href="#">LINEでログイン</a>
+    <p class="note">一度ログインすれば、次からはこの画面を<br>飛ばして開けます。</p>
+  </div>
+
+  <div id="tools">
+    <div class="group-title">よく使う</div>
+
+    <a class="tool" data-gas="rsv" data-q="?page=links">
+      <div class="icon">🔗</div>
+      <div class="txt">
+        <div class="name">リンク集・定型文</div>
+        <div class="desc">決済リンク・お客様への定型文をコピー</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="tool" data-gas="rsv" data-q="?action=customers">
+      <div class="icon">👥</div>
+      <div class="txt">
+        <div class="name">顧客管理</div>
+        <div class="desc">お客様の履歴・車検・領収書</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="tool" href="https://script.google.com/macros/s/AKfycbwVF0zpW_SQ0wLBySCOBnv1VjMbN-Kjipf6OQXepHHkBa1QLth_A2mK6RvByFbcrgDcIQ/exec">
+      <div class="icon green">📊</div>
+      <div class="txt">
+        <div class="name">経営ダッシュボード</div>
+        <div class="desc">売上・利益・KPI（Googleアカウントで開きます）</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <div class="group-title">作業・現場</div>
+
+    <a class="tool" href="https://script.google.com/macros/s/AKfycby3tEqjWCmLOXe7nQjRPb69n4wx5NRyyMdctl503KagWu7_GOx6Dc7caVGBP3tfQsREOQ/exec">
+      <div class="icon green">🧽</div>
+      <div class="txt">
+        <div class="name">洗車 作業手順書</div>
+        <div class="desc">現場で見る手順・注意点</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <div class="group-title">発信・記事</div>
+
+    <a class="tool" data-gas="rsv" data-q="?page=blogTodo">
+      <div class="icon orange">📝</div>
+      <div class="txt">
+        <div class="name">未処理ブログ一覧</div>
+        <div class="desc">まだ記事にしていない作業報告</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="tool" href="https://script.google.com/macros/s/AKfycbwANLZLYa-PXyKelTHlNjs2em0_HceyUxrw2LPD6Fh6yVrasnGvN8APdEbU7zAiYrpW/exec">
+      <div class="icon orange">✍️</div>
+      <div class="txt">
+        <div class="name">アフィリ記事生成ツール</div>
+        <div class="desc">商品提案・記事づくり・適合調査</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <div class="tip">
+      <strong>ホーム画面に置いておくと早いです。</strong><br>
+      iPhone：Safariでこのページを開き、下の共有ボタン →「ホーム画面に追加」。<br>
+      次からはアイコンから1タップ、ログインも不要です。
     </div>
-    <div class="arrow">›</div>
-  </a>
-
-  <a class="tool" href="https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=customers">
-    <div class="icon">👥</div>
-    <div class="txt">
-      <div class="name">顧客管理</div>
-      <div class="desc">お客様の履歴・車検・領収書</div>
-    </div>
-    <div class="arrow">›</div>
-  </a>
-
-  <a class="tool" href="https://script.google.com/macros/s/AKfycbwVF0zpW_SQ0wLBySCOBnv1VjMbN-Kjipf6OQXepHHkBa1QLth_A2mK6RvByFbcrgDcIQ/exec">
-    <div class="icon green">📊</div>
-    <div class="txt">
-      <div class="name">経営ダッシュボード</div>
-      <div class="desc">売上・利益・KPI</div>
-    </div>
-    <div class="arrow">›</div>
-  </a>
-
-  <div class="group-title">作業・現場</div>
-
-  <a class="tool" href="https://script.google.com/macros/s/AKfycby3tEqjWCmLOXe7nQjRPb69n4wx5NRyyMdctl503KagWu7_GOx6Dc7caVGBP3tfQsREOQ/exec">
-    <div class="icon green">🧽</div>
-    <div class="txt">
-      <div class="name">洗車 作業手順書</div>
-      <div class="desc">現場で見る手順・注意点</div>
-    </div>
-    <div class="arrow">›</div>
-  </a>
-
-  <div class="group-title">発信・記事</div>
-
-  <a class="tool" href="https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?page=blogTodo">
-    <div class="icon orange">📝</div>
-    <div class="txt">
-      <div class="name">未処理ブログ一覧</div>
-      <div class="desc">まだ記事にしていない作業報告</div>
-    </div>
-    <div class="arrow">›</div>
-  </a>
-
-  <a class="tool" href="https://script.google.com/macros/s/AKfycbwANLZLYa-PXyKelTHlNjs2em0_HceyUxrw2LPD6Fh6yVrasnGvN8APdEbU7zAiYrpW/exec">
-    <div class="icon orange">✍️</div>
-    <div class="txt">
-      <div class="name">アフィリ記事生成ツール</div>
-      <div class="desc">商品提案・記事づくり・適合調査</div>
-    </div>
-    <div class="arrow">›</div>
-  </a>
-
-  <div class="tip">
-    <strong>ホーム画面に置いておくと早いです。</strong><br>
-    iPhone：Safariでこのページを開き、下の共有ボタン → 「ホーム画面に追加」。<br>
-    次からはアプリのアイコンから1タップで開けます。
   </div>
 
   <footer>ラクルマスタッフ専用ページ</footer>
 
 </div>
+
+<script>
+// 予約管理GAS（リンク集・顧客管理・ブログ一覧はここ。LINEユーザーIDをtokenとして渡す）
+var RSV_GAS = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+// LINEログインのチャンネルID。client_idは認可URLに載る公開値なので直書きしてよい（シークレットは絶対に置かない）
+var LINE_CHANNEL_ID = '2004330318';
+var CALLBACK_URL    = 'https://rakuruma.com/staff-callback.html';
+var STORAGE_KEY     = 'rakuruma_staff_token';
+
+var el = {
+  loading: document.getElementById('loading'),
+  gate:    document.getElementById('gate'),
+  tools:   document.getElementById('tools'),
+  logout:  document.getElementById('logoutBtn'),
+  err:     document.getElementById('err')
+};
+
+document.getElementById('loginBtn').href =
+  'https://access.line.me/oauth2/v2.1/authorize'
+  + '?response_type=code'
+  + '&client_id=' + LINE_CHANNEL_ID
+  + '&redirect_uri=' + encodeURIComponent(CALLBACK_URL)
+  + '&state=staffHome'
+  + '&scope=profile'
+  // PCではQRログインを最初から出す（メール＋パスワード＋2段階認証を省く）。スマホのLINEアプリ内では影響なし
+  + '&initial_amr_display=lineqr';
+
+(function init() {
+  var token = '';
+
+  // ログイン直後：staff-callback.html が #t=... で戻してくる
+  var m = window.location.hash.match(/[#&]t=([^&]+)/);
+  if (m) {
+    token = decodeURIComponent(m[1]);
+    try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
+    // アドレスバーからトークンを消す（共有・スクショで漏れるのを防ぐ）
+    history.replaceState(null, '', window.location.pathname);
+  } else {
+    try { token = localStorage.getItem(STORAGE_KEY) || ''; } catch (e) {}
+  }
+
+  if (!token) { showGate(); return; }
+
+  // 保存済みトークンがまだ有効か確認する（許可リストから外れている場合に備えて）
+  fetch(RSV_GAS + '?action=staffCheck&token=' + encodeURIComponent(token))
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.valid) { showTools(token); }
+      else { clearToken(); showGate('ログインの有効期限が切れました。もう一度ログインしてください。'); }
+    })
+    .catch(function () {
+      // 通信できないときはツールを出しておく（オフラインで締め出さない）
+      showTools(token);
+    });
+})();
+
+function showGate(msg) {
+  el.loading.style.display = 'none';
+  el.tools.style.display   = 'none';
+  el.logout.style.display  = 'none';
+  el.gate.style.display    = 'block';
+  if (msg) { el.err.textContent = msg; el.err.style.display = 'block'; }
+}
+
+function showTools(token) {
+  // 予約管理GASのリンクにトークンを差し込む（これで各ページで再ログインしなくて済む）
+  var links = document.querySelectorAll('a.tool[data-gas="rsv"]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].href = RSV_GAS + links[i].getAttribute('data-q') + '&token=' + encodeURIComponent(token);
+  }
+  el.loading.style.display = 'none';
+  el.gate.style.display    = 'none';
+  el.tools.style.display   = 'block';
+  el.logout.style.display  = 'block';
+}
+
+function clearToken() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+}
+
+function logout() {
+  if (!confirm('ログアウトします。よろしいですか？')) return;
+  clearToken();
+  window.location.reload();
+}
+</script>
 </body>
 </html>

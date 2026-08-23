@@ -66,6 +66,12 @@ if (error || !code) {
       showError((d && d.error) ? d.error : 'ログインに失敗しました。もう一度お試しください。');
       return;
     }
+    // スタッフツール置き場（rakuruma.com/staff/）へ戻る場合。
+    // トークンはクエリでなくハッシュで渡す（サーバーのアクセスログやRefererに残さないため）。
+    if (state.split('__')[0] === 'staffHome') {
+      window.location.replace('https://rakuruma.com/staff/#t=' + encodeURIComponent(d.token));
+      return;
+    }
     // stateからリダイレクト先を復元
     var parts  = state.split('__');
     var action = parts[0] || 'customers';
