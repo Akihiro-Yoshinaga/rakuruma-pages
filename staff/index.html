@@ -205,16 +205,20 @@ document.getElementById('loginBtn').href =
 
   if (!token) { showGate(); return; }
 
-  // 保存済みトークンがまだ有効か確認する（許可リストから外れている場合に備えて）
+  // 保存済みトークンがあればまずツールを表示する（GASの応答待ち2〜5秒を体感から消す）。
+  // 有効確認は裏で走らせ、許可リストから外れていた場合だけログイン画面に切り替える。
+  // トークンが無効でも各ツールはGAS側で認証を弾くので、先に表示しても安全。
+  showTools(token);
+
   fetch(RSV_GAS + '?action=staffCheck&token=' + encodeURIComponent(token))
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      if (d && d.valid) { showTools(token); }
-      else { clearToken(); showGate('ログインの有効期限が切れました。もう一度ログインしてください。'); }
+      if (d && d.valid) return; // 有効。表示済みのまま
+      clearToken();
+      showGate('ログインの有効期限が切れました。もう一度ログインしてください。');
     })
     .catch(function () {
-      // 通信できないときはツールを出しておく（オフラインで締め出さない）
-      showTools(token);
+      // 通信できないときはツールを出したままにする（オフラインで締め出さない）
     });
 })();
 
