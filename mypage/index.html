@@ -127,6 +127,9 @@ body {
 .cond-meta { margin-top: 10px; font-size: 12px; color: #718096; line-height: 1.7; }
 .cond-next { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #EBF4FF; color: #003B8B; font-size: 13px; font-weight: 700; }
 .cond-stale-msg { margin-top: 8px; font-size: 13px; color: #718096; }
+.cond-old-toggle { display: block; width: 100%; margin-top: 10px; padding: 10px; border: 1.5px solid #cbd5e0; border-radius: 10px; background: #f7fafc; font-size: 13px; font-weight: 700; color: #4a5568; cursor: pointer; }
+.cond-old { margin-top: 10px; }
+.cond-old-caption { font-size: 12px; color: #718096; margin-bottom: 8px; }
 .lightbox-cc { margin: 10px 0; }
 .lightbox-cc .cond-items { grid-template-columns: 1fr; }
 .shaken-car {
@@ -545,27 +548,41 @@ function renderCondition(ins) {
   var nextTxt = ins.nextMonth ? '次回の季節点検：' + ins.nextMonth + '月（' + (INSPECTION_THEME[ins.nextMonth] || '') + '）' : '';
   var h = '<div class="cond' + (ins.state === 'stale' ? ' stale' : '') + '">';
   h += '<div class="cond-head"><div>'
-     + '<div class="cond-label">お車の状態（1級整備士の所見）</div>';
+     + '<div class="cond-label">お車の状態</div>';
   if (ins.state === 'fresh') {
     h += '<div class="cond-title">' + escapeHtml(ins.checkedAt) + ' 確認</div></div></div>';
     h += renderCondAlert(ins.items);
     h += renderCondItems(ins.items);
     if (ins.note) h += '<div class="cond-note">' + escapeHtml(ins.note) + '</div>';
   } else if (ins.state === 'stale' || ins.state === 'expired') {
-    // 3ヶ月を過ぎた所見は表示しない（古いデータを「現在の状態」として見せない）
+    // 3ヶ月を過ぎた所見は既定では見せない（古いデータを「現在の状態」として見せない）。タップで前回分を開ける
     h += '<div class="cond-title stale">前回の確認：' + escapeHtml(ins.checkedAt) + '</div></div></div>';
     h += '<div class="cond-stale-msg">次回の点検で、あらためてお車の状態を確認します。</div>';
+    if (ins.items && ins.items.length) {
+      h += '<button class="cond-old-toggle" onclick="toggleOldCond(this)">▼ 前回（' + escapeHtml(ins.checkedAt) + '）の点検結果を見る</button>';
+      h += '<div class="cond-old hidden">'
+        + '<div class="cond-old-caption">' + escapeHtml(ins.checkedAt) + ' 時点の状態です</div>'
+        + renderCondItems(ins.items)
+        + (ins.note ? '<div class="cond-note">' + escapeHtml(ins.note) + '</div>' : '')
+        + '</div>';
+    }
   } else {
     h += '<div class="cond-title stale">まだ点検の記録がありません</div></div></div>';
     h += '<div class="cond-stale-msg">季節の変わり目に、洗車のついでにお車の状態をチェックして、ここに記録します。</div>';
   }
   var meta = [];
   if (ins.odometer) meta.push('走行距離：' + escapeHtml(String(ins.odometer)) + ' km（' + escapeHtml(ins.odometerAt) + '）');
-  if (ins.staffName) meta.push('確認者：' + escapeHtml(ins.staffName));
+  if (ins.staffName) meta.push('確認者：' + escapeHtml(ins.staffName) + (String(ins.staffName).indexOf('吉永') >= 0 ? '（1級整備士）' : ''));
   if (meta.length) h += '<div class="cond-meta">' + meta.join('<br>') + '</div>';
   if (nextTxt) h += '<div class="cond-next">' + escapeHtml(nextTxt) + '</div>';
   h += '</div>';
   return h;
+}
+
+function toggleOldCond(btn) {
+  var box = btn.nextElementSibling;
+  var open = box.classList.toggle('hidden');
+  btn.textContent = (open ? '▼' : '▲') + btn.textContent.slice(1);
 }
 
 // 履歴カードのタップで、その作業の写真をその場で拡大表示（GASページに飛ばない）
