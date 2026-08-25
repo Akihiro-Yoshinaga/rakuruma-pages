@@ -178,7 +178,7 @@ section { padding: var(--section-padding-desktop) 24px; scroll-margin-top: 80px;
 
 /* ---------- 施工実績（既存HPと同じカルーセル） ---------- */
 .works-section { background: #fff; }
-.works-filter-label { font-size: 14px; font-weight: 700; color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 10px; }
+.works-filter-label { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: var(--color-text-secondary); margin-top: 4px; margin-bottom: 12px; }
 .works-filter { display: flex; gap: 8px; flex-wrap: wrap; }
 .works-filter-chip {
   border: 1.5px solid rgba(26,82,160,.25); background: #fff; color: var(--color-primary-blue);
@@ -247,8 +247,8 @@ section { padding: var(--section-padding-desktop) 24px; scroll-margin-top: 80px;
 .cta-section h2 { font-size: clamp(22px, 3vw, 32px); font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-md); }
 .cta-section p { font-size: var(--font-size-base); opacity: .9; margin-bottom: var(--spacing-2xl); line-height: var(--line-height-relaxed); }
 .cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-.cta-area { font-size: var(--font-size-sm); opacity: .85; margin: var(--spacing-2xl) auto 0; max-width: 720px; }
-.cta-note { font-size: 11.5px; opacity: .65; margin: 10px auto 0; max-width: 720px; line-height: 1.7; }
+.cta-area { font-size: var(--font-size-sm); opacity: .85; margin: var(--spacing-2xl) auto 0; max-width: 620px; text-align: left; line-height: 1.9; }
+.cta-note { font-size: 11.5px; opacity: .65; margin: 12px auto 0; max-width: 620px; line-height: 1.8; text-align: left; }
 
 /* ---------- フッター ---------- */
 footer {
@@ -446,3 +446,54 @@ footer {
   .price-row .pp-wide { grid-area: d / d / i / i; }
   .price-row .pp-wide::before { content: ""; display: none; }
 }
+
+
+/* ---------- 実写の追加（2026-08-24：流れの写真・作業アイコン・中間バナー） ---------- */
+.step { padding: 0 0 20px; overflow: hidden; }
+.step-img { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: #eef1f5; }
+.step-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.step .sn { margin: 14px 18px 6px; }
+.step h3 { margin: 0 18px 8px; }
+.step p { margin: 0 18px; }
+
+.svc-ic { width: 30px; height: 30px; color: var(--color-primary-blue); margin-bottom: 10px; display: block; }
+
+.photo-band { position: relative; padding: 0; overflow: hidden; max-height: 420px; }
+.photo-band img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 220px; max-height: 420px; }
+.photo-band .pb-overlay {
+  position: absolute; inset: 0; display: flex; align-items: flex-end;
+  background: linear-gradient(180deg, rgba(3,24,54,0) 40%, rgba(3,24,54,.66) 100%);
+}
+.photo-band .pb-overlay p {
+  color: #fff; font-size: clamp(18px, 2.6vw, 26px); font-weight: 700;
+  letter-spacing: .04em; padding: 0 28px 26px; text-shadow: 0 1px 8px rgba(0,0,0,.35);
+}
+
+/* ---------- Why Rakuruma ---------- */
+.why-section { background: #fff; }
+.why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.why-card {
+  background: #fff; border: 1px solid #dfe3ea; border-radius: 6px;
+  padding: 24px 26px; box-shadow: var(--shadow-light);
+}
+.why-card h3 { font-size: 16.5px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.5; }
+.why-card p { font-size: 14px; line-height: 1.9; color: var(--color-text-secondary); }
+@media (max-width: 640px) { .why-grid { grid-template-columns: 1fr; } }
+
+
+/* ---------- ご依頼の流れ v2（写真つき3ステップ） ---------- */
+.flow-grid { grid-template-columns: repeat(3, 1fr); }
+.step { padding: 0; overflow: hidden; }
+.step-img { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
+.step-body { padding: 18px 20px 20px; }
+.step .sn { display: block; font-family: var(--font-secondary); font-size: 13px; font-weight: 700; color: var(--color-primary-blue); letter-spacing: .08em; margin-bottom: 6px; }
+@media (max-width: 640px) { .flow-grid { grid-template-columns: 1fr; } }
+
+/* 絞り込みの国産/輸入グループラベル */
+.works-filter-group {
+  flex: none; width: 52px; align-self: center; font-size: 11px; font-weight: 700;
+  letter-spacing: .08em; color: var(--color-text-muted); white-space: nowrap;
+}
+.works-filter { display: block; }
+.wf-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.wf-row + .wf-row { margin-top: 10px; }

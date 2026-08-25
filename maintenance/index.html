@@ -797,11 +797,12 @@
 
     /* 車種で絞り込むチップ */
     .works-filter-label {
+      display: flex; align-items: center; gap: 12px;
       font-size: 14px;
       font-weight: var(--font-weight-bold);
       color: var(--color-text-secondary);
       margin-top: var(--spacing-xl);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .works-filter {
       display: flex;
@@ -835,6 +836,13 @@
       background: #f7fafd;
       border-color: rgba(26, 82, 160, 0.18);
     }
+    .works-filter-group {
+      flex: none; width: 52px; align-self: center; font-size: 11px; font-weight: 700;
+      letter-spacing: .08em; color: var(--color-text-muted); white-space: nowrap;
+    }
+    .works-filter { display: block; }
+    .wf-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .wf-row + .wf-row { margin-top: 10px; }
     .works-filter-model .works-filter-chip.active {
       background: var(--color-primary-blue);
       color: #fff;
@@ -2858,9 +2866,9 @@
 <section class="works-section" id="works">
   <div class="section-inner">
     <div class="section-label">WORKS · REPORT</div>
-    <h2 class="works-headline">作業実績、<span>すべて公開中。</span></h2>
+    <h2 class="works-headline">作業実績、<span>すべて記録。</span></h2>
     <p class="section-desc">
-      すべての作業を記録し、ブログで公開しています。
+      累計1,000件以上の施工をすべて記録し、2026年7月からは写真つきでブログに公開しています。その一部をご紹介します。
     </p>
     <div class="works-filter-label" id="worksFilterLabel" style="display:none;">メーカーで絞り込む</div>
     <div class="works-filter" id="worksFilterMaker" style="display:none;"></div>
@@ -3503,8 +3511,9 @@
 
   function chipHtml(label, dataKey, count, isActive) {
     return '<button type="button" class="works-filter-chip' + (isActive ? ' active' : '')
-      + '" data-key="' + escWorks(dataKey) + '">' + escWorks(label) + ' (' + count + ')</button>';
+      + '" data-key="' + escWorks(dataKey) + '">' + escWorks(label) + '</button>';
   }
+  var DOMESTIC_MAKERS = ['トヨタ','レクサス','ホンダ','日産','スズキ','ダイハツ','マツダ','スバル','三菱','ヴェルファイア40系'];
 
   // 車種行（選択中メーカーの車種チップ）を描画。メーカー未選択なら隠す。
   function buildModelChips() {
@@ -3542,14 +3551,23 @@
       return;
     }
     el.style.display = ''; if (labelEl) labelEl.style.display = '';
-    var chips = [chipHtml('すべて', '__all__', allWorks.length, activeMaker === '__all__')];
-    makers.forEach(function(m) { chips.push(chipHtml(m.key, m.key, m.count, activeMaker === m.key)); });
-    el.innerHTML = chips.join('');
-    el.querySelectorAll('.works-filter-chip').forEach(function(btn) {
+    var dom = makers.filter(function(m){ return DOMESTIC_MAKERS.indexOf(m.key) !== -1; });
+    var imp = makers.filter(function(m){ return DOMESTIC_MAKERS.indexOf(m.key) === -1; });
+    if (labelEl) labelEl.innerHTML = '<span>メーカーで絞り込む</span>' + chipHtml('すべて', '__all__', allWorks.length, activeMaker === '__all__');
+    var rowA = ['<span class="works-filter-group">国産車</span>'];
+    dom.forEach(function(m) { rowA.push(chipHtml(m.key, m.key, m.count, activeMaker === m.key)); });
+    var rowB = ['<span class="works-filter-group">輸入車</span>'];
+    imp.forEach(function(m) { rowB.push(chipHtml(m.key, m.key, m.count, activeMaker === m.key)); });
+    el.innerHTML = '<div class="wf-row">' + rowA.join('') + '</div>'
+                 + (imp.length ? '<div class="wf-row">' + rowB.join('') + '</div>' : '');
+    var allChips = [];
+    if (labelEl) allChips = allChips.concat(Array.prototype.slice.call(labelEl.querySelectorAll('.works-filter-chip')));
+    allChips = allChips.concat(Array.prototype.slice.call(el.querySelectorAll('.works-filter-chip')));
+    allChips.forEach(function(btn) {
       btn.addEventListener('click', function() {
         activeMaker = btn.getAttribute('data-key');
         activeModel = '__all__'; // メーカーを変えたら車種は「すべて」に戻す
-        el.querySelectorAll('.works-filter-chip').forEach(function(b) { b.classList.toggle('active', b === btn); });
+        allChips.forEach(function(b) { b.classList.toggle('active', b === btn); });
         buildModelChips();
         applyWorksFilter();
       });
