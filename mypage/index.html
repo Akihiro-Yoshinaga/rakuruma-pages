@@ -115,7 +115,9 @@ body {
 .sig-icon img { max-height: 32px; max-width: 40px; display: block; }
 .sig-name { font-size: 10.5px; font-weight: 700; color: #4a5568; line-height: 1.25; min-height: 2.5em; display: flex; align-items: center; justify-content: center; word-break: keep-all; overflow-wrap: anywhere; }
 .sig-st { font-size: 13px; font-weight: 800; margin-top: 4px; padding: 3px 0; border-radius: 999px; }
-.sig-st.good { color: #fff; background: #2f855a; } .sig-st.adj { color: #fff; background: #1a56b0; } .sig-st.warn { color: #fff; background: #dd6b20; } .sig-st.bad { color: #fff; background: #e53e3e; }
+.sig-st.good, .sig-st.adj { color: #2f855a; background: none; }
+.sig-st.warn { color: #fff; background: #DD6B20; }
+.sig-st.bad { color: #fff; background: #E53E3E; }
 .cond-alert { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; padding: 9px 12px; border-radius: 10px; margin-bottom: 10px; }
 .cond-alert.ok { background: #F0FFF4; color: #276749; }
 .cond-alert.warn { background: #FFFAF0; color: #9C4221; }
@@ -521,10 +523,11 @@ function renderCondItems(items) {
   var shown = (items || []).filter(function(it) { return COND_SHOW_KEYS.indexOf(it.key) >= 0; });
   return '<div class="cond-items">' + shown.map(function(it) {
     var cls = statusClass(it.status);
+    var stText = it.status === '良好（調整）' ? '調整済み' : it.status;
     return '<div class="sig-tile">'
       + '<div class="sig-icon">' + condIcon(it.key) + '</div>'
       + '<div class="sig-name">' + escapeHtml(it.label) + '</div>'
-      + '<div class="sig-st ' + cls + '">' + escapeHtml(it.status) + '</div>'
+      + '<div class="sig-st ' + cls + '">' + escapeHtml(stText) + '</div>'
       + '</div>';
   }).join('') + '</div>';
 }
@@ -541,7 +544,7 @@ function renderCondition(ins) {
   if (!ins) return '';
   var nextTxt = ins.nextMonth ? '次回の季節点検：' + ins.nextMonth + '月（' + (INSPECTION_THEME[ins.nextMonth] || '') + '）' : '';
   var h = '<div class="cond' + (ins.state === 'stale' ? ' stale' : '') + '">';
-  h += '<div class="cond-head"><div class="cond-icon">🩺</div><div>'
+  h += '<div class="cond-head"><div>'
      + '<div class="cond-label">お車の状態（1級整備士の所見）</div>';
   if (ins.state === 'fresh') {
     h += '<div class="cond-title">' + escapeHtml(ins.checkedAt) + ' 確認</div></div></div>';
