@@ -477,6 +477,27 @@
   .cta h2 { color: #fff; }
   .cta .btn-line { max-width: 420px; margin: 0 auto; }
   .cta-note { font-size: 12px; opacity: .85; margin-top: 12px; }
+  .rform-wrap {
+    max-width: 560px; margin: 30px auto 0; background: #fff; border-radius: 14px;
+    padding: 24px 24px 22px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+  .rform-title { font-size: 15px; font-weight: 700; color: #1c2b3a; }
+  .rform-sub { font-size: 12px; color: #5a6675; margin: 3px 0 12px; }
+  .rform-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .rform-wrap input[type="text"] {
+    width: 100%; border: 1px solid #ccd3dd; border-radius: 8px; padding: 11px 12px;
+    font-size: 14px; font-family: inherit; color: #1c2b3a; background: #fff; box-sizing: border-box;
+  }
+  .rform-wrap input:focus { outline: 2px solid #0B3B8C; outline-offset: -1px; }
+  .rform-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 4px; }
+  .rform-err { font-size: 12.5px; color: #c0392b; }
+  .rform-submit {
+    background: #06C755; color: #fff; border: none; border-radius: 999px;
+    padding: 12px 34px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .rform-submit:disabled { opacity: .6; }
+  .rform-done { max-width: 560px; margin: 30px auto 0; font-size: 14px; color: #1c2b3a; background: #fff; border-radius: 14px; padding: 20px 22px; text-align: left; }
+  @media (max-width: 560px) { .rform-grid { grid-template-columns: 1fr; } }
 
   .footer {
     background: #0d2646; color: #cfd9e8;
@@ -884,6 +905,27 @@
       LINEで仕事内容を聞いてみる
     </a>
     <p class="cta-note">タップするとLINEが開き、メッセージが入力済みになっています。<b>そのまま送信するだけでOK</b>（ご質問があれば書き足してください）。<br>友だち追加だけでは応募になりません。質問・相談だけでも大丈夫です。返信は通常1営業日以内です。</p>
+
+    <div class="rform-wrap">
+      <p class="rform-title">LINEを使っていない方は、こちらから</p>
+      <p class="rform-sub">質問だけでも大丈夫です。1営業日以内にご連絡します。</p>
+      <form id="recruitForm" novalidate>
+        <div class="rform-grid">
+          <input type="text" id="rf-name" placeholder="お名前（必須）" autocomplete="name">
+          <input type="text" id="rf-contact" placeholder="電話またはメール（必須）">
+        </div>
+        <div class="rform-grid">
+          <input type="text" id="rf-area" placeholder="お住まいの区・市（任意）">
+          <input type="text" id="rf-note" placeholder="質問・ひとこと（任意）">
+        </div>
+        <input type="text" name="fax_number" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+        <div class="rform-foot">
+          <span class="rform-err" id="rf-err"></span>
+          <button type="submit" class="rform-submit" id="rf-submit">送信する</button>
+        </div>
+      </form>
+      <p class="rform-done" id="rf-done" style="display:none">送信しました。1営業日以内に、ご記入いただいた連絡先へご連絡いたします。</p>
+    </div>
   </div>
 </section>
 
@@ -901,6 +943,31 @@
 </div>
 <script>
 // ファーストビューを抜けたら出す（ヒーローが見えている間は隠す）
+(function(){
+  var f=document.getElementById('recruitForm');
+  if(!f) return;
+  var FORM_URL='https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v=function(id){ return document.getElementById(id).value.trim(); };
+    var err=document.getElementById('rf-err');
+    if(f.querySelector('[name="fax_number"]').value) return;
+    if(!v('rf-name')){ err.textContent='お名前をご記入ください'; return; }
+    if(!v('rf-contact')){ err.textContent='電話番号またはメールアドレスをご記入ください'; return; }
+    err.textContent='';
+    var btn=document.getElementById('rf-submit');
+    btn.disabled=true; btn.textContent='送信中…';
+    var payload={ type:'recruit', name:v('rf-name'), contact:v('rf-contact'), area:v('rf-area'), note:v('rf-note'), fax_number:'' };
+    fetch(FORM_URL+'?payload='+encodeURIComponent(JSON.stringify(payload)))
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d.status==='success'){ f.style.display='none'; document.getElementById('rf-done').style.display='block'; }
+        else { throw 0; }
+      })
+      .catch(function(){ err.textContent='送信できませんでした。お手数ですがLINEからご連絡ください'; btn.disabled=false; btn.textContent='送信する'; });
+  });
+})();
+
 (function () {
   var cta  = document.getElementById('fixedCta');
   var hero = document.querySelector('.hero');
