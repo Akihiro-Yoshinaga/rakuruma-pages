@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/partner/partner_style.css?v=20260825d">
+  <link rel="stylesheet" href="/partner/partner_style.css?v=20260825e">
   <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -298,6 +298,28 @@
     <a class="btn-line" href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener">LINEで相談する</a>
     <a class="btn-primary" href="mailto:support@rakuruma.com">メールで相談する</a>
   </div>
+  <p class="mail-addr">メール：<button type="button" id="copyMail">support@rakuruma.com</button><span id="copyDone" aria-live="polite"></span></p>
+
+  <div class="pform-wrap">
+    <p class="pform-title">フォームでのご相談</p>
+    <p class="pform-sub">2営業日以内にご返信いたします。</p>
+    <form id="partnerForm" novalidate>
+      <div class="pform-grid">
+        <input type="text" id="pf-company" placeholder="会社名（必須）" autocomplete="organization">
+        <input type="text" id="pf-name" placeholder="ご担当者名（必須）" autocomplete="name">
+        <input type="tel" id="pf-phone" placeholder="お電話番号" autocomplete="tel">
+        <input type="email" id="pf-email" placeholder="メールアドレス（必須）" autocomplete="email">
+      </div>
+      <textarea id="pf-note" rows="3" placeholder="ご相談内容（例：持ち込みドラレコの取付を月2〜3台お願いしたい）"></textarea>
+      <input type="text" name="fax_number" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+      <div class="pform-foot">
+        <span class="pform-err" id="pf-err"></span>
+        <button type="submit" class="pform-submit" id="pf-submit">送信する</button>
+      </div>
+    </form>
+    <p class="pform-done" id="pf-done" style="display:none">送信しました。2営業日以内に、ご記入いただいた連絡先へご返信いたします。</p>
+  </div>
+
   <p class="cta-area">対応エリア：世田谷・目黒・渋谷・港区・品川・大田・中野・杉並・新宿・中央の各区、<span style="white-space:nowrap">狛江市、川崎市</span></p>
   <p class="cta-note">※分解整備にあたる作業は、認証を受けた提携工場と連携して対応いたします。作業範囲は事前にご相談ください。</p>
 </section>
@@ -438,6 +460,45 @@
     var cached=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');
     if(cached&&cached.works&&cached.works.length) renderWorks(cached.works);
   } catch(e){}
+  // メールアドレスのコピー
+  (function(){
+    var btn=document.getElementById('copyMail'), done=document.getElementById('copyDone');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var t='support@rakuruma.com';
+      (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){
+        done.textContent='コピーしました';
+      }).catch(function(){ done.textContent=t+' を選択してコピーしてください'; });
+      setTimeout(function(){ done.textContent=''; }, 3000);
+    });
+  })();
+
+  // 問い合わせフォーム（法人問い合わせGASを流用）
+  (function(){
+    var f=document.getElementById('partnerForm');
+    if(!f) return;
+    var FORM_URL='https://script.google.com/macros/s/AKfycbxs16J7ggYM9MFP2h3BimMJYAuXGQ7Bj-kQXMfBb3YDdJsXCafvIQH0HfAzLPjcgqO/exec';
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var v=function(id){ return document.getElementById(id).value.trim(); };
+      var err=document.getElementById('pf-err');
+      if(f.querySelector('[name="fax_number"]').value) return;
+      if(!v('pf-company')||!v('pf-name')){ err.textContent='会社名とご担当者名をご記入ください'; return; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('pf-email'))){ err.textContent='メールアドレスをご確認ください'; return; }
+      err.textContent='';
+      var btn=document.getElementById('pf-submit');
+      btn.disabled=true; btn.textContent='送信中…';
+      var payload={ type:'corporate', company:v('pf-company'), name:v('pf-name'), phone:v('pf-phone'), email:v('pf-email'), fleet_size:'（工場・販売店LPより）', note:v('pf-note'), fax_number:'' };
+      fetch(FORM_URL+'?payload='+encodeURIComponent(JSON.stringify(payload)))
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if(d.status==='success'){ f.style.display='none'; document.getElementById('pf-done').style.display='block'; }
+          else { throw 0; }
+        })
+        .catch(function(){ err.textContent='送信できませんでした。お手数ですがLINEまたはメールでご連絡ください'; btn.disabled=false; btn.textContent='送信する'; });
+    });
+  })();
+
   fetch(GAS_URL+'?action=lpWorks').then(function(r){ return r.json(); }).then(function(d){
     renderWorks(d.works||[]);
     try { localStorage.setItem(CACHE_KEY, JSON.stringify({works:d.works||[], t:d.t||0})); } catch(e){}
