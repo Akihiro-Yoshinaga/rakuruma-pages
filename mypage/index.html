@@ -108,11 +108,24 @@ body {
 .cond-label { font-size: 12px; color: #718096; font-weight: 600; }
 .cond-title { font-size: 16px; font-weight: 800; color: #003B8B; }
 .cond-title.stale { color: #718096; }
-.cond-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.cond-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 10px; background: #f7fafc; font-size: 14px; font-weight: 700; color: #1a202c; }
-.cond-item .st { font-size: 13px; font-weight: 800; padding: 3px 8px; border-radius: 999px; color: #fff; white-space: nowrap; }
-.st.good { background: #2f855a; } .st.adj { background: #1a56b0; } .st.warn { background: #dd6b20; } .st.bad { background: #e53e3e; }
-.cond.stale .st { background: #a0aec0; }
+.cond-items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+/* 信号式タイル：アイコン＋3段階シグナル＋状態ラベル（過去カルテのUIを踏襲） */
+.sig-tile { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 4px 8px; text-align: center; }
+.sig-icon { height: 34px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 2px; }
+.sig-icon img { max-height: 32px; max-width: 40px; display: block; }
+.sig-name { font-size: 10.5px; font-weight: 700; color: #4a5568; line-height: 1.25; min-height: 2.5em; display: flex; align-items: center; justify-content: center; word-break: keep-all; overflow-wrap: anywhere; }
+.sig-bar { display: flex; gap: 3px; justify-content: center; margin: 5px 0 4px; }
+.sig-bar span { width: 14px; height: 8px; border-radius: 4px; background: #e2e8f0; }
+.sig-bar .on.g { background: #2f855a; } .sig-bar .on.y { background: #f6ad55; } .sig-bar .on.r { background: #e53e3e; }
+.sig-st { font-size: 12px; font-weight: 800; }
+.sig-st.good { color: #2f855a; } .sig-st.adj { color: #1a56b0; } .sig-st.warn { color: #c05621; } .sig-st.bad { color: #c53030; }
+.cond.stale .sig-bar .on { background: #a0aec0; }
+.cond.stale .sig-st { color: #a0aec0; }
+.cond-alert { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; padding: 9px 12px; border-radius: 10px; margin-bottom: 10px; }
+.cond-alert.ok { background: #F0FFF4; color: #276749; }
+.cond-alert.warn { background: #FFFAF0; color: #9C4221; }
+.cond-alert.bad { background: #FFF5F5; color: #C53030; }
+@media (max-width: 360px) { .cond-items { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .cond-note { margin-top: 10px; font-size: 13px; color: #4a5568; background: #f9f9f9; border-radius: 8px; padding: 10px 12px; line-height: 1.6; }
 .cond-meta { margin-top: 10px; font-size: 12px; color: #718096; line-height: 1.7; }
 .cond-next { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #EBF4FF; color: #003B8B; font-size: 13px; font-weight: 700; }
@@ -501,10 +514,34 @@ function statusClass(st) {
   if (st === '注意' || st === '要確認') return 'warn';
   return 'bad';
 }
+// 項目アイコン。/mypage/icons/<key>.png を置けば絵文字から自動で差し替わる（onerrorで絵文字に戻す）
+var COND_ICON_EMOJI = { battery: '🔋', tire: '🛞', tirePressure: '🎯', oil: '🛢️', wiper: '🌂', coolant: '🌡️' };
+function condIcon(key) {
+  var emoji = COND_ICON_EMOJI[key] || '🔧';
+  return '<img src="/mypage/icons/' + key + '.svg" alt="" onerror="this.parentNode.textContent=\'' + emoji + '\';">';
+}
+// 3段階シグナル（青・黄・赤）。該当色だけ点灯させる
 function renderCondItems(items) {
   return '<div class="cond-items">' + (items || []).map(function(it) {
-    return '<div class="cond-item"><span>' + escapeHtml(it.label) + '</span><span class="st ' + statusClass(it.status) + '">' + escapeHtml(it.status) + '</span></div>';
+    var cls = statusClass(it.status);
+    var g = (cls === 'good' || cls === 'adj') ? ' on g' : '';
+    var y = cls === 'warn' ? ' on y' : '';
+    var r = cls === 'bad' ? ' on r' : '';
+    return '<div class="sig-tile">'
+      + '<div class="sig-icon">' + condIcon(it.key) + '</div>'
+      + '<div class="sig-name">' + escapeHtml(it.label) + '</div>'
+      + '<div class="sig-bar"><span class="' + ('g' + g).replace('g on g', 'on g') + '"></span><span class="' + ('y' + y).replace('y on y', 'on y') + '"></span><span class="' + ('r' + r).replace('r on r', 'on r') + '"></span></div>'
+      + '<div class="sig-st ' + cls + '">' + escapeHtml(it.status) + '</div>'
+      + '</div>';
   }).join('') + '</div>';
+}
+// カード上部のまとめ行（⚠ 交換が必要な消耗品があります／✅ すべて良好です）
+function renderCondAlert(items) {
+  var bad = (items || []).some(function(it) { return statusClass(it.status) === 'bad'; });
+  var warn = (items || []).some(function(it) { return statusClass(it.status) === 'warn'; });
+  if (bad)  return '<div class="cond-alert bad">⚠️ 交換が必要な項目があります</div>';
+  if (warn) return '<div class="cond-alert warn">⚠️ 注意しておきたい項目があります</div>';
+  return '<div class="cond-alert ok">✅ すべて良好です</div>';
 }
 function renderCondition(ins) {
   if (!ins) return '';
@@ -514,6 +551,7 @@ function renderCondition(ins) {
      + '<div class="cond-label">お車の状態（1級整備士の所見）</div>';
   if (ins.state === 'fresh' || ins.state === 'stale') {
     h += '<div class="cond-title' + (ins.state === 'stale' ? ' stale' : '') + '">' + escapeHtml(ins.checkedAt) + ' 確認</div></div></div>';
+    if (ins.state === 'fresh') h += renderCondAlert(ins.items);
     h += renderCondItems(ins.items);
     if (ins.note) h += '<div class="cond-note">' + escapeHtml(ins.note) + '</div>';
     if (ins.state === 'stale') h += '<div class="cond-stale-msg">前回の確認から3ヶ月以上たっています。次回の点検で改めて確認します。</div>';
