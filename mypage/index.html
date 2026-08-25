@@ -508,6 +508,7 @@ function escapeHtml(s) {
 // ===== お車の状態（季節点検） =====
 // 所見には必ず確認日を添える。3ヶ月以内＝色つき、3〜6ヶ月＝グレー（再確認待ち）、6ヶ月超＝最上段に出さない
 var INSPECTION_THEME = { 4: '冬明けチェック', 8: '猛暑チェック', 12: '冬支度チェック' };
+function fmtKm(v) { return String(v == null ? '' : v).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 function statusClass(st) {
   if (st === '良好') return 'good';
   if (st === '良好（調整）') return 'adj';
@@ -571,7 +572,7 @@ function renderCondition(ins) {
     h += '<div class="cond-stale-msg">季節の変わり目に、洗車のついでにお車の状態をチェックして、ここに記録します。</div>';
   }
   var meta = [];
-  if (ins.odometer) meta.push('走行距離：' + escapeHtml(String(ins.odometer)) + ' km（' + escapeHtml(ins.odometerAt) + '）');
+  if (ins.odometer) meta.push('走行距離：' + escapeHtml(fmtKm(ins.odometer)) + ' km（' + escapeHtml(ins.odometerAt) + '）');
   if (ins.staffName) meta.push('確認者：' + escapeHtml(ins.staffName) + (String(ins.staffName).indexOf('吉永') >= 0 ? '（1級整備士）' : ''));
   if (meta.length) h += '<div class="cond-meta">' + meta.join('<br>') + '</div>';
   if (nextTxt) h += '<div class="cond-next">' + escapeHtml(nextTxt) + '</div>';
@@ -600,7 +601,7 @@ function openLightbox(idx) {
       ccEl.innerHTML = '<div class="cond-label" style="margin-bottom:6px;">お車の状態（' + escapeHtml(r.carCheck.date || r.date) + ' 確認）</div>'
         + renderCondItems(r.carCheck.items)
         + (r.carCheck.note ? '<div class="cond-note">' + escapeHtml(r.carCheck.note) + '</div>' : '')
-        + (r.carCheck.odometer ? '<div class="cond-meta">走行距離：' + escapeHtml(String(r.carCheck.odometer)) + ' km</div>' : '');
+        + (r.carCheck.odometer ? '<div class="cond-meta">走行距離：' + escapeHtml(fmtKm(r.carCheck.odometer)) + ' km</div>' : '');
       ccEl.style.display = 'block';
     } else {
       ccEl.innerHTML = '';
