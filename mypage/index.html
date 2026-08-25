@@ -509,6 +509,36 @@ function escapeHtml(s) {
 // 所見には必ず確認日を添える。3ヶ月以内＝色つき、3〜6ヶ月＝グレー（再確認待ち）、6ヶ月超＝最上段に出さない
 var INSPECTION_THEME = { 4: '冬明けチェック', 8: '猛暑チェック', 12: '冬支度チェック' };
 function fmtKm(v) { return String(v == null ? '' : v).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+// 「お車の状態」は履歴データ（キャッシュ含む）からその場で計算する。
+// サーバーで計算して返すと、遅いGAS応答（10秒超）を待つまでカードが出ない（2026-08-25の改善）
+function buildInspectionFromReports(reports) {
+  var now = new Date();
+  var last = null, lastOdo = null;
+  (reports || []).some(function(r) {  // reportsは新しい順
+    var cc = r.carCheck;
+    if (!cc) return false;
+    if (!lastOdo && cc.odometer) lastOdo = { odometer: cc.odometer, dateStr: cc.date || r.date };
+    if (!last && cc.items && cc.items.length) last = { cc: cc, r: r };
+    return !!(last && lastOdo);
+  });
+  var m0 = now.getMonth() + 1, months = [4, 8, 12], nextMonth = 4;
+  for (var i = 0; i < months.length; i++) { if (months[i] >= m0) { nextMonth = months[i]; break; } }
+  var out = { nextMonth: nextMonth, state: 'none', checkedAt: '', ageDays: null, items: [], note: '', odometer: '', odometerAt: '', staffName: '' };
+  if (last) {
+    var dm = String(last.cc.date || last.r.date).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+    var d = dm ? new Date(Number(dm[1]), Number(dm[2]) - 1, Number(dm[3])) : null;
+    var age = d ? Math.floor((now - d) / 86400000) : null;
+    out.checkedAt = last.cc.date || last.r.date;
+    out.ageDays = age;
+    out.state = age == null ? 'stale' : (age <= 92 ? 'fresh' : (age <= 183 ? 'stale' : 'expired'));
+    out.items = last.cc.items;
+    out.note = last.cc.note || '';
+    out.staffName = last.r.staffName || '';
+  }
+  if (lastOdo) { out.odometer = lastOdo.odometer; out.odometerAt = lastOdo.dateStr; }
+  return out;
+}
 function statusClass(st) {
   if (st === '良好') return 'good';
   if (st === '良好（調整）') return 'adj';
@@ -567,6 +597,9 @@ function renderCondition(ins) {
         + (ins.note ? '<div class="cond-note">' + escapeHtml(ins.note) + '</div>' : '')
         + '</div>';
     }
+  } else if (window._refreshing) {
+    h += '<div class="cond-title stale">読み込んでいます…</div></div></div>';
+    h += '<div class="cond-stale-msg"><span class="shaken-spinner"></span>最新の点検記録を確認しています。</div>';
   } else {
     h += '<div class="cond-title stale">まだ点検の記録がありません</div></div></div>';
     h += '<div class="cond-stale-msg">季節の変わり目に、洗車のついでにお車の状態をチェックして、ここに記録します。</div>';
@@ -738,10 +771,9 @@ function render(data) {
     html += '</div>';
   }
 
-  html += renderCondition(data.inspection);
-
   var reports = data.reports || [];
   window._reports = reports;
+  html += renderCondition(buildInspectionFromReports(reports));
   if (reports.length > 0) {
     html += '<div class="count-bar">過去の作業：<span>' + reports.length + '件</span></div>';
     html += '<div class="list">';
