@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ラクルマ公式LINEへ移動します</title>
+<noscript><meta http-equiv="refresh" content="0; url=https://lin.ee/r0BAZkR0"></noscript>
+<style>
+  body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+       display:flex; align-items:center; justify-content:center; min-height:90vh;
+       margin:0; color:#5c6673; background:#fff; text-align:center; line-height:1.9;}
+  a{color:#003B8B;}
+</style>
+</head>
+<body>
+<div>
+  <p>LINEを開いています…</p>
+  <p><a href="https://lin.ee/r0BAZkR0">切り替わらない場合はこちらをタップ</a></p>
+</div>
+<script>
+(function () {
+  // HPの予約ボタン経由を1件記録してから転送する（hp_price_line）
+  var DEST = "https://lin.ee/r0BAZkR0";
+  var ua = navigator.userAgent || '';
+  var d = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
+  var ping = "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec" + '?track=hp_price_line&d=' + d;
+  // sendBeaconが使えた場合はimgを撃たない（二重計上の防止）
+  var sent = false;
+  try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}
+  if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
+  setTimeout(function () { location.replace(DEST); }, 300);
+})();
+</script>
+</body>
+</html>

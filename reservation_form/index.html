@@ -1480,6 +1480,9 @@
       heavily_dirty:   document.getElementById('heavily_dirty')?.checked ? 'はい' : '',
       options:         selectedOptions,
       note:            document.getElementById('note')?.value.trim() || '',
+      // 導線の記録：src=リッチメニュー等の導線キー／参照元URL（どちらも無ければ「直接」扱い）
+      src:             (typeof RM_SRC !== 'undefined' ? RM_SRC : '') || '',
+      ref:             (document.referrer || '').slice(0, 120),
     };
 
     // GAS へ送信（GETパラメータにJSONを乗せる方式）
