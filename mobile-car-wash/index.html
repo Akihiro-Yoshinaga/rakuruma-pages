@@ -61,6 +61,15 @@
 @media (min-width: 900px) {
     section.map img { width: 420px !important; max-width: 100%; }
 }
+/* 料金プラン: スマホの縦リズムを統一 */
+@media (max-width: 899px) {
+    section.plan .discription { margin: 12px auto 18px; line-height: 1.8; }
+    .plan-perks { gap: 8px; margin-bottom: 24px; }
+    .plan-perk { font-size: 12px; padding: 8px 14px; }
+    section.plan .plan_container .plan_middle .plan_box { margin-bottom: 28px; }
+    section.plan .plan_container .plan_middle .pcard p { margin-top: 0; }
+    section.plan .plan_container .plan_middle .pcard .pcard__name { margin: 0 0 18px; }
+}
 /* 料金プランカードの構造化（帯＋価格＋対象の3ゾーン） */
 .pcard { position: relative; text-align: center; padding: 0 0 20px !important; overflow: visible; }
 .pcard__name {
