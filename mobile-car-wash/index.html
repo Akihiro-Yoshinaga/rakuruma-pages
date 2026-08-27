@@ -33,6 +33,104 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/rakuruma-style.css?v=20260715">
 <style>
+/* セクション見出しの統一様式（金線eyebrow＋紺タイトル） */
+.sec-eyebrow {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    font-size: 12.5px; font-weight: 800; letter-spacing: 0.16em;
+    color: #b08d4f; margin: 0 0 14px;
+}
+.sec-eyebrow::before, .sec-eyebrow::after {
+    content: ''; width: 26px; height: 2px; background: #c9ab6a; border-radius: 2px;
+}
+.sec-title {
+    text-align: center; font-size: clamp(24px, 3vw, 31px); font-weight: 900;
+    color: #0d2748; letter-spacing: 0.02em; line-height: 1.5; margin: 0;
+}
+/* ご利用の流れ: 元の全幅写真バナーを高さ圧縮して1画面に収める */
+@media (min-width: 900px) {
+    .howtouse ol.step_list li { height: 165px; }
+    .howtouse ol.step_list li .subhead {
+        width: 116px; height: 116px; min-width: 116px;
+        margin-right: 44px; padding-top: 30px;
+        font-size: 14.5px; line-height: 1.5;
+    }
+    .howtouse ol.step_list li .subhead .montserrat { font-size: 11px; letter-spacing: 0.12em; }
+    .howtouse ol.step_list li p { width: 46%; font-size: 12.5px; line-height: 1.8; }
+}
+/* エリア: PCは地図を小さく */
+@media (min-width: 900px) {
+    section.map img { width: 420px !important; max-width: 100%; }
+}
+/* 料金プランカードの構造化（帯＋価格＋対象の3ゾーン） */
+.pcard { position: relative; text-align: center; padding: 0 0 20px !important; overflow: visible; }
+.pcard__name {
+    background: #f0f5fb; border-radius: 20px 20px 0 0;
+    padding: 15px 10px; margin: 0 0 20px;
+    font-size: 16px; font-weight: 800; color: #003B8B; letter-spacing: 0.02em;
+}
+.pcard__cycle { display: block; font-size: 11px; font-weight: 600; color: #7d8ca1; margin-top: 3px; }
+.pcard__for {
+    border-top: 1px solid #eef2f7; margin: 18px 18px 0; padding-top: 14px;
+    font-size: 12.5px; font-weight: 600; color: #5a6b80;
+}
+.pcard--reco { border: 2px solid #003B8B; }
+.pcard--reco .pcard__name { background: #e4eefb; }
+.pcard__badge {
+    position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+    background: #003B8B; color: #fff;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.06em;
+    padding: 4px 18px; border-radius: 999px; white-space: nowrap;
+}
+/* ご利用の流れSTEP3: スタッフとお客様が両方入る位置に切り抜きを調整（スマホ側） */
+@media (max-width: 899px) {
+    .howtouse ol.step_list li:nth-child(3) { background-position: 68% center !important; }
+}
+/* 全体統一: セクション上下余白80px・リード文14.5px */
+@media (min-width: 600px) {
+    section.solution { padding-top: 80px !important; padding-bottom: 80px !important; }
+    section.reviews, section.rk-crosslink { padding-top: 80px !important; padding-bottom: 80px !important; }
+    section.contact { padding-top: 80px !important; }
+    .discription.fonts { font-size: 14.5px; }
+}
+/* 料金プラン: 定期特典のチップ */
+.plan-perks { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 0 0 26px; }
+.plan-perk {
+    display: inline-flex; align-items: center;
+    background: #ffffff; border: 1px solid #d7e0ec; border-radius: 999px;
+    padding: 9px 18px; font-size: 13px; font-weight: 600; color: #33445c;
+}
+.plan-perk::before { content: '\2713'; color: #c9ab6a; font-weight: 900; margin-right: 8px; }
+.plan-perk b { font-weight: 800; color: #0d2748; margin-right: 2px; }
+/* 料金プランカード下の紺三角（行き先のない装飾）を無効化 */
+.plan .plan_container .plan_middle .plan_box::after { display: none !important; }
+/* 料金プランカード: SM/LXを横並びに */
+.plan-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.plan-price { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.plan-price__sz {
+    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+    color: #b08d4f; letter-spacing: 0.08em;
+}
+.plan-price b { font-size: 17px; font-weight: 800; color: #0d2748; }
+.plan-price small { font-size: 10.5px; color: #767676; }
+/* 予約フォーム: PCは幅を絞ってボタンの巨大化を防ぐ */
+@media (min-width: 900px) {
+    #rakuruma-form-wrap { max-width: 720px; margin: 0 auto; }
+}
+/* 料金プラン: PCは余白を詰めて1画面に近づける */
+@media (min-width: 900px) {
+    section.plan .discription { margin: 12px auto 20px; line-height: 1.8; }
+    section.plan .common-option { margin-bottom: 6px; }
+    section.plan .plan_container .plan_middle { margin-bottom: 28px; }
+    section.plan .plan_container .plan_middle .plan_box { padding-top: 22px; }
+}
+/* サービス内容: 中間幅で窮屈になる対策（テキストを上段全幅・画像2×2） */
+@media (min-width: 600px) and (max-width: 1024px) {
+    .service .service_list li.flexbox { flex-wrap: wrap; }
+    .service .service_list .flexbox .smallhead { width: 100%; margin-bottom: 16px; }
+    .service .service_list .flexbox .image_frame { width: 48.5%; margin-bottom: 10px; }
+}
+</style>
+<style>
 /* ===== このページ専用: レイアウト統一 ===== */
 /* 600〜1024px幅で横スクロールが発生する問題の解消（共通CSSの min-width:1024px を打ち消し） */
 .main {
@@ -252,15 +350,14 @@ a[href^="https://lin.ee"]:hover {
     box-shadow: 0 8px 22px rgba(37, 99, 168, 0.45);
 }
 
-/* ===== PC用ファーストビュー（整備ページ方式: 動画全面＋オーバーレイ＋中央コンテンツ） ===== */
+/* ===== PC用ファーストビュー（LPデザイン規定 2026-08-21 準拠: 動画全面＋下グラデ＋下寄せコピー） ===== */
 .hero__pc-content {
     display: none;
 }
 @media (min-width: 600px) {
-    /* 動画を全面に敷く（共通CSSの中央340px配置を上書き） */
     .hero--wp {
         display: block;
-        min-height: 620px;
+        min-height: 640px;
     }
     .hero--wp .hero__media {
         position: absolute;
@@ -272,16 +369,20 @@ a[href^="https://lin.ee"]:hover {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center 30%;
+        object-position: center;
     }
-    /* 濃紺の半透明オーバーレイ */
+    /* 紺の下グラデーション（規定 1章） */
     .hero--wp::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: rgba(8, 18, 36, 0.62);
         z-index: 1;
         pointer-events: none;
+        background: linear-gradient(to top,
+            rgba(3, 24, 54, 0.96) 0%,
+            rgba(3, 24, 54, 0.82) 30%,
+            rgba(4, 28, 62, 0.45) 60%,
+            rgba(8, 30, 64, 0.18) 100%);
     }
     /* スマホ用のオーバーレイ要素（縦書きコピー・バッジ）はPCでは使わない */
     .hero--wp .hero__copy,
@@ -289,100 +390,103 @@ a[href^="https://lin.ee"]:hover {
     .hero--wp .hero__badge--rank {
         display: none;
     }
-    /* 中央コンテンツ */
+    /* 下寄せコンテンツ */
     .hero__pc-content {
         position: relative;
         z-index: 2;
-        min-height: 620px;
+        min-height: 640px;
+        max-width: 1080px;
+        margin: 0 auto;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 90px 24px 70px;
-        gap: 26px;
+        align-items: flex-start;
+        justify-content: flex-end;
+        text-align: left;
+        padding: 90px 40px 60px;
     }
-    .hero__pc-sub-top {
-        font-size: clamp(15px, 1.6vw, 18px);
-        font-weight: 700;
-        color: #ffffff;
-        letter-spacing: 0.12em;
-        margin: 0;
+    .hero__pc-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        color: #c9ab6a;
+        margin: 0 0 14px;
+    }
+    .hero__pc-eyebrow::before {
+        content: '';
+        width: 28px;
+        height: 2px;
+        background: #c9ab6a;
+        border-radius: 2px;
     }
     .hero__pc-title {
-        font-size: clamp(36px, 4.5vw, 54px);
+        font-size: clamp(34px, 4.2vw, 50px);
         font-weight: 900;
         color: #ffffff;
-        line-height: 1.4;
-        letter-spacing: 0.03em;
-        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
-        margin: 0;
+        line-height: 1.38;
+        letter-spacing: 0.02em;
+        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+        margin: 0 0 14px;
     }
     .hero__pc-title .hero__pc-highlight {
-        color: #FFD700;
-    }
-    .hero__pc-cta {
-        display: flex;
-        gap: 16px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 6px;
-    }
-    .hero__pc-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 17px 38px;
-        border-radius: 50px;
-        font-size: 16px;
-        font-weight: 800;
-        text-decoration: none;
-        letter-spacing: 0.02em;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .hero__pc-btn:hover {
-        transform: translateY(-3px);
-    }
-    .hero__pc-btn--primary {
-        background: linear-gradient(135deg, #FFDF3D 0%, #F6C90E 100%);
-        color: #0d1f3c;
-        box-shadow: 0 6px 24px rgba(246, 201, 14, 0.4);
-    }
-    .hero__pc-btn--primary:hover {
-        box-shadow: 0 10px 32px rgba(246, 201, 14, 0.5);
-    }
-    .hero__pc-btn--line {
-        background: linear-gradient(135deg, #0bd463 0%, #06B34C 100%);
-        color: #fff;
-        box-shadow: 0 6px 24px rgba(6, 199, 85, 0.35);
-    }
-    .hero__pc-btn--line:hover {
-        box-shadow: 0 10px 32px rgba(6, 199, 85, 0.45);
+        color: #c9ab6a;
     }
     .hero__pc-trust {
-        display: flex;
-        gap: 12px 28px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 8px;
-    }
-    .hero__pc-trust span {
-        font-size: 13.5px;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.92);
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.82);
         letter-spacing: 0.04em;
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
+        margin: 0 0 26px;
     }
-    .hero__pc-trust span::before {
-        content: '✓';
-        color: #FFD700;
-        font-weight: 900;
+    .hero__pc-trust .star {
+        color: #c9ab6a;
     }
     .hero__pc-trust sup {
         font-size: 9px;
         color: rgba(255, 255, 255, 0.6);
+    }
+    /* すりガラスCTAカード（規定 1章） */
+    .hero__pc-cta {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(250px, 310px));
+        gap: 14px;
+    }
+    .hero__pc-card {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 14px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 17px 20px 15px;
+        text-decoration: none;
+        display: block;
+        transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .hero__pc-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+    .hero__pc-card-name {
+        display: block;
+        font-size: 16.5px;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: 0.02em;
+    }
+    .hero__pc-card-desc {
+        display: block;
+        font-size: 11.5px;
+        color: rgba(255, 255, 255, 0.78);
+        margin-top: 4px;
+    }
+    .hero__pc-card-arrow {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 12.5px;
+        font-weight: 800;
+        color: #c9ab6a;
     }
 }
 
@@ -404,6 +508,37 @@ a[href^="https://lin.ee"]:hover {
 .button_area .flexbox .button_g:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
+/* PC: 全幅の白帯をやめて右下フローティングのコンパクト表示に */
+@media (min-width: 600px) {
+    .button_area.bk_w {
+        width: auto;
+        height: auto;
+        left: auto;
+        right: 24px;
+        bottom: 24px;
+        padding: 0;
+        background: transparent;
+        border: none;
+    }
+    .button_area .flexbox {
+        max-width: none;
+        gap: 10px;
+    }
+    .button_area .flexbox .button_b,
+    .button_area .flexbox .button_g {
+        width: auto;
+        padding: 0;
+        border-radius: 999px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+    }
+    .button_area .flexbox .button_b a,
+    .button_area .flexbox .button_g a {
+        display: block;
+        padding: 13px 26px;
+        font-size: 14.5px;
+        white-space: nowrap;
+    }
 }
 @media (max-width: 599px) {
     .button_area {
@@ -709,6 +844,7 @@ a[href^="https://lin.ee"]:hover {
         <a href="#faq" onclick="rkToggleMenu()">よくある質問</a>
         <div class="rk-menu-divider">その他のサービス</div>
         <a href="/maintenance/">出張整備・パーツ取付</a>
+        <a href="/shaken/">出張車検</a>
         <a href="/blog/">作業実績ブログ</a>
         <a href="/price_list/">プラン料金表</a>
         <a href="/p/line-wash/" class="rk-menu-line-btn" target="_blank" rel="noopener noreferrer">💬 LINEで相談</a>
@@ -721,6 +857,20 @@ a[href^="https://lin.ee"]:hover {
                 <video id="hero-video" class="hero__video" autoplay muted loop playsinline preload="auto" poster="/assets/uploads/2025/08/rakuruma-hero-video-poster.jpg">
                     <source src="/assets/uploads/2025/10/FV-movie1-opt.mp4" type="video/mp4">
                 </video>
+                <script>
+                (function () {
+                    // PC幅ではぼかし背景つき横長版に差し替える（縦動画のドアップ回避）
+                    if (window.matchMedia('(min-width: 600px)').matches) {
+                        var v = document.getElementById('hero-video');
+                        if (v) {
+                            v.poster = '/assets/uploads/2025/10/FV-movie1-pc-poster.jpg?v=2';
+                            var srcEl = v.querySelector('source');
+                            if (srcEl) { srcEl.src = '/assets/uploads/2025/10/FV-movie1-pc.mp4'; }
+                            v.load();
+                        }
+                    }
+                })();
+                </script>
             </div>
 
             <div class="hero__logo">
@@ -747,18 +897,22 @@ a[href^="https://lin.ee"]:hover {
                 </span>
             </div>
 
-            <!-- PC用の中央コンテンツ（スマホでは非表示） -->
+            <!-- PC用の下寄せコンテンツ（スマホでは非表示） -->
             <div class="hero__pc-content">
-                <p class="hero__pc-sub-top">国家1級整備士が監修の出張洗車</p>
+                <p class="hero__pc-eyebrow">国家1級整備士が監修の出張洗車</p>
                 <p class="hero__pc-title">洗車は行くから、<br><span class="hero__pc-highlight">来てもらう</span>時代へ。</p>
+                <p class="hero__pc-trust"><span class="star">★</span>5.0 世田谷・目黒・渋谷 エリア口コミNo.1（24件）<sup>※1</sup>　／　拘束時間0分・完全おまかせ</p>
                 <div class="hero__pc-cta">
-                    <a href="#calendar-container" class="hero__pc-btn hero__pc-btn--primary">初回お試し 6,000円で予約する</a>
-                    <a href="/p/line-wash/" target="_blank" rel="noopener noreferrer" class="hero__pc-btn hero__pc-btn--line">LINEで相談する</a>
-                </div>
-                <div class="hero__pc-trust">
-                    <span>世田谷・目黒・渋谷 エリア口コミNo.1<sup>※1</sup></span>
-                    <span>くらしのマーケット 第1位<sup>※1</sup></span>
-                    <span>拘束時間0分・完全おまかせ</span>
+                    <a href="#calendar-container" class="hero__pc-card">
+                        <span class="hero__pc-card-name">初回お試し 6,000円で予約</span>
+                        <span class="hero__pc-card-desc">空き枠から日時を選ぶだけ。全サイズ同額です</span>
+                        <span class="hero__pc-card-arrow">空き状況を見る →</span>
+                    </a>
+                    <a href="/p/line-wash/" target="_blank" rel="noopener noreferrer" class="hero__pc-card">
+                        <span class="hero__pc-card-name">LINEで相談する</span>
+                        <span class="hero__pc-card-desc">料金やエリアの確認など、質問だけでもOK</span>
+                        <span class="hero__pc-card-arrow">友だち追加へ →</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -887,89 +1041,86 @@ a[href^="https://lin.ee"]:hover {
 
         <section class="introduction" style="padding: 80px 0; background-color: #ffffff;">
             <div class="area_s">
-                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 60px; color: #2c3e50;">あなたも<span class="colorfont_b">こんな経験</span>、ありませんか？</h2>
-                
-                <!-- お悩みと理由のセクション（3列グリッドレイアウト） -->
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px;">
-                    
+                <style>
+                    .pain-eyebrow {
+                        display: flex; align-items: center; justify-content: center; gap: 12px;
+                        font-size: 12.5px; font-weight: 800; letter-spacing: 0.16em;
+                        color: #b08d4f; margin: 0 0 14px;
+                    }
+                    .pain-eyebrow::before, .pain-eyebrow::after {
+                        content: ''; width: 26px; height: 2px; background: #c9ab6a; border-radius: 2px;
+                    }
+                    .pain-title {
+                        text-align: center; font-size: clamp(24px, 3vw, 31px); font-weight: 900;
+                        color: #0d2748; letter-spacing: 0.02em; line-height: 1.5; margin: 0 0 48px;
+                    }
+                    .pain-grid {
+                        display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px;
+                    }
+                    .pain-card {
+                        background: #ffffff; border: 1px solid #e6ecf4; border-radius: 14px;
+                        padding: 34px 26px 26px; text-align: center;
+                        box-shadow: 0 2px 12px rgba(13, 39, 72, 0.05);
+                    }
+                    .pain-icon { width: 60px; height: 60px; margin: 0 auto 20px; display: block; }
+                    .pain-card h3 {
+                        font-size: 17px; font-weight: 800; color: #0d2748;
+                        letter-spacing: 0.02em; line-height: 1.4; margin: 0 0 10px;
+                    }
+                    .pain-desc {
+                        font-size: 13.5px; color: #5a6b80; line-height: 1.85; margin: 0 0 20px;
+                    }
+                    .pain-result {
+                        border-top: 1px solid #eef2f7; padding-top: 15px; margin: 0;
+                        font-size: 13px; font-weight: 700; color: #003B8B; line-height: 1.6;
+                    }
+                    .pain-result::before { content: '\2192'; color: #c9ab6a; font-weight: 800; margin-right: 7px; }
+                    @media (max-width: 768px) {
+                        .pain-grid { grid-template-columns: 1fr; gap: 16px; }
+                        .pain-title { margin-bottom: 36px; }
+                        .pain-card { padding: 28px 22px 22px; }
+                    }
+                </style>
+                <p class="pain-eyebrow">よくあるお悩み</p>
+                <h2 class="pain-title">あなたもこんな経験、ありませんか？</h2>
+
+                <div class="pain-grid">
                     <!-- 悩み1 -->
-                    <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
-                        <!-- 悩み画像 -->
-                        <div style="margin: 0 auto 20px;">
-                            <svg viewBox="0 0 160 160" role="img" aria-label="洗車する時間がない" style="width: 132px; height: 132px; display: block; margin: 0 auto;">
-                                <circle cx="80" cy="80" r="76" fill="#EAF1FB"/>
-                                <circle cx="80" cy="58" r="30" fill="#ffffff" stroke="#003B8B" stroke-width="6"/>
-                                <line x1="80" y1="58" x2="80" y2="40" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <line x1="80" y1="58" x2="93" y2="64" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <circle cx="80" cy="58" r="4" fill="#F4D110"/>
-                                <path d="M38 122 c0-8 7-14 15-14 h8 l9-11 h24 l9 11 h9 c8 0 15 6 15 14" fill="#ffffff" stroke="#003B8B" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-                                <line x1="34" y1="122" x2="126" y2="122" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <circle cx="60" cy="124" r="9" fill="#F4D110" stroke="#003B8B" stroke-width="5"/>
-                                <circle cx="102" cy="124" r="9" fill="#F4D110" stroke="#003B8B" stroke-width="5"/>
-                            </svg>
-                        </div>
-                        <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">洗車する時間がない</h3>
-                        <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">車の汚れが気になっても、週末は子どもとの予定でいっぱい...</p>
-                        <div style="padding: 12px; background: rgba(0, 59, 139, 0.05); border-radius: 8px;">
-                            <p class="fontss colorfont_b" style="margin: 0; font-weight: 500;">洗車は後回しになりがち</p>
-                        </div>
+                    <div class="pain-card">
+                        <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="洗車する時間がない" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="24" cy="24" r="16"/>
+                            <path d="M24 15 v9 l6.5 4"/>
+                            <circle cx="24" cy="24" r="1.6" fill="#c9ab6a" stroke="none"/>
+                        </svg>
+                        <h3>洗車する時間がない</h3>
+                        <p class="pain-desc">車の汚れが気になっても、週末は子どもとの予定でいっぱい…</p>
+                        <p class="pain-result">洗車は後回しになりがち</p>
                     </div>
 
                     <!-- 悩み2 -->
-                    <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
-                        <!-- 悩み画像 -->
-                        <div style="margin: 0 auto 20px;">
-                            <svg viewBox="0 0 160 160" role="img" aria-label="予約が取れない" style="width: 132px; height: 132px; display: block; margin: 0 auto;">
-                                <circle cx="80" cy="80" r="76" fill="#EAF1FB"/>
-                                <rect x="38" y="44" width="84" height="76" rx="10" fill="#ffffff"/>
-                                <rect x="38" y="44" width="84" height="24" rx="10" fill="#F4D110"/>
-                                <rect x="38" y="58" width="84" height="10" fill="#F4D110"/>
-                                <rect x="38" y="44" width="84" height="76" rx="10" fill="none" stroke="#003B8B" stroke-width="6"/>
-                                <line x1="38" y1="68" x2="122" y2="68" stroke="#003B8B" stroke-width="6"/>
-                                <line x1="58" y1="34" x2="58" y2="52" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <line x1="102" y1="34" x2="102" y2="52" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <g stroke="#003B8B" stroke-width="5" stroke-linecap="round">
-                                    <path d="M51 78 l12 12 M63 78 l-12 12"/>
-                                    <path d="M74 78 l12 12 M86 78 l-12 12"/>
-                                    <path d="M97 78 l12 12 M109 78 l-12 12"/>
-                                    <path d="M51 98 l12 12 M63 98 l-12 12"/>
-                                    <path d="M74 98 l12 12 M86 98 l-12 12"/>
-                                    <path d="M97 98 l12 12 M109 98 l-12 12"/>
-                                </g>
-                            </svg>
-                        </div>
-                        <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">予約が取れない</h3>
-                        <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">洗車できる時に限って混雑している...</p>
-                        <div style="padding: 12px; background: rgba(0, 59, 139, 0.05); border-radius: 8px;">
-                            <p class="fontss colorfont_b" style="margin: 0; font-weight: 500;">スキマ時間でしか洗車する時間がない</p>
-                        </div>
+                    <div class="pain-card">
+                        <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="予約が取れない" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="8" y="11" width="32" height="29" rx="4"/>
+                            <path d="M8 19.5 h32"/>
+                            <path d="M16.5 7 v7 M31.5 7 v7"/>
+                            <path d="M20 26.5 l8 7 M28 26.5 l-8 7" stroke="#c9ab6a"/>
+                        </svg>
+                        <h3>予約が取れない</h3>
+                        <p class="pain-desc">洗車できる時に限って混雑している…</p>
+                        <p class="pain-result">スキマ時間でしか洗車する時間がない</p>
                     </div>
 
                     <!-- 悩み3 -->
-                    <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafe 100%); border-radius: 16px; padding: 24px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); border: 1px solid rgba(0, 59, 139, 0.05); text-align: center;">
-                        <!-- 悩み画像 -->
-                        <div style="margin: 0 auto 20px;">
-                            <svg viewBox="0 0 160 160" role="img" aria-label="待つのが面倒" style="width: 132px; height: 132px; display: block; margin: 0 auto;">
-                                <circle cx="80" cy="80" r="76" fill="#EAF1FB"/>
-                                <path d="M70 50 h20 l-10 12 z" fill="#F4D110"/>
-                                <path d="M80 94 l14 16 h-28 z" fill="#F4D110"/>
-                                <circle cx="80" cy="86" r="3" fill="#F4D110"/>
-                                <path d="M62 44 v8 c0 10 7 15 13 21 c3 3 5 6 5 9 c0 3 -2 6 -5 9 c-6 6 -13 11 -13 21 v8" fill="none" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <path d="M98 44 v8 c0 10 -7 15 -13 21 c-3 3 -5 6 -5 9 c0 3 2 6 5 9 c6 6 13 11 13 21 v8" fill="none" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <line x1="54" y1="44" x2="106" y2="44" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <line x1="54" y1="120" x2="106" y2="120" stroke="#003B8B" stroke-width="6" stroke-linecap="round"/>
-                                <g fill="#003B8B">
-                                    <circle cx="68" cy="136" r="4"/>
-                                    <circle cx="80" cy="136" r="4"/>
-                                    <circle cx="92" cy="136" r="4"/>
-                                </g>
-                            </svg>
-                        </div>
-                        <h3 class="fontl bold colorfont_b" style="margin-bottom: 16px; line-height: 1.4;">待つのが面倒</h3>
-                        <p class="fonts" style="color: #666; line-height: 1.6; margin-bottom: 16px;">待っている間、他のことができるわけでもなく中途半端...</p>
-                        <div style="padding: 12px; background: rgba(0, 59, 139, 0.05); border-radius: 8px;">
-                            <p class="fontss colorfont_b" style="margin: 0; font-weight: 500;">結局めんどくさくなって、汚れたまま乗り続けてしまう</p>
-                        </div>
+                    <div class="pain-card">
+                        <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="待つのが面倒" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 8 h18 M15 40 h18"/>
+                            <path d="M17.5 8 v4 c0 5 4.5 7.5 6.5 12 c-2 4.5 -6.5 7 -6.5 12 v4"/>
+                            <path d="M30.5 8 v4 c0 5 -4.5 7.5 -6.5 12 c2 4.5 6.5 7 6.5 12 v4"/>
+                            <path d="M24 31 l3.4 5 h-6.8 z" fill="#c9ab6a" stroke="none"/>
+                        </svg>
+                        <h3>待つのが面倒</h3>
+                        <p class="pain-desc">待っている間、他のことができるわけでもなく中途半端…</p>
+                        <p class="pain-result">結局めんどくさくなって、汚れたまま乗り続けてしまう</p>
                     </div>
                 </div>
 
@@ -988,53 +1139,133 @@ a[href^="https://lin.ee"]:hover {
             </div>
         </section>
 
-        <section class="solution" style="padding: 40px 0 60px; background-color: #f8fafe; border-radius: 0 80px 0 80px;">
-            <div class="area_s" style="text-align: center;">
-                <!-- 横並びのメッセージ -->
-                <div style="margin-bottom: 30px;">
-                    <p style="font-size: 28px; color: #003B8B; margin: 0 0 8px; font-weight: 600;">そんなお悩みを</p>
-                    <img src="/assets/images/logo.svg" alt="ラクルマ" style="max-width: 220px; height: auto; display: block; margin: 0 auto 8px;" loading="lazy" decoding="async">
-                    <p style="font-size: 28px; color: #003B8B; margin: 0; font-weight: 600;">なら解決します。</p>
-                </div>
-                
-                <!-- 画像 -->
-                <div style="max-width: 400px; margin: 0 auto 25px; border-radius: 12px; overflow: hidden;">
-                    <img src="/assets/uploads/2025/09/YOSH0212.webp" alt="プロの洗車作業" style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async">
-                </div>
-                
-                <!-- メッセージ -->
-                <div style="max-width: 500px; margin: 0 auto; padding: 0 20px; text-align: center;">
-                    <p style="font-size: 16px; line-height: 1.8; color: #2c3e50; margin-bottom: 12px; font-weight: 400;">仕事中や家でくつろいでいる間に、<br>プロが愛車をピカピカに。</p>
-                    <p style="font-size: 16px; line-height: 1.8; color: #2c3e50; margin-bottom: 0; font-weight: 400;">Web予約はたった1分。<br>定期プランなら予約も不要です。</p>
+        <section class="solution" style="padding: 64px 0 72px; background-color: #f8fafe; border-radius: 0 80px 0 80px;">
+            <div class="area_s">
+                <style>
+                    .sol-eyebrow {
+                        display: flex; align-items: center; justify-content: center; gap: 12px;
+                        font-size: 12.5px; font-weight: 800; letter-spacing: 0.16em;
+                        color: #b08d4f; margin: 0 0 14px;
+                    }
+                    .sol-eyebrow::before, .sol-eyebrow::after {
+                        content: ''; width: 26px; height: 2px; background: #c9ab6a; border-radius: 2px;
+                    }
+                    .sol-title {
+                        text-align: center; font-size: clamp(24px, 3vw, 31px); font-weight: 900;
+                        color: #0d2748; letter-spacing: 0.02em; line-height: 1.5; margin: 0 0 44px;
+                    }
+                    .sol-title .sol-brand { color: #003B8B; }
+                    .sol-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+                    .sol-card {
+                        background: #ffffff; border: 1px solid #dfe8f3; border-radius: 14px;
+                        padding: 26px 24px 24px; text-align: left;
+                        box-shadow: 0 4px 18px rgba(13, 39, 72, 0.06);
+                    }
+                    .sol-card-pain {
+                        display: block; font-size: 12.5px; font-weight: 700; color: #9aa7b8;
+                        text-decoration: line-through; margin: 0 0 10px;
+                    }
+                    .sol-card-pain::before {
+                        content: '\2713'; color: #c9ab6a; font-weight: 900; margin-right: 6px;
+                        display: inline-block; text-decoration: none;
+                    }
+                    .sol-card h3 {
+                        font-size: 17.5px; font-weight: 800; color: #003B8B;
+                        letter-spacing: 0.01em; line-height: 1.55; margin: 0 0 10px;
+                    }
+                    .sol-card p { font-size: 13.5px; color: #5a6b80; line-height: 1.85; margin: 0; }
+                    @media (max-width: 768px) {
+                        .sol-grid { grid-template-columns: 1fr; gap: 14px; }
+                        .sol-title { margin-bottom: 32px; }
+                        .sol-card { padding: 22px 20px 20px; }
+                    }
+                </style>
+                <p class="sol-eyebrow">ラクルマの答え</p>
+                <h2 class="sol-title">そのお悩み、<span class="sol-brand">ラクルマ</span>がすべてなくします。</h2>
+                <div class="sol-grid">
+                    <div class="sol-card">
+                        <span class="sol-card-pain">洗車する時間がない</span>
+                        <h3>駐車場に伺うから、<br>あなたの時間は0分</h3>
+                        <p>仕事中や在宅中に、プロが駐車場で仕上げます。立ち会いも不要です。</p>
+                    </div>
+                    <div class="sol-card">
+                        <span class="sol-card-pain">予約が取れない</span>
+                        <h3>Web予約は1分。<br>定期プランなら予約も不要</h3>
+                        <p>スマホで空き枠を選ぶだけ。定期プランは毎回の予約すらありません。</p>
+                    </div>
+                    <div class="sol-card">
+                        <span class="sol-card-pain">待つのが面倒</span>
+                        <h3>待ち時間ゼロ。<br>仕上がりは写真でご報告</h3>
+                        <p>待合室はありません。作業が終わったら、写真付きでお知らせします。</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="point area_l" id="points">
-            <h2 class="headline fontxl bold">ラクルマが選ばれる<span class="colorfont_b">3つのポイント</span></h2>
+            <style>
+                .pt-eyebrow {
+                    display: flex; align-items: center; justify-content: center; gap: 12px;
+                    font-size: 12.5px; font-weight: 800; letter-spacing: 0.16em;
+                    color: #b08d4f; margin: 0 0 14px;
+                }
+                .pt-eyebrow::before, .pt-eyebrow::after {
+                    content: ''; width: 26px; height: 2px; background: #c9ab6a; border-radius: 2px;
+                }
+                .pt-title {
+                    text-align: center; font-size: clamp(24px, 3vw, 31px); font-weight: 900;
+                    color: #0d2748; letter-spacing: 0.02em; line-height: 1.5; margin: 0 0 48px;
+                }
+                .pt-num {
+                    font-family: 'Montserrat', sans-serif; font-size: 12.5px; font-weight: 700;
+                    letter-spacing: 0.18em; color: #b08d4f; margin-bottom: 6px;
+                }
+                .pt-head {
+                    font-size: clamp(19px, 2vw, 23px); font-weight: 900; color: #0d2748;
+                    line-height: 1.5; letter-spacing: 0.01em;
+                }
+                .pt-body { font-size: 14px; color: #5a6b80; line-height: 2; margin-top: 12px; }
+                .pt-badge {
+                    position: absolute; left: 20px; bottom: 20px;
+                    display: flex; flex-direction: column; gap: 3px;
+                    background: rgba(3, 24, 54, 0.82);
+                    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+                    border: 1px solid rgba(255, 255, 255, 0.28);
+                    border-radius: 12px; padding: 13px 18px;
+                }
+                .pt-badge-star {
+                    font-family: 'Montserrat', sans-serif; font-size: 23px; font-weight: 700;
+                    color: #ffffff; line-height: 1.1;
+                }
+                .pt-badge-star .gold { color: #c9ab6a; font-size: 19px; }
+                .pt-badge-sub { font-size: 11px; font-weight: 600; color: rgba(255, 255, 255, 0.85); }
+            </style>
+            <p class="pt-eyebrow">ラクルマの強み</p>
+            <h2 class="pt-title">選ばれるのには、理由があります。</h2>
             <ul class="content_container">
                 <li class="flexbox">
                     <div class="image_frame">
-                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_8034-scaled.webp); background-size: cover; background-position: center;"></div>
+                        <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/YOSH0212.webp); background-size: cover; background-position: center;">
+                            <div class="pt-badge">
+                                <span class="pt-badge-star"><span class="gold">★</span> 4.93</span>
+                                <span class="pt-badge-sub">くらしのマーケット総合評価・口コミ579件</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="textarea">
-                        <div class="subhead fontll bold">
-                            <div class="montserrat colorfont_b">POINT 1</div>
-                            <div class="smallhead">駐車場代 ¥0</div>
-                        </div>
-                        <div class="fonts">バイクで伺うから、狭い駐車場や月極駐車場でもそのまま施工できます。</div>
+                        <div class="pt-num">POINT 1</div>
+                        <div class="pt-head">579件の口コミが証明する<br>★4.93の仕上がり</div>
+                        <div class="pt-body">くらしのマーケットで総合★4.93。くらしのマーケットアワード2025にも入賞しました。数字は、一台ずつの仕上がりに満足いただけた積み重ねです。</div>
                     </div>
                 </li>
                 <li class="flexbox">
                     <div class="textarea">
-                        <div class="subhead fontll bold">
-                            <div class="montserrat colorfont_b">POINT 2</div>
-                            <div class="smallhead">予約は30秒、スマホで完結</div>
-                        </div>
-                        <div class="fonts">立ち会い不要。洗車中の時間は、まるごと自由時間に。</div>
+                        <div class="pt-num">POINT 2</div>
+                        <div class="pt-head">洗うのは、<br>国家1級整備士の店</div>
+                        <div class="pt-body">代表は元ディーラー整備士8年の国家1級整備士。洗車のついでに、タイヤの減りやオイルのにじみなど、プロの目でクルマの異変に気づけます。</div>
                     </div>
                     <div class="image_frame">
-                        <img src="/assets/uploads/2025/08/479529b40188fb49868caf63883b5f8a.webp" alt="スマホで簡単予約" class="image_pic img_r" style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;" loading="lazy" decoding="async">
+                        <img src="/assets/images/works-diagnosis.webp" alt="国家1級整備士による点検" class="image_pic img_r" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
                     </div>
                 </li>
                 <li class="flexbox">
@@ -1042,11 +1273,9 @@ a[href^="https://lin.ee"]:hover {
                         <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/IMG_4869.webp); background-size: cover; background-position: center;"></div>
                     </div>
                     <div class="textarea">
-                        <div class="subhead fontll bold">
-                            <div class="montserrat colorfont_b">POINT 3</div>
-                            <div class="smallhead">ご希望なら無料点検も</div>
-                        </div>
-                        <div class="fonts">ご希望の方には、タイヤ・オイル・ライトまで国家1級整備士が無料でチェック。定期プランなら季節の変わり目（4月・8月・12月）に毎回チェックが付きます。もちろん不要な方は洗車のみでOKです。</div>
+                        <div class="pt-num">POINT 3</div>
+                        <div class="pt-head">洗って終わりにしない、<br>車の「かかりつけ」</div>
+                        <div class="pt-body">ご希望なら無料の安心点検つき。作業のたびに車の状態が記録され、マイページでいつでも見返せます。洗車が、そのまま愛車の健康管理になります。</div>
                     </div>
                 </li>
             </ul>
@@ -1058,7 +1287,7 @@ a[href^="https://lin.ee"]:hover {
                 .comparison__inner { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
                 .cmp-table-wrap { background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 59, 139, 0.08); overflow: hidden; }
                 .cmp-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-                .cmp-table th, .cmp-table td { text-align: center; vertical-align: middle; padding: 18px 8px; border-bottom: 1px solid #eef1f5; }
+                .cmp-table th, .cmp-table td { text-align: center; vertical-align: middle; padding: 12px 8px; border-bottom: 1px solid #eef1f5; }
                 .cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: none; }
                 .cmp-table tbody th { width: 19%; background: #f0f2f5; font-size: 13px; font-weight: 700; color: #333; padding: 18px 6px; }
                 .cmp-col-raku { width: 31%; background: rgba(0, 59, 139, 0.08); }
@@ -1067,32 +1296,33 @@ a[href^="https://lin.ee"]:hover {
                 .cmp-table thead th:first-child { background: #f0f2f5; }
                 .cmp-head-logo { height: 40px; width: auto; display: block; margin: 0 auto; }
                 .cmp-head-other { font-size: 13px; color: #555; font-weight: 700; line-height: 1.4; }
-                .cmp-mark { display: block; font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+                .cmp-mark { display: inline-block; font-size: 18px; font-weight: 900; line-height: 1; margin-right: 7px; vertical-align: baseline; }
                 .cmp-mark--best { color: #003B8B; }
                 .cmp-mark--good { color: #4C7DC4; }
                 .cmp-mark--fair { color: #D97706; }
                 .cmp-mark--bad { color: #D93025; }
                 .cmp-value { font-size: 15px; font-weight: 700; color: #444; line-height: 1.4; }
                 .cmp-col-raku .cmp-value { font-size: 17px; color: #003B8B; }
-                .cmp-note { display: block; font-size: 12px; font-weight: 500; color: #767676; margin-top: 4px; line-height: 1.5; }
+                .cmp-note { display: block; font-size: 11.5px; font-weight: 500; color: #767676; margin-top: 3px; line-height: 1.45; }
                 .cmp-col-raku .cmp-note { color: #3d5a8a; }
                 .cmp-legend { text-align: center; font-size: 12px; color: #767676; margin-top: 14px; line-height: 1.8; }
                 .cmp-legend b { font-weight: 700; }
                 @media (max-width: 768px) {
                     .comparison__inner { padding: 0 12px; }
-                    .cmp-table th, .cmp-table td { padding: 14px 4px; }
+                    .cmp-table th, .cmp-table td { padding: 10px 4px; }
                     .cmp-table tbody th { width: 17%; font-size: 12px; padding: 14px 3px; }
                     .cmp-col-raku { width: 33%; }
                     .cmp-head-logo { height: 32px; }
                     .cmp-head-other { font-size: 12px; }
-                    .cmp-mark { font-size: 22px; }
+                    .cmp-mark { font-size: 16px; }
                     .cmp-value { font-size: 13px; }
                     .cmp-col-raku .cmp-value { font-size: 15px; }
                     .cmp-note { font-size: 12px; }
                 }
             </style>
             <div class="comparison__inner">
-                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 50px;">本当にお得？<span class="colorfont_b">他社サービスと徹底比較</span></h2>
+                <p class="sec-eyebrow">本当にお得？</p>
+                <h2 class="sec-title" style="margin-bottom: 36px;">他社サービスと徹底比較</h2>
 
                 <div class="cmp-table-wrap">
                     <table class="cmp-table">
@@ -1216,43 +1446,71 @@ a[href^="https://lin.ee"]:hover {
         <!-- 水道不要！こんな場所でもセクション -->
         <section class="locations" style="padding: 80px 0; background-color: #f8fafe;">
             <div class="area_s">
-                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 20px;">水道がなくても大丈夫</h2>
-                <p style="text-align: center; font-size: 20px; color: #003B8B; font-weight: 600; margin-bottom: 50px;">あらゆる駐車場で施工可能</p>
+                <style>
+                    .loc-eyebrow {
+                        display: flex; align-items: center; justify-content: center; gap: 12px;
+                        font-size: 12.5px; font-weight: 800; letter-spacing: 0.16em;
+                        color: #b08d4f; margin: 0 0 14px;
+                    }
+                    .loc-eyebrow::before, .loc-eyebrow::after {
+                        content: ''; width: 26px; height: 2px; background: #c9ab6a; border-radius: 2px;
+                    }
+                    .loc-title {
+                        text-align: center; font-size: clamp(24px, 3vw, 31px); font-weight: 900;
+                        color: #0d2748; letter-spacing: 0.02em; line-height: 1.5; margin: 0 0 48px;
+                    }
+                    .loc-card {
+                        background: #ffffff; border: 1px solid #e6ecf4; border-radius: 14px;
+                        overflow: hidden; box-shadow: 0 2px 12px rgba(13, 39, 72, 0.05);
+                    }
+                    .loc-card-img { width: 100%; height: 200px; overflow: hidden; }
+                    .loc-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+                    .loc-card-body { padding: 22px 24px 24px; text-align: left; }
+                    .loc-card-body h3 {
+                        font-size: 17px; font-weight: 800; color: #0d2748;
+                        letter-spacing: 0.02em; line-height: 1.4; margin: 0 0 8px;
+                    }
+                    .loc-card-body .loc-desc { font-size: 13.5px; color: #5a6b80; line-height: 1.85; margin: 0 0 8px; }
+                    .loc-card-body .loc-note { font-size: 11.5px; color: #9aa7b8; line-height: 1.6; margin: 0; }
+                    .loc-tech-head { margin: 80px 0 8px; }
+                </style>
+                <p class="loc-eyebrow">あらゆる駐車場で施工できます</p>
+                <h2 class="loc-title">水道がなくても、大丈夫。</h2>
                 
                 <!-- 3カラムレイアウト -->
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 50px;">
                     <!-- 月極駐車場 -->
-                    <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
-                        <div style="width: 100%; height: 200px; overflow: hidden;">
-                            <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.webp" alt="月極駐車場" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
+                    <div class="loc-card">
+                        <div class="loc-card-img">
+                            <img src="/assets/uploads/2025/10/e8ac2017bd6cb4980264464ce71dfd41.webp" alt="月極駐車場" loading="lazy" decoding="async">
                         </div>
-                        <div style="padding: 30px; text-align: center;">
-                            <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">月極駐車場</h3>
-                            <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0 0 8px 0;">水や泡を使わないので、隣の車や床を汚さずに洗浄が可能</p>
-                            <p style="font-size: 12px; color: #767676; line-height: 1.5; margin: 0;">※事前に許可を取る必要があります。</p>
+                        <div class="loc-card-body">
+                            <h3>月極駐車場</h3>
+                            <p class="loc-desc">水や泡を使わないので、隣の車や床を汚さずに洗浄できます。</p>
+                            <p class="loc-note">※事前に許可を取る必要があります。</p>
                         </div>
                     </div>
                     
                     <!-- マンション駐車場 -->
-                    <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
-                        <div style="width: 100%; height: 200px; overflow: hidden;">
-                            <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.webp" alt="マンション駐車場" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
+                    <div class="loc-card">
+                        <div class="loc-card-img">
+                            <img src="/assets/uploads/2025/10/85f972426cec875586f6f772211fcf7a.webp" alt="マンション駐車場" loading="lazy" decoding="async">
                         </div>
-                        <div style="padding: 30px; text-align: center;">
-                            <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">マンション駐車場</h3>
-                            <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0 0 8px 0;">機械式・地下駐車場もOK。狭い場所でも丁寧に施工</p>
-                            <p style="font-size: 12px; color: #767676; line-height: 1.5; margin: 0;">※事前に許可を取る必要があります。</p>
+                        <div class="loc-card-body">
+                            <h3>マンション駐車場</h3>
+                            <p class="loc-desc">機械式・地下駐車場もOK。狭い場所でも丁寧に施工します。</p>
+                            <p class="loc-note">※事前に許可を取る必要があります。</p>
                         </div>
                     </div>
                     
                     <!-- ご自宅の駐車場 -->
-                    <div style="background: white; padding: 0; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.1); overflow: hidden; transition: transform 0.3s;">
-                        <div style="width: 100%; height: 200px; overflow: hidden;">
-                            <img src="/assets/uploads/2025/11/IMG_8600.webp" alt="ご自宅の駐車場" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">
+                    <div class="loc-card">
+                        <div class="loc-card-img">
+                            <img src="/assets/uploads/2025/11/IMG_8600.webp" alt="ご自宅の駐車場" loading="lazy" decoding="async">
                         </div>
-                        <div style="padding: 30px; text-align: center;">
-                            <h3 class="fontl bold colorfont_b" style="margin-bottom: 15px;">ご自宅の駐車場</h3>
-                            <p style="font-size: 14px; color: #666; line-height: 1.6; margin: 0;">ご自宅で待ち時間ゼロ。家事をしながら安心お任せ</p>
+                        <div class="loc-card-body">
+                            <h3>ご自宅の駐車場</h3>
+                            <p class="loc-desc">ご自宅で待ち時間ゼロ。家事をしながら安心してお任せいただけます。</p>
                         </div>
                     </div>
                 </div>
@@ -1260,17 +1518,17 @@ a[href^="https://lin.ee"]:hover {
                 <!-- 説明文と動画 -->
                 <div style="display: flex; flex-direction: column; gap: 30px;">
                     <!-- セクション見出し -->
-                    <h3 class="headline headline_br bold" style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
-                        <span style="display: block; font-size: 20px; color: #666; font-weight: normal; margin-bottom: 10px;">駐車場を汚さない秘密</span>
-                        <span class="fontxl colorfont_b" style="font-size: 32px;">水なし洗車の技術</span>
-                    </h3>
+                    <div class="loc-tech-head">
+                        <p class="loc-eyebrow">駐車場を汚さない秘密</p>
+                        <h3 class="loc-title" style="margin-bottom: 12px;">水なし洗車の技術</h3>
+                    </div>
 
                     <!-- 動画セクション（2つの動画を横並び） -->
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
                         <!-- 動画1: なぜ傷がつかないかの解説 -->
                         <div style="display: flex; flex-direction: column; align-items: center;">
-                            <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">特殊な洗浄成分で水なし洗車を実現</h4>
-                            <div style="position: relative; width: 90%;">
+                            <h4 style="text-align: center; margin: 0 0 14px; font-size: 15.5px; font-weight: 800; color: #0d2748; letter-spacing: 0.02em;">特殊な洗浄成分で水なし洗車を実現</h4>
+                            <div style="position: relative; width: 90%; max-width: 310px;">
                             <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                 <video id="reason-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline preload="none">
                                     <source data-src="/assets/uploads/2025/09/reason3.mp4" type="video/mp4">
@@ -1292,8 +1550,8 @@ a[href^="https://lin.ee"]:hover {
 
                         <!-- 動画2: 傷がつかない実証動画 -->
                         <div style="display: flex; flex-direction: column; align-items: center;">
-                            <h4 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 15px; font-size: 20px;">1年間使い続けても傷ゼロ<span style="font-size: 11px; margin-left: 4px;">※1</span></h4>
-                            <div style="position: relative; width: 90%;">
+                            <h4 style="text-align: center; margin: 0 0 14px; font-size: 15.5px; font-weight: 800; color: #0d2748; letter-spacing: 0.02em;">1年間使い続けても傷ゼロ<span style="font-size: 10px; margin-left: 4px; color: #9aa7b8;">※1</span></h4>
+                            <div style="position: relative; width: 90%; max-width: 310px;">
                             <div style="position: relative; padding-bottom: 177.78%; background: #f0f0f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                 <video id="why-video" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" muted loop playsinline preload="none">
                                     <source data-src="/assets/uploads/2025/09/why.mp4" type="video/mp4">
@@ -1342,7 +1600,35 @@ a[href^="https://lin.ee"]:hover {
         <!-- くらしのマーケット口コミ（写真・口コミカード） -->
         <section class="reviews" id="voice" style="padding: 60px 0; background-color: #f8fafe;">
             <div style="max-width: 1080px; margin: 0 auto; padding: 0 20px;">
-                <h2 class="headline fontxl bold" style="text-align: center; margin-bottom: 50px;">実際にご利用いただいた<span class="colorfont_b">お客様の声</span></h2>
+                <p class="sec-eyebrow">実際にご利用いただいた</p>
+                <h2 class="sec-title">お客様の声</h2>
+                <div class="rv-stats-line">
+                    <span class="rv-stats-line__main"><span class="star">★</span>5.0<small>／5.0</small></span>
+                    <span class="rv-stats-line__label">出張洗車の口コミ24件 すべて★5<sup>※1</sup></span>
+                    <span class="rv-stats-line__sub">店舗全体では 口コミ579件・総合★4.93</span>
+                </div>
+                <style>
+                    .rv-stats-line {
+                        display: flex; align-items: center; justify-content: center; gap: 16px;
+                        flex-wrap: wrap; margin: 22px 0 36px;
+                    }
+                    .rv-stats-line__main {
+                        font-family: 'Montserrat', sans-serif; font-size: 34px; font-weight: 700;
+                        color: #0d2748; line-height: 1;
+                    }
+                    .rv-stats-line__main .star { color: #c9ab6a; font-size: 26px; margin-right: 2px; }
+                    .rv-stats-line__main small { font-size: 14px; font-weight: 600; color: #9aa7b8; margin-left: 2px; }
+                    .rv-stats-line__label { font-size: 14.5px; font-weight: 800; color: #0d2748; }
+                    .rv-stats-line__label sup { font-size: 9px; color: #9aa7b8; }
+                    .rv-stats-line__sub {
+                        font-size: 12px; font-weight: 600; color: #767676;
+                        border-left: 1px solid #d7dee8; padding-left: 16px;
+                    }
+                    @media (max-width: 768px) {
+                        .rv-stats-line { flex-direction: column; gap: 6px; }
+                        .rv-stats-line__sub { border-left: none; padding-left: 0; }
+                    }
+                </style>
 
                 <!-- 口コミスクロール -->
                 <div style="width: 100%; overflow: hidden; margin-top: 20px;">
@@ -1389,77 +1675,98 @@ a[href^="https://lin.ee"]:hover {
                             </div>
                         </div>
 
-                        <!-- 下段：口コミスクロール -->
-                        <div id="review-scroll-container" style="overflow-x: auto; overflow-y: hidden; position: relative; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scroll-behavior: smooth;">
-                            <div style="display: flex; gap: 15px; padding-bottom: 10px;">
-                                <!-- 口コミカード1 -->
-                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
-                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年1月</span>
-                                    </div>
-                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">初回利用でしたが丁寧な対応で安心してお任せできました。仕上がりもとても綺麗で、ガソリンスタンドより確実に満足できるサービスです！</p>
+                        <!-- 下段：口コミ（縦長カード・右→左の自動無限スクロール） -->
+                        <style>
+                            .rv-marquee { overflow: hidden; }
+                            .rv-track {
+                                display: flex; gap: 14px; width: max-content;
+                                animation: rvScroll 40s linear infinite;
+                            }
+                            .rv-marquee:hover .rv-track { animation-play-state: paused; }
+                            @keyframes rvScroll {
+                                0% { transform: translateX(0); }
+                                100% { transform: translateX(-50%); }
+                            }
+                            .rv-card {
+                                flex: 0 0 220px; min-height: 230px;
+                                display: flex; flex-direction: column;
+                                background: #fff; border: 1px solid #e6ecf4; border-radius: 14px;
+                                padding: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                            }
+                            .rv-quote {
+                                font-family: Georgia, serif; font-size: 34px; font-weight: 900;
+                                color: #c9ab6a; line-height: 0.6; margin-bottom: 8px;
+                            }
+                            .rv-card p { font-size: 13px; line-height: 1.75; color: #333; margin: 0; }
+                            .rv-who { font-size: 11px; color: #767676; margin-top: auto; padding-top: 10px; }
+                            .rv-stars { color: #c9ab6a; letter-spacing: 1px; }
+                        </style>
+                        <div class="rv-marquee">
+                            <div class="rv-track">
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>初回利用でしたが丁寧な対応で安心してお任せできました。仕上がりもとても綺麗で、ガソリンスタンドより確実に満足できるサービスです！</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年1月のお客様</div>
                                 </div>
-
-                                <!-- 口コミカード2 -->
-                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
-                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年5月</span>
-                                    </div>
-                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">こまめに連絡をいただいてスムーズにお願いできました。洗車も、黄砂がタップリのっかったボディをピカピカにしていただきました。ありがとうございます。</p>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>こまめに連絡をいただいてスムーズにお願いできました。洗車も、黄砂がタップリのっかったボディをピカピカにしていただきました。ありがとうございます。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年5月のお客様</div>
                                 </div>
-
-                                <!-- 口コミカード3 -->
-                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
-                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年3月</span>
-                                    </div>
-                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">事前のやりとりから丁寧かつスムーズで安心してお願いできました。マンションの狭い駐車場でも問題なく対応していただき、40分ほどでピカピカに。またぜひ利用したいと思います。</p>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>事前のやりとりから丁寧かつスムーズで安心してお願いできました。マンションの狭い駐車場でも問題なく対応していただき、40分ほどでピカピカに。またぜひ利用したいと思います。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年3月のお客様</div>
                                 </div>
-
-                                <!-- 口コミカード4 -->
-                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
-                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年9月</span>
-                                    </div>
-                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">これまで利用した洗車サービスの中で1番綺麗にしてくれました。立ち会いできませんでしたが、妥協なくピカピカに！間違いなくリピートします。</p>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>これまで利用した洗車サービスの中で1番綺麗にしてくれました。立ち会いできませんでしたが、妥協なくピカピカに！間違いなくリピートします。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年9月のお客様</div>
                                 </div>
-
-                                <!-- 口コミカード5 -->
-                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
-                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2025年2月</span>
-                                    </div>
-                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">対応もとても爽やかで、かなり綺麗に仕上げていただきました！ありがとうございます！</p>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>対応もとても爽やかで、かなり綺麗に仕上げていただきました！ありがとうございます！</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2025年2月のお客様</div>
                                 </div>
-
-                                <!-- 口コミカード6 -->
-                                <div style="min-width: 100%; max-width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); flex-shrink: 0; box-sizing: border-box;">
-                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                                        <span style="color: #FFD700; font-size: 16px;">★★★★★</span>
-                                        <span style="font-size: 12px; color: #767676; white-space: nowrap;">2024年10月</span>
-                                    </div>
-                                    <p style="font-size: 14px; line-height: 1.8; color: #333; word-wrap: break-word; overflow-wrap: break-word;">綺麗に車の内外をお掃除してくださいました。ありがとうございます。リピート確定です！よろしくお願い致します。</p>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>綺麗に車の内外をお掃除してくださいました。ありがとうございます。リピート確定です！よろしくお願い致します。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年10月のお客様</div>
+                                </div>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>初回利用でしたが丁寧な対応で安心してお任せできました。仕上がりもとても綺麗で、ガソリンスタンドより確実に満足できるサービスです！</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年1月のお客様</div>
+                                </div>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>こまめに連絡をいただいてスムーズにお願いできました。洗車も、黄砂がタップリのっかったボディをピカピカにしていただきました。ありがとうございます。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年5月のお客様</div>
+                                </div>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>事前のやりとりから丁寧かつスムーズで安心してお願いできました。マンションの狭い駐車場でも問題なく対応していただき、40分ほどでピカピカに。またぜひ利用したいと思います。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年3月のお客様</div>
+                                </div>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>これまで利用した洗車サービスの中で1番綺麗にしてくれました。立ち会いできませんでしたが、妥協なくピカピカに！間違いなくリピートします。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年9月のお客様</div>
+                                </div>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>対応もとても爽やかで、かなり綺麗に仕上げていただきました！ありがとうございます！</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2025年2月のお客様</div>
+                                </div>
+                                <div class="rv-card">
+                                    <div class="rv-quote">"</div>
+                                    <p>綺麗に車の内外をお掃除してくださいました。ありがとうございます。リピート確定です！よろしくお願い致します。</p>
+                                    <div class="rv-who"><span class="rv-stars">★★★★★</span>　2024年10月のお客様</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- インジケーター -->
-                        <div id="review-indicators" style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
-                            <span class="review-indicator" data-index="0" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; cursor: pointer; transition: opacity 0.3s;"></span>
-                            <span class="review-indicator" data-index="1" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
-                            <span class="review-indicator" data-index="2" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
-                            <span class="review-indicator" data-index="3" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
-                            <span class="review-indicator" data-index="4" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
-                            <span class="review-indicator" data-index="5" style="width: 10px; height: 10px; border-radius: 50%; background: #003B8B; opacity: 0.3; cursor: pointer; transition: opacity 0.3s;"></span>
-                        </div>
-
                         <div class="wash-cta">
-                <span class="wash-cta__micro">＼ 口コミ24件すべて★5 ／</span>
                 <a href="#calendar-container" class="wash-cta__btn">
                     <span>
                         <span class="wash-cta__main">空き状況を確認して予約する</span>
@@ -1468,112 +1775,7 @@ a[href^="https://lin.ee"]:hover {
                 </a>
             </div>
 
-                        <!-- 自動スクロール制御 -->
-                        <script>
-                            (function() {
-                                const container = document.getElementById('review-scroll-container');
-                                const indicators = document.querySelectorAll('.review-indicator');
-                                let autoScrollInterval;
-                                let isUserInteracting = false;
-                                let interactionTimeout;
-                                let currentIndex = 0;
 
-                                function updateIndicators() {
-                                    const cardWidth = container.querySelector('div[style*="min-width: 100%"]').offsetWidth;
-                                    const gap = 15;
-                                    const scrollPosition = container.scrollLeft;
-                                    const index = Math.round(scrollPosition / (cardWidth + gap));
-
-                                    currentIndex = index;
-
-                                    indicators.forEach((indicator, i) => {
-                                        indicator.style.opacity = i === index ? '1' : '0.3';
-                                    });
-                                }
-
-                                function autoScroll() {
-                                    if (isUserInteracting) return;
-
-                                    const cardWidth = container.querySelector('div[style*="min-width: 100%"]').offsetWidth;
-                                    const gap = 15;
-                                    const scrollAmount = cardWidth + gap;
-                                    const maxScroll = container.scrollWidth - container.clientWidth;
-
-                                    // 次のカードにスクロール
-                                    let nextScroll = container.scrollLeft + scrollAmount;
-
-                                    // 最後まで行ったら最初に戻る
-                                    if (nextScroll >= maxScroll) {
-                                        container.scrollLeft = 0;
-                                    } else {
-                                        container.scrollLeft = nextScroll;
-                                    }
-                                }
-
-                                function startAutoScroll() {
-                                    autoScrollInterval = setInterval(autoScroll, 4000); // 4秒ごと
-                                }
-
-                                function stopAutoScroll() {
-                                    clearInterval(autoScrollInterval);
-                                }
-
-                                function resetAutoScroll() {
-                                    stopAutoScroll();
-                                    clearTimeout(interactionTimeout);
-                                    interactionTimeout = setTimeout(() => {
-                                        isUserInteracting = false;
-                                        startAutoScroll();
-                                    }, 3000); // 3秒後に自動スクロール再開
-                                }
-
-                                // スクロール時にインジケーター更新
-                                container.addEventListener('scroll', () => {
-                                    updateIndicators();
-                                    if (isUserInteracting) {
-                                        resetAutoScroll();
-                                    }
-                                }, { passive: true });
-
-                                // インジケーターのクリックイベント
-                                indicators.forEach(indicator => {
-                                    indicator.addEventListener('click', () => {
-                                        const index = parseInt(indicator.dataset.index);
-                                        const cardWidth = container.querySelector('div[style*="min-width: 100%"]').offsetWidth;
-                                        const gap = 15;
-
-                                        isUserInteracting = true;
-                                        stopAutoScroll();
-                                        container.scrollLeft = index * (cardWidth + gap);
-                                        resetAutoScroll();
-                                    });
-                                });
-
-                                // ユーザー操作を検知
-                                container.addEventListener('touchstart', () => {
-                                    isUserInteracting = true;
-                                    stopAutoScroll();
-                                });
-
-                                container.addEventListener('touchend', () => {
-                                    resetAutoScroll();
-                                });
-
-                                // マウス操作にも対応（PC用）
-                                container.addEventListener('mousedown', () => {
-                                    isUserInteracting = true;
-                                    stopAutoScroll();
-                                });
-
-                                container.addEventListener('mouseup', () => {
-                                    resetAutoScroll();
-                                });
-
-                                // 初期化
-                                updateIndicators();
-                                startAutoScroll();
-                            })();
-                        </script>
                 </div>
 
                 <!-- アニメーション定義 -->
@@ -1607,7 +1809,8 @@ a[href^="https://lin.ee"]:hover {
         </section>
 
         <section class="service area_m">
-            <h2 class="headline headline_br bold"><span class="fontxl montserrat">BASIC PLAN</span><span class="colorfont_b fontm">サービス内容について</span></h2>
+            <p class="sec-eyebrow">基本メニュー</p>
+            <h2 class="sec-title">サービス内容について</h2>
             <ul class="service_list">
                 <li class="flexbox bk_lb">
                     <div class="smallhead flexbox colorfont_b fontll bold">洗車<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">30〜40分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 8,800円（LXサイズ）</span></div>
@@ -1629,25 +1832,6 @@ a[href^="https://lin.ee"]:hover {
                     </div>
                 </li>
                 <li class="flexbox bk_lb">
-                    <div class="smallhead flexbox colorfont_b fontll bold">安心点検（選択可）<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">10〜20分</span></div>
-                    <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_1.webp);"></div>
-                        <p class="colorfont_w fontm bold">バッテリー点検</p>
-                    </div>
-                    <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_2.webp);"></div>
-                        <p class="colorfont_w fontm bold">ウォッシャー液補充</p>
-                    </div>
-                    <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_3.webp);"></div>
-                        <p class="colorfont_w fontm bold">空気圧調整</p>
-                    </div>
-                    <div class="image_frame">
-                        <div class="image_pic" style="background-image: url(/assets/images/service_img_4.webp);"></div>
-                        <p class="colorfont_w fontm bold">ライトの点検</p>
-                    </div>
-                </li>
-                <li class="flexbox bk_lb">
                     <div class="smallhead flexbox colorfont_b fontll bold">室内清掃（オプション）<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">20〜30分</span><br><span class="fontm" style="color: #666; font-weight: normal;">＋2,200円（全サイズ）</span></div>
                     <div class="image_frame">
                         <div class="image_pic" style="background-image: url(/assets/images/service_img_13.webp);"></div>
@@ -1666,58 +1850,98 @@ a[href^="https://lin.ee"]:hover {
                         <p class="colorfont_w fontm bold">ナビゲーション</p>
                     </div>
                 </li>
-            </ul>
+            <li class="flexbox bk_lb">
+                    <div class="smallhead flexbox colorfont_b fontll bold">安心点検（選択可）<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">10〜20分</span></div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_1.webp);"></div>
+                        <p class="colorfont_w fontm bold">バッテリー点検</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_2.webp);"></div>
+                        <p class="colorfont_w fontm bold">ウォッシャー液補充</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_3.webp);"></div>
+                        <p class="colorfont_w fontm bold">空気圧調整</p>
+                    </div>
+                    <div class="image_frame">
+                        <div class="image_pic" style="background-image: url(/assets/images/service_img_4.webp);"></div>
+                        <p class="colorfont_w fontm bold">ライトの点検</p>
+                    </div>
+                </li>
+                </ul>
             <p class="fontss">※サービス内容・目安時間はお車の大きさ・特徴・汚れ具合によって変わります。<br>※定期プランなら、単発洗車＋1,000円ほどで室内清掃も毎回セットになります。</p>
 
             <!-- 料金一覧と初回お試し価格の統合セクション -->
             <div style="text-align: center; margin: 30px auto 50px auto; padding: 0; max-width: 1080px;">
                 <!-- 料金一覧 -->
-                <div style="padding: 35px 45px; background: white; border-radius: 16px; border: 2px solid #e0e0e0; display: inline-block;">
-                    <h3 class="fontl bold colorfont_b" style="text-align: center; margin-bottom: 20px;">通常料金</h3>
-                    <div style="margin: 0 auto;">
-                        <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 10px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>洗車（LXサイズ）</span>
-                                <span>8,800円</span>
-                            </div>
-                        </div>
-                        <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; margin-bottom: 15px;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <span>安心点検（選択可）</span>
-                                <span>0円</span>
-                            </div>
-                        </div>
-                        <div style="text-align: center; padding-top: 15px; border-top: 2px solid #f0f0f0;">
-                            <div style="color: #767676; font-size: 14px; margin-bottom: 8px;">通常価格</div>
-                            <div class="fontl bold" style="color: #767676;">8,800円</div>
-                        </div>
-                        <p class="fontss" style="color: #999; margin-top: 12px;">※室内清掃はオプション（全サイズ＋2,200円）</p>
+                <style>
+                .price-flow { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+                .pfx-card {
+                    width: 100%; max-width: 400px;
+                    background: #ffffff; border: 1px solid #dfe8f3; border-radius: 16px;
+                    overflow: hidden; text-align: center;
+                    display: flex; flex-direction: column;
+                }
+                .pfx-card__head {
+                    background: #f0f5fb; padding: 14px 10px; margin: 0;
+                    font-size: 16px; font-weight: 800; color: #0d2748; letter-spacing: 0.02em;
+                }
+                .pfx-card--first { border: 2px solid #003B8B; }
+                .pfx-card--first .pfx-card__head { background: #003B8B; color: #ffffff; }
+                .pfx-card__body { padding: 20px 26px 22px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+                .pfx-row {
+                    display: flex; justify-content: space-between;
+                    padding: 10px 0; border-bottom: 1px solid #eef2f7;
+                    font-size: 14px; font-weight: 600; color: #33445c;
+                }
+                .pfx-total { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0 0; }
+                .pfx-total span { font-size: 13px; color: #767676; }
+                .pfx-total b { font-size: 24px; font-weight: 800; color: #0d2748; }
+                .pfx-note { font-size: 11.5px; color: #9aa7b8; margin: 10px 0 0; }
+                .pfx-label { font-size: 13px; font-weight: 600; color: #767676; margin: 0 0 6px; }
+                .pfx-price { font-size: 52px; font-weight: 900; color: #003B8B; line-height: 1; margin: 0; }
+                .pfx-price span { font-size: 26px; }
+                .pfx-uniform {
+                    margin: 14px 0 0; padding-top: 13px; border-top: 1px solid #eef2f7;
+                    font-size: 14px; font-weight: 800; color: #003B8B;
+                }
+                .price-arrow { margin: 0; }
+                .price-arrow svg { width: 40px; height: 52px; }
+                @media (min-width: 900px) {
+                    .price-flow { flex-direction: row; align-items: stretch; justify-content: center; gap: 30px; }
+                    .pfx-card { width: 380px; }
+                    .price-arrow { align-self: center; }
+                    .price-arrow svg { transform: rotate(-90deg); }
+                }
+                </style>
+                <div class="price-flow">
+                <div class="pfx-card">
+                    <p class="pfx-card__head">通常料金</p>
+                    <div class="pfx-card__body">
+                        <div class="pfx-row"><span>洗車（LXサイズ）</span><span>8,800円</span></div>
+                        <div class="pfx-row"><span>安心点検（選択可）</span><span>0円</span></div>
+                        <div class="pfx-total"><span>通常価格</span><b>8,800円</b></div>
+                        <p class="pfx-note">※室内清掃はオプション（全サイズ＋2,200円）</p>
                     </div>
                 </div>
-
-                <!-- 矢印 -->
-                <div style="text-align: center; margin: 20px 0;">
+                <div class="price-arrow" style="text-align: center;">
                     <svg width="60" height="80" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- 矢印の線 -->
-                        <line x1="30" y1="10" x2="30" y2="50" stroke="#003B8B" stroke-width="4" stroke-linecap="round"/>
-                        <!-- 矢印の先端 -->
+                        <line x1="30" y1="10" x2="30" y2="52" stroke="#003B8B" stroke-width="8" stroke-linecap="round"/>
                         <path d="M30 70 L15 50 L45 50 Z" fill="#003B8B"/>
                     </svg>
                 </div>
-
-                <h3 class="fontxl bold colorfont_b" style="margin-bottom: 30px;">初回お試し体験</h3>
-
-                <!-- 価格表示 -->
-                <div style="background: linear-gradient(135deg, #f8fafe 0%, #ffffff 100%); border: 2px solid #003B8B; border-radius: 16px; padding: 35px 45px; display: inline-block; margin-bottom: 30px;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 16px; color: #666; margin-bottom: 12px;">初回限定価格</div>
-                        <div style="font-size: 56px; font-weight: bold; color: #003B8B; line-height: 1; margin-bottom: 12px;">6,000<span style="font-size: 32px;">円</span></div>
-                        <div style="font-size: 15px; color: #003B8B; font-weight: 600; border-top: 1px solid #e0e0e0; padding-top: 15px; margin-top: 10px;">
-                            ✓ 全サイズ均一価格<span style="color: #666; font-weight: normal; font-size: 13px; display: block; margin-top: 5px;">小型車からSUVまで迷わず予約</span>
-                        </div>
+                <div class="pfx-card pfx-card--first">
+                    <p class="pfx-card__head">初回お試し体験</p>
+                    <div class="pfx-card__body">
+                        <p class="pfx-label">初回限定価格</p>
+                        <p class="pfx-price">6,000<span>円</span></p>
+                        <p class="pfx-uniform">全サイズ均一価格</p>
+                        <p class="pfx-note">小型車からSUVまで迷わず予約できます</p>
                     </div>
                 </div>
-                
+                </div><!-- /price-flow -->
+
                 <!-- 予約フォーム -->
                 <div style="background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 59, 139, 0.08); overflow: hidden;">
                     <!-- 予約フォーム上部の案内 -->
@@ -2423,12 +2647,13 @@ a[href^="https://lin.ee"]:hover {
         </section>
 
         <section class="howtouse area_l" style="overflow:hidden;">
-            <h2 class="headline headline_br bold"><span class="fontxl montserrat">HOW TO USE</span><span class="colorfont_b fontm">ご利用の流れ</span></h2>
+            <p class="sec-eyebrow">予約から決済までWebで完結</p>
+            <h2 class="sec-title">ご利用の流れ</h2>
             <p class="discription fonts">まずは手軽にお試しできるので安心。<br class="sp">Webから簡単にお申込みが可能です。</p>
             <ol class="step_list colorfont_w">
                 <li class="flexbox" style="background-position:center center !important;">
                     <div class="subhead fontll"><span class="montserrat fontm">STEP 1</span><br>初回お申込み</div>
-                    <p class="fonts"><a href="#calendar-container" style="color: #F4D110; font-weight: bold;">カレンダー</a>より日付→時間をタップし、詳細をご入力いただければ予約が完了します。</p>
+                    <p class="fonts"><a href="#calendar-container" style="color: #c9ab6a; font-weight: bold; text-decoration: underline;">カレンダー</a>より日付→時間をタップし、詳細をご入力いただければ予約が完了します。</p>
                 </li>
                 <li class="flexbox" style="background-position:center center !important;">
                     <div class="subhead fontll"><span class="montserrat fontm">STEP 2</span><br>訪問</div>
@@ -2456,7 +2681,8 @@ a[href^="https://lin.ee"]:hover {
         </section>
 
         <section class="map area_s">
-            <h2 class="headline headline_br bold"><span class="fontxl montserrat">AREA</span><span class="colorfont_b fontm">サービス提供エリア</span></h2>
+            <p class="sec-eyebrow">東京・神奈川に出張</p>
+            <h2 class="sec-title">サービス提供エリア</h2>
             <p class="discription fonts"><span class="bold">世田谷区/目黒区/渋谷区</span><br>サービス提供エリアは順次拡大中です。利用時間・日時によっては対応できないエリアもございますので、詳細はお問い合わせくださいませ。</p>
             <img src="/assets/images/map.png" alt="エリアマップ" loading="lazy" decoding="async">
         </section>
@@ -2464,7 +2690,8 @@ a[href^="https://lin.ee"]:hover {
 
         <section class="plan bk_lb" id="plan">
             <div class="area_s">
-                <h2 class="headline headline_br bold"><span class="fontxl montserrat">LIST PLAN</span><span class="colorfont_b fontm">料金プラン</span></h2>
+                <p class="sec-eyebrow">料金のご案内</p>
+                <h2 class="sec-title">料金プラン</h2>
 
                 <div class="plan-tabs" role="tablist">
                     <button class="plan-tab plan-tab--active" data-tab="regular" aria-selected="true">定期利用プラン（推奨）</button>
@@ -2475,28 +2702,35 @@ a[href^="https://lin.ee"]:hover {
                     <!-- 定期利用プラン -->
                     <div class="plan-content plan-content--regular u-fade-in">
                         <p class="discription fonts">決まった曜日・時間に、近づけばこちらからご連絡。<br>考える手間なく、愛車はいつもピカピカに。</p>
-                        <div class="common-option"><span class="option-icon">＋</span> 定期プランは室内清掃も毎回セット。単発洗車＋1,000円ほどでご利用いただけます</div>
-                        <div class="common-option"><span class="option-icon">＋</span> 季節の変わり目（4月・8月・12月）には、国家1級整備士がお車の状態を無料でチェック。結果はLINEとマイページでお伝えします</div>
+                        <div class="plan-perks">
+                            <span class="plan-perk"><b>室内清掃</b>が毎回セット（単発＋1,000円ほど）</span>
+                            <span class="plan-perk"><b>季節の無料点検</b>つき（4月・8月・12月）</span>
+                        </div>
                         <div class="plan_middle flexbox">
-                            <div class="plan_box plan_box--regular bk_w" style="text-align:center; padding:20px 16px;">
-                                <p class="fontm bold colorfont_b" style="margin-bottom:4px;">月2回プラン</p>
-                                <p class="fontss" style="color:#767676; margin-bottom:12px;">（月額）</p>
-                                <p class="fontm bold">SMサイズ <span class="fontll">13,000円</span></p>
-                                <p class="fontss" style="color:#767676; margin-bottom:8px;">（6,500円/1回）</p>
-                                <p class="fontm bold">LXサイズ <span class="fontll">14,000円</span></p>
-                                <p class="fontss" style="color:#767676;">（7,000円/1回）</p>
+                            <div class="plan_box plan_box--regular bk_w pcard">
+                                <p class="pcard__name">月2回プラン<span class="pcard__cycle">月額</span></p>
+                                <div class="plan-prices">
+                                    <div class="plan-price"><span class="plan-price__sz">SM</span><b>13,000円</b><small>（6,500円/1回）</small></div>
+                                    <div class="plan-price"><span class="plan-price__sz">LX</span><b>14,000円</b><small>（7,000円/1回）</small></div>
+                                </div>
+                                <p class="pcard__for">いつもきれいを保ちたい方に</p>
                             </div>
-                            <div class="plan_box plan_box--regular bk_w" style="text-align:center; padding:20px 16px;">
-                                <p class="fontm bold colorfont_b" style="margin-bottom:4px;">月１回プラン</p>
-                                <p class="fontss" style="color:#767676; margin-bottom:12px;">（月額）</p>
-                                <p class="fontm bold" style="margin-bottom:8px;">SMサイズ <span class="fontll">7,900円</span></p>
-                                <p class="fontm bold">LXサイズ <span class="fontll">8,900円</span></p>
+                            <div class="plan_box plan_box--regular bk_w pcard pcard--reco">
+                                <span class="pcard__badge">おすすめ</span>
+                                <p class="pcard__name">月１回プラン<span class="pcard__cycle">月額</span></p>
+                                <div class="plan-prices">
+                                    <div class="plan-price"><span class="plan-price__sz">SM</span><b>7,900円</b></div>
+                                    <div class="plan-price"><span class="plan-price__sz">LX</span><b>8,900円</b></div>
+                                </div>
+                                <p class="pcard__for">迷ったらこちら。標準のペース</p>
                             </div>
-                            <div class="plan_box plan_box--regular bk_w" style="text-align:center; padding:20px 16px;">
-                                <p class="fontm bold colorfont_b" style="margin-bottom:4px;">２ヶ月に１回プラン</p>
-                                <p class="fontss" style="color:#767676; margin-bottom:12px;">（2ヶ月に1回決済）</p>
-                                <p class="fontm bold" style="margin-bottom:8px;">SMサイズ <span class="fontll">7,900円</span></p>
-                                <p class="fontm bold">LXサイズ <span class="fontll">8,900円</span></p>
+                            <div class="plan_box plan_box--regular bk_w pcard">
+                                <p class="pcard__name">２ヶ月に１回プラン<span class="pcard__cycle">2ヶ月に1回決済</span></p>
+                                <div class="plan-prices">
+                                    <div class="plan-price"><span class="plan-price__sz">SM</span><b>7,900円</b></div>
+                                    <div class="plan-price"><span class="plan-price__sz">LX</span><b>8,900円</b></div>
+                                </div>
+                                <p class="pcard__for">気軽に続けたい方に</p>
                             </div>
                         </div>
                     </div>
@@ -2535,7 +2769,8 @@ a[href^="https://lin.ee"]:hover {
         </section>
 
         <section class="profile area_s">
-            <h2 class="headline headline_br bold"><span class="fontxl montserrat">SERVICE CREW</span><span class="colorfont_b fontm">ラクルマのスタッフのご紹介</span></h2>
+            <p class="sec-eyebrow">スタッフのご紹介</p>
+            <h2 class="sec-title">ラクルマのスタッフ</h2>
             <p class="discription fonts">国家一級整備士による安心の訪問サービスで、愛車にふさわしいケアを。</p>
             <div class="prof_box flexbox">
                 <div class="prof_pic image_frame">
@@ -2555,7 +2790,8 @@ a[href^="https://lin.ee"]:hover {
 
         <section class="faq bk_lb" id="faq">
             <div class="area_s">
-                <h2 class="headline headline_br bold"><span class="fontxl montserrat">FAQ</span><span class="colorfont_b fontm">よくあるご質問</span></h2>
+                <p class="sec-eyebrow">気になることにお答えします</p>
+                <h2 class="sec-title">よくあるご質問</h2>
                 <div class="faq_lists">
                     <dl class="faq_list">
                         <dt class="fontm bold">初回お試し利用は最短でいつから利用可能ですか？</dt>
@@ -2574,7 +2810,8 @@ a[href^="https://lin.ee"]:hover {
         </section>
 
         <section class="contact area_s" id="contact" style="padding-top: 40px;">
-            <h2 class="headline headline_br bold"><span class="fontxl montserrat">CONTACT</span><span class="colorfont_b fontm">ラクルマへのお問い合わせ</span></h2>
+            <p class="sec-eyebrow">お気軽にどうぞ</p>
+            <h2 class="sec-title">ラクルマへのお問い合わせ</h2>
             <p style="text-align:center; color:#555; font-size:14px; line-height:1.7; margin: 24px auto 0; max-width: 560px;">疑問・不安はお気軽に。無料でお答えします。</p>
             <div class="wash-cta" style="margin-top: 24px;">
                 <a href="/p/line-wash/" class="wash-cta__btn wash-cta__btn--line" target="_blank" rel="noopener noreferrer">
@@ -2617,54 +2854,99 @@ a[href^="https://lin.ee"]:hover {
             }
             .rk-banner__body { position: absolute; left: 0; right: 0; bottom: 0; padding: 20px 22px; color: #fff; }
             .rk-banner__tag {
-                display: inline-block; background: #FFD700; color: #0d1f3c;
-                font-size: 11px; font-weight: 800; padding: 3px 10px;
-                border-radius: 20px; margin-bottom: 8px; letter-spacing: 0.04em;
+                display: inline-block; background: rgba(255, 255, 255, 0.14); color: #ffffff;
+                border: 1px solid rgba(255, 255, 255, 0.35);
+                backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+                font-size: 11px; font-weight: 700; padding: 4px 12px;
+                border-radius: 20px; margin-bottom: 8px; letter-spacing: 0.05em;
             }
             .rk-banner__name { font-size: 20px; font-weight: 900; line-height: 1.3; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
             .rk-banner__desc { font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.88); margin-bottom: 10px; }
-            .rk-banner__more { font-size: 13px; font-weight: 800; color: #FFD700; }
+            .rk-banner__more { font-size: 13px; font-weight: 800; color: #c9ab6a; }
             @media (max-width: 768px) {
                 .rk-crosslink { padding: 48px 20px; }
                 .rk-crosslink__row { grid-template-columns: 1fr; }
                 .rk-banner__img { height: 200px; }
             }
         </style>
+        <p class="sec-eyebrow">洗車だけじゃない</p>
         <div class="rk-crosslink__ttl">こんなご依頼も出張対応しています</div>
-        <p class="rk-crosslink__sub">洗車だけじゃない。クルマのことは、まとめてラクルマへ。</p>
-        <div class="rk-crosslink__row">
-            <a class="rk-banner" href="/maintenance/">
-                <div class="rk-banner__img"><img src="/assets/images/works-diagnosis.webp" alt="国家1級整備士による出張整備・点検" loading="lazy"></div>
-                <div class="rk-banner__overlay"></div>
-                <div class="rk-banner__body">
-                    <span class="rk-banner__tag">国家1級整備士が対応</span>
-                    <div class="rk-banner__name">🔧 出張整備・パーツ取付</div>
-                    <div class="rk-banner__desc">ドラレコ・ミラー取付から車検・整備管理まで、ご自宅で完結。</div>
-                    <span class="rk-banner__more">整備ページを見る →</span>
-                </div>
+        <p class="rk-crosslink__sub">クルマのことは、まとめてラクルマへ。</p>
+        <style>
+            .rkb-stack { display: flex; flex-direction: column; gap: 16px; max-width: 920px; margin: 0 auto; }
+            .rkb {
+                position: relative; display: flex; align-items: center; gap: 22px;
+                background: #ffffff; border: 1.5px solid #dfe8f3; border-radius: 16px;
+                padding: 22px 74px 22px 24px; min-height: 128px;
+                text-decoration: none; overflow: hidden;
+                box-shadow: 0 4px 18px rgba(13, 39, 72, 0.06);
+                transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            }
+            .rkb:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(13, 39, 72, 0.12); border-color: #b9c9de; }
+            .rkb__badge {
+                flex: 0 0 68px; width: 68px; height: 68px; border-radius: 50%;
+                background: #003B8B; color: #fff;
+                display: flex; align-items: center; justify-content: center; text-align: center;
+                font-size: 13px; font-weight: 800; line-height: 1.35; letter-spacing: 0.02em;
+            }
+            .rkb__main { flex: 1 1 auto; min-width: 0; text-align: left; }
+            .rkb__catch { font-size: 12.5px; font-weight: 800; color: #b08d4f; letter-spacing: 0.04em; margin: 0 0 4px; }
+            .rkb__title { font-size: clamp(21px, 2.2vw, 27px); font-weight: 900; color: #0d2748; letter-spacing: 0.03em; line-height: 1.3; margin: 0; }
+            .rkb__photo { flex: 0 0 170px; width: 170px; height: 96px; border-radius: 10px; overflow: hidden; border: 1px solid #e6ecf4; }
+            .rkb__photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(1.05) saturate(1.02); }
+            .rkb__benefit {
+                flex: 0 0 224px; width: 224px; box-sizing: border-box;
+                border: 1.5px solid #003B8B; border-radius: 10px;
+                padding: 10px 16px; font-size: 12.5px; font-weight: 800; color: #003B8B; line-height: 1.65;
+                text-align: center;
+            }
+            .rkb__arrow {
+                position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+                width: 34px; height: 34px; border-radius: 50%;
+                background: #003B8B; color: #fff;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 15px; font-weight: 800;
+            }
+            @media (max-width: 860px) {
+                .rkb { flex-wrap: wrap; padding: 18px 60px 18px 18px; gap: 12px 14px; }
+                .rkb__photo { display: none; }
+                .rkb__benefit { white-space: normal; font-size: 12px; padding: 8px 12px; }
+                .rkb__badge { flex-basis: 58px; width: 58px; height: 58px; font-size: 11.5px; }
+            }
+        </style>
+        <div class="rkb-stack">
+            <a class="rkb" href="/maintenance/">
+                <span class="rkb__badge">出張<br>対応</span>
+                <span class="rkb__main">
+                    <p class="rkb__catch">＼ プロの整備士がご自宅に訪問 ／</p>
+                    <p class="rkb__title">出張整備・パーツ取付</p>
+                </span>
+                <span class="rkb__photo"><img src="/assets/images/works-diagnosis.webp" alt="出張整備" loading="lazy"></span>
+                <span class="rkb__benefit">ドラレコ取付もご自宅で<br>購入前の部品相談は無料</span>
+                <span class="rkb__arrow">→</span>
             </a>
-            <a class="rk-banner" href="/blog/">
-                <div class="rk-banner__img"><img src="/assets/images/voice-mirror-dashcam.webp" alt="車種別の作業実績" loading="lazy" style="object-position: center 30%;"></div>
-                <div class="rk-banner__overlay"></div>
-                <div class="rk-banner__body">
-                    <span class="rk-banner__tag">施工事例を随時更新</span>
-                    <div class="rk-banner__name">📝 車種別の作業実績</div>
-                    <div class="rk-banner__desc">実際の施工・取付事例を公開中。あなたの車種の実績も探せます。</div>
-                    <span class="rk-banner__more">作業実績を見る →</span>
-                </div>
+            <a class="rkb" href="/shaken/">
+                <span class="rkb__badge">来店<br>不要</span>
+                <span class="rkb__main">
+                    <p class="rkb__catch">＼ 車を預けずご自宅で完結 ／</p>
+                    <p class="rkb__title">出張車検</p>
+                </span>
+                <span class="rkb__photo"><img src="/assets/images/service_shaken.jpg" alt="出張車検" loading="lazy"></span>
+                <span class="rkb__benefit">代車・送迎いらず<br>LINEで概算見積り無料</span>
+                <span class="rkb__arrow">→</span>
             </a>
-            <a class="rk-banner" href="/shaken/">
-                <div class="rk-banner__img"><img src="/assets/images/service_shaken.jpg" alt="国家1級整備士による出張車検" loading="lazy"></div>
-                <div class="rk-banner__overlay"></div>
-                <div class="rk-banner__body">
-                    <span class="rk-banner__tag">車を預けずご自宅で</span>
-                    <div class="rk-banner__name">🚗 出張車検</div>
-                    <div class="rk-banner__desc">代車も送迎も不要。ご自宅の駐車場で車検が完結します。</div>
-                    <span class="rk-banner__more">車検ページを見る →</span>
-                </div>
+            <a class="rkb" href="/blog/">
+                <span class="rkb__badge">事例<br>多数</span>
+                <span class="rkb__main">
+                    <p class="rkb__catch">＼ あなたの車種もきっと見つかる ／</p>
+                    <p class="rkb__title">車種別の作業実績</p>
+                </span>
+                <span class="rkb__photo"><img src="/assets/uploads/2025/10/74f7d0941b02809f624ce02bd5ad3f9c.webp" alt="作業実績" loading="lazy"></span>
+                <span class="rkb__benefit">実際の施工事例を<br>随時更新中</span>
+                <span class="rkb__arrow">→</span>
             </a>
         </div>
-    </section>
+        </section>
 
     <script>
         // 料金プランタブ切り替え
@@ -3037,8 +3319,8 @@ a[href^="https://lin.ee"]:hover {
 
     <!-- 法人・フリート向けセクション -->
     <section style="padding: 60px 20px; background: #f0f4fb; text-align: center;">
-        <p style="font-size: 13px; font-weight: 700; color: #2563a8; letter-spacing: 0.1em; margin-bottom: 12px;">FOR BUSINESS</p>
-        <h2 style="font-size: 22px; font-weight: 900; color: #1a3a5c; margin-bottom: 12px; line-height: 1.5;">法人・フリートのお客様へ</h2>
+        <p class="sec-eyebrow">法人のお客様</p>
+        <h2 class="sec-title" style="margin-bottom: 12px;">法人・フリートのお客様へ</h2>
         <p style="font-size: 14px; color: #4a5568; line-height: 1.8; margin-bottom: 28px;">複数台の車両管理をまとめてお任せいただける<br>法人・フリートプランをご用意しています。<br>お見積り・ご相談はお気軽にどうぞ。</p>
         <a href="/corporate_form/" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #2563a8, #1a3a5c); color: #ffffff; font-size: 16px; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(37,99,168,0.35); letter-spacing: 0.04em;">法人・フリート向けお問い合わせはこちら</a>
     </section>
@@ -3057,6 +3339,7 @@ a[href^="https://lin.ee"]:hover {
         <a href="/">ホーム</a>
         <a href="/mobile-car-wash/" aria-current="page">出張洗車</a>
         <a href="/maintenance/">出張整備・パーツ取付</a>
+        <a href="/shaken/">出張車検</a>
         <a href="/blog/">作業実績ブログ</a>
         <a href="/price_list/">料金</a>
         <a href="/p/line-wash/">LINEで相談・予約</a>
