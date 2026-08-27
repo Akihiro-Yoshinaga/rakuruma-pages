@@ -529,6 +529,17 @@
         </label>
       </div>
 
+      <!-- 安心点検 -->
+      <div class="field" style="margin-bottom:18px;">
+        <label style="display:flex; align-items:flex-start; gap:12px; padding:14px; background:var(--gray-100); border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer;" id="anshin-check-label">
+          <input type="checkbox" id="anshin_check" name="anshin_check" value="希望する" style="width:20px;height:20px;min-width:20px;accent-color:var(--accent);margin-top:1px;cursor:pointer;" />
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--gray-900);line-height:1.4;">安心点検も希望する（無料）</div>
+            <div style="font-size:11px;color:var(--gray-400);margin-top:2px;">バッテリー / タイヤ空気圧 / ライト / ウォッシャー液（10〜20分）</div>
+          </div>
+        </label>
+      </div>
+
       <div class="field" style="margin-bottom:0;">
         <label style="margin-bottom:8px;">ボディの状態</label>
         <label style="display:flex; align-items:flex-start; gap:12px; padding:14px; background:var(--gray-100); border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer;" id="dirty-check-label">
@@ -864,6 +875,7 @@
       first_time:      document.getElementById('first_time').checked ? 'はい' : '',
       indoor_cleaning: document.getElementById('indoor_cleaning').checked ? '希望する' : '',
       heavily_dirty:   document.getElementById('heavily_dirty').checked ? 'はい' : '',
+      anshin_check:    document.getElementById('anshin_check').checked ? '希望する' : '',
       slot1:   isFallbackMode ? document.getElementById('slot1-manual').value : document.getElementById('slot1-value').value,
       slot2:   isFallbackMode ? document.getElementById('slot2-manual').value : document.getElementById('slot2-value').value,
       note:    document.getElementById('note').value.trim(),

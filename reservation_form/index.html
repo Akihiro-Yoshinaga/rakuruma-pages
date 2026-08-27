@@ -749,6 +749,15 @@
         </div>
       </label>
 
+      <!-- 安心点検 -->
+      <label class="check-field" id="label-anshin">
+        <input type="checkbox" id="anshin_check" name="anshin_check" value="希望する" />
+        <div>
+          <div class="check-label">安心点検も希望する（無料）</div>
+          <div class="check-note">バッテリー / タイヤ空気圧 / ライト / ウォッシャー液（10〜20分）</div>
+        </div>
+      </label>
+
       <!-- 初めてのご利用 -->
       <label class="check-field" id="label-first-time">
         <input type="checkbox" id="first_time" name="first_time" value="はい" />
@@ -1139,6 +1148,7 @@
     document.getElementById('menu-extra-card').style.display = isWash ? 'block' : 'none';
     document.getElementById('field-heavily-dirty').style.display = isWash ? 'block' : 'none';
     if (!isWash) document.getElementById('heavily_dirty').checked = false;
+    if (!isWash) document.getElementById('anshin_check').checked = false;
   }
   document.getElementById('menu').addEventListener('change', updateMenuExtras);
 
@@ -1478,6 +1488,7 @@
       first_time:      document.getElementById('first_time')?.checked ? 'はい' : '',
       indoor_cleaning: document.getElementById('indoor_cleaning')?.checked ? '希望する' : '',
       heavily_dirty:   document.getElementById('heavily_dirty')?.checked ? 'はい' : '',
+      anshin_check:    document.getElementById('anshin_check')?.checked ? '希望する' : '',
       options:         selectedOptions,
       note:            document.getElementById('note')?.value.trim() || '',
       // 導線の記録：src=リッチメニュー等の導線キー／参照元URL（どちらも無ければ「直接」扱い）

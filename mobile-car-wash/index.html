@@ -1854,6 +1854,17 @@ a[href^="https://lin.ee"]:hover {
                             </label>
                           </div>
 
+                          <!-- 安心点検 -->
+                          <div class="rf-field" style="margin-bottom:18px;">
+                            <label class="rf-check-row" style="cursor:pointer;">
+                              <input type="checkbox" id="rf-anshin" value="希望する" style="width:20px;height:20px;min-width:20px;accent-color:#2563a8;margin-top:1px;" />
+                              <div>
+                                <div class="rf-check-label">安心点検も希望する（無料）</div>
+                                <div class="rf-check-note">バッテリー / タイヤ空気圧 / ライト / ウォッシャー液（10〜20分）</div>
+                              </div>
+                            </label>
+                          </div>
+
                           <!-- ボディの状態 -->
                           <div class="rf-field" style="margin-bottom:0;">
                             <label style="margin-bottom:8px;">ボディの状態</label>
@@ -2162,6 +2173,7 @@ a[href^="https://lin.ee"]:hover {
                           first_time:      document.getElementById('rf-first-time').checked ? 'はい' : '',
                           indoor_cleaning: document.getElementById('rf-indoor').checked ? '希望する' : '',
                           heavily_dirty:   document.getElementById('rf-dirty').checked ? 'はい' : '',
+                          anshin_check:    document.getElementById('rf-anshin').checked ? '希望する' : '',
                           slot1: isFallbackMode ? document.getElementById('rf-slot1-manual').value : document.getElementById('rf-slot1-value').value,
                           slot2: isFallbackMode ? document.getElementById('rf-slot2-manual').value : document.getElementById('rf-slot2-value').value,
                           note: document.getElementById('rf-note').value.trim(),
@@ -3160,7 +3172,7 @@ a[href^="https://lin.ee"]:hover {
         <a href="/price_list/">料金</a>
         <a href="/p/line-wash/">LINEで相談・予約</a>
       </nav>
-      <div class="footer-sns" style="margin:26px 0 18px;"><p style="font-size:12px;opacity:.6;margin:0 0 12px;">施工事例・車のメンテナンス情報を発信中</p><div style="display:flex;justify-content:center;align-items:center;gap:28px;"><a href="https://www.instagram.com/rakuruma.car/" target="_blank" rel="noopener" aria-label="Instagram" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#ig-grad)"/><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16.6" cy="7.4" r="1" fill="#fff"/></svg><span style="font-size:11px;">Instagram</span></a></div></div>
+      <div class="footer-sns" style="margin:26px 0 18px;"><p style="font-size:12px;opacity:.6;margin:0 0 12px;">施工事例・車のメンテナンス情報を発信中</p><div style="display:flex;justify-content:center;align-items:center;gap:28px;"><a href="https://www.instagram.com/rakuruma.car/" target="_blank" rel="noopener" aria-label="Instagram" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#ig-grad)"/><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16.6" cy="7.4" r="1" fill="#fff"/></svg><span style="font-size:11px;">Instagram</span></a><a href="https://www.youtube.com/@rakuruma2023" target="_blank" rel="noopener" aria-label="YouTube" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="5" fill="#FF0000"/><path d="M10 8.5v7l6-3.5z" fill="#fff"/></svg><span style="font-size:11px;">YouTube</span></a></div></div>
       <p class="rk-sitefooter__copy">© ラクルマ｜世田谷区・目黒区・渋谷区の出張洗車・整備・パーツ取付</p>
     </footer>
 
