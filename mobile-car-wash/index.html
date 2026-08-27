@@ -1067,27 +1067,28 @@ a[href^="https://lin.ee"]:hover {
                         display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px;
                     }
                     .pain-card {
-                        background: #ffffff; border: 1px solid #e6ecf4; border-radius: 14px;
-                        padding: 34px 26px 26px; text-align: center;
-                        box-shadow: 0 2px 12px rgba(13, 39, 72, 0.05);
+                        background: #ffffff; border: 1px solid #dfe8f3; border-radius: 14px;
+                        padding: 26px 24px 24px; text-align: left;
+                        box-shadow: 0 4px 18px rgba(13, 39, 72, 0.06);
                     }
-                    .pain-icon { width: 60px; height: 60px; margin: 0 auto 20px; display: block; }
+                    .pain-card__head { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+                    .pain-icon { width: 28px; height: 28px; flex: 0 0 28px; display: block; margin: 0; }
                     .pain-card h3 {
-                        font-size: 17px; font-weight: 800; color: #0d2748;
-                        letter-spacing: 0.02em; line-height: 1.4; margin: 0 0 10px;
+                        font-size: 17.5px; font-weight: 800; color: #0d2748;
+                        letter-spacing: 0.01em; line-height: 1.4; margin: 0;
                     }
                     .pain-desc {
-                        font-size: 13.5px; color: #5a6b80; line-height: 1.85; margin: 0 0 20px;
+                        font-size: 13.5px; color: #5a6b80; line-height: 1.85; margin: 0 0 18px;
                     }
                     .pain-result {
-                        border-top: 1px solid #eef2f7; padding-top: 15px; margin: 0;
+                        border-top: 1px solid #eef2f7; padding-top: 14px; margin: 0;
                         font-size: 13px; font-weight: 700; color: #003B8B; line-height: 1.6;
                     }
                     .pain-result::before { content: '\2192'; color: #c9ab6a; font-weight: 800; margin-right: 7px; }
                     @media (max-width: 768px) {
                         .pain-grid { grid-template-columns: 1fr; gap: 16px; }
                         .pain-title { margin-bottom: 36px; }
-                        .pain-card { padding: 28px 22px 22px; }
+                        .pain-card { padding: 22px 20px 20px; }
                     }
                 </style>
                 <p class="pain-eyebrow">よくあるお悩み</p>
@@ -1096,38 +1097,44 @@ a[href^="https://lin.ee"]:hover {
                 <div class="pain-grid">
                     <!-- 悩み1 -->
                     <div class="pain-card">
-                        <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="洗車する時間がない" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="24" cy="24" r="16"/>
-                            <path d="M24 15 v9 l6.5 4"/>
-                            <circle cx="24" cy="24" r="1.6" fill="#c9ab6a" stroke="none"/>
-                        </svg>
-                        <h3>洗車する時間がない</h3>
+                        <div class="pain-card__head">
+                            <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="24" cy="24" r="16"/>
+                                <path d="M24 15 v9 l6.5 4"/>
+                                <circle cx="24" cy="24" r="1.6" fill="#c9ab6a" stroke="none"/>
+                            </svg>
+                            <h3>洗車する時間がない</h3>
+                        </div>
                         <p class="pain-desc">車の汚れが気になっても、週末は子どもとの予定でいっぱい…</p>
                         <p class="pain-result">洗車は後回しになりがち</p>
                     </div>
 
                     <!-- 悩み2 -->
                     <div class="pain-card">
-                        <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="予約が取れない" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="8" y="11" width="32" height="29" rx="4"/>
-                            <path d="M8 19.5 h32"/>
-                            <path d="M16.5 7 v7 M31.5 7 v7"/>
-                            <path d="M20 26.5 l8 7 M28 26.5 l-8 7" stroke="#c9ab6a"/>
-                        </svg>
-                        <h3>予約が取れない</h3>
+                        <div class="pain-card__head">
+                            <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="8" y="11" width="32" height="29" rx="4"/>
+                                <path d="M8 19.5 h32"/>
+                                <path d="M16.5 7 v7 M31.5 7 v7"/>
+                                <path d="M20 26.5 l8 7 M28 26.5 l-8 7" stroke="#c9ab6a"/>
+                            </svg>
+                            <h3>予約が取れない</h3>
+                        </div>
                         <p class="pain-desc">洗車できる時に限って混雑している…</p>
                         <p class="pain-result">スキマ時間でしか洗車する時間がない</p>
                     </div>
 
                     <!-- 悩み3 -->
                     <div class="pain-card">
-                        <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="待つのが面倒" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 8 h18 M15 40 h18"/>
-                            <path d="M17.5 8 v4 c0 5 4.5 7.5 6.5 12 c-2 4.5 -6.5 7 -6.5 12 v4"/>
-                            <path d="M30.5 8 v4 c0 5 -4.5 7.5 -6.5 12 c2 4.5 6.5 7 6.5 12 v4"/>
-                            <path d="M24 31 l3.4 5 h-6.8 z" fill="#c9ab6a" stroke="none"/>
-                        </svg>
-                        <h3>待つのが面倒</h3>
+                        <div class="pain-card__head">
+                            <svg class="pain-icon" viewBox="0 0 48 48" role="img" aria-label="" fill="none" stroke="#14335e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 8 h18 M15 40 h18"/>
+                                <path d="M17.5 8 v4 c0 5 4.5 7.5 6.5 12 c-2 4.5 -6.5 7 -6.5 12 v4"/>
+                                <path d="M30.5 8 v4 c0 5 -4.5 7.5 -6.5 12 c2 4.5 6.5 7 6.5 12 v4"/>
+                                <path d="M24 31 l3.4 5 h-6.8 z" fill="#c9ab6a" stroke="none"/>
+                            </svg>
+                            <h3>待つのが面倒</h3>
+                        </div>
                         <p class="pain-desc">待っている間、他のことができるわけでもなく中途半端…</p>
                         <p class="pain-result">結局めんどくさくなって、汚れたまま乗り続けてしまう</p>
                     </div>
@@ -1190,7 +1197,7 @@ a[href^="https://lin.ee"]:hover {
                     }
                 </style>
                 <p class="sol-eyebrow">ラクルマの答え</p>
-                <h2 class="sol-title">そのお悩み、<span class="sol-brand">ラクルマ</span>がすべてなくします。</h2>
+                <h2 class="sol-title">そのお悩み、<span class="sol-brand">ラクルマ</span>が解決します。</h2>
                 <div class="sol-grid">
                     <div class="sol-card">
                         <span class="sol-card-pain">洗車する時間がない</span>
