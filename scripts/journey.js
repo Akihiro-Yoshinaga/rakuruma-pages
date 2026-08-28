@@ -18,6 +18,11 @@
   // 中継ページ（/p/...）は「見たページ」に数えない。押した瞬間の踏み台なので経路が汚れる
   if (location.pathname.indexOf('/p/') === 0) return;
 
+  // 日本語URL（/blog/car/エミーラ/ など）は%エンコードのままだとシートで読めないので戻す
+  function readablePath() {
+    try { return decodeURIComponent(location.pathname); } catch (e) { return location.pathname; }
+  }
+
   function refHost() {
     var r = document.referrer || '';
     if (!r) return 'direct';
@@ -42,7 +47,7 @@
     // 30日を過ぎた初回接触は捨てて、この訪問を新しい初回として数え直す
     if (s.ts && (Date.now() - Date.parse(s.ts)) > WINDOW_DAYS * 864e5) s = {};
 
-    var path = location.pathname;
+    var path = readablePath();
     if (!s.ft) {
       s.ft  = path;
       s.ref = refHost();
