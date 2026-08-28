@@ -36,6 +36,12 @@
 /* FVの黄色をページ共通ゴールドに統一（このページのみ） */
 .hero--wp .hero__copy-highlight { color: #c9ab6a; }
 .hero--wp .hero__badge-rank { color: #c9ab6a; }
+/* スクロールで静かに現れる（reveal） */
+.rv-fade { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease-out, transform 0.7s ease-out; }
+.rv-fade.is-in { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+    .rv-fade { opacity: 1; transform: none; transition: none; }
+}
 /* セクション見出しの統一様式（金線eyebrow＋紺タイトル） */
 .sec-eyebrow {
     display: flex; align-items: center; justify-content: center; gap: 12px;
@@ -3396,5 +3402,35 @@ a[href^="https://lin.ee"]:hover {
         onScroll();
     })();
     </script>
+<script>
+(function () {
+    // スクロールに合わせて見出し・カードが静かに現れる（FVは対象外）
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!('IntersectionObserver' in window)) return;
+    var sels = [
+        '.sec-eyebrow', '.sec-title',
+        '.pain-eyebrow', '.pain-title', '.sol-eyebrow', '.sol-title',
+        '.loc-eyebrow', '.loc-title', '.pt-eyebrow', '.pt-title',
+        '.pain-card', '.sol-card', '#points .flexbox',
+        '.loc-card', '.rkb', '.pcard', '.pfx-card',
+        '.step_list li', '.plan-perk'
+    ];
+    var els = Array.prototype.slice.call(document.querySelectorAll(sels.join(',')));
+    els.forEach(function (el) { el.classList.add('rv-fade'); });
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (el) {
+        var sibs = Array.prototype.filter.call(el.parentElement.children, function (c) {
+            return c.classList.contains('rv-fade');
+        });
+        var idx = sibs.indexOf(el);
+        if (idx > 0) { el.style.transitionDelay = Math.min(idx * 90, 360) + 'ms'; }
+        io.observe(el);
+    });
+})();
+</script>
 </body>
 </html>
