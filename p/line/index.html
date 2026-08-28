@@ -24,7 +24,17 @@
   var DEST = "https://lin.ee/r0BAZkR0";
   var ua = navigator.userAgent || '';
   var d = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
-  var ping = "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec" + '?track=pamphlet_line&d=' + d;
+  // 回遊データ（journey.js が localStorage に貯めた初回LP・参照元・経路）を一緒に送る
+  var jq = '';
+  try {
+    var j = JSON.parse(localStorage.getItem('rk_journey') || '{}') || {};
+    if (j.ft)  jq += '&ft=' + encodeURIComponent(String(j.ft).slice(0, 80));
+    if (j.ref) jq += '&fr=' + encodeURIComponent(String(j.ref).slice(0, 40));
+    if (j.n)   jq += '&n='  + (parseInt(j.n, 10) || 0);
+    var pp = (j.p || []).slice(-5).map(function (x) { return String(x).slice(0, 60); }).join('>');
+    if (pp)    jq += '&pp=' + encodeURIComponent(pp);
+  } catch (e) {}
+  var ping = "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec" + '?track=pamphlet_line&d=' + d + jq;
   // sendBeaconが使えた場合はimgを撃たない（二重計上の防止）
   var sent = false;
   try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}

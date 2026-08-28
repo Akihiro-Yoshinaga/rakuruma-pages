@@ -956,6 +956,22 @@
     } catch (e) { return ''; }
   })();
 
+  // ===== 回遊の記録（2026-08-28）=====
+  // journey.js が localStorage に貯めた「最初に着地したページ・参照元・経路」を予約に添える。
+  // 同一オリジンなのでこのページに journey.js を読ませなくても読める。
+  function readJourney() {
+    try {
+      var j = JSON.parse(localStorage.getItem('rk_journey') || '{}') || {};
+      if (!j.ft) return {};
+      return {
+        ft: String(j.ft).slice(0, 80),
+        fr: String(j.ref || '').slice(0, 40),
+        n:  parseInt(j.n, 10) || 0,
+        pp: (j.p || []).slice(-5).map(function (x) { return String(x).slice(0, 60); }).join('>'),
+      };
+    } catch (e) { return {}; }
+  }
+
   function trackRichMenuTap() {
     try {
       if (!RM_SRC) return;
@@ -1494,6 +1510,8 @@
       // 導線の記録：src=リッチメニュー等の導線キー／参照元URL（どちらも無ければ「直接」扱い）
       src:             (typeof RM_SRC !== 'undefined' ? RM_SRC : '') || '',
       ref:             (document.referrer || '').slice(0, 120),
+      // 回遊の記録：journey.js が貯めた「最初に着地したページ」と参照元・経路（2026-08-28 追加）
+      ...readJourney(),
     };
 
     // GAS へ送信（GETパラメータにJSONを乗せる方式）
