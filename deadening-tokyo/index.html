@@ -149,13 +149,19 @@ header{
 .card p{font-size:15px;line-height:1.95}
 
 .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.panel{border:1px solid var(--line);border-radius:10px;padding:32px 28px;background:var(--bg-2)}
-.panel.on{border-color:var(--accent)}
+.panel{border:1px solid var(--line);border-radius:14px;padding:34px 30px;background:var(--bg-2)}
+.panel.on{
+  border-color:rgba(143,211,232,.55);
+  background:linear-gradient(180deg,rgba(143,211,232,.07),rgba(143,211,232,0) 55%),var(--bg-2);
+  box-shadow:0 0 48px -22px rgba(143,211,232,.35);
+}
+.panel.on h3{color:var(--accent)}
 .panel h3{font-size:17px}
 .panel ul{list-style:none;margin-top:8px}
-.panel li{font-size:15px;color:var(--fg-dim);padding:10px 0 10px 26px;position:relative;line-height:1.85;border-bottom:1px solid var(--line)}
+.panel li{font-size:15px;color:var(--fg-dim);padding:11px 0 11px 30px;position:relative;line-height:1.85;border-bottom:1px solid var(--line)}
+.panel.on li{border-bottom-color:rgba(143,211,232,.14);color:var(--fg)}
 .panel li:last-child{border-bottom:0}
-.panel li::before{position:absolute;left:0;top:10px;font-weight:700}
+.panel li::before{position:absolute;left:2px;top:11px;font-weight:700;font-size:14px}
 .panel.on li::before{content:"○";color:var(--accent)}
 .panel.off li::before{content:"×";color:#6b7178}
 
@@ -211,6 +217,55 @@ footer a{color:var(--fg)}
 /* ── スマホ固定CTA ───────────────────── */
 .sticky{display:none}
 
+/* ── モーション演出（スクロール表示＋ホバー） ───────────── */
+.reveal{
+  opacity:0;transform:translateY(26px);
+  transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1);
+  transition-delay:var(--d,0s);
+}
+.reveal.in{opacity:1;transform:none}
+
+.fv{position:relative;overflow:hidden}
+.fv::before{
+  content:"";position:absolute;inset:-30% -10%;pointer-events:none;
+  background:radial-gradient(38% 32% at 32% 34%,rgba(143,211,232,.09),transparent 70%);
+  animation:fvdrift 16s ease-in-out infinite alternate;
+}
+.fv .wrap{position:relative}
+@keyframes fvdrift{
+  from{transform:translate3d(-4%,-2%,0)}
+  to{transform:translate3d(7%,5%,0)}
+}
+
+header{transition:box-shadow .35s}
+header.scrolled{box-shadow:0 10px 32px rgba(0,0,0,.45)}
+
+@media (hover:hover){
+  .card,.plan{transition:transform .45s cubic-bezier(.22,1,.36,1),border-color .45s,background .45s,box-shadow .45s}
+  .card:hover,.plan:hover{
+    transform:translateY(-6px);
+    border-color:#3c434c;background:#16191d;
+    box-shadow:0 22px 44px -20px rgba(0,0,0,.6),0 0 0 1px rgba(143,211,232,.05);
+  }
+  .plan.reco:hover{border-color:var(--accent);box-shadow:0 22px 48px -18px rgba(143,211,232,.16)}
+  .panel{transition:border-color .45s,background .45s,box-shadow .45s}
+  .panel:not(.on):hover{border-color:#3c434c;background:#16191d}
+  .panel.on:hover{border-color:var(--accent);box-shadow:0 0 56px -20px rgba(143,211,232,.45)}
+  .stats div{transition:background .35s}
+  .stats div:hover{background:#15181c}
+  .btn{transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,filter .3s,opacity .3s}
+  .btn:hover{opacity:1;transform:translateY(-2px);filter:brightness(1.07);box-shadow:0 12px 28px -12px rgba(6,199,85,.5)}
+  .btn-ghost:hover{box-shadow:0 12px 28px -14px rgba(143,211,232,.25)}
+  summary{transition:color .3s}
+  summary:hover{color:var(--accent)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .fv::before{animation:none}
+}
+
 @media (max-width:820px){
   body{font-size:16px}
   section{padding:64px 0}
@@ -244,7 +299,7 @@ footer a{color:var(--fg)}
 <div class="fv">
   <div class="wrap">
     <p class="eyebrow">Deadening Tokyo</p>
-    <h1>世田谷でデッドニング、<br>頼めるお店がない。</h1>
+    <h1>車を預けない、<br>デッドニング。</h1>
     <p class="sub">探しても都内に数えるほど。1ヶ月待ち。持ち込みは断られる。<br><strong>私たちが、ご自宅に伺います。約3時間で終わります。</strong></p>
     <p class="sub2">元トヨタ／元ホンダのディーラー整備士（国家1級）が2名｜持ち込み歓迎｜東京都内出張<br>デッドニング（車の静音化・ロードノイズ対策）・スピーカー交換</p>
     <a class="btn" href="https://lin.ee/r0BAZkR0">LINEで相談する</a>
@@ -256,35 +311,11 @@ footer a{color:var(--fg)}
 <section>
   <div class="wrap">
     <div class="stats">
-      <div><b>元ディーラー</b><span>トヨタ・ホンダ／国家1級2名</span></div>
+      <div><b>国家1級×2名</b><span>元トヨタ・元ホンダのディーラー整備士</span></div>
       <div><b>約3時間</b><span>ドア2枚・その日に完了</span></div>
       <div><b>持込OK</b><span>他店購入品も断りません</span></div>
       <div><b>0円</b><span>出張費（東京都内）<span class="todo">要確定</span></span></div>
     </div>
-  </div>
-</section>
-
-<!-- ══ お客様の声（きっかけ） ══ -->
-<section>
-  <div class="wrap">
-    <p class="eyebrow">Why we started</p>
-    <h2>「頼めるお店が、<br>見つからなかった」</h2>
-    <p class="lead">このサービスは、あるお客様のこんなお話から始まりました。</p>
-    <div class="panel" style="margin:32px 0">
-      <p style="font-size:16.5px;line-height:2.1;color:var(--fg)">
-        「デッドニングをやりたくて調べたんですが、<strong>世田谷の近くで見つかったのは2件だけ</strong>。
-        しかもどちらも大田区のほうで、少し遠い。<br><br>
-        近いほうに問い合わせてみたら、<strong>1ヶ月待ち</strong>と言われました。
-        <strong>持ち込みもあまりやっていない</strong>とのことで、
-        自分の思うような形で進められないのが、正直ストレスでした。」
-      </p>
-    </div>
-    <p class="note">
-      調べてみると、実際そのとおりでした。東京でデッドニングを扱う店は練馬・荒川・大田などにあり、
-      <strong>世田谷区には見つかりません</strong>。「デッドニング 東京」で検索すると、千葉県の店が出てくることもあります。<br><br>
-      <strong>やりたい人はいるのに、頼める場所がない。</strong>
-      だったら、こちらから伺えばいい。それがこのサービスの出発点です。
-    </p>
   </div>
 </section>
 
@@ -389,24 +420,24 @@ footer a{color:var(--fg)}
     <p class="eyebrow">On-site</p>
     <h2>預ける、という選択肢が<br>なくなります。</h2>
     <p class="lead">専門店にデッドニングを頼むと、車を2〜3日預けることになります。<br>その間、買い物も送り迎えもできません。</p>
-    <p class="note">私たちは伺います。ご自宅の駐車場に停まったまま、<strong>約3時間</strong>で終わります。<br>作業中は在宅でも外出中でもかまいません。鍵をお預かりして、終わったらご報告します。</p>
+    <p class="note">私たちは伺います。ご自宅の駐車場に停まったまま、<strong>その日のうち</strong>に終わります。<br>作業中は在宅でも外出中でもかまいません。鍵をお預かりして、終わったらご報告します。</p>
     <div class="two" style="margin-top:36px">
-      <div class="panel">
+      <div class="panel off">
         <h3>専門店・カー用品店</h3>
-        <ul style="list-style:none">
-          <li style="padding-left:0">そもそも都内に数えるほどしかない</li>
-          <li style="padding-left:0">予約が1ヶ月先になることがある</li>
-          <li style="padding-left:0">車を持ち込む／2〜3日預ける</li>
-          <li style="padding-left:0">持ち込みパーツは断られることがある</li>
+        <ul>
+          <li>そもそも都内に数えるほどしかない</li>
+          <li>予約が1ヶ月先になることがある</li>
+          <li>車を持ち込む／2〜3日預ける</li>
+          <li>持ち込みパーツは断られることがある</li>
         </ul>
       </div>
       <div class="panel on">
         <h3>デッドニング東京</h3>
-        <ul style="list-style:none">
-          <li style="padding-left:0">ご自宅の駐車場に伺う</li>
-          <li style="padding-left:0">約3時間・その日に完了</li>
-          <li style="padding-left:0">他店で購入されたパーツの取付も歓迎</li>
-          <li style="padding-left:0">空きがあれば、来週伺えます</li>
+        <ul>
+          <li>ご自宅の駐車場に伺う</li>
+          <li>約3時間・その日に完了</li>
+          <li>他店で購入されたパーツの取付も歓迎</li>
+          <li>空きがあれば、来週伺えます</li>
         </ul>
       </div>
     </div>
@@ -437,7 +468,7 @@ footer a{color:var(--fg)}
       <div class="plan reco">
         <span class="tag">いちばん多いご依頼</span>
         <div class="name">持ち込みプラン</div>
-        <div class="price">42,000<small>円（税込）</small></div>
+        <div class="price">55,000<small>円（税込）</small></div>
         <div class="time">約3.5〜4時間</div>
         <ul>
           <li>お持ちのスピーカーの取付工賃</li>
@@ -448,7 +479,7 @@ footer a{color:var(--fg)}
       </div>
       <div class="plan">
         <div class="name">スタンダード</div>
-        <div class="price">5万円台<small>〜</small></div>
+        <div class="price">7万円台<small>〜</small></div>
         <div class="time">約3.5〜4時間</div>
         <ul>
           <li>国産定番スピーカー（本体込み）</li>
@@ -459,7 +490,7 @@ footer a{color:var(--fg)}
       </div>
       <div class="plan">
         <div class="name">デッドニングのみ</div>
-        <div class="price">33,000<small>円（税込）</small></div>
+        <div class="price">44,000<small>円（税込）</small></div>
         <div class="time">約2.5〜3時間</div>
         <ul>
           <li>フロントドア2枚</li>
@@ -470,11 +501,26 @@ footer a{color:var(--fg)}
       </div>
     </div>
     <p class="note">
-      <strong>ドア4枚（フロント＋リア）59,800円</strong>（約4.5〜5時間）／後席の会話の聞こえ方が変わります。<br>
+      <strong>ドア4枚（フロント＋リア）79,800円</strong>（約4.5〜5時間）／後席の会話の聞こえ方が変わります。<br>
       オプション：ラゲッジ／リアフェンダー 16,500円〜（+1〜2時間）<br>
       天井・フロアの施工は、屋外で1日では完了しないため出張では承っておりません。<br>
       全プランに施工写真の記録が付きます。<br>
       <span class="todo">要確定</span> 出張費・対応エリア・保証期間の記載をここに追記
+    </p>
+  </div>
+</section>
+
+<!-- ══ 価格の理由 ══ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Why this price</p>
+    <h2>専門店の施工を、<br>この価格で出せる理由。</h2>
+    <p class="lead">安くするために、何かを省いているわけではありません。</p>
+    <p class="note">
+      私たちは店舗を持ちません。ご自宅の駐車場が作業場なので、<strong>家賃や設備の維持費が価格に乗っていません</strong>。<br><br>
+      そして出張整備が本業です。車両も工具も、訪問作業の段取りも既にあります。
+      デッドニングのために新しく抱えた固定費がほとんどない。<strong>だから、工程は省かずに価格だけを抑えられます。</strong><br><br>
+      使用素材：<span class="todo">要確定</span> 制振材・吸音材のブランド名をここに記載
     </p>
   </div>
 </section>
@@ -541,6 +587,11 @@ footer a{color:var(--fg)}
     </details>
 
     <details>
+      <summary>輸入車にも対応していますか。</summary>
+      <p><span class="todo">要確定</span> 輸入車の対応可否・条件（例：車種により事前にお調べしてから回答します）をここに記載。</p>
+    </details>
+
+    <details>
       <summary>対応エリアはどこまでですか。</summary>
       <p><span class="todo">要確定</span> 世田谷区・目黒区・渋谷区を中心に東京都内へ出張します。エリア外の可否・出張費の記載をここに追記してください。</p>
     </details>
@@ -572,9 +623,49 @@ footer a{color:var(--fg)}
     <a href="https://rakuruma.com/maintenance/">出張整備</a>　/
     <a href="https://lin.ee/r0BAZkR0">LINEで相談</a>
   </div>
+  <div class="footer-sns" style="margin:26px 0 18px;"><p style="font-size:12px;opacity:.6;margin:0 0 12px;">施工事例・車のメンテナンス情報を発信中</p><div style="display:flex;justify-content:center;align-items:center;gap:28px;"><a href="https://www.instagram.com/rakuruma.car/" target="_blank" rel="noopener" aria-label="Instagram" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#ig-grad)"/><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16.6" cy="7.4" r="1" fill="#fff"/></svg><span style="font-size:11px;">Instagram</span></a><a href="https://www.youtube.com/@rakuruma2023" target="_blank" rel="noopener" aria-label="YouTube" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="5" fill="#FF0000"/><path d="M10 8.5v7l6-3.5z" fill="#fff"/></svg><span style="font-size:11px;">YouTube</span></a></div></div>
 </footer>
 
 <div class="sticky"><a class="btn" href="https://lin.ee/r0BAZkR0">LINEで相談する</a></div>
 
+<script>
+(function(){
+  if(!("IntersectionObserver" in window))return;
+  var containers=".cards,.plans,.stats,.two,.flow";
+  var items=[];
+  document.querySelectorAll(".fv .wrap > *, section .wrap > *").forEach(function(el){
+    if(el.matches(containers)){
+      var kids=el.children;
+      for(var i=0;i<kids.length;i++){
+        kids[i].style.setProperty("--d",Math.min(i*0.09,0.45)+"s");
+        items.push(kids[i]);
+      }
+    }else{
+      items.push(el);
+    }
+  });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        en.target.classList.add("in");
+        io.unobserve(en.target);
+      }
+    });
+  },{threshold:0.12,rootMargin:"0px 0px -8% 0px"});
+  items.forEach(function(el){
+    el.classList.add("reveal");
+    io.observe(el);
+  });
+  var hd=document.querySelector("header");
+  var onScroll=function(){
+    if(window.scrollY>8){hd.classList.add("scrolled");}
+    else{hd.classList.remove("scrolled");}
+  };
+  window.addEventListener("scroll",onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+
+<script src="/scripts/reveal.js" defer></script>
 </body>
 </html>
