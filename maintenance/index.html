@@ -2470,8 +2470,17 @@
 
       .price-table th,
       .price-table td {
-        padding: var(--spacing-md) 14px;
+        padding: var(--spacing-md) 10px;
       }
+      /* 途中折り対策: 金額と時間は折り返さない */
+      .price-table td:nth-child(2),
+      .price-table td:nth-child(3),
+      .price-table th:nth-child(3) {
+        white-space: nowrap;
+      }
+      .price-table th:nth-child(2) { min-width: 5.5em; }
+      /* 見出しカードのタイトル折り緩和 */
+      .trouble-card-title { font-size: 16px; letter-spacing: 0; }
     }
   </style>
 <script type="text/javascript">
@@ -2756,7 +2765,7 @@
         </button>
         <div class="accordion-body">
           <table class="price-table">
-            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <thead><tr><th>作業内容</th><th>目安料金<br class="sp">（税込）</th><th>所要時間</th></tr></thead>
             <tbody>
               <tr><td>エンジンオイル交換</td><td class="price">¥5,500〜</td><td>30〜60分</td></tr>
               <tr><td>タイヤ交換（4本）</td><td class="price">¥8,800〜</td><td>60〜90分</td></tr>
@@ -2780,7 +2789,7 @@
         </button>
         <div class="accordion-body">
           <table class="price-table">
-            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <thead><tr><th>作業内容</th><th>目安料金<br class="sp">（税込）</th><th>所要時間</th></tr></thead>
             <tbody>
               <tr><td>車検（24ヶ月点検込み）</td><td class="price">¥33,000〜＋法定費用</td><td>応相談</td></tr>
               <tr><td>法定点検</td><td class="price">お見積もり</td><td>応相談</td></tr>
@@ -2801,7 +2810,7 @@
         </button>
         <div class="accordion-body">
           <table class="price-table">
-            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <thead><tr><th>作業内容</th><th>目安料金<br class="sp">（税込）</th><th>所要時間</th></tr></thead>
             <tbody>
               <tr><td>ドライブレコーダー取付</td><td class="price">¥8,800〜</td><td>60〜90分</td></tr>
               <tr><td>デジタルインナーミラー取付</td><td class="price">¥11,000〜</td><td>60〜90分</td></tr>
@@ -2829,7 +2838,7 @@
         </button>
         <div class="accordion-body">
           <table class="price-table">
-            <thead><tr><th>作業内容</th><th>目安料金（税込）</th><th>所要時間</th></tr></thead>
+            <thead><tr><th>作業内容</th><th>目安料金<br class="sp">（税込）</th><th>所要時間</th></tr></thead>
             <tbody>
               <tr><td>ヨークステアリング取付</td><td class="price">お見積もり</td><td>応相談</td></tr>
               <tr><td>シフトレバー取付</td><td class="price">お見積もり</td><td>応相談</td></tr>
