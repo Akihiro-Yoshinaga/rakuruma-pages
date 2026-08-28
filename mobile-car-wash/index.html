@@ -36,6 +36,19 @@
 /* FVの黄色をページ共通ゴールドに統一（このページのみ） */
 .hero--wp .hero__copy-highlight { color: #c9ab6a; }
 .hero--wp .hero__badge-rank { color: #c9ab6a; }
+/* スマホ微調整: 見出しサイズ・比較表の折り返し・バナー整列 */
+@media (max-width: 599px) {
+    /* 見出しは22pxに落とし、brと合わせて自然な2行に */
+    .sec-title, .pain-title, .sol-title, .loc-title, .pt-title { font-size: 22px !important; }
+    /* 比較表: マークを縦積みに戻し、値の途中折りを防ぐ */
+    .cmp-mark { display: block !important; margin: 0 0 4px !important; font-size: 17px !important; }
+    .cmp-value { white-space: nowrap; }
+}
+@media (max-width: 860px) {
+    /* クロスリンクバナー: バッジ横にタイトル、ベネフィットは全幅次行で統一 */
+    .rkb__main { flex: 1 1 0 !important; }
+    .rkb__benefit { flex: 1 1 100% !important; width: auto !important; }
+}
 /* セクション見出しの統一様式（金線eyebrow＋紺タイトル） */
 .sec-eyebrow {
     display: flex; align-items: center; justify-content: center; gap: 12px;
@@ -1095,7 +1108,7 @@ a[href^="https://lin.ee"]:hover {
                     }
                 </style>
                 <p class="pain-eyebrow">よくあるお悩み</p>
-                <h2 class="pain-title">あなたもこんな経験、ありませんか？</h2>
+                <h2 class="pain-title">あなたもこんな経験、<br class="sp">ありませんか？</h2>
 
                 <div class="pain-grid">
                     <!-- 悩み1 -->
@@ -1200,7 +1213,7 @@ a[href^="https://lin.ee"]:hover {
                     }
                 </style>
                 <p class="sol-eyebrow">ラクルマの答え</p>
-                <h2 class="sol-title">そのお悩み、<span class="sol-brand">ラクルマ</span>が解決します。</h2>
+                <h2 class="sol-title">そのお悩み、<br class="sp"><span class="sol-brand">ラクルマ</span>が解決します。</h2>
                 <div class="sol-grid">
                     <div class="sol-card">
                         <span class="sol-card-pain">洗車する時間がない</span>
@@ -1260,7 +1273,7 @@ a[href^="https://lin.ee"]:hover {
                 .pt-badge-sub { font-size: 11px; font-weight: 600; color: rgba(255, 255, 255, 0.85); }
             </style>
             <p class="pt-eyebrow">ラクルマの強み</p>
-            <h2 class="pt-title">選ばれるのには、理由があります。</h2>
+            <h2 class="pt-title">選ばれるのには、<br class="sp">理由があります。</h2>
             <ul class="content_container">
                 <li class="flexbox">
                     <div class="image_frame">
@@ -2889,7 +2902,7 @@ a[href^="https://lin.ee"]:hover {
             }
         </style>
         <p class="sec-eyebrow">洗車だけじゃない</p>
-        <div class="rk-crosslink__ttl">こんなご依頼も出張対応しています</div>
+        <div class="rk-crosslink__ttl">こんなご依頼も<br class="sp">出張対応しています</div>
         <p class="rk-crosslink__sub">クルマのことは、まとめてラクルマへ。</p>
         <style>
             .rkb-stack { display: flex; flex-direction: column; gap: 16px; max-width: 920px; margin: 0 auto; }
