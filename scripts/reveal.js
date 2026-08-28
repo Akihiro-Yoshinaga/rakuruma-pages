@@ -7,11 +7,20 @@
     if (!('IntersectionObserver' in window)) return;
 
     var SELECTORS = [
+        // 見出し（全ページ共通）
         'section h2', '.headline',
         '.sec-eyebrow', '.pain-eyebrow', '.sol-eyebrow', '.loc-eyebrow', '.pt-eyebrow',
+        // 洗車LP
         '.pain-card', '.sol-card', '#points .flexbox', '.point .flexbox',
         '.loc-card', '.rkb', '.pcard', '.pfx-card',
         '.step_list li', '.service_list li', '.plan_box', '.plan-perk',
+        // トップ
+        '.intro-card', '.parts-card', '.step-1', '.step-2', '.step-3',
+        // 整備・車検・共通カード
+        '.trouble-card', '.service-killer-card', '.rak-item', '.trust-item',
+        '.work-card', '.voice-card', '.faq-item', '.accordion-item',
+        '.compare-table', '.prof-card', '.sq-card', '.price-cta-card', '.line-demo-step',
+        '.cmp-flow-grid',
         '[data-reveal]'
     ];
 
