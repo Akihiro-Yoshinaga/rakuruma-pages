@@ -25,6 +25,8 @@
   var DEST = "https://rakuruma.com/maintenance/";
   var ua = navigator.userAgent || '';
   var d = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
+  // 本人の端末（/p/owner/ で印を付けたブラウザ）は d=owner で送り、集計側で除外する（2026-09-01）
+  try { if (localStorage.getItem('rk_owner') === '1') d = 'owner'; } catch (e) {}
   // 回遊データ（journey.js が localStorage に貯めた初回LP・参照元・経路）を一緒に送る
   var jq = '';
   try {

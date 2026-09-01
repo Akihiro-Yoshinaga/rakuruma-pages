@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>計測除外の設定（本人用）</title>
+<style>
+  body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+       display:flex; align-items:center; justify-content:center; min-height:90vh;
+       margin:0; color:#5c6673; background:#fff; text-align:center; line-height:1.9;}
+  .ok{color:#0a7a2f; font-weight:700; font-size:20px;}
+  .off{color:#b00020; font-weight:700; font-size:20px;}
+  .note{font-size:13px; margin-top:18px; color:#8a94a3;}
+  a{color:#003B8B;}
+</style>
+</head>
+<body>
+<div>
+  <p id="msg">設定しています…</p>
+  <p class="note">
+    このブラウザからのボタンタップは導線計測の集計から除外されます。<br>
+    普段サイトを見る端末・ブラウザごと（SafariとLINE内ブラウザは別）に1回ずつ開いてください。<br>
+    解除するときは <a href="?off=1">こちら</a>。
+  </p>
+</div>
+<script>
+(function () {
+  var msg = document.getElementById('msg');
+  var off = /[?&]off=1/.test(location.search);
+  try {
+    if (off) {
+      localStorage.removeItem('rk_owner');
+      msg.textContent = '解除しました。この端末のタップは通常どおり計測されます。';
+      msg.className = 'off';
+    } else {
+      localStorage.setItem('rk_owner', '1');
+      msg.textContent = '設定OK。この端末のタップは集計から除外されます。';
+      msg.className = 'ok';
+    }
+  } catch (e) {
+    msg.textContent = '設定できませんでした（プライベートブラウズ中は保存できません）。通常モードで開き直してください。';
+    msg.className = 'off';
+  }
+})();
+</script>
+</body>
+</html>
