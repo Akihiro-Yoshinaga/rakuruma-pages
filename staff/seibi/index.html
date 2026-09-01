@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>ラクルマ｜作業手順書（整備）</title>
+<!-- GAS手順書の入り口（覚えやすいURL）。
+     PC：iframe埋め込みで表示（script.google.com の帯が視界に入らない）。
+     スマホ：GAS直リンクへ即転送。サードパーティCookieブロックでiframe内のGoogleログインが
+     401になるため（2026-09-01 実機確認。PCのChromeは通る）。 -->
 <style>
-  /* GASのウェブアプリをそのまま全画面で埋め込む。
-     script.google.com の外枠に付く「Apps Scriptユーザーによって作成された」帯を視界から消すのが目的。
-     iframe越しはブラウザのCookie制限でGoogleログイン判定が壊れることがある（特にiPhoneのSafari）ため、
-     下に直接開くリンクを常設しておく。 */
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { height:100%; }
   body { display:flex; flex-direction:column; background:#f5f6f8;
@@ -17,13 +17,26 @@
   iframe { flex:1; border:0; width:100%; }
   .fallback { flex-shrink:0; text-align:center; padding:8px 12px; font-size:12.5px; color:#5c6470;
     background:#fff; border-top:1px solid #e0e4ea; }
-  .fallback a { color:#1668d6; font-weight:700; }
+  .fallback a, .loading a { color:#1668d6; font-weight:700; }
+  .loading { text-align:center; padding:60px 20px; font-size:15px; color:#5c6470; }
 </style>
 </head>
 <body>
-<iframe src="https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=seibi" allow="autoplay; fullscreen" allowfullscreen></iframe>
-<div class="fallback">表示されない・ログインを求められて進めない場合は
-  <a href="https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=seibi">こちらから直接開く</a>
-</div>
+<div class="loading" id="loading">作業手順書を開いています…<br><br>
+自動で開かない場合は <a id="direct" href="#">こちら</a></div>
+<script>
+var GAS = 'https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=seibi';
+document.getElementById('direct').href = GAS;
+if (/iPhone|iPad|Android|Mobile/i.test(navigator.userAgent)) {
+  // スマホはiframe内のGoogleログインが通らないため直接開く
+  location.replace(GAS);
+} else {
+  document.getElementById('loading').remove();
+  document.body.insertAdjacentHTML('beforeend',
+    '<iframe src="' + GAS + '" allow="autoplay; fullscreen" allowfullscreen></iframe>' +
+    '<div class="fallback">表示されない・エラーが出る場合は <a href="' + GAS + '">こちらから直接開く</a></div>');
+}
+</script>
+<noscript><a href="https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=seibi">作業手順書を開く</a></noscript>
 </body>
 </html>
