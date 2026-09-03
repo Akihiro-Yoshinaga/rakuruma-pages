@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>報酬明細の確認を始める | ラクルマ</title>
+<style>
+  body { margin: 0; font-family: -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; background: #f6f7f9; color: #1a1a2e; }
+  .wrap { max-width: 520px; margin: 12vh auto; padding: 32px 24px; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.06); text-align: center; }
+  h1 { font-size: 20px; margin: 0 0 12px; }
+  p { font-size: 15px; line-height: 1.7; margin: 0 0 20px; color: #444; }
+  a.btn { display: inline-block; padding: 14px 28px; background: #1a1a2e; color: #fff; border-radius: 999px; font-size: 16px; font-weight: 700; text-decoration: none; }
+  .note { font-size: 13px; color: #777; margin-top: 20px; }
+  code { background: #f0f0f4; padding: 2px 6px; border-radius: 4px; font-size: 13px; word-break: break-all; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>先月分の報酬明細を確認する</h1>
+  <p>Claude Code（Mac）が開き、明細の確認を始める指示が入力欄に入ります。<br>内容を見て Enter を押してください。</p>
+  <a class="btn" id="open" href="#">Claude Code を開く</a>
+  <p class="note">自動で開かない場合は上のボタンを押してください。<br>iPhone では開けません。Mac で開いてください。</p>
+</div>
+<script>
+  var url = 'claude-cli://open?cwd=%2FUsers%2Fyoshinagaakihiro%2FDocuments%2Fgit&q=' + encodeURIComponent(
+    '先月分の報酬明細をチャットで確認したい。予約管理GASの管理API（トークンは rakuruma-handbook/06_tools/apps-script/.admin_token、op=statementPreview）で清水さん・高橋さん・飯田さんの先月分を出して、案件ごとの工賃×料率と合計、確定漏れ（unconfirmed）を表で見せて。私が「OK」と言ったスタッフの分だけ op=statementSend&confirm=1 で送って。OKが無い人には絶対に送らない。'
+  );
+  document.getElementById('open').setAttribute('href', url);
+  // Macでは自動で起動を試みる（未登録や非対応端末では何も起きない）
+  if (/Macintosh/.test(navigator.userAgent)) { setTimeout(function () { window.location.href = url; }, 400); }
+</script>
+</body>
+</html>
