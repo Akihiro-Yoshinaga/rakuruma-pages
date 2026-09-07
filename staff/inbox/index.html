@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>LINE受信箱 | ラクルマ</title>
+<style>
+  :root { --navy:#182F66; --gold:#C3A054; --ink:#1A202C; --sub:#4A5568; --mute:#A0AEC0; --line:#E2E8F0; --bg:#F7FAFC; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif; color:var(--ink); background:#fff; font-size:15px; }
+  .top { background:var(--navy); color:#fff; padding:14px 14px 10px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:5; }
+  .top .ttl { font-size:18px; font-weight:800; }
+  .top .cnt { font-size:12px; color:#D9BC7A; font-weight:700; }
+  .top .back { font-size:22px; font-weight:800; margin-right:2px; cursor:pointer; }
+  .top .lnk { margin-left:auto; font-size:12px; font-weight:800; background:#fff; color:var(--navy); border-radius:8px; padding:6px 10px; text-decoration:none; white-space:nowrap; }
+  .tabs { display:flex; border-bottom:1px solid var(--line); background:#fff; position:sticky; top:52px; z-index:4; }
+  .tabs div { flex:1; text-align:center; padding:11px 0; font-size:14px; font-weight:700; color:#718096; cursor:pointer; }
+  .tabs .on { color:var(--navy); border-bottom:3px solid var(--navy); }
+  .row { display:flex; gap:12px; padding:12px 14px; border-bottom:1px solid #EDF2F7; align-items:flex-start; cursor:pointer; }
+  .row.done { opacity:.55; }
+  .av { width:44px; height:44px; border-radius:50%; background:#CBD5E0; flex:0 0 44px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:16px; }
+  .row.need .av { background:var(--navy); }
+  .b { flex:1; min-width:0; }
+  .n { font-size:16px; font-weight:800; display:flex; justify-content:space-between; gap:8px; }
+  .n span { font-size:12px; color:var(--mute); font-weight:600; white-space:nowrap; }
+  .m { font-size:14px; color:var(--sub); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+  .tag { display:inline-block; font-size:11px; font-weight:800; color:#fff; border-radius:6px; padding:2px 7px; margin-top:5px; margin-right:4px; }
+  .t-new { background:#E8A33D; } .t-cust { background:#38A169; } .t-biz { background:#2B6CB0; } .t-done { background:#718096; } .t-shaken { background:#805AD5; } .t-teiki { background:#319795; }
+  .badge { background:#E53E3E; color:#fff; font-size:12px; font-weight:800; border-radius:10px; padding:1px 7px; margin-left:6px; }
+  .empty { padding:40px 20px; text-align:center; color:var(--mute); font-size:14px; }
+  #thread { display:none; }
+  .hdr { background:var(--navy); color:#fff; padding:12px 14px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:5; }
+  .hdr .nm { font-size:17px; font-weight:800; }
+  .hdr .sub { font-size:12px; color:#D9BC7A; font-weight:600; }
+  .msgs { padding:12px 12px 150px; display:flex; flex-direction:column; gap:10px; background:var(--bg); min-height:60vh; }
+  .bub { max-width:84%; padding:10px 12px; border-radius:14px; font-size:15px; line-height:1.45; white-space:pre-wrap; word-break:break-word; }
+  .in { background:#fff; border:1px solid var(--line); align-self:flex-start; }
+  .out { background:var(--navy); color:#fff; align-self:flex-end; }
+  .meta { font-size:11px; color:var(--mute); margin-top:4px; white-space:normal; }
+  .out .meta { color:#B9C4DA; }
+  .sys { align-self:center; font-size:11px; color:#718096; background:#E2E8F0; padding:3px 10px; border-radius:10px; }
+  .compose { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line); padding:8px 10px 12px; z-index:6; }
+  .msgs { padding-bottom:210px; }
+  .tpl { display:flex; gap:6px; overflow-x:auto; margin-bottom:8px; -webkit-overflow-scrolling:touch; }
+  .tpl div { font-size:12px; font-weight:700; color:var(--navy); border:1.5px solid var(--navy); border-radius:14px; padding:5px 10px; white-space:nowrap; cursor:pointer; }
+  .box { display:flex; gap:8px; align-items:flex-end; }
+  textarea { flex:1; border:1.5px solid #CBD5E0; border-radius:14px; padding:10px 12px; font-size:16px; font-family:inherit; resize:none; min-height:44px; max-height:140px; }
+  .send { background:var(--navy); color:#fff; font-weight:800; border:0; border-radius:14px; padding:12px 16px; font-size:15px; cursor:pointer; }
+  .send:disabled { opacity:.5; }
+  .actions { display:flex; gap:8px; padding:8px 12px; background:var(--bg); flex-wrap:wrap; }
+  .abtn { font-size:12px; font-weight:800; border-radius:8px; padding:6px 10px; background:#fff; border:1.5px solid var(--navy); color:var(--navy); cursor:pointer; text-decoration:none; }
+  .abtn.ok { border-color:#38A169; color:#38A169; }
+  .note { font-size:12px; color:#C05621; font-weight:700; padding:6px 12px 0; }
+  .toast { position:fixed; left:50%; bottom:130px; transform:translateX(-50%); background:#1A202C; color:#fff; font-size:13px; padding:8px 14px; border-radius:10px; display:none; z-index:9; }
+  .linkbox { background:#FFF8E7; border:1px solid #E8A33D; margin:8px 12px; border-radius:10px; padding:10px 12px; font-size:13px; }
+  .linkbox input { width:100%; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; margin-top:6px; }
+  .hit { padding:6px 0; border-bottom:1px solid #F0E6CC; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+</style>
+</head>
+<body>
+
+<div id="list">
+  <div class="top"><a class="back" href="/staff/" style="color:#fff;text-decoration:none">‹</a><div class="ttl">受信箱</div><div class="cnt" id="cnt"></div><a class="lnk" id="reload" href="#">更新</a></div>
+  <div class="tabs">
+    <div class="on" data-tab="need">未対応</div><div data-tab="all">すべて</div><div data-tab="biz">業務連絡</div>
+  </div>
+  <div id="rows"><div class="empty">読み込み中…</div></div>
+</div>
+
+<div id="thread">
+  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub" id="tSub"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div id="linkbox" class="linkbox" style="display:none">
+    <b>顧客リストと紐付け</b>（名前か電話で検索。無ければ新規登録）
+    <input id="q" placeholder="名前 または 電話番号">
+    <div id="hits"></div>
+    <div style="margin-top:8px"><span class="abtn" id="btnNew">この名前で新規登録</span></div>
+  </div>
+  <div class="note" id="note"></div>
+  <div class="msgs" id="msgs"></div>
+  <div class="compose">
+    <div class="tpl" id="tpl"></div>
+    <div class="box" style="margin-bottom:8px"><input id="intent" placeholder="どう返したい？（例：来週の午前で調整したい・やんわり）" style="flex:1;border:1.5px solid #C3A054;border-radius:14px;padding:9px 12px;font-size:15px;font-family:inherit"><button class="send" id="btnDraft" style="background:#C3A054">✨ 下書き</button></div>
+    <div class="box"><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var TOKEN = '', STAFF = '';
+(function() {
+  var m = window.location.hash.match(/[#&]t=([^&]+)/) || window.location.search.match(/[?&]token=([^&]+)/);
+  if (m) { TOKEN = decodeURIComponent(m[1]); try { localStorage.setItem('rakuruma_staff_token', TOKEN); } catch(e) {} history.replaceState(null, '', window.location.pathname); }
+  else { try { TOKEN = localStorage.getItem('rakuruma_staff_token') || ''; } catch(e) {} }
+  if (!TOKEN) { window.location.replace('/staff/'); }
+})();
+var API_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+var ITEMS = [], TAB = 'need', CUR = null, TEMPLATES = null;
+
+function api(body) { body.action = 'inbox'; body.token = TOKEN; return fetch(API_URL, { method:'POST', body: JSON.stringify(body) }).then(function(r){ return r.json(); }); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
+function shortAt(s) { return String(s || '').replace(/^\d{4}\//, '').replace(/:\d{2}$/, ''); }
+
+var BIZ = null; // 業務連絡は開いたときだけ取りに行く
+function loadList() {
+  if (!ITEMS.length) {
+    try { var c = JSON.parse(localStorage.getItem('rakuruma_inbox_cache') || 'null'); if (c && c.items) { ITEMS = c.items; renderList(); } } catch(e) {}
+    if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>';
+  }
+  api({ op:'list' }).then(function(r) {
+    if (!r.ok) {
+      if (/認証/.test(r.error || '')) { try { localStorage.removeItem('rakuruma_staff_token'); } catch(e) {} window.location.replace('/staff/'); return; }
+      document.getElementById('rows').innerHTML = '<div class="empty">' + esc(r.error) + '</div>'; return;
+    }
+    ITEMS = r.items || []; STAFF = r.staff || STAFF;
+    try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS })); } catch(e) {}
+    renderList();
+    if (BIZ) loadBiz(true);
+  }).catch(function(e) { if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">通信エラー: ' + esc(e) + '</div>'; });
+}
+function loadBiz(silent) {
+  if (!silent) document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>';
+  api({ op:'listBiz' }).then(function(r) { BIZ = (r.ok && r.items) || []; if (TAB === 'biz') renderList(); });
+}
+
+function renderList() {
+  var source = (TAB === 'biz') ? (BIZ || []) : ITEMS;
+  var items = source.filter(function(it) {
+    if (TAB === 'need') return it.needsReply;
+    return true;
+  });
+  var need = ITEMS.filter(function(it){ return it.needsReply; }).length + (BIZ || []).filter(function(it){ return it.needsReply; }).length;
+  if (TAB === 'biz' && BIZ === null) { document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>'; return; }
+  document.getElementById('cnt').textContent = '未対応 ' + need + '件';
+  if (!items.length) { document.getElementById('rows').innerHTML = '<div class="empty">' + (TAB === 'need' ? '未対応はありません 🎉' : 'まだ記録がありません') + '</div>'; return; }
+  document.getElementById('rows').innerHTML = items.map(function(it, i) {
+    var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
+    var tags = '';
+    if (it.src === 'biz') tags += '<span class="tag t-biz">業務連絡</span>';
+    else if (it.customer) {
+      if (it.customer.car) tags += '<span class="tag t-cust">' + esc(it.customer.car) + '</span>';
+      if (it.customer.shakenExpiry) tags += '<span class="tag t-shaken">車検 ' + esc(it.customer.shakenExpiry) + '</span>';
+      if (it.customer.teiki) tags += '<span class="tag t-teiki">定期プラン</span>';
+    } else tags += '<span class="tag t-new">新規・未登録</span>';
+    if (!it.needsReply) tags += '<span class="tag t-done">対応済み</span>';
+    var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
+    return '<div class="row ' + (it.needsReply ? 'need' : 'done') + '" data-i="' + source.indexOf(it) + '">'
+      + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
+      + '<div class="m">' + (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText) + '</div>' + tags + badge + '</div></div>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
+}
+
+function openThread(it) {
+  CUR = it;
+  document.getElementById('list').style.display = 'none';
+  document.getElementById('thread').style.display = 'block';
+  document.getElementById('linkbox').style.display = 'none';
+  document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
+  var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
+  document.getElementById('tName').textContent = name;
+  document.getElementById('tSub').textContent = it.src === 'biz' ? '業務連絡LINE' : (it.customer ? [it.customer.car, it.customer.shakenExpiry ? '車検満了 ' + it.customer.shakenExpiry : '', it.customer.teiki ? '定期プラン' : ''].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
+  var cust = document.getElementById('tCust');
+  if (it.customer) { cust.style.display = 'inline-block'; cust.href = API_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
+  document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
+  document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
+  window.scrollTo(0, 0);
+  api({ op:'thread', uid: it.uid, src: it.src }).then(function(r) {
+    if (!r.ok) { document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error) + '</div>'; return; }
+    var html = '', lastDay = '';
+    (r.messages || []).forEach(function(m) {
+      var day = String(m.at || '').slice(0, 10);
+      if (day !== lastDay) { html += '<div class="sys">' + esc(day) + '</div>'; lastDay = day; }
+      var isIn = m.dir === '受信';
+      var body = m.text || ('（' + m.kind + '）');
+      html += '<div class="bub ' + (isIn ? 'in' : 'out') + '">' + esc(body) + '<div class="meta">' + esc(String(m.at || '').slice(11, 16)) + ' ' + esc(isIn ? '受信' : m.kind) + '</div></div>';
+    });
+    document.getElementById('msgs').innerHTML = html || '<div class="sys">記録がありません</div>';
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+  if (!TEMPLATES) api({ op:'templates' }).then(function(r) { TEMPLATES = (r.ok && r.templates) || []; renderTpl(); }); else renderTpl();
+}
+
+function renderTpl() {
+  document.getElementById('tpl').innerHTML = (TEMPLATES || []).map(function(t, i) { return '<div data-i="' + i + '">' + esc(t.label) + '</div>'; }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('#tpl div'), function(el) {
+    el.onclick = function() { var ta = document.getElementById('text'); ta.value = (ta.value ? ta.value + '\n' : '') + TEMPLATES[parseInt(el.getAttribute('data-i'), 10)].text; ta.focus(); autosize(); };
+  });
+}
+
+function autosize() { var ta = document.getElementById('text'); ta.style.height = 'auto'; ta.style.height = Math.min(140, ta.scrollHeight) + 'px'; }
+document.getElementById('text').addEventListener('input', autosize);
+
+document.getElementById('btnSend').onclick = function() {
+  if (!CUR) return;
+  var ta = document.getElementById('text'); var text = ta.value.trim();
+  if (!text) return;
+  if (!confirm('この内容で送信します。よろしいですか？\n\n' + text.slice(0, 200))) return;
+  var btn = this; btn.disabled = true;
+  api({ op:'send', uid: CUR.uid, src: CUR.src, text: text }).then(function(r) {
+    btn.disabled = false;
+    if (!r.ok) { alert('送信できませんでした: ' + (r.error || '')); return; }
+    ta.value = ''; autosize(); toast('送信しました（記録済み）');
+    CUR.needsReply = false; CUR.unread = 0;
+    openThread(CUR);
+  }).catch(function(e) { btn.disabled = false; alert('通信エラー: ' + e); });
+};
+
+document.getElementById('btnDraft').onclick = function() {
+  if (!CUR) return;
+  var intent = document.getElementById('intent').value.trim();
+  var btn = this; btn.disabled = true; btn.textContent = '作成中…';
+  api({ op:'draft', uid: CUR.uid, src: CUR.src, intent: intent }).then(function(r) {
+    btn.disabled = false; btn.textContent = '✨ 下書き';
+    if (!r.ok) { alert('下書きを作れませんでした: ' + (r.error || '')); return; }
+    var ta = document.getElementById('text'); ta.value = r.text; autosize(); ta.focus();
+    toast('下書きを入れました。直してから送信してください');
+  }).catch(function(e) { btn.disabled = false; btn.textContent = '✨ 下書き'; alert('通信エラー: ' + e); });
+};
+document.getElementById('btnDone').onclick = function() {
+  if (!CUR) return;
+  api({ op:'done', uid: CUR.uid }).then(function(r) { if (r.ok) { toast('対応済みにしました'); CUR.needsReply = false; CUR.unread = 0; } else alert(r.error || '失敗'); });
+};
+
+document.getElementById('back').onclick = function() {
+  document.getElementById('thread').style.display = 'none';
+  document.getElementById('list').style.display = 'block';
+  renderList();
+};
+document.getElementById('reload').onclick = function(e) { e.preventDefault(); loadList(); };
+Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
+  el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
+});
+
+// ---- 顧客リストとの紐付け ----
+document.getElementById('btnLink').onclick = function() {
+  var box = document.getElementById('linkbox'); box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  document.getElementById('q').value = CUR.displayName || ''; searchCust();
+};
+var searchTimer = null;
+document.getElementById('q').addEventListener('input', function() { clearTimeout(searchTimer); searchTimer = setTimeout(searchCust, 400); });
+function searchCust() {
+  var q = document.getElementById('q').value.trim();
+  if (!q) { document.getElementById('hits').innerHTML = ''; return; }
+  api({ op:'search', q: q }).then(function(r) {
+    var hits = (r.ok && r.hits) || [];
+    document.getElementById('hits').innerHTML = hits.length ? hits.map(function(h) {
+      return '<div class="hit"><div><b>' + esc(h.name) + '</b> ' + esc(h.car) + '<br><span style="color:#718096">' + esc(h.phone) + (h.uid ? '・LINE紐付け済み' : '') + '</span></div><span class="abtn" data-row="' + h.row + '" data-name="' + esc(h.name) + '">この人</span></div>';
+    }).join('') : '<div style="color:#718096;padding:6px 0">該当なし</div>';
+    Array.prototype.forEach.call(document.querySelectorAll('#hits .abtn'), function(el) {
+      el.onclick = function() {
+        if (!confirm(el.getAttribute('data-name') + ' さんの行にこのLINEを紐付けます。よろしいですか？')) return;
+        api({ op:'link', uid: CUR.uid, row: el.getAttribute('data-row'), expect: el.getAttribute('data-name') }).then(function(r) {
+          if (!r.ok) { alert(r.error || '失敗'); return; }
+          toast('紐付けました'); loadList(); document.getElementById('back').onclick();
+        });
+      };
+    });
+  });
+}
+document.getElementById('btnNew').onclick = function() {
+  var name = prompt('お客様のお名前（姓 名）', document.getElementById('q').value.trim() || (CUR.displayName || ''));
+  if (!name) return;
+  var phone = prompt('電話番号（分かれば）', '') || '';
+  api({ op:'newCustomer', uid: CUR.uid, name: name, phone: phone }).then(function(r) {
+    if (!r.ok) { alert(r.error || '失敗'); return; }
+    toast('顧客リストに登録しました（行' + r.row + '）'); loadList(); document.getElementById('back').onclick();
+  });
+};
+
+loadList();
+setInterval(function() { if (document.getElementById('list').style.display !== 'none') loadList(); }, 90000);
+</script>
+</body>
+</html>
