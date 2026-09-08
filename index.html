@@ -779,36 +779,6 @@
       color: var(--color-accent-gold);
     }
 
-    .intro-trust {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 18px;
-      border-top: 1px solid var(--color-border-light);
-      padding-top: 16px;
-    }
-
-    .intro-trust-item {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 5px;
-    }
-
-    .intro-trust-item .star {
-      color: var(--color-accent-yellow);
-      font-size: 14px;
-    }
-
-    .intro-trust-item strong {
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--color-text-primary);
-    }
-
-    .intro-trust-item small {
-      font-size: 11px;
-      color: var(--color-text-muted);
-    }
 
     @media (max-width: 767px) {
       .intro-cards {
@@ -907,6 +877,181 @@
       font-size: 12px;
       color: var(--color-text-muted);
       text-align: right;
+    }
+
+    /* ===== 洗車：三つ折りパンフレットと同じ見せ方（BEFORE/AFTER写真＋料金カード・2026-09-08） ===== */
+    .ba-grid--photo .ba-item { overflow: visible; }
+    .ba-grid--photo .ba-item img { aspect-ratio: 4 / 3; border-radius: var(--radius-sm); }
+    .ba-item--after::before {
+      content: '➜';
+      position: absolute;
+      left: -6px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--color-primary-blue);
+      color: #fff;
+      font-size: 13px;
+      line-height: 26px;
+      text-align: center;
+      z-index: 2;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .plan-cards {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .plan-card {
+      display: flex;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--color-bg-light-blue);
+    }
+
+    .plan-card-tag {
+      flex: 0 0 84px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      padding: 12px 6px;
+      color: #fff;
+      text-align: center;
+      background: var(--color-primary-blue);
+    }
+
+    .plan-card--tanpatsu .plan-card-tag {
+      background: #6a7280;
+    }
+
+    .plan-card-tag strong {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .plan-card-tag small {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .plan-card-crown {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #f3d98a;
+      margin-bottom: 3px;
+    }
+
+    .plan-card-crown svg {
+      width: 15px;
+      height: 15px;
+      fill: #f3d98a;
+    }
+
+    .plan-card-body {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 14px;
+    }
+
+    .plan-card-catch {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .plan-card-price {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0 6px;
+    }
+
+    .plan-card-freq {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+
+    .plan-card-num {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--color-primary-blue);
+    }
+
+    .plan-card-unit {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-primary-blue);
+    }
+
+    .plan-card-badge {
+      margin-left: auto;
+      align-self: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-primary-blue);
+      background: #fff;
+      border: 1px solid var(--color-border-light);
+      border-radius: 20px;
+      padding: 3px 9px;
+      white-space: nowrap;
+    }
+
+    .plan-card-note {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-top: 4px;
+    }
+
+    .plan-trial {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0 8px;
+      padding: 12px 14px;
+      border: 2px solid var(--gold-line);
+      border-radius: var(--radius-sm);
+      background: #fff;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: var(--transition-fast);
+    }
+
+    .plan-trial:hover {
+      background: #fffcf3;
+    }
+
+    .plan-trial-main strong {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--color-primary-blue);
+    }
+
+    .plan-trial-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+
+    @media (max-width: 767px) {
+      .plan-card-tag { flex-basis: 76px; }
+      .plan-card-num { font-size: 28px; }
     }
 
     .benefit-list {
@@ -1571,13 +1716,19 @@
       display: flex;
       gap: var(--spacing-lg);
       overflow-x: auto;
+      overscroll-behavior-x: contain;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
       scrollbar-width: none;
       padding-bottom: 4px;
     }
     .works-track::-webkit-scrollbar { display: none; }
+    /* PC：トラックパッドの縦スクロールが横スクロール領域の上で引っかかる不具合の対策（2026-09-08）。
+       強制スナップ＋CSSのsmoothが縦ホイールのわずかな横成分でスナップ動作を起こし、ページ送りを止めていた。
+       PCは弱いスナップにし、なめらか移動はボタン側の scrollTo({behavior:'smooth'}) に任せる */
+    @media (min-width: 768px) {
+      .works-track { scroll-snap-type: x proximity; scroll-behavior: auto; }
+    }
 
     .work-card {
       background: #fff;
@@ -2060,11 +2211,6 @@
         <span class="intro-card-arrow">→</span>
       </a>
     </nav>
-    <div class="intro-trust">
-      <span class="intro-trust-item"><span class="star">★</span><strong data-curama-rating>4.93</strong><small>くらしのマーケット評価</small></span>
-      <span class="intro-trust-item"><strong><span data-curama-count>584</span>件</strong><small>口コミ</small></span>
-      <span class="intro-trust-item"><strong>全件公開</strong><small>作業実績ブログ</small></span>
-    </div>
   </div>
 </section>
 
@@ -2072,37 +2218,68 @@
 <section class="service-section" id="wash">
   <div class="section-inner">
     <div class="section-label">SERVICE 01｜洗車</div>
-    <h2 class="section-title">場所を選ばない、出張洗車。</h2>
+    <h2 class="section-title">水を使わない、出張洗車。</h2>
     <p class="section-desc">
-      プロの手洗い洗車をご自宅で。立ち会いは不要なので、在宅ワークや家事のあいだに、外装も車内もまるごときれいになります。
+      水を使わない洗車なので、月極や地下駐車場など場所を選びません。近隣や環境を気にせず、ご自宅にいながらピカピカに。
     </p>
     <div class="service-flex service-flex--mediafirst">
       <figure class="service-media">
-        <div class="ba-grid">
+        <div class="ba-grid ba-grid--photo">
           <div class="ba-item">
-            <video class="ba-video" muted loop playsinline preload="none"
-                   poster="/assets/uploads/2025/10/voice-1-poster.jpg"
-                   data-src="/assets/uploads/2025/10/voice-1-opt.mp4"></video>
+            <img src="/assets/images/wash-ba/black-before.jpg" alt="洗車前：砂ぼこりで白くくすんだ黒いボディ" width="800" height="600" loading="lazy">
+            <span class="ba-chip">BEFORE</span>
+          </div>
+          <div class="ba-item ba-item--after">
+            <img src="/assets/images/wash-ba/black-after.jpg" alt="洗車後：ツヤの戻った黒いボディ" width="800" height="600" loading="lazy">
+            <span class="ba-chip ba-chip--after">AFTER</span>
           </div>
           <div class="ba-item">
-            <video class="ba-video" muted loop playsinline preload="none"
-                   poster="/assets/uploads/2025/10/voice-2-poster.jpg"
-                   data-src="/assets/uploads/2025/10/voice-2-opt.mp4"></video>
+            <img src="/assets/images/wash-ba/roof-before.jpg" alt="洗車前：砂ぼこりの積もったリアガラス" width="800" height="600" loading="lazy">
+            <span class="ba-chip">BEFORE</span>
           </div>
-          <figcaption class="ba-caption">実際の作業前後（動画）</figcaption>
+          <div class="ba-item ba-item--after">
+            <img src="/assets/images/wash-ba/roof-after.jpg" alt="洗車後：透き通ったリアガラス" width="800" height="600" loading="lazy">
+            <span class="ba-chip ba-chip--after">AFTER</span>
+          </div>
+          <figcaption class="ba-caption">実際の作業前後</figcaption>
         </div>
       </figure>
       <div>
-        <ul class="benefit-list">
-          <li>立ち会い不要。駐車場から動かさず、その場で完結</li>
-          <li>車内清掃もおまかせ。食べこぼしも、ペットの毛も</li>
-          <li>洗車のあいだに国家1級整備士監修の点検つき。気になる箇所は写真つきでご報告（追加料金なし）</li>
-        </ul>
-        <div class="service-foot">
-          <div class="service-price">
-            <span class="service-price-num">7,700円〜</span>
-            <span class="service-price-note">SMサイズ 7,700円／LXサイズ 8,800円（税込）・定期プランあり</span>
+        <div class="plan-cards">
+          <div class="plan-card plan-card--teiki">
+            <div class="plan-card-tag">
+              <span class="plan-card-crown"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-1.6 10H4.6L3 8zm1.6 12h14.8v1.6H4.6V20z"/></svg>推奨</span>
+              <strong>定期</strong><small>プラン</small>
+            </div>
+            <div class="plan-card-body">
+              <div class="plan-card-catch">【 タイミングを気にせず、いつもきれいな状態をキープ 】</div>
+              <div class="plan-card-price">
+                <span class="plan-card-freq">月1回</span><span class="plan-card-num">7,900</span><span class="plan-card-unit">円〜</span>
+                <span class="plan-card-badge">車内清掃込み</span>
+              </div>
+              <div class="plan-card-note">予約不要。決まった曜日に、いつもピカピカ。</div>
+            </div>
           </div>
+          <div class="plan-card plan-card--tanpatsu">
+            <div class="plan-card-tag">
+              <strong>単発</strong><small>プラン</small>
+            </div>
+            <div class="plan-card-body">
+              <div class="plan-card-catch">【 気になったときに、その都度ご依頼 】</div>
+              <div class="plan-card-price">
+                <span class="plan-card-freq">1回</span><span class="plan-card-num">9,900</span><span class="plan-card-unit">円〜</span>
+                <span class="plan-card-badge">車内清掃込み</span>
+              </div>
+              <div class="plan-card-note">※車内清掃ご不要の場合は7,700円〜</div>
+            </div>
+          </div>
+          <a class="plan-trial" href="/mobile-car-wash/#calendar-container">
+            <span class="plan-trial-lead">洗車がはじめての方 →</span>
+            <span class="plan-trial-main">体験 <strong>6,000</strong>円</span>
+            <span class="plan-trial-sub">（税込・出張費0円）</span>
+          </a>
+        </div>
+        <div class="service-foot">
           <a class="service-link" href="/mobile-car-wash/">洗車の料金・詳細を見る →</a>
         </div>
       </div>
@@ -2114,7 +2291,7 @@
 <section class="service-section service-section--alt" id="maintenance">
   <div class="section-inner">
     <div class="section-label">SERVICE 02｜車検・整備</div>
-    <h2 class="section-title">車検も、バッテリー交換も、出張で。</h2>
+    <h2 class="section-title">自宅にいながら車検も整備も。</h2>
     <p class="section-desc">
       車検は引き取りから返車まで、まるごと代行。「なんだか、車の調子が悪い」も、原因の切り分けから対応します。
     </p>
@@ -2141,7 +2318,7 @@
 <section class="service-section" id="parts">
   <div class="section-inner">
     <div class="section-label">SERVICE 03｜パーツ取付</div>
-    <h2 class="section-title">車内エンタメも、ドラレコもお任せ。</h2>
+    <h2 class="section-title">車内をもっと楽しく、快適に。</h2>
     <p class="section-desc">
       ドラレコ、テレビキャンセラー、リアモニター。持ち込み歓迎です。型番選びの相談から、乗り換え時の載せ替えまで、ご自宅で。
     </p>
@@ -2434,7 +2611,7 @@
   </div>
   <div class="footer-sns" style="margin:26px 0 18px;"><p style="font-size:12px;opacity:.6;margin:0 0 12px;">施工事例・車のメンテナンス情報を発信中</p><div style="display:flex;justify-content:center;align-items:center;gap:28px;"><a href="https://www.instagram.com/rakuruma.car/" target="_blank" rel="noopener" aria-label="Instagram" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#ig-grad)"/><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16.6" cy="7.4" r="1" fill="#fff"/></svg><span style="font-size:11px;">Instagram</span></a><a href="https://www.youtube.com/@rakuruma2023" target="_blank" rel="noopener" aria-label="YouTube" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="5" fill="#FF0000"/><path d="M10 8.5v7l6-3.5z" fill="#fff"/></svg><span style="font-size:11px;">YouTube</span></a></div></div>
   <p>© ラクルマ｜世田谷区・目黒区・渋谷区・品川区・港区の出張洗車・整備・パーツ取付</p>
-  <p style="margin-top:8px;font-size:11px;opacity:0.5;">最終更新：2026年8月</p>
+  <p style="margin-top:8px;font-size:11px;opacity:0.5;">最終更新：2026年9月</p>
 </footer>
 
 <!-- FLOATING LINE BUTTON（PC用。スマホは下の固定バーに一本化） -->
