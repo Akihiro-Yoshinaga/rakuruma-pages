@@ -72,8 +72,15 @@ function main() {
   if (typeof liff === 'undefined') { show('st-error'); return; }
   liff.init({ liffId: LIFF_ID }).then(function () {
     if (!liff.isLoggedIn()) {
-      if (liff.isInClient()) { liff.login({ redirectUri: location.href }); return; }
-      // 普通のブラウザ（PC等）はLINEログイン画面が重いので、従来の友だち追加リンクへ
+      // LINEアプリ内で liff.login() を呼ぶとログインを繰り返す（9/8 実機で発生）。呼ばない。
+      // ログイン情報が無い＝正規の入口（liff.line.me）を通っていないので、1回だけ入口に戻す。
+      // それでも駄目なら従来の友だち追加リンクへ（追跡は諦めるがお客様は先に進める）
+      var retried = false;
+      try { retried = sessionStorage.getItem('rk_blog_liff_retry') === '1'; } catch (e) {}
+      if (liff.isInClient() && !retried) {
+        try { sessionStorage.setItem('rk_blog_liff_retry', '1'); } catch (e) {}
+        location.replace('https://liff.line.me/' + LIFF_ID + '/line-blog/' + location.search); return;
+      }
       location.replace(LINE_ADD); return;
     }
     var idToken = liff.getIDToken() || '';

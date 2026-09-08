@@ -910,9 +910,18 @@ function submitPhone() {
   // https://liff.line.me/{id}/line-blog/?k=... は ?liff.state=/line-blog/?k=... の形でここに届く。
   // 本来は liff.init() がこの転送をするが、下のトークンキャッシュ経路は liff.init を通らないため
   // 履歴ページが出てしまった（9/8 実機で確認）。先に自前で転送する。?src=rm_mypage（'?'始まり）は対象外
+  // ⚠️ 自前で location.replace すると、LINEアプリが初回ロード時に渡すログイン情報を受け取る前に
+  //    ページを離れてしまい、転送先で未ログイン→ログイン→未ログインのループになる（9/8 実機で発生）。
+  //    必ず liff.init() を通し、転送はSDKに任せる（SDKがログイン状態を保存してから liff.state 先へ移る）
   try {
     var st0 = new URLSearchParams(location.search).get('liff.state') || '';
-    if (st0.charAt(0) === '/' && st0.charAt(1) !== '/') { location.replace('/mypage' + st0); return; }
+    if (st0.charAt(0) === '/' && st0.charAt(1) !== '/') {
+      show('loading'); loadStep('LINEにログインしています');
+      liff.init({ liffId: LIFF_ID })
+        .then(function () { location.replace('/mypage' + st0); })   // SDKが先に転送していれば、ここには来ない
+        .catch(function () { location.replace('/mypage' + st0); });
+      return;
+    }
   } catch (e) {}
   document.getElementById('loginBtn').addEventListener('click', function(ev) { ev.preventDefault(); startLiff(); });
   document.getElementById('phoneBtn').addEventListener('click', submitPhone);
