@@ -1451,218 +1451,97 @@
 
     /* ===== HOWTO：頼み方（旧HOW TO USEデザイン） ===== */
     .howto-section {
-      background: var(--color-bg-light-blue);
+      background: var(--color-bg-white);
     }
 
-    /* 3ステップ：写真を主役に、白い説明パネル＋補足チップ（2026-09-08） */
     .step-list {
       list-style: none;
-      margin: 8px 0 0;
+      margin: 40px 0 0;
       padding: 0;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
     }
 
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .step-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-
-    .step-card {
-      background: var(--color-bg-white);
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-light);
+    .step-list li {
       display: flex;
-      flex-direction: column;
-    }
-
-    .step-photo {
-      position: relative;
-      aspect-ratio: 4 / 3;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      height: 280px;
       background-size: cover;
       background-position: center;
-    }
-
-    .step-1 { background-image: url(/assets/images/step1_sp.webp); }
-    .step-3 { background-image: url(/assets/images/image_3.jpg); }
-    .step-4 { background-image: url(/assets/images/step3_sp.webp); }
-
-    /* STEP 2：予約画面のスクリーンショットを紺の台紙に載せる */
-    .step-photo--ui {
-      background: linear-gradient(160deg, #2b4470, #1a2c4d);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .step-photo--ui img {
-      width: 78%;
-      height: auto;
-      display: block;
-      margin-top: 44px;
-      border-radius: 10px 10px 0 0;
-      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.35);
-    }
-
-    .step-no {
-      position: absolute;
-      left: 14px;
-      top: 14px;
-      background: var(--color-primary-blue);
+      background-color: rgba(0, 0, 0, 0.38);
+      background-blend-mode: overlay;
       color: #fff;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      padding: 6px 12px;
-      border-radius: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     }
 
-    .step-body {
-      padding: 18px 20px 20px;
+    .step-list li:first-child {
+      border-radius: 160px 0 0 0;
+    }
+
+    .step-list li:last-child {
+      border-radius: 0 0 160px 0;
+    }
+
+    .step-1 { background-image: url(/assets/images/step1.webp); }
+    .step-2 { background-image: url(/assets/images/image_3.jpg); }
+    .step-3 { background-image: url(/assets/images/step3.webp); }
+
+    .step-badge {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px solid #fff;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-
-    .step-title {
-      font-size: 19px;
-      font-weight: 800;
-      color: var(--color-text-primary);
-      line-height: 1.3;
-    }
-
-    .step-title::after {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--gold-line);
-      margin-top: 8px;
-    }
-
-    .step-body p {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--color-text-secondary);
-      margin: 0;
-    }
-
-    .step-chips {
-      list-style: none;
-      margin: auto 0 0;
-      padding: 6px 0 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .step-chips li {
-      font-size: 11.5px;
-      font-weight: 700;
-      color: var(--color-primary-blue);
-      background: var(--color-bg-light-blue);
-      border-radius: 20px;
-      padding: 4px 10px;
-      white-space: nowrap;
-    }
-
-    .step-chips li::before {
-      content: '✓ ';
-      color: var(--color-accent-gold);
-    }
-
-    .step-cta {
-      margin-top: 28px;
-      display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 10px;
-    }
-
-    .step-cta-btn {
-      display: inline-block;
-      background: var(--gradient-button-green);
-      color: var(--color-text-white);
-      font-size: 16px;
+      flex-shrink: 0;
+      font-size: 21px;
       font-weight: 800;
-      text-decoration: none;
-      padding: 16px 40px;
-      border-radius: var(--button-radius);
-      box-shadow: var(--shadow-heavy);
-      transition: var(--transition-fast);
+      text-align: center;
+      line-height: 1.4;
     }
 
-    .step-cta-btn:hover {
-      opacity: var(--opacity-hover);
-      transform: translateY(-1px);
+    .step-badge span {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
     }
 
-    .step-cta-note {
-      font-size: 12px;
-      color: var(--color-text-muted);
+    .step-list li p {
+      width: 41%;
+      font-size: 15px;
+      line-height: 2;
+      text-align: left;
     }
 
-    @media (max-width: 767px) {
-      .step-list {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 14px;
+    @media (max-width: 700px) {
+      .step-list li {
+        flex-direction: column;
+        gap: 0;
+        height: auto;
+        padding: 34px 20px;
       }
-
-      /* スマホは写真を左、説明を右に置いて1枚を低く */
-      .step-card {
-        flex-direction: row;
-        align-items: stretch;
+      .step-list li:first-child {
+        border-radius: 80px 0 0 0;
       }
-
-      .step-photo {
-        flex: 0 0 38%;
-        aspect-ratio: auto;
-        min-height: 150px;
+      .step-list li:last-child {
+        border-radius: 0 0 80px 0;
       }
-
-      .step-photo--ui img {
-        width: 84%;
-        margin-top: 36px;
+      .step-1 { background-image: url(/assets/images/step1_sp.webp); }
+      .step-2 { background-image: url(/assets/images/image_3.jpg); }
+      .step-3 { background-image: url(/assets/images/step3_sp.webp); }
+      .step-badge {
+        width: 150px;
+        height: 150px;
+        font-size: 17px;
       }
-
-      .step-no {
-        left: 10px;
-        top: 10px;
-        font-size: 10.5px;
-        padding: 5px 9px;
-      }
-
-      .step-body {
-        padding: 14px 14px 14px 16px;
-        gap: 6px;
-      }
-
-      .step-title {
-        font-size: 16px;
-      }
-
-      .step-title::after {
-        margin-top: 6px;
-      }
-
-      .step-body p {
-        font-size: 13px;
-        line-height: 1.75;
-      }
-
-      .step-chips li {
-        font-size: 10.5px;
-        padding: 3px 8px;
-      }
-
-      .step-cta-btn {
+      .step-list li p {
         width: 100%;
-        text-align: center;
-        padding: 15px 20px;
+        margin-top: 16px;
+        font-size: 14px;
+        line-height: 1.9;
       }
     }
 
@@ -2543,7 +2422,7 @@
       <figure class="service-media">
         <div class="parts-strip" id="partsStrip" aria-label="パーツ取付の作業例">
           <div class="parts-strip-track" id="partsStripTrack" style="animation-duration: 72s;">
-            <div class="parts-card"><img src="/assets/images/parts_entame.jpg" alt="テレビ・ナビの取り付けの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">テレビ・ナビの取り付け</div></div></div><div class="parts-card"><img src="/assets/images/parts/dashcam-2cam.jpg" alt="ドライブレコーダー（前後2カメラ）の作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">ドライブレコーダー（前後2カメラ）</div></div></div><div class="parts-card"><img src="/assets/images/parts_mirror.jpg" alt="デジタルインナーミラーの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">デジタルインナーミラー</div></div></div><div class="parts-card"><img src="/assets/images/parts/tv-canceller.jpg" alt="テレビキャンセラーの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">テレビキャンセラー</div></div></div><div class="parts-card"><img src="/assets/images/service_parts.jpg" alt="後席フリップダウンモニターの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">後席フリップダウンモニター</div></div></div><div class="parts-card"><img src="/assets/images/parts/radar.jpg" alt="レーダー探知機の作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">レーダー探知機</div></div></div><div class="parts-card"><img src="/assets/images/parts/android-navi.jpg" alt="海外製Androidナビの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">海外製Androidナビ</div></div></div><div class="parts-card"><img src="/assets/images/parts/import-dashcam.jpg" alt="輸入車のドラレコ取付の作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">輸入車のドラレコ取付</div></div></div><div class="parts-card"><img src="/assets/images/parts_entame.jpg" alt="テレビ・ナビの取り付けの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">テレビ・ナビの取り付け</div></div></div><div class="parts-card"><img src="/assets/images/parts/dashcam-2cam.jpg" alt="ドライブレコーダー（前後2カメラ）の作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">ドライブレコーダー（前後2カメラ）</div></div></div><div class="parts-card"><img src="/assets/images/parts_mirror.jpg" alt="デジタルインナーミラーの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">デジタルインナーミラー</div></div></div><div class="parts-card"><img src="/assets/images/parts/tv-canceller.jpg" alt="テレビキャンセラーの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">テレビキャンセラー</div></div></div><div class="parts-card"><img src="/assets/images/service_parts.jpg" alt="後席フリップダウンモニターの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">後席フリップダウンモニター</div></div></div><div class="parts-card"><img src="/assets/images/parts/radar.jpg" alt="レーダー探知機の作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">レーダー探知機</div></div></div><div class="parts-card"><img src="/assets/images/parts/android-navi.jpg" alt="海外製Androidナビの作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">海外製Androidナビ</div></div></div><div class="parts-card"><img src="/assets/images/parts/import-dashcam.jpg" alt="輸入車のドラレコ取付の作業例" loading="lazy" width="480" height="360"><div class="parts-card-body"><div class="parts-card-title">輸入車のドラレコ取付</div></div></div>
+            <div class="parts-card"><img src="/assets/images/parts_entame.jpg" alt="テレビ・ナビの取り付けの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">テレビ・ナビの取り付け</div></div></div><div class="parts-card"><img src="/assets/images/parts/dashcam-2cam.jpg" alt="ドライブレコーダー（前後2カメラ）の作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">ドライブレコーダー（前後2カメラ）</div></div></div><div class="parts-card"><img src="/assets/images/parts_mirror.jpg" alt="デジタルインナーミラーの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">デジタルインナーミラー</div></div></div><div class="parts-card"><img src="/assets/images/parts/tv-canceller.jpg" alt="テレビキャンセラーの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">テレビキャンセラー</div></div></div><div class="parts-card"><img src="/assets/images/service_parts.jpg" alt="後席フリップダウンモニターの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">後席フリップダウンモニター</div></div></div><div class="parts-card"><img src="/assets/images/parts/radar.jpg" alt="レーダー探知機の作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">レーダー探知機</div></div></div><div class="parts-card"><img src="/assets/images/parts/android-navi.jpg" alt="海外製Androidナビの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">海外製Androidナビ</div></div></div><div class="parts-card"><img src="/assets/images/parts/import-dashcam.jpg" alt="輸入車のドラレコ取付の作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">輸入車のドラレコ取付</div></div></div><div class="parts-card"><img src="/assets/images/parts_entame.jpg" alt="テレビ・ナビの取り付けの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">テレビ・ナビの取り付け</div></div></div><div class="parts-card"><img src="/assets/images/parts/dashcam-2cam.jpg" alt="ドライブレコーダー（前後2カメラ）の作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">ドライブレコーダー（前後2カメラ）</div></div></div><div class="parts-card"><img src="/assets/images/parts_mirror.jpg" alt="デジタルインナーミラーの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">デジタルインナーミラー</div></div></div><div class="parts-card"><img src="/assets/images/parts/tv-canceller.jpg" alt="テレビキャンセラーの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">テレビキャンセラー</div></div></div><div class="parts-card"><img src="/assets/images/service_parts.jpg" alt="後席フリップダウンモニターの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">後席フリップダウンモニター</div></div></div><div class="parts-card"><img src="/assets/images/parts/radar.jpg" alt="レーダー探知機の作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">レーダー探知機</div></div></div><div class="parts-card"><img src="/assets/images/parts/android-navi.jpg" alt="海外製Androidナビの作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">海外製Androidナビ</div></div></div><div class="parts-card"><img src="/assets/images/parts/import-dashcam.jpg" alt="輸入車のドラレコ取付の作業例" loading="lazy"><div class="parts-card-body"><div class="parts-card-title">輸入車のドラレコ取付</div></div></div>
           </div>
         </div>
       </figure>
@@ -2602,45 +2481,20 @@
   <div class="section-inner">
     <div class="section-label">FLOW</div>
     <h2 class="section-title">相談から作業完了まで、LINEひとつで。</h2>
-    <p class="section-desc">電話も、来店も、立ち会いもいりません。やりとりはすべてLINEで完結します。</p>
     <ol class="step-list">
-      <li class="step-card">
-        <div class="step-photo step-1"><span class="step-no">STEP 1</span></div>
-        <div class="step-body">
-          <h3 class="step-title">LINEで相談</h3>
-          <p>車種と気になるところを送ってください。写真が1枚あればスムーズです。</p>
-          <ul class="step-chips"><li>相談・見積り無料</li><li>写真1枚でOK</li><li>返信は最短当日</li></ul>
-        </div>
+      <li class="step-1">
+        <div class="step-badge"><span>STEP 1</span>LINEで相談</div>
+        <p>車種と気になるところを送ってください。写真があればスムーズ。相談・見積りは無料です。</p>
       </li>
-      <li class="step-card">
-        <div class="step-photo step-photo--ui"><span class="step-no">STEP 2</span><img src="/assets/images/flow/booking-ui.jpg" alt="ご希望日時を候補から選ぶ予約画面" loading="lazy" width="720" height="754"></div>
-        <div class="step-body">
-          <h3 class="step-title">見積りと日程</h3>
-          <p>金額と、お伺いできる日時をご返信します。ご希望日を選んでいただければ確定です。</p>
-          <ul class="step-chips"><li>金額は出張費込み</li><li>日程は候補から選ぶだけ</li><li>断ってもOK</li></ul>
-        </div>
+      <li class="step-2">
+        <div class="step-badge"><span>STEP 2</span>見積りと日程</div>
+        <p>金額とお伺いできる日時をご返信します。納得できたら日程確定です。</p>
       </li>
-      <li class="step-card">
-        <div class="step-photo step-3"><span class="step-no">STEP 3</span></div>
-        <div class="step-body">
-          <h3 class="step-title">当日、鍵を渡すだけ</h3>
-          <p>駐車場にお伺いします。お出かけの日は、鍵をポストなどにご用意いただければ大丈夫です。</p>
-          <ul class="step-chips"><li>立ち会い不要</li><li>鍵はポストでもOK</li><li>在宅中でもOK</li></ul>
-        </div>
-      </li>
-      <li class="step-card">
-        <div class="step-photo step-4"><span class="step-no">STEP 4</span></div>
-        <div class="step-body">
-          <h3 class="step-title">作業とご報告</h3>
-          <p>その場で作業を終え、写真つきでLINEにご報告。お支払いはLINE（カード）でも、その場（現金・カード・PayPay・振込）でも。</p>
-          <ul class="step-chips"><li>写真つきで報告</li><li>支払いはLINEでも対面でも</li><li>記録が残る</li></ul>
-        </div>
+      <li class="step-3">
+        <div class="step-badge"><span>STEP 3</span>ご自宅で作業</div>
+        <p>駐車場にお伺いして、その場で完結。作業内容はご説明のうえ、記録に残します。</p>
       </li>
     </ol>
-    <div class="step-cta">
-      <a href="/p/line-top/" class="step-cta-btn">💬 LINEで相談してみる</a>
-      <span class="step-cta-note">登録だけしておいて、困ったときに使うのもOKです</span>
-    </div>
   </div>
 </section>
 
