@@ -621,6 +621,35 @@
       margin-top: 14px;
     }
 
+    /* ===== MEDIA：メディア掲載（作業実績と同じ横スクロールカード） ===== */
+    .media-section {
+      background: var(--color-bg-light-blue);
+    }
+
+    .media-section .work-card-img {
+      position: relative;
+    }
+
+    .media-thumb-badge {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      background: rgba(3, 24, 54, 0.82);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 4px 9px;
+      border-radius: 6px;
+    }
+
+    .media-note {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 14px;
+      text-align: center;
+    }
+
     /* 口コミの絞り込みタブ（依頼の種類ごとに読める＝段階②の不安解消） */
     .voice-tabs {
       display: flex;
@@ -1939,6 +1968,7 @@
   <a href="#concept" onclick="toggleMenu()">ラクルマとは</a>
   <a href="#howto" onclick="toggleMenu()">頼み方</a>
   <a href="#voice" onclick="toggleMenu()">お客様の声</a>
+  <a href="#media" onclick="toggleMenu()">メディア掲載</a>
   <a href="#works" onclick="toggleMenu()">作業実績</a>
   <div class="menu-divider">その他</div>
   <a href="/blog/">作業実績ブログ</a>
@@ -2266,6 +2296,61 @@
   </div>
 </section>
 
+<!-- MEDIA：メディア掲載 -->
+<section class="media-section" id="media">
+  <div class="section-inner">
+    <div class="section-label">MEDIA</div>
+    <h2 class="section-title">メディア掲載</h2>
+    <p class="section-desc">ラクルマの出張整備・出張洗車の取り組みを、各メディアにご紹介いただきました。地域イベントへの出展もあわせてご紹介します。</p>
+    <div class="works-carousel-wrap">
+      <div class="works-track" id="mediaTrack">
+        <a class="work-card is-link" href="https://www.youtube.com/watch?v=bi6B8mfOGhw" target="_blank" rel="noopener">
+          <div class="work-card-img"><img src="/assets/images/media/jwave-grand-marquee-2024.jpg" alt="J-WAVE GRAND MARQUEE" loading="lazy"><span class="media-thumb-badge">J-WAVE 81.3FM</span></div>
+          <div class="work-card-body">
+            <div class="work-card-date">2024.05.30 放送</div>
+            <div class="work-card-title">J-WAVE「GRAND MARQUEE」コーナー「MINSHO RADIO FLYER」で、代表・吉永がラクルマの出張整備・洗車をお話ししました。</div>
+            <span class="work-card-tag">ラジオ出演</span>
+            <span class="work-card-more">出演の様子を見る（YouTube）→</span>
+          </div>
+        </a>
+        <a class="work-card is-link" href="https://www.tokyo-np.co.jp/article/249672" target="_blank" rel="noopener">
+          <div class="work-card-img"><img src="/assets/images/media/tokyo-np-2023.jpg" alt="東京新聞 2023年5月13日 掲載紙面" loading="lazy"><span class="media-thumb-badge">新聞掲載</span></div>
+          <div class="work-card-body">
+            <div class="work-card-date">2023.05.13 掲載</div>
+            <div class="work-card-title">東京新聞 朝刊・山手版「小規模事業者に専門家指導　世田谷区の伴走支援」。区の支援を受けて創業した事例として、写真つきで紹介されました。</div>
+            <span class="work-card-tag">新聞掲載</span>
+            <span class="work-card-more">記事を読む（Web版）→</span>
+          </div>
+        </a>
+        <a class="work-card is-link" href="https://note.com/rakuruma/n/nb877ca866768" target="_blank" rel="noopener">
+          <div class="work-card-img"><img src="/assets/images/media/karanoichi-2024.jpg" alt="せたカラー主催 カラの市 整備体験ワークショップ" loading="lazy"><span class="media-thumb-badge">せたカラー</span></div>
+          <div class="work-card-body">
+            <div class="work-card-date">2024.03.16 開催</div>
+            <div class="work-card-title">世田谷区・せたカラー主催「カラの市」（経堂コルティ）に、本物の工具を使う整備体験ワークショップを出展しました。</div>
+            <span class="work-card-tag">イベント出展</span>
+            <span class="work-card-more">出展レポートを読む（note）→</span>
+          </div>
+        </a>
+        <a class="work-card is-link" href="https://www.j-wave.co.jp/original/stepone/workers/9930.html" target="_blank" rel="noopener">
+          <div class="work-card-img"><img src="/assets/images/media/jwave-step-one-2023.jpg" alt="J-WAVE STEP ONE" loading="lazy"><span class="media-thumb-badge">J-WAVE 81.3FM</span></div>
+          <div class="work-card-body">
+            <div class="work-card-date">2023.09.13 放送</div>
+            <div class="work-card-title">J-WAVE「STEP ONE」コーナー「CHEER UP WORKERS」に電話出演。「車のかかりつけ医」を目指す想いを紹介いただきました。</div>
+            <span class="work-card-tag">ラジオ出演</span>
+            <span class="work-card-more">番組の紹介ページを読む →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="carousel-dots" id="mediaDots"></div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="mediaPrev" aria-label="前へ">‹</button>
+      <button class="carousel-btn" id="mediaNext" aria-label="次へ">›</button>
+    </div>
+    <p class="media-note">取材・出演のご相談は <a href="/press/" style="color:var(--color-primary-blue);font-weight:700;">メディアの方へ（プレスキット）</a> をご覧ください。</p>
+  </div>
+</section>
+
 <!-- MEMBER：担当整備士 -->
 <section class="member-section" id="member">
   <div class="section-inner">
@@ -2341,6 +2426,7 @@
     <a href="/blog/">作業実績ブログ</a>
     <a href="/price_list/">料金</a>
     <a href="/company/">運営者情報</a>
+    <a href="/press/">メディアの方へ</a>
     <a href="/recruit/mobile-detailing/">出張洗車スタッフ募集</a>
     <a href="/p/line-top/">LINE相談</a>
   </div>
@@ -2477,6 +2563,12 @@
     }
     track._carouselRefresh = buildDots;
   }
+
+  // メディア掲載カルーセル（静的カード）
+  initCarousel({
+    trackId: 'mediaTrack', dotsId: 'mediaDots',
+    prevId: 'mediaPrev', nextId: 'mediaNext', cardSelector: '.work-card'
+  });
 
   // GASから作業実績を取得してカルーセルを構築
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';

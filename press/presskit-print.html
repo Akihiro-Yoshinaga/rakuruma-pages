@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ラクルマ プレスキット（A4）</title>
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --navy: #24395c; --navy-deep: #031836; --gold: #c9ab6a; --gold-text: #a2854c; --bg: #f1eee6; --muted: #777; --border: #e6e2da; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 210mm; height: auto; }
+  body { font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif; color: #222; line-height: 1.6; font-size: 10.5pt; background: #fff; }
+  .page { width: 210mm; height: 296mm; padding: 12mm 14mm 10mm; display: flex; flex-direction: column; overflow: hidden; page-break-after: avoid; }
+  .head { background: var(--navy-deep); color: #fff; padding: 9mm 10mm; border-radius: 4mm; display: flex; justify-content: space-between; align-items: center; gap: 8mm; }
+  .eyebrow { font-size: 8pt; letter-spacing: 2px; color: var(--gold); font-weight: 700; }
+  .head h1 { font-size: 19pt; font-weight: 900; line-height: 1.3; margin-top: 2mm; }
+  .head p { font-size: 9pt; opacity: .85; margin-top: 2mm; }
+  .head .pic { width: 30mm; height: 30mm; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid var(--gold); }
+  .head .pic img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-top: 5mm; }
+  h2 { font-size: 9pt; letter-spacing: 1.5px; color: var(--gold-text); font-weight: 700; margin-bottom: 2mm; padding-bottom: 1mm; border-bottom: 1.5px solid var(--gold); }
+  .block { margin-top: 4mm; }
+  .lead { font-size: 9.5pt; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5mm; }
+  .stat { border: 1px solid var(--border); border-radius: 2.5mm; padding: 2.5mm 2mm; text-align: center; }
+  .stat--main { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .stat .num { font-size: 15pt; font-weight: 900; line-height: 1.1; }
+  .stat .num small { font-size: 8pt; font-weight: 700; }
+  .stat .lbl { font-size: 7pt; margin-top: 1.5mm; opacity: .85; }
+  dl { display: grid; grid-template-columns: 14mm 1fr; row-gap: 1mm; font-size: 9pt; }
+  dt { color: var(--muted); }
+  ul { padding-left: 4mm; font-size: 9pt; }
+  li { margin-bottom: 1.2mm; }
+  li strong { color: var(--navy); }
+  table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+  th, td { text-align: left; vertical-align: top; padding: 1.2mm 1mm; border-bottom: 1px solid var(--border); }
+  th { white-space: nowrap; color: var(--navy); font-weight: 700; width: 24mm; }
+  .contact { margin-top: auto; background: var(--bg); border-radius: 3mm; padding: 4mm 6mm; display: flex; justify-content: space-between; align-items: center; gap: 6mm; font-size: 9pt; }
+  .contact .tel { font-size: 15pt; font-weight: 900; color: var(--navy); letter-spacing: .5px; white-space: nowrap; }
+  .contact .url { font-size: 8.5pt; color: var(--muted); }
+  .foot { font-size: 7pt; color: var(--muted); text-align: right; margin-top: 2mm; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="eyebrow">PRESS KIT ／ 出張洗車・出張整備「ラクルマ」</div>
+      <h1>整備士がご自宅まで伺う、<br>世田谷発の出張洗車・出張整備サービス</h1>
+      <p>代表・吉永明拓（国家1級自動車整備士／元ホンダ正規ディーラー8年）。2023年3月、世田谷区の創業支援を受けて開始。</p>
+    </div>
+    <div class="pic"><img src="../assets/images/media/profile-press.jpg" alt=""></div>
+  </div>
+
+  <div class="block">
+    <h2>ABOUT</h2>
+    <p class="lead">ラクルマは、ご自宅やマンションの駐車場まで整備士が訪問し、洗車・整備・パーツ取付を行う出張サービスです。「クルマを工場に持っていく時間がない」都市部のオーナーに向けて、担当整備士が定期的に訪問し、洗車と点検をセットで行う「愛車のかかりつけ医」のような関わり方を提案しています。J-WAVE出演時にいただいたキャッチコピーは『家でダラダラ、車ピカピカ。』</p>
+  </div>
+
+  <div class="block">
+    <h2>FACTS &amp; FIGURES</h2>
+    <div class="stats">
+      <div class="stat stat--main"><div class="num">1,000<small>件以上</small></div><div class="lbl">累計施工件数</div></div>
+      <div class="stat"><div class="num">★4.93</div><div class="lbl">くらしのマーケット 平均評価</div></div>
+      <div class="stat"><div class="num">584<small>件</small></div><div class="lbl">くらしのマーケット 口コミ</div></div>
+      <div class="stat"><div class="num">2023<small>年3月</small></div><div class="lbl">サービス開始</div></div>
+      <div class="stat"><div class="num">5<small>区</small></div><div class="lbl">世田谷・目黒・渋谷・品川・港</div></div>
+      <div class="stat"><div class="num">1<small>級</small></div><div class="lbl">国家1級整備士・自動車検査員</div></div>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div>
+      <div class="block" style="margin-top:0">
+        <h2>TOPICS ― お話しできるテーマ</h2>
+        <ul>
+          <li><strong>2025年6月「出張整備」規制緩和</strong>で現場は何が変わったか（解禁前から実践してきた立場から）</li>
+          <li><strong>AI活用</strong>：整備士ひとりの会社が、生成AIで予約管理・作業報告・車検リマインド・ブログ生成を自作（半年で1,500回以上更新）</li>
+          <li><strong>整備士の働き方</strong>：ディーラーを離れ、バイク訪問の出張整備で独立した理由</li>
+          <li><strong>都市部オーナーのクルマ管理</strong>：少量の水での手洗い洗車と、整備士が毎回状態を見る定期プラン</li>
+          <li><strong>子ども向け整備体験ワークショップ</strong>：本物の工具でドアミラー分解・タイヤの空気入れ</li>
+          <li><strong>断られがちな取り付け</strong>：持ち込みパーツ、海外製ナビ、デジタルインナーミラーの実情</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h2>PROFILE</h2>
+        <dl>
+          <dt>代表</dt><dd>吉永 明拓（よしなが あきひろ）</dd>
+          <dt>資格</dt><dd>国家1級自動車整備士／自動車検査員</dd>
+          <dt>経歴</dt><dd>ホンダ正規ディーラーに整備士として8年勤務。2022年 世田谷区「せたカラー」採択、2023年3月 ラクルマ開始</dd>
+          <dt>趣味</dt><dd>F1・SUPER GT観戦、ダーツ、テニス</dd>
+        </dl>
+      </div>
+    </div>
+    <div>
+      <div class="block" style="margin-top:0">
+        <h2>MEDIA ― 掲載・出演実績</h2>
+        <table>
+          <tr><th>2024.05.30</th><td>J-WAVE「GRAND MARQUEE」MINSHO RADIO FLYER 出演</td></tr>
+          <tr><th>2024.03.16</th><td>世田谷区・せたカラー「カラの市」整備体験ワークショップ出展</td></tr>
+          <tr><th>2023.09.13</th><td>J-WAVE「STEP ONE」CHEER UP WORKERS 電話出演</td></tr>
+          <tr><th>2023.05.13</th><td>東京新聞 朝刊・山手版「小規模事業者に専門家指導」写真つき掲載</td></tr>
+        </table>
+      </div>
+      <div class="block">
+        <h2>HOW WE WORK WITH MEDIA</h2>
+        <ul>
+          <li>電話・オンライン取材：平日日中を中心に対応。ラジオの電話出演可</li>
+          <li>スタジオ出演・対面取材：都内は伺います</li>
+          <li>現場同行・撮影：お客様の了承が取れた現場をご案内（要事前相談）</li>
+          <li>ロゴ・写真素材：お問い合わせいただければ個別にお渡しします</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact">
+    <div>
+      <div style="font-weight:700;color:var(--navy)">取材のお問い合わせ　担当：吉永（代表）</div>
+      <div class="url">LINE（取材・業者様専用）https://lin.ee/RM1ASYt ／ フォーム https://rakuruma.com/reservation_form/（「取材」とご記入ください）</div>
+      <div class="url">〒154-0004 東京都世田谷区三軒茶屋1-32-8　屋号：AYコーポレーション　https://rakuruma.com/</div>
+    </div>
+    <div class="tel">090-1455-8809</div>
+  </div>
+  <div class="foot">2026年9月現在　詳細・最新の数字は https://rakuruma.com/press/</div>
+</div>
+</body>
+</html>
