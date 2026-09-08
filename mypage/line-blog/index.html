@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ラクルマ公式LINE</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+       background:#f5f7fa; margin:0; padding:20px; min-height:100vh; box-sizing:border-box;
+       display:flex; align-items:center; justify-content:center;}
+  .card{background:#fff; border-radius:16px; padding:36px 24px; max-width:400px; width:100%;
+        box-shadow:0 2px 16px rgba(0,0,0,.08); text-align:center;}
+  .icon{font-size:52px; margin-bottom:12px;}
+  h2{color:#1a202c; font-size:19px; margin:0 0 10px;}
+  p{color:#4a5568; font-size:15px; line-height:1.8; margin:0 0 6px;}
+  .btn{display:block; width:100%; padding:14px; background:#06C755; color:#fff; font-size:16px; font-weight:700;
+       border:none; border-radius:10px; margin-top:18px; box-sizing:border-box; text-decoration:none;
+       box-shadow:0 4px 12px rgba(6,199,85,.3);}
+  .sub{font-size:12px; color:#8a94a6; margin-top:12px;}
+  .spinner{width:44px; height:44px; border:4px solid #e2e8f0; border-top-color:#06C755; border-radius:50%;
+           animation:spin .8s linear infinite; margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="st-loading"><div class="spinner"></div><p>LINEに接続しています…</p></div>
+  <div id="st-friend" class="hidden">
+    <div class="icon">✅</div>
+    <h2>ありがとうございます</h2>
+    <p>トークで「見積もりを聞きたい」と送ってください。<br>車種と作業内容が分かれば、概算をお返しします。</p>
+    <a class="btn" id="btn-talk" href="https://lin.ee/r0BAZkR0">トークを開いて相談する</a>
+    <p class="sub">無料・車検証は不要です</p>
+  </div>
+  <div id="st-nofriend" class="hidden">
+    <div class="icon">📱</div>
+    <h2>あと1タップです</h2>
+    <p>友だち追加すると、この作業の見積もりをLINEで聞けます。</p>
+    <a class="btn" href="https://lin.ee/r0BAZkR0">友だち追加して相談する</a>
+    <p class="sub">無料・車検証は不要です</p>
+  </div>
+  <div id="st-error" class="hidden">
+    <div class="icon">📱</div>
+    <p>LINEをうまく開けませんでした。<br>下のボタンから友だち追加のうえ、ご相談ください。</p>
+    <a class="btn" href="https://lin.ee/r0BAZkR0">LINEで友だち追加する</a>
+  </div>
+</div>
+<script>
+// ブログ→LINEのLIFF着地ページ（2026-09-08 実験開始）
+// 中継ページ /p/line-blog/ がタップを記録して k（タップID）付きでここへ飛ばす。LIFFのログインで取れる
+// IDトークンを予約管理GASに渡し、同じ k の行にLINEユーザーIDを書く（lineTapLink）。
+// マイページLIFFアプリ（endpoint = /mypage/）のサブパスとして動く。liff.state 経由で /mypage/ から転送される。
+var LIFF_ID  = '2004330318-vS44KWOy';
+var GAS_URL  = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+var LINE_ADD = 'https://lin.ee/r0BAZkR0';
+var q = new URLSearchParams(location.search);
+var k = q.get('k') || '', src = q.get('src') || 'hp_blog_line', d = q.get('d') || '';
+
+function show(id) {
+  ['st-loading', 'st-friend', 'st-nofriend', 'st-error'].forEach(function (x) { document.getElementById(x).classList.add('hidden'); });
+  document.getElementById(id).classList.remove('hidden');
+}
+// トークを開くリンク。ベーシックIDが取れれば本文を入れた状態でトークを開ける（送信は本人のタップ）
+function talkUrl(basicId) {
+  var text = 'ブログを見て、この作業の見積もりを聞きたいです。\n車種：\nご希望の作業：';
+  return basicId ? 'https://line.me/R/oaMessage/' + encodeURIComponent(basicId) + '/?' + encodeURIComponent(text) : LINE_ADD;
+}
+function main() {
+  if (typeof liff === 'undefined') { show('st-error'); return; }
+  liff.init({ liffId: LIFF_ID }).then(function () {
+    if (!liff.isLoggedIn()) {
+      if (liff.isInClient()) { liff.login({ redirectUri: location.href }); return; }
+      // 普通のブラウザ（PC等）はLINEログイン画面が重いので、従来の友だち追加リンクへ
+      location.replace(LINE_ADD); return;
+    }
+    var idToken = liff.getIDToken() || '';
+    var link = fetch(GAS_URL + '?action=lineTapLink&idToken=' + encodeURIComponent(idToken)
+                 + '&k=' + encodeURIComponent(k) + '&src=' + encodeURIComponent(src) + '&d=' + encodeURIComponent(d))
+      .then(function (r) { return r.json(); }).catch(function () { return { ok: false }; });
+    var fr = (typeof liff.getFriendship === 'function')
+      ? liff.getFriendship().catch(function () { return { friendFlag: null }; })
+      : Promise.resolve({ friendFlag: null });
+    Promise.all([link, fr]).then(function (res) {
+      var basicId = (res[0] && res[0].basicId) || '';
+      var friend  = res[1] ? res[1].friendFlag : null;
+      document.getElementById('btn-talk').href = talkUrl(basicId);
+      // 友だちでないと分かったときだけ追加を促す。判定できない場合はトークへ（LINE側で追加を促してくれる）
+      show(friend === false ? 'st-nofriend' : 'st-friend');
+    });
+  }).catch(function () { show('st-error'); });
+}
+main();
+</script>
+</body>
+</html>
