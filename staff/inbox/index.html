@@ -210,7 +210,7 @@ document.getElementById('text').addEventListener('input', autosize);
 
 // ---- 送信までの猶予（15秒。押し間違い・宛先違いをここで止める） ----
 var GRACE_SEC = 15, graceTimer = null, graceTick = null;
-function withGrace(label, run) {
+function withGrace(label, run, onCancel) {
   var box = document.getElementById('grace');
   if (graceTimer) { alert('前の送信の猶予中です。終わってからもう一度お願いします'); return; }
   var left = GRACE_SEC;
@@ -219,7 +219,7 @@ function withGrace(label, run) {
   box.style.display = 'flex';
   graceTick = setInterval(function() { left--; document.getElementById('graceSec').textContent = '（' + left + '秒後に送信）'; }, 1000);
   graceTimer = setTimeout(function() { clearGrace(); run(); }, GRACE_SEC * 1000);
-  document.getElementById('graceCancel').onclick = function() { clearGrace(); toast('取り消しました。送信していません'); };
+  document.getElementById('graceCancel').onclick = function() { clearGrace(); if (onCancel) onCancel(); toast('取り消しました。送信していません'); };
 }
 function clearGrace() { clearTimeout(graceTimer); clearInterval(graceTick); graceTimer = null; graceTick = null; document.getElementById('grace').style.display = 'none'; }
 document.getElementById('btnSend').onclick = function() {
@@ -246,7 +246,7 @@ document.getElementById('btnSend').onclick = function() {
     target.needsReply = false; target.unread = 0;
     if (CUR === target) openThread(CUR);
   }).catch(function(e) { btn.disabled = false; ta.value = sentText; autosize(); alert('通信エラー: ' + e); });
-  });
+  }, function() { if (CUR === target) { ta.value = sentText; autosize(); } });
 };
 
 document.getElementById('btnDraft').onclick = function() {
