@@ -906,6 +906,14 @@ function submitPhone() {
 
 // 初期化
 (function init() {
+  // LIFF入口のサブパス転送（2026-09-08）：/mypage/ はLIFFアプリのendpointなので、
+  // https://liff.line.me/{id}/line-blog/?k=... は ?liff.state=/line-blog/?k=... の形でここに届く。
+  // 本来は liff.init() がこの転送をするが、下のトークンキャッシュ経路は liff.init を通らないため
+  // 履歴ページが出てしまった（9/8 実機で確認）。先に自前で転送する。?src=rm_mypage（'?'始まり）は対象外
+  try {
+    var st0 = new URLSearchParams(location.search).get('liff.state') || '';
+    if (st0.charAt(0) === '/' && st0.charAt(1) !== '/') { location.replace('/mypage' + st0); return; }
+  } catch (e) {}
   document.getElementById('loginBtn').addEventListener('click', function(ev) { ev.preventDefault(); startLiff(); });
   document.getElementById('phoneBtn').addEventListener('click', submitPhone);
 
