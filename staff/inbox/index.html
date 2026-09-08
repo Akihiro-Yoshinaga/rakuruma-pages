@@ -208,6 +208,14 @@ document.getElementById('btnSend').onclick = function() {
   var btn = this; btn.disabled = true;
   api({ op:'send', uid: CUR.uid, src: CUR.src, text: text }).then(function(r) {
     btn.disabled = false;
+    if (r && r.ok === undefined) {
+      // GASの応答が別ページに化けることが稀にある。送れているかをスレッドで確かめてから判断する
+      return api({ op:'thread', uid: CUR.uid, src: CUR.src }).then(function(t) {
+        var sent = (t.ok && (t.messages || []).some(function(m) { return m.dir === '送信' && m.text === text; }));
+        if (sent) { ta.value = ''; autosize(); toast('送信しました（記録済み）'); CUR.needsReply = false; CUR.unread = 0; openThread(CUR); }
+        else alert('送信を確認できませんでした。スレッドを見て、届いていなければもう一度送ってください');
+      });
+    }
     if (!r.ok) { alert('送信できませんでした: ' + (r.error || '')); return; }
     ta.value = ''; autosize(); toast('送信しました（記録済み）');
     CUR.needsReply = false; CUR.unread = 0;
@@ -259,6 +267,13 @@ document.getElementById('schedAdd').onclick = function() {
   if (!text) { alert('本文が空です'); return; }
   if (!confirm(date.replace(/-/g, '/') + ' ' + time + ' に次の内容を自動送信します。よろしいですか？\n\n' + text.slice(0, 200))) return;
   api({ op:'scheduleAdd', uid: CUR.uid, src: CUR.src, at: date + ' ' + time, text: text }).then(function(r) {
+    if (r && r.ok === undefined) {
+      return api({ op:'scheduleList', uid: CUR.uid }).then(function(l) {
+        var hit = (l.ok && (l.items || []).some(function(x) { return x.text === text; }));
+        if (hit) { toast('予約しました'); document.getElementById('schedbox').style.display = 'none'; document.getElementById('schedText').value = ''; loadSched(); }
+        else alert('登録を確認できませんでした。予約一覧を見て、無ければもう一度登録してください');
+      });
+    }
     if (!r.ok) { alert(r.error || '登録できませんでした'); return; }
     toast('予約しました（' + r.at + '）');
     document.getElementById('schedbox').style.display = 'none'; document.getElementById('schedText').value = '';
