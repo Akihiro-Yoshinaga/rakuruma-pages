@@ -1961,6 +1961,93 @@
     }
 
     /* ===== FLOATING LINE BTN ===== */
+    /* ===== PC用固定ヘッダー：FVを抜けたら表示（スマホは非表示） ===== */
+    .pc-header {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--z-index-fixed);
+      background: rgba(255, 255, 255, 0.96);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 1px 0 var(--color-border-light), var(--shadow-light);
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+    }
+
+    .pc-header.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .pc-header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 64px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .pc-header-logo img {
+      display: block;
+      height: 30px;
+      width: auto;
+    }
+
+    .pc-header-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-left: 8px;
+    }
+
+    .pc-header-nav a {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      text-decoration: none;
+      padding: 6px 0;
+      border-bottom: 2px solid transparent;
+      transition: var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .pc-header-nav a:hover {
+      color: var(--color-primary-blue);
+      border-bottom-color: var(--gold-line);
+    }
+
+    .pc-header-line {
+      margin-left: auto;
+      background: var(--gradient-button-green);
+      color: var(--color-text-white);
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: var(--button-radius);
+      white-space: nowrap;
+      transition: var(--transition-fast);
+    }
+
+    .pc-header-line:hover {
+      opacity: var(--opacity-hover);
+    }
+
+    @media (min-width: 768px) {
+      .pc-header { display: block; }
+    }
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .pc-header-nav { gap: 16px; }
+      .pc-header-nav a { font-size: 13px; }
+    }
+
     .float-line {
       position: fixed;
       bottom: 24px;
@@ -2125,6 +2212,21 @@
   <a href="/blog/">作業実績ブログ</a>
   <a href="/p/line-top/" class="menu-line-btn">💬 LINEで相談</a>
 </nav>
+
+<!-- PC用固定ヘッダー（スマホ非表示）。FVを通り過ぎたら上から現れる（2026-09-08） -->
+<header class="pc-header" aria-label="サイトヘッダー">
+  <div class="pc-header-inner">
+    <a href="/" class="pc-header-logo"><img src="/assets/images/logo.svg" alt="ラクルマ"></a>
+    <nav class="pc-header-nav" aria-label="主要ページ">
+      <a href="/mobile-car-wash/">出張洗車</a>
+      <a href="/shaken/">出張車検</a>
+      <a href="/maintenance/">出張整備・パーツ取付</a>
+      <a href="/price_list/">料金表</a>
+      <a href="/blog/">作業実績ブログ</a>
+    </nav>
+    <a href="/p/line-top/" class="pc-header-line">💬 LINEで相談</a>
+  </div>
+</header>
 
 <!-- FV（旧トップデザイン） -->
 <section class="fv-top">
@@ -2812,9 +2914,11 @@
   (function() {
     var floatBtn = document.querySelector('.float-line');
     var fixbar = document.querySelector('.fixbar');
+    var pcHeader = document.querySelector('.pc-header');
     if (!('IntersectionObserver' in window)) {
-      // 非対応環境では固定バーを常時表示にフォールバック
+      // 非対応環境では固定バー・PCヘッダーを常時表示にフォールバック
       if (fixbar) fixbar.classList.add('is-visible');
+      if (pcHeader) pcHeader.classList.add('is-visible');
       return;
     }
     var visible = new Set();
@@ -2826,6 +2930,7 @@
       var inFv = visible.size > 0;
       if (floatBtn) floatBtn.classList.toggle('is-hidden', inFv);
       if (fixbar) fixbar.classList.toggle('is-visible', !inFv);
+      if (pcHeader) pcHeader.classList.toggle('is-visible', !inFv);
     }, { threshold: 0.2 });
     ['.fv-top', '.hero'].forEach(function(sel) {
       var el = document.querySelector(sel);
