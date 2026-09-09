@@ -112,8 +112,8 @@
 
 <div id="thread">
   <div class="hdrwrap">
-  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnMemo" style="display:none">📝 メモに残す</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
@@ -121,6 +121,12 @@
     <div style="display:flex;gap:8px;margin-top:6px"><input type="date" id="schedDate" style="flex:1"><input type="time" id="schedTime" value="18:00" style="flex:1"></div>
     <textarea id="schedText" rows="3" placeholder="送る本文（下の返信欄に入れた文をそのまま使えます）" style="width:100%;margin-top:6px;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;font-family:inherit"></textarea>
     <div style="margin-top:8px;display:flex;gap:8px"><span class="abtn" id="schedUse">返信欄の文を使う</span><span class="abtn ok" id="schedAdd">この日時で登録</span></div>
+  </div>
+  <div id="memobox" class="linkbox" style="display:none;background:#F3FBF4;border-color:#38A169">
+    <b>メモに残す</b> <span id="memoBasis" style="color:#718096"></span>
+    <div style="font-size:12px;color:#718096;margin-top:2px">事実だけを1行ずつ（日付・作業・金額・約束）。直してから保存。顧客リストの「メモ」に日付つきで追記されます</div>
+    <textarea id="memoText" rows="4" placeholder="作成中…" style="width:100%;margin-top:6px;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;font-family:inherit"></textarea>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="memoSave">保存</span><span class="abtn" id="memoClose">閉じる</span></div>
   </div>
   <div id="pickbox" class="linkbox" style="display:none">
     <b>このお客様のLINEを選ぶ</b>（LINEの表示名で探します。表示名はカタカナや英語のこともあります）
@@ -266,6 +272,9 @@ function openThread(it) {
     document.getElementById('tRefresh').style.display = 'none';
     var cust0 = document.getElementById('tCust'); cust0.style.display = 'inline-block'; cust0.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN);
     document.getElementById('btnLink').style.display = 'none';
+    document.getElementById('btnMemo').style.display = 'none';
+    document.getElementById('memobox').style.display = 'none';
+    showMemoLine('');
     document.getElementById('note').textContent = '';
     document.getElementById('schedlist').innerHTML = '';
     document.getElementById('msgs').innerHTML = '<div class="sys">LINEがまだ紐付いていません。上の候補から本人を選ぶと、やりとりと送信ができるようになります</div>';
@@ -281,6 +290,9 @@ function openThread(it) {
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
+  document.getElementById('btnMemo').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
+  document.getElementById('memobox').style.display = 'none';
+  showMemoLine(it.customer && it.customer.memo);
   document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
   if (cachedT) scrollBottom(); else window.scrollTo(0, 0);
   loadSched();
@@ -289,6 +301,7 @@ function openThread(it) {
     document.getElementById('tRefresh').style.display = 'none';
     if (!r.ok) { if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error) + '</div>'; return; }
     threadCachePut(it.uid, r.messages || []);
+    if (r.customer && it.customer) { it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo); }
     renderMsgs(it, r.messages || [], false);
   }).catch(function() { document.getElementById('tRefresh').style.display = 'none'; if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">通信エラー。右上の更新か、開き直してください</div>'; });
   if (!TEMPLATES) api({ op:'templates' }).then(function(r) { TEMPLATES = (r.ok && r.templates) || []; renderTpl(); }); else renderTpl();
@@ -486,9 +499,50 @@ function fill(text) {
   var car = (CUR && CUR.customer && CUR.customer.car) || 'お車';
   return String(text || '').replace(/\{名前\}/g, nm).replace(/\{車種\}/g, car);
 }
+// ---- メモに残す：やりとりから事実だけを抜いて顧客リストの「メモ」列へ ----
+function memoLastEntry(memo) {
+  var m = String(memo || '').split(/【(\d{4}\/\d{2}\/\d{2}) LINE】[^\n]*\n?/); // [前, 日付, 本文, 日付, 本文…]
+  if (m.length < 3) return null;
+  return { date: m[m.length - 2], text: String(m[m.length - 1] || '').trim() };
+}
+function showMemoLine(memo) {
+  var el = document.getElementById('tMemo'); var last = memoLastEntry(memo);
+  if (!last || !last.text) { el.style.display = 'none'; el.textContent = ''; return; }
+  var first = last.text.split('\n')[0]; var d = last.date.slice(5).replace(/^0/, '').replace('/0', '/');
+  el.style.display = 'block'; el.textContent = '📝 ' + (/^\d{1,2}\/\d{1,2}/.test(first) ? first : d + ' ' + first);
+  el.title = last.text;
+}
+function openMemo(afterDone) {
+  if (!CUR || !CUR.customer || CUR.noLine) return;
+  var box = document.getElementById('memobox'), ta = document.getElementById('memoText'), basis = document.getElementById('memoBasis');
+  box.style.display = 'block'; ta.value = ''; ta.placeholder = '作成中…'; basis.textContent = ''; document.getElementById('memoClose').textContent = afterDone ? 'メモなしで閉じる' : '閉じる';
+  var target = CUR;
+  api({ op:'memoDraft', uid: target.uid }).then(function(r) {
+    if (CUR !== target) return;
+    if (!r.ok) { basis.textContent = ''; ta.placeholder = r.error || '作れませんでした'; return; }
+    if (r.empty) { basis.textContent = '（' + r.basis + 'にやりとりがありません）'; ta.placeholder = '残したいことがあれば手で書いて保存'; if (afterDone) box.style.display = 'none'; return; }
+    basis.textContent = '（' + r.basis + '・' + r.count + '件から作成）';
+    ta.value = r.draft; ta.placeholder = ''; ta.focus();
+  }).catch(function(e) { ta.placeholder = '通信エラー: ' + e; });
+}
+document.getElementById('btnMemo').onclick = function() { openMemo(false); };
+document.getElementById('memoClose').onclick = function() { document.getElementById('memobox').style.display = 'none'; };
+document.getElementById('memoSave').onclick = function() {
+  if (!CUR || !CUR.customer) return;
+  var text = document.getElementById('memoText').value.trim(); if (!text) { alert('本文が空です'); return; }
+  var target = CUR; var btn = this; btn.textContent = '保存中…';
+  api({ op:'memoSave', uid: target.uid, text: text }).then(function(r) {
+    btn.textContent = '保存';
+    if (!r.ok) { alert(r.error || '失敗'); return; }
+    target.customer.memo = (target.customer.memo ? target.customer.memo + '\n\n' : '') + r.entry;
+    showMemoLine(target.customer.memo);
+    document.getElementById('memobox').style.display = 'none';
+    toast('メモに残しました（顧客リスト 行' + r.row + '）');
+  }).catch(function(e) { btn.textContent = '保存'; alert('通信エラー: ' + e); });
+};
 document.getElementById('btnDone').onclick = function() {
   if (!CUR) return;
-  api({ op:'done', uid: CUR.uid }).then(function(r) { if (r.ok) { toast('対応済みにしました'); CUR.needsReply = false; CUR.unread = 0; } else alert(r.error || '失敗'); });
+  api({ op:'done', uid: CUR.uid }).then(function(r) { if (r.ok) { toast('対応済みにしました'); CUR.needsReply = false; CUR.unread = 0; if (CUR.customer && !CUR.noLine) openMemo(true); } else alert(r.error || '失敗'); });
 };
 
 document.getElementById('back').onclick = function() {
