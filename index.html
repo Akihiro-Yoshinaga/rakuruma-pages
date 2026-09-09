@@ -711,7 +711,9 @@
       .voice-grid {
         display: flex;
         overflow-x: auto;
-        scroll-snap-type: x mandatory;
+        /* 強制スナップだと縦スワイプのわずかな横成分でカードに吸い付き、縦スクロールが止まる。弱いスナップに（2026-09-09） */
+        scroll-snap-type: x proximity;
+        overscroll-behavior-x: contain;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
         margin: 0 -24px;
@@ -1700,7 +1702,7 @@
       gap: var(--spacing-lg);
       overflow-x: auto;
       overscroll-behavior-x: contain;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity; /* スマホも弱いスナップに統一（縦スクロールの引っかかり対策・2026-09-09） */
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       padding-bottom: 4px;
