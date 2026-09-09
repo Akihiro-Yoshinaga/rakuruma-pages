@@ -35,7 +35,7 @@ var k = q.get('k') || '', src = q.get('src') || 'hp_blog_line', d = q.get('d') |
 // トークの入力欄に「記事URL＋一言」を入れた状態で開く（oaMessage の ?文面 形式。/p/recruit-line/ と同じ仕組み）。
 // お客様は送信を押すだけ。記事URLを手でコピペしてもらう手間をなくし、こちらも「どの記事の話か」がすぐ分かる。
 // 一言が要らなければ TALK_NOTE を '' にするだけ。bid が無い（PC経由・referrer無し）時は従来どおり文面なし
-var TALK_NOTE = 'この記事の作業について、見積もりをお願いします。';
+var TALK_NOTE = 'この記事の作業について、ご質問がある場合は以下にメッセージを入れて送信お願いします。\n';   // 2026-09-09 吉永さん指定の文面（末尾の改行＝お客様が書き足す行）
 var bid = q.get('bid') || '';
 var TALK_URL = TALK_BASE;
 if (/^\d{6,20}$/.test(bid)) {
