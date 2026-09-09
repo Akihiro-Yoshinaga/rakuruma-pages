@@ -10,5 +10,11 @@
         if (!d || !d.ok || !d.count || !d.rating) return;
         document.querySelectorAll('[data-curama-count]').forEach(function (el) { el.textContent = d.count; });
         document.querySelectorAll('[data-curama-rating]').forEach(function (el) { el.textContent = d.rating; });
+        // 洗車の口コミ（店舗口コミ一覧を毎日巡回した値）。件数・「すべて★5」か「★5が◯件」か・平均
+        if (d.washCount) {
+            document.querySelectorAll('[data-curama-wash-count]').forEach(function (el) { el.textContent = d.washCount; });
+            document.querySelectorAll('[data-curama-wash-claim]').forEach(function (el) { el.textContent = (d.washFive === d.washCount) ? 'すべて★5' : ('★5が' + d.washFive + '件'); });
+            if (d.washAvg) document.querySelectorAll('[data-curama-wash-avg]').forEach(function (el) { el.textContent = Number(d.washAvg).toFixed(1); });
+        }
     }).catch(function () {});
 })();
