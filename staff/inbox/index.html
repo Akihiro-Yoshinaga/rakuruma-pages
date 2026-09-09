@@ -38,6 +38,9 @@
   .out { background:var(--navy); color:#fff; align-self:flex-end; }
   .meta { font-size:11px; color:var(--mute); margin-top:4px; white-space:normal; }
   .out .meta { color:#B9C4DA; }
+  .out.pending { opacity:.55; border:2px dashed #D9BC7A; }
+  body.gracing .msgs { padding-bottom:340px; }
+  .out.pending .meta { color:#FFE9B0; font-weight:700; }
   .sys { align-self:center; font-size:11px; color:#718096; background:#E2E8F0; padding:3px 10px; border-radius:10px; }
   .compose { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line); padding:8px 10px 12px; z-index:6; }
   .msgs { padding-bottom:210px; }
@@ -192,7 +195,9 @@ function openThread(it) {
       else inner = esc(body);
       html += '<div class="bub ' + (isIn ? 'in' : 'out') + '">' + inner + '<div class="meta">' + esc(String(m.at || '').slice(11, 16)) + ' ' + esc(isIn ? '受信' : m.kind) + '</div></div>';
     });
+    var pend = (CUR === it && graceTimer) ? document.getElementById('pending') : null;
     document.getElementById('msgs').innerHTML = html || '<div class="sys">記録がありません</div>';
+    if (pend) document.getElementById('msgs').appendChild(pend);
     window.scrollTo(0, document.body.scrollHeight);
   });
   if (!TEMPLATES) api({ op:'templates' }).then(function(r) { TEMPLATES = (r.ok && r.templates) || []; renderTpl(); }); else renderTpl();
@@ -221,14 +226,24 @@ function withGrace(label, run, onCancel) {
   graceTimer = setTimeout(function() { clearGrace(); run(); }, GRACE_SEC * 1000);
   document.getElementById('graceCancel').onclick = function() { clearGrace(); if (onCancel) onCancel(); toast('取り消しました。送信していません'); };
 }
-function clearGrace() { clearTimeout(graceTimer); clearInterval(graceTick); graceTimer = null; graceTick = null; document.getElementById('grace').style.display = 'none'; }
+function showPending(inner) {
+  var box = document.getElementById('msgs');
+  var sys = box.querySelector('.sys'); if (sys && box.children.length === 1) box.innerHTML = '';
+  var d = document.createElement('div'); d.className = 'bub out pending'; d.id = 'pending';
+  d.innerHTML = inner + '<div class="meta">送信待ち（' + GRACE_SEC + '秒以内なら取り消せます）</div>';
+  box.appendChild(d); document.body.classList.add('gracing'); window.scrollTo(0, document.body.scrollHeight);
+  return d;
+}
+function removePending() { var d = document.getElementById('pending'); if (d) d.remove(); document.body.classList.remove('gracing'); }
+function clearGrace() { clearTimeout(graceTimer); clearInterval(graceTick); graceTimer = null; graceTick = null; document.getElementById('grace').style.display = 'none'; document.body.classList.remove('gracing'); }
 document.getElementById('btnSend').onclick = function() {
   if (!CUR) return;
   var ta = document.getElementById('text'); var text = ta.value.trim();
   if (!text) return;
-  if (!confirm('この内容で送信します。よろしいですか？\n\n' + text.slice(0, 200))) return;
+  if (graceTimer) { alert('前の送信の猶予中です。終わってからもう一度お願いします'); return; }
   var btn = this; var target = CUR; var sentText = text;
   ta.value = ''; autosize();
+  showPending(esc(sentText));
   withGrace(((target.customer && target.customer.name) || target.partner || target.displayName || '') + ' へ送信', function() {
   btn.disabled = true;
   api({ op:'send', uid: target.uid, src: target.src, text: sentText }).then(function(r) {
@@ -238,15 +253,15 @@ document.getElementById('btnSend').onclick = function() {
       return api({ op:'thread', uid: target.uid, src: target.src }).then(function(t) {
         var sent = (t.ok && (t.messages || []).some(function(m) { return m.dir === '送信' && m.text === sentText; }));
         if (sent) { toast('送信しました（記録済み）'); target.needsReply = false; target.unread = 0; if (CUR === target) openThread(CUR); }
-        else { ta.value = sentText; autosize(); alert('送信を確認できませんでした。スレッドを見て、届いていなければもう一度送ってください'); }
+        else { removePending(); ta.value = sentText; autosize(); alert('送信を確認できませんでした。スレッドを見て、届いていなければもう一度送ってください'); }
       });
     }
-    if (!r.ok) { ta.value = sentText; autosize(); alert('送信できませんでした: ' + (r.error || '')); return; }
+    if (!r.ok) { removePending(); ta.value = sentText; autosize(); alert('送信できませんでした: ' + (r.error || '')); return; }
     toast('送信しました（記録済み）');
     target.needsReply = false; target.unread = 0;
     if (CUR === target) openThread(CUR);
-  }).catch(function(e) { btn.disabled = false; ta.value = sentText; autosize(); alert('通信エラー: ' + e); });
-  }, function() { if (CUR === target) { ta.value = sentText; autosize(); } });
+  }).catch(function(e) { btn.disabled = false; removePending(); ta.value = sentText; autosize(); alert('通信エラー: ' + e); });
+  }, function() { removePending(); if (CUR === target) { ta.value = sentText; autosize(); ta.focus(); } });
 };
 
 document.getElementById('btnDraft').onclick = function() {
@@ -317,16 +332,17 @@ document.getElementById('photo').addEventListener('change', function() {
     var c = document.createElement('canvas'); c.width = Math.round(w * s); c.height = Math.round(h * s);
     c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
     var dataUrl = c.toDataURL('image/jpeg', 0.85);
-    if (!confirm('この写真を送信します。よろしいですか？')) return;
+    if (graceTimer) { alert('前の送信の猶予中です。終わってからもう一度お願いします'); return; }
     var target = CUR;
+    showPending('<img src="' + dataUrl + '" alt="送信する写真" style="max-width:100%;border-radius:10px;display:block">');
     withGrace('写真を送信', function() {
     toast('送信中…');
     api({ op:'sendImage', uid: target.uid, src: target.src, dataUrl: dataUrl }).then(function(r) {
       if (r && r.ok === undefined) { toast('送信結果を確認中…'); return openThread(CUR); }
-      if (!r.ok) { alert('送れませんでした: ' + (r.error || '')); return; }
+      if (!r.ok) { removePending(); alert('送れませんでした: ' + (r.error || '')); return; }
       toast('写真を送りました（記録済み）'); if (CUR === target) openThread(CUR);
-    }).catch(function(e) { alert('通信エラー: ' + e); });
-    });
+    }).catch(function(e) { removePending(); alert('通信エラー: ' + e); });
+    }, function() { removePending(); });
   };
   img.src = url;
 });
