@@ -143,7 +143,7 @@ var TOKEN = '', STAFF = '';
   else { try { TOKEN = localStorage.getItem('rakuruma_staff_token') || ''; } catch(e) {} }
   if (!TOKEN) { window.location.replace('/staff/'); }
 })();
-var API_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+var API_URL = 'https://script.google.com/macros/s/AKfycbxdfdeYlUCvEH5wB4zLHjzGWRoJaFqX0Y0F0pSNrpURcYYLH_rlvlHfv-cLLXfS41bqNw/exec'; /* 受信箱専用GAS（06_tools/inbox-gas）2026-09-09 */ var MAIN_GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 var ITEMS = [], OTHERS = [], TAB = 'need', CUR = null, TEMPLATES = null;
 
 // 読み取り系は9秒で打ち切って1回だけやり直す（GAS側でたまに30〜40秒止まることがある。送信系はやり直さない）
@@ -244,7 +244,7 @@ function openThread(it) {
     document.getElementById('tName').textContent = nm0;
     document.getElementById('tSub').textContent = (it.customer && it.customer.car) || '';
     document.getElementById('tRefresh').style.display = 'none';
-    var cust0 = document.getElementById('tCust'); cust0.style.display = 'inline-block'; cust0.href = API_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN);
+    var cust0 = document.getElementById('tCust'); cust0.style.display = 'inline-block'; cust0.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN);
     document.getElementById('btnLink').style.display = 'none';
     document.getElementById('note').textContent = '';
     document.getElementById('schedlist').innerHTML = '';
@@ -259,7 +259,7 @@ function openThread(it) {
   document.getElementById('tName').textContent = name;
   document.getElementById('tSub').textContent = it.src === 'biz' ? '工場・取引先（ラクルマ ご依頼・相談）' : (it.customer ? [it.customer.car, it.customer.shakenExpiry ? '車検満了 ' + it.customer.shakenExpiry : '', it.customer.teiki ? '定期プラン' : ''].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
-  if (it.customer) { cust.style.display = 'inline-block'; cust.href = API_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
+  if (it.customer) { cust.style.display = 'inline-block'; cust.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
   document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
   if (cachedT) scrollBottom(); else window.scrollTo(0, 0);
