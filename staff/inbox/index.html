@@ -172,7 +172,14 @@ function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
 function isDesktop() { return window.matchMedia('(min-width: 900px)').matches; }
 function scrollBottom() { var m = document.getElementById('msgs'); if (isDesktop()) m.scrollTop = m.scrollHeight; else window.scrollTo(0, document.body.scrollHeight); }
-function shortAt(s) { return String(s || '').replace(/^\d{4}\//, '').replace(/:\d{2}$/, ''); }
+// 一覧の時刻表記は公式LINEアプリと同じ：今日=HH:MM／昨日=昨日／6日以内=曜日／それ以前=M/D
+function shortAt(s) {
+  var m = String(s || '').match(/^(\d{4})\/(\d{2})\/(\d{2}) (\d{1,2}:\d{2})/); if (!m) return String(s || '').replace(/^\d{4}\//, '').replace(/:\d{2}$/, '');
+  var d = new Date(+m[1], +m[2] - 1, +m[3]); var today = new Date(); today.setHours(0,0,0,0);
+  var diff = Math.round((today - d) / 86400000);
+  if (diff <= 0) return m[4]; if (diff === 1) return '昨日'; if (diff < 7) return '日月火水木金土'.charAt(d.getDay()) + '曜日';
+  return (+m[2]) + '/' + (+m[3]) + (m[1] !== String(today.getFullYear()) ? ' ' + m[1] : '');
+}
 
 var BIZ = null; // 業務連絡は開いたときだけ取りに行く
 function loadList() {
