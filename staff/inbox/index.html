@@ -39,14 +39,20 @@
   .hdr .nm { font-size:17px; font-weight:800; }
   .hdr .sub { font-size:12px; color:#D9BC7A; font-weight:600; }
   .msgs { padding:12px 12px 150px; display:flex; flex-direction:column; gap:10px; background:var(--bg); min-height:60vh; }
-  .bub { max-width:84%; padding:10px 14px; border-radius:16px; font-size:16px; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
-  .in { background:#fff; border:1px solid var(--line); align-self:flex-start; }
-  .out { background:#D6DEEE; color:#1A202C; align-self:flex-end; }
+  .mrow { display:flex; align-items:flex-end; gap:6px; }
+  .mrow.in { justify-content:flex-start; }
+  .mrow.out { justify-content:flex-end; }
+  .mav { width:34px; height:34px; border-radius:50%; background:#CBD5E0; color:#fff; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; flex:0 0 34px; align-self:flex-start; }
+  .mt { font-size:11px; color:#8E95A0; white-space:nowrap; line-height:1.3; flex:0 0 auto; padding-bottom:2px; }
+  .mrow.out .mt { text-align:right; }
+  .bub { max-width:72%; padding:10px 14px; border-radius:16px; font-size:16px; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
+  .bub.in { background:#F1F3F5; align-self:flex-start; }
+  .bub.out { background:#D6DEEE; color:#1A202C; align-self:flex-end; }
   .meta { font-size:11px; color:var(--mute); margin-top:4px; white-space:normal; }
-  .out .meta { color:#4A5A7A; }
-  .out.pending { background:#EDF1F8; border:2px dashed #7A8BB0; }
+  .bub.out .meta { color:#4A5A7A; }
+  .bub.out.pending { background:#EDF1F8; border:2px dashed #7A8BB0; }
   body.gracing .msgs { padding-bottom:340px; }
-  .out.pending .meta { color:#182F66; font-weight:700; }
+  .bub.out.pending .meta { color:#182F66; font-weight:700; }
   .sys { align-self:center; font-size:11px; color:#718096; background:#E2E8F0; padding:3px 10px; border-radius:10px; }
   .compose { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line); padding:8px 10px 12px; z-index:6; }
   .msgs { padding-bottom:210px; }
@@ -78,7 +84,7 @@
     .msgs { flex:1; overflow-y:auto; padding-bottom:20px; min-height:0; }
     body.gracing .msgs { padding-bottom:120px; }
     .compose { position:static; padding:10px 16px 14px; }
-    .bub { max-width:70%; }
+    .bub { max-width:60%; }
     #grace { left:416px !important; right:16px !important; bottom:170px !important; }
     .toast { bottom:190px; }
     .row.sel { background:#EEF2F8; }
@@ -284,18 +290,29 @@ function threadCachePut(uid, msgs) {
     localStorage.setItem('rakuruma_inbox_threads', JSON.stringify(c));
   } catch(e) {}
 }
+function dayLabel(d) {
+  var m = String(d || '').match(/^(\d{4})\/(\d{2})\/(\d{2})$/); if (!m) return d;
+  var dt = new Date(+m[1], +m[2] - 1, +m[3]); var today = new Date(); today.setHours(0,0,0,0);
+  var diff = Math.round((today - dt) / 86400000);
+  var w = '日月火水木金土'.charAt(dt.getDay());
+  if (diff === 0) return '今日'; if (diff === 1) return '昨日';
+  return (+m[2]) + '/' + (+m[3]) + '(' + w + ')' + (m[1] !== String(today.getFullYear()) ? ' ' + m[1] : '');
+}
 function renderMsgs(it, msgs, fromCache) {
     var html = '', lastDay = '';
     (msgs || []).forEach(function(m) {
       var day = String(m.at || '').slice(0, 10);
-      if (day !== lastDay) { html += '<div class="sys">' + esc(day) + '</div>'; lastDay = day; }
+      if (day !== lastDay) { html += '<div class="sys">' + esc(dayLabel(day)) + '</div>'; lastDay = day; }
       var isIn = m.dir === '受信';
+      var av = ((it.customer && it.customer.name) || it.partner || it.displayName || '？').charAt(0);
       var body = m.text || ('（' + m.kind + '）');
       var inner;
       if (m.img) inner = '<a href="' + esc(m.img.view || m.img.full) + '" target="_blank" rel="noopener"><img src="' + esc(m.img.thumb) + '" alt="画像" style="max-width:100%;border-radius:10px;display:block"></a>';
       else if (m.kind === '画像') inner = '（画像：まだ取り込めていません。数分後に更新してください）';
       else inner = esc(body);
-      html += '<div class="bub ' + (isIn ? 'in' : 'out') + '">' + inner + '<div class="meta">' + esc(String(m.at || '').slice(11, 16)) + ' ' + esc(isIn ? '受信' : m.kind) + '</div></div>';
+      var mt = '<div class="mt">' + esc(String(m.at || '').slice(11, 16)) + (isIn ? '' : '<br>' + esc(String(m.kind || '').replace(/（.*）$/, '').replace(/^返信$/, '返信'))) + '</div>';
+      if (isIn) html += '<div class="mrow in"><div class="mav">' + esc(av) + '</div><div class="bub in">' + inner + '</div>' + mt + '</div>';
+      else html += '<div class="mrow out">' + mt + '<div class="bub out">' + inner + '</div></div>';
     });
     var pend = (CUR === it && graceTimer) ? document.getElementById('pending') : null;
     document.getElementById('tRefresh').style.display = fromCache ? 'inline-block' : 'none';
