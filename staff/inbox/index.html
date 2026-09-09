@@ -85,13 +85,15 @@
     .msgs { flex:1; overflow-y:auto; padding-bottom:20px; min-height:0; }
     body.gracing .msgs { padding-bottom:120px; }
     .compose { position:static; padding:10px 16px 14px; border-top:1px solid var(--line); }
-    .bub { max-width:42%; font-size:14px; padding:12px 14px; border-radius:14px; }
+    .bub { max-width:42%; font-size:14px; padding:9px 14px; border-radius:16px; line-height:1.4; }
     .mrow.in .bub { max-width:42%; }
-    .mav { width:32px; height:32px; flex:0 0 32px; font-size:13px; }
+    .mav { width:40px; height:40px; flex:0 0 40px; font-size:15px; }
+    .mrow { gap:10px; }
     .mt { font-size:12px; }
-    .msgs { padding:16px 20px 20px; gap:14px; }
+    .msgs { padding:16px 20px 20px; gap:20px; }
     textarea { min-height:92px; }
-    .row { min-height:96px; }
+    .row { min-height:99px; }
+    .av { width:52px; height:52px; flex:0 0 52px; }
     #grace { left:416px !important; right:16px !important; bottom:170px !important; }
     .toast { bottom:190px; }
     .row.sel { background:#EEF2F8; }
@@ -542,7 +544,7 @@ document.getElementById('memoSave').onclick = function() {
 };
 document.getElementById('btnDone').onclick = function() {
   if (!CUR) return;
-  api({ op:'done', uid: CUR.uid }).then(function(r) { if (r.ok) { toast('対応済みにしました'); CUR.needsReply = false; CUR.unread = 0; if (CUR.customer && !CUR.noLine) openMemo(true); } else alert(r.error || '失敗'); });
+  api({ op:'done', uid: CUR.uid }).then(function(r) { if (r.ok) { toast('対応済みにしました'); CUR.needsReply = false; CUR.unread = 0; } else alert(r.error || '失敗'); });
 };
 
 document.getElementById('back').onclick = function() {
