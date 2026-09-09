@@ -138,7 +138,20 @@ var TOKEN = '', STAFF = '';
 var API_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 var ITEMS = [], OTHERS = [], TAB = 'need', CUR = null, TEMPLATES = null;
 
-function api(body) { body.action = 'inbox'; body.token = TOKEN; return fetch(API_URL, { method:'POST', body: JSON.stringify(body) }).then(function(r){ return r.json(); }); }
+// 読み取り系は9秒で打ち切って1回だけやり直す（GAS側でたまに30〜40秒止まることがある。送信系はやり直さない）
+var API_RETRY_OPS = { list:1, listBiz:1, thread:1, templates:1, scheduleList:1, search:1 };
+function api(body) {
+  body.action = 'inbox'; body.token = TOKEN;
+  var payload = JSON.stringify(body);
+  var canRetry = !!API_RETRY_OPS[body.op] && typeof AbortController !== 'undefined';
+  function once(timeoutMs) {
+    var ctl = timeoutMs ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function() { ctl.abort(); }, timeoutMs) : null;
+    return fetch(API_URL, { method:'POST', body: payload, signal: ctl ? ctl.signal : undefined }).then(function(r) { if (timer) clearTimeout(timer); return r.json(); }, function(e) { if (timer) clearTimeout(timer); throw e; });
+  }
+  if (!canRetry) return once(0);
+  return once(9000).catch(function() { return once(0); });
+}
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
 function isDesktop() { return window.matchMedia('(min-width: 900px)').matches; }
