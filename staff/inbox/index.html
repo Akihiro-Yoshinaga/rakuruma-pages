@@ -97,7 +97,7 @@
 </div>
 
 <div id="thread">
-  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub" id="tSub"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
+  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
   <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
@@ -155,7 +155,7 @@ function api(body) {
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
 function isDesktop() { return window.matchMedia('(min-width: 900px)').matches; }
-function scrollBottom() { var m = document.getElementById('msgs'); if (isDesktop()) m.scrollTop = m.scrollHeight; else scrollBottom(); }
+function scrollBottom() { var m = document.getElementById('msgs'); if (isDesktop()) m.scrollTop = m.scrollHeight; else window.scrollTo(0, document.body.scrollHeight); }
 function shortAt(s) { return String(s || '').replace(/^\d{4}\//, '').replace(/:\d{2}$/, ''); }
 
 var BIZ = null; // 業務連絡は開いたときだけ取りに行く
@@ -233,14 +233,15 @@ function openThread(it) {
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = API_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
   document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
-  window.scrollTo(0, 0);
+  if (cachedT) scrollBottom(); else window.scrollTo(0, 0);
   loadSched();
   api({ op:'thread', uid: it.uid, src: it.src }).then(function(r) {
     if (CUR !== it) return;
+    document.getElementById('tRefresh').style.display = 'none';
     if (!r.ok) { if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error) + '</div>'; return; }
     threadCachePut(it.uid, r.messages || []);
     renderMsgs(it, r.messages || [], false);
-  }).catch(function() { if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">通信エラー。右上の更新か、開き直してください</div>'; });
+  }).catch(function() { document.getElementById('tRefresh').style.display = 'none'; if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">通信エラー。右上の更新か、開き直してください</div>'; });
   if (!TEMPLATES) api({ op:'templates' }).then(function(r) { TEMPLATES = (r.ok && r.templates) || []; renderTpl(); }); else renderTpl();
 }
 // スレッドの直近表示を端末に残し、次に開いたとき一瞬で出す（裏で最新を取り直す）
@@ -268,7 +269,7 @@ function renderMsgs(it, msgs, fromCache) {
       html += '<div class="bub ' + (isIn ? 'in' : 'out') + '">' + inner + '<div class="meta">' + esc(String(m.at || '').slice(11, 16)) + ' ' + esc(isIn ? '受信' : m.kind) + '</div></div>';
     });
     var pend = (CUR === it && graceTimer) ? document.getElementById('pending') : null;
-    if (fromCache) html += '<div class="sys" id="msgsRefreshing">最新を確認中…</div>';
+    document.getElementById('tRefresh').style.display = fromCache ? 'inline-block' : 'none';
     document.getElementById('msgs').innerHTML = html || '<div class="sys">記録がありません</div>';
     if (pend) document.getElementById('msgs').appendChild(pend);
     scrollBottom();
