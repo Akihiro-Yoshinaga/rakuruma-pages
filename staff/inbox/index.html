@@ -13,6 +13,10 @@
   .top .cnt { font-size:12px; color:#D9BC7A; font-weight:700; }
   .top .back { font-size:22px; font-weight:800; margin-right:2px; cursor:pointer; }
   .lnk, .lnk:link, .lnk:visited, .lnk:hover { margin-left:auto; font-size:13px; font-weight:800; background:#fff; color:var(--navy) !important; border-radius:8px; padding:7px 12px; text-decoration:none !important; white-space:nowrap; display:inline-block; }
+  .srch { display:flex; align-items:center; gap:6px; padding:8px 12px; background:#fff; border-bottom:1px solid var(--line); }
+  .srch input { flex:1; border:1.5px solid var(--line); border-radius:12px; padding:9px 12px; font-size:15px; font-family:inherit; background:#F7F9FC; }
+  .srch input:focus { outline:none; border-color:var(--navy); background:#fff; }
+  .srch span { font-size:22px; color:#718096; padding:0 6px; cursor:pointer; }
   .tabs { display:flex; border-bottom:1px solid var(--line); background:#fff; position:sticky; top:52px; z-index:4; }
   .tabs div { flex:1; text-align:center; padding:11px 0; font-size:14px; font-weight:700; color:#718096; cursor:pointer; }
   .tabs .on { color:var(--navy); border-bottom:3px solid var(--navy); }
@@ -67,6 +71,7 @@
   <div class="tabs">
     <div class="on" data-tab="need">未対応</div><div data-tab="all">すべて</div><div data-tab="biz">工場・取引先</div>
   </div>
+  <div class="srch"><input id="search" type="search" placeholder="お客様を検索（名前・車種・本文）" autocomplete="off"><span id="searchClear" style="display:none">×</span></div>
   <div id="rows"><div class="empty">読み込み中…</div></div>
 </div>
 
@@ -138,16 +143,24 @@ function loadBiz(silent) {
   api({ op:'listBiz' }).then(function(r) { BIZ = (r.ok && r.items) || []; if (TAB === 'biz') renderList(); });
 }
 
+function normQ(t) { return String(t || '').toLowerCase().replace(/[\s\u3000]+/g, ''); }
+function itemMatches(it, q) {
+  var c = it.customer || {};
+  return [c.name, c.kana, c.car, c.phone, it.displayName, it.partner, it.lastText].some(function(v) { return normQ(v).indexOf(q) >= 0; });
+}
 function renderList() {
-  var source = (TAB === 'biz') ? (BIZ || []) : ITEMS;
+  var q = normQ(document.getElementById('search').value);
+  document.getElementById('searchClear').style.display = q ? 'inline' : 'none';
+  var source = q ? ITEMS.concat(BIZ || []) : ((TAB === 'biz') ? (BIZ || []) : ITEMS);
   var items = source.filter(function(it) {
+    if (q) return itemMatches(it, q);
     if (TAB === 'need') return it.needsReply;
     return true;
   });
   var need = ITEMS.filter(function(it){ return it.needsReply; }).length + (BIZ || []).filter(function(it){ return it.needsReply; }).length;
-  if (TAB === 'biz' && BIZ === null) { document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>'; return; }
+  if (!q && TAB === 'biz' && BIZ === null) { document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>'; return; }
   document.getElementById('cnt').textContent = '未対応 ' + need + '件';
-  if (!items.length) { document.getElementById('rows').innerHTML = '<div class="empty">' + (TAB === 'need' ? '未対応はありません 🎉' : 'まだ記録がありません') + '</div>'; return; }
+  if (!items.length) { document.getElementById('rows').innerHTML = '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : 'まだ記録がありません')) + '</div>'; return; }
   document.getElementById('rows').innerHTML = items.map(function(it, i) {
     var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
     var tags = '';
@@ -366,6 +379,8 @@ document.getElementById('reload').onclick = function(e) { e.preventDefault(); lo
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
   el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
 });
+document.getElementById('search').addEventListener('input', function() { if (this.value.trim() && BIZ === null) loadBiz(false); renderList(); });
+document.getElementById('searchClear').onclick = function() { var i = document.getElementById('search'); i.value = ''; renderList(); i.focus(); };
 
 // ---- 顧客リストとの紐付け ----
 document.getElementById('btnLink').onclick = function() {
