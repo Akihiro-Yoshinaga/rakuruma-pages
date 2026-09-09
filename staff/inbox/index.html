@@ -84,9 +84,14 @@
     .hdr .back { display:none; }
     .msgs { flex:1; overflow-y:auto; padding-bottom:20px; min-height:0; }
     body.gracing .msgs { padding-bottom:120px; }
-    .compose { position:static; padding:10px 16px 14px; }
-    .bub { max-width:60%; }
-    .mrow.in .bub { max-width:60%; }
+    .compose { position:static; padding:10px 16px 14px; border-top:1px solid var(--line); }
+    .bub { max-width:42%; font-size:14px; padding:12px 14px; border-radius:14px; }
+    .mrow.in .bub { max-width:42%; }
+    .mav { width:32px; height:32px; flex:0 0 32px; font-size:13px; }
+    .mt { font-size:12px; }
+    .msgs { padding:16px 20px 20px; gap:14px; }
+    textarea { min-height:92px; }
+    .row { min-height:96px; }
     #grace { left:416px !important; right:16px !important; bottom:170px !important; }
     .toast { bottom:190px; }
     .row.sel { background:#EEF2F8; }
@@ -339,6 +344,8 @@ function renderTpl() {
 
 function autosize() { var ta = document.getElementById('text'); ta.style.height = 'auto'; ta.style.height = Math.min(140, ta.scrollHeight) + 'px'; }
 document.getElementById('text').addEventListener('input', autosize);
+document.getElementById('text').addEventListener('keydown', function(e) { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); document.getElementById('btnSend').click(); } });
+if (isDesktop()) document.getElementById('text').placeholder = 'Command + Enterで送信 / Enterで改行（送信すると記録に残ります）';
 
 // ---- 送信までの猶予（15秒。押し間違い・宛先違いをここで止める） ----
 var GRACE_SEC = 15, graceTimer = null, graceTick = null;
