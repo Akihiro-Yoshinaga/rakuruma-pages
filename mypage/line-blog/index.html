@@ -28,9 +28,19 @@
 var LIFF_ID  = '2004330318-vS44KWOy';
 var GAS_URL  = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 var LINE_ADD = 'https://lin.ee/r0BAZkR0';
-var TALK_URL = 'https://line.me/R/oaMessage/%40248xbsae/';   // 公式アカウント @248xbsae のトークを直接開く（文面は入れない）
+var TALK_BASE = 'https://line.me/R/oaMessage/%40248xbsae/';  // 公式アカウント @248xbsae のトークを直接開く
 var q = new URLSearchParams(location.search);
 var k = q.get('k') || '', src = q.get('src') || 'hp_blog_line', d = q.get('d') || '';
+// 記事URLの自動入力（2026-09-09）：中継ページ /p/line-blog/ が記事ID（bid）を渡してきたら、
+// トークの入力欄に「記事URL＋一言」を入れた状態で開く（oaMessage の ?文面 形式。/p/recruit-line/ と同じ仕組み）。
+// お客様は送信を押すだけ。記事URLを手でコピペしてもらう手間をなくし、こちらも「どの記事の話か」がすぐ分かる。
+// 一言が要らなければ TALK_NOTE を '' にするだけ。bid が無い（PC経由・referrer無し）時は従来どおり文面なし
+var TALK_NOTE = 'この記事の作業について、見積もりをお願いします。';
+var bid = q.get('bid') || '';
+var TALK_URL = TALK_BASE;
+if (/^\d{6,20}$/.test(bid)) {
+  TALK_URL = TALK_BASE + '?' + encodeURIComponent('https://rakuruma.com/blog/' + bid + '/' + (TALK_NOTE ? '\n' + TALK_NOTE : ''));
+}
 
 function goTalk() {
   document.getElementById('lnk-talk').href = TALK_URL;

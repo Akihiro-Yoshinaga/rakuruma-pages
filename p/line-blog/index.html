@@ -27,6 +27,16 @@
   // 送るので hp_blog_line の数え方は変わらない（= タップ数に対するuid取得率がそのままLIFFの離脱率になる）。
   // 悪ければ LIFF_ENTRY への振り分けをやめて LINE_ADD に戻すだけ（記事側は触らない）。
   var LIFF_ENTRY = "https://liff.line.me/2004330318-vS44KWOy/line-blog/";
+  // 記事ID（2026-09-09）：どの記事から押したかをLIFF入口に渡し、トークの入力欄に記事URLを自動で入れる。
+  // お客様が記事URLを手でコピペして送ってくれた例があり、その手間をなくす（同時にこちらも記事を特定できる）。
+  // 記事ページのCTAは同一オリジンのリンクなので document.referrer に記事URLが入る（記事側は触らない）。
+  // 将来 ?bid=記事ID を直接付けても動く。数字以外は捨てる
+  var bid = '';
+  try {
+    var qb = new URLSearchParams(location.search).get('bid') || '';
+    var rm = (document.referrer || '').match(/^https?:\/\/(?:www\.)?rakuruma\.com\/blog\/(\d{6,20})\/?/);
+    bid = /^\d{6,20}$/.test(qb) ? qb : (rm ? rm[1] : '');
+  } catch (e) {}
   var ua = navigator.userAgent || '';
   var d = /iPhone|iPad|iPod/i.test(ua) ? 'ios' : (/Android/i.test(ua) ? 'android' : 'other');
   // 本人の端末（/p/owner/ で印を付けたブラウザ）は d=owner で送り、集計側で除外する（2026-09-01）
@@ -54,7 +64,7 @@
   if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
   // スマホ（LINEアプリが開ける）はLIFFへ、PC等は従来の友だち追加リンクへ（QRが出る）
   var DEST = (d === 'ios' || d === 'android' || d === 'owner')
-    ? LIFF_ENTRY + '?k=' + k + '&src=hp_blog_line&d=' + d
+    ? LIFF_ENTRY + '?k=' + k + '&src=hp_blog_line&d=' + d + (bid ? '&bid=' + bid : '')
     : LINE_ADD;
   setTimeout(function () { location.replace(DEST); }, 300);
 })();
