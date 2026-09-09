@@ -34,7 +34,8 @@
   .badge { background:#E53E3E; color:#fff; font-size:12px; font-weight:700; border-radius:10px; padding:1px 7px; margin-left:6px; vertical-align:1px; }
   .empty { padding:40px 20px; text-align:center; color:var(--mute); font-size:14px; }
   #thread { display:none; }
-  .hdr { background:var(--navy); color:#fff; padding:12px 14px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:5; }
+  .hdrwrap { position:sticky; top:0; z-index:5; }
+  .hdr { background:var(--navy); color:#fff; padding:12px 14px; display:flex; align-items:center; gap:10px; }
   .hdr .nm { font-size:17px; font-weight:800; }
   .hdr .sub { font-size:12px; color:#D9BC7A; font-weight:600; }
   .msgs { padding:12px 12px 150px; display:flex; flex-direction:column; gap:10px; background:var(--bg); min-height:60vh; }
@@ -55,7 +56,7 @@
   textarea { flex:1; border:1.5px solid #CBD5E0; border-radius:14px; padding:10px 12px; font-size:16px; font-family:inherit; resize:none; min-height:44px; max-height:140px; }
   .send { background:var(--navy); color:#fff; font-weight:800; border:0; border-radius:14px; padding:12px 16px; font-size:15px; cursor:pointer; }
   .send:disabled { opacity:.5; }
-  .actions { display:flex; gap:8px; padding:8px 12px; background:var(--bg); flex-wrap:wrap; }
+  .actions { display:flex; gap:8px; padding:8px 12px; background:#fff; border-bottom:1px solid var(--line); flex-wrap:wrap; }
   .abtn { font-size:12px; font-weight:800; border-radius:8px; padding:6px 10px; background:#fff; border:1.5px solid var(--navy); color:var(--navy); cursor:pointer; text-decoration:none; }
   .abtn.ok { border-color:#38A169; color:#38A169; }
   .note { font-size:12px; color:#C05621; font-weight:700; padding:6px 12px 0; }
@@ -97,8 +98,10 @@
 </div>
 
 <div id="thread">
+  <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
   <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  </div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
     <b>予約送信</b>（決めた日時に自動で送ります。前日リマインドなどに）
