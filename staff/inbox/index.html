@@ -116,7 +116,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnMemo" style="display:none">📝 メモに残す</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnMemo" style="display:none">📝 メモに残す</span><span class="abtn" id="btnChange" style="display:none">📅 日程変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
@@ -124,6 +124,12 @@
     <div style="display:flex;gap:8px;margin-top:6px"><input type="date" id="schedDate" style="flex:1"><input type="time" id="schedTime" value="18:00" style="flex:1"></div>
     <textarea id="schedText" rows="3" placeholder="送る本文（下の返信欄に入れた文をそのまま使えます）" style="width:100%;margin-top:6px;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;font-family:inherit"></textarea>
     <div style="margin-top:8px;display:flex;gap:8px"><span class="abtn" id="schedUse">返信欄の文を使う</span><span class="abtn ok" id="schedAdd">この日時で登録</span></div>
+  </div>
+  <div id="changebox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
+    <b>📅 日程変更の提案</b> <span id="chgStatus" style="color:#718096"></span>
+    <div id="chgBody" style="margin-top:6px;font-size:14px;line-height:1.5"></div>
+    <div id="chgEdit" style="display:none;margin-top:6px"><span style="font-size:12px;color:#718096">新しい日時</span><div style="display:flex;gap:8px;margin-top:4px"><input type="date" id="chgDate" style="flex:1"><input type="time" id="chgTime" style="flex:1"></div></div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="chgApply" style="display:none">この内容で変更する</span><span class="abtn" id="chgClose">閉じる</span></div>
   </div>
   <div id="memobox" class="linkbox" style="display:none;background:#F3FBF4;border-color:#38A169">
     <b>メモに残す</b> <span id="memoBasis" style="color:#718096"></span>
@@ -276,8 +282,8 @@ function openThread(it) {
     document.getElementById('tRefresh').style.display = 'none';
     var cust0 = document.getElementById('tCust'); cust0.style.display = 'inline-block'; cust0.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN);
     document.getElementById('btnLink').style.display = 'none';
-    document.getElementById('btnMemo').style.display = 'none';
-    document.getElementById('memobox').style.display = 'none';
+    document.getElementById('btnMemo').style.display = 'none'; document.getElementById('btnChange').style.display = 'none';
+    document.getElementById('memobox').style.display = 'none'; document.getElementById('changebox').style.display = 'none';
     showMemoLine(''); showSchedLine(null);
     document.getElementById('note').textContent = '';
     document.getElementById('schedlist').innerHTML = '';
@@ -295,7 +301,10 @@ function openThread(it) {
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
   document.getElementById('btnMemo').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
+  document.getElementById('btnChange').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
   document.getElementById('memobox').style.display = 'none';
+  document.getElementById('changebox').style.display = 'none';
+  CHG = null;
   showMemoLine(it.customer && it.customer.memo);
   showSchedLine(it.sched);
   document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
@@ -308,6 +317,7 @@ function openThread(it) {
     threadCachePut(it.uid, r.messages || []);
     if (r.customer && it.customer) { it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo); }
     renderMsgs(it, r.messages || [], false);
+    maybeProposeChange(it, r.messages || []);
   }).catch(function() { document.getElementById('tRefresh').style.display = 'none'; if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">通信エラー。右上の更新か、開き直してください</div>'; });
   if (!TEMPLATES) api({ op:'templates' }).then(function(r) { TEMPLATES = (r.ok && r.templates) || []; renderTpl(); }); else renderTpl();
 }
@@ -507,6 +517,55 @@ function fill(text) {
   var car = (CUR && CUR.customer && CUR.customer.car) || 'お車';
   return String(text || '').replace(/\{名前\}/g, nm).replace(/\{車種\}/g, car);
 }
+// ---- 日程変更：文脈から変更案を出し、承認でカレンダーを動かす ----
+var CHG = null, CHG_CHECKED = {};
+function fmtJa(s) { var m = String(s || '').match(/^(\d{4})\/(\d{2})\/(\d{2}) (\d{2}:\d{2})/); if (!m) return s; var d = new Date(+m[1], +m[2] - 1, +m[3]); return (+m[2]) + '/' + (+m[3]) + '(' + '日月火水木金土'.charAt(d.getDay()) + ') ' + m[4]; }
+function maybeProposeChange(it, msgs) {
+  if (!it.customer || it.noLine || it.src !== 'cust') return;
+  var last = msgs[msgs.length - 1]; if (!last) return; // 合意は相手の返事のあと、こちらの承諾で成立することもあるので送受どちらでも見る
+  if (Date.now() - new Date(String(last.at).replace(/-/g, '/')).getTime() > 7 * 86400000) return;
+  var tail = msgs.slice(-4).map(function(m) { return m.text || ''; }).join(' ');
+  if (!/\d{1,2}\s*[日\/]|来週|再来週|明日|明後日|月曜|火曜|水曜|木曜|金曜|土曜|日曜|変更|ずら|延期|振り替/.test(tail)) return;
+  var key = it.uid + '|' + last.at; if (CHG_CHECKED[key]) return; CHG_CHECKED[key] = 1;
+  proposeChange(it, true);
+}
+function proposeChange(it, auto) {
+  var box = document.getElementById('changebox'), body = document.getElementById('chgBody'), st = document.getElementById('chgStatus');
+  document.getElementById('chgApply').style.display = 'none'; document.getElementById('chgEdit').style.display = 'none'; CHG = null;
+  if (!auto) { box.style.display = 'block'; body.textContent = ''; st.textContent = '（やりとりと今後の予定を確認中…）'; }
+  api({ op:'changeProposal', uid: it.uid }).then(function(r) {
+    if (CUR !== it) return;
+    if (!r.ok) { if (!auto) { st.textContent = ''; body.textContent = r.error || '判定できませんでした'; } return; }
+    if (!r.change) {
+      if (auto) return;
+      st.textContent = ''; body.innerHTML = '変更案なし：' + esc(r.reason || '') + ((r.events && r.events.length) ? '<div style="margin-top:6px;color:#718096;font-size:12px">今後の予定：' + r.events.map(function(e) { return esc(fmtJa(e.start)) + ' ' + esc(e.title); }).join('／') + '</div>' : '');
+      return;
+    }
+    CHG = r; box.style.display = 'block'; st.textContent = auto ? '（AIがやりとりから読み取りました）' : '';
+    body.innerHTML = '<div><b>' + esc(r.event.title) + '</b> <span style="color:#718096">[' + esc(r.event.calendarName) + ']</span></div>'
+      + '<div style="margin-top:4px">' + esc(fmtJa(r.event.start)) + '〜' + esc(r.event.end.slice(11)) + '　→　<b style="color:#C05621">' + esc(fmtJa(r.newStart)) + '</b>〜' + esc(r.newEnd.slice(11)) + '</div>'
+      + '<div style="margin-top:4px;font-size:12px;color:#718096">根拠：' + esc(r.reason) + (r.quote ? '（「' + esc(r.quote) + '」）' : '') + (r.event.recurring ? '　※繰り返し予定のこの回だけ動かします' : '') + '</div>';
+    document.getElementById('chgDate').value = r.newStart.slice(0, 10).replace(/\//g, '-'); document.getElementById('chgTime').value = r.newStart.slice(11, 16);
+    document.getElementById('chgEdit').style.display = 'block'; document.getElementById('chgApply').style.display = 'inline-block';
+  }).catch(function(e) { if (!auto) { st.textContent = ''; body.textContent = '通信エラー: ' + e; } });
+}
+document.getElementById('btnChange').onclick = function() { if (CUR) proposeChange(CUR, false); };
+document.getElementById('chgClose').onclick = function() { document.getElementById('changebox').style.display = 'none'; CHG = null; };
+document.getElementById('chgApply').onclick = function() {
+  if (!CUR || !CHG) return;
+  var d = document.getElementById('chgDate').value, t = document.getElementById('chgTime').value; if (!d || !t) { alert('日時を入れてください'); return; }
+  var s0 = new Date(CHG.event.start.replace(/-/g, '/')), e0 = new Date(CHG.event.end.replace(/-/g, '/'));
+  var s1 = new Date(d.replace(/-/g, '/') + ' ' + t); var e1 = new Date(s1.getTime() + (e0 - s0));
+  var pad = function(n) { return (n < 10 ? '0' : '') + n; }; var f = function(x) { return x.getFullYear() + '/' + pad(x.getMonth() + 1) + '/' + pad(x.getDate()) + ' ' + pad(x.getHours()) + ':' + pad(x.getMinutes()); };
+  if (!confirm(CHG.event.title + '\n' + fmtJa(CHG.event.start) + ' → ' + fmtJa(f(s1)) + '\nカレンダーを変更します。よろしいですか？')) return;
+  var btn = this; btn.textContent = '変更中…'; var target = CUR;
+  api({ op:'changeApply', uid: target.uid, calendarId: CHG.event.calendarId, eventId: CHG.event.eventId, start: f(s1), end: f(e1), origStart: CHG.event.start, note: CHG.reason || '' }).then(function(r) {
+    btn.textContent = 'この内容で変更する';
+    if (!r.ok) { alert(r.error || '変更できませんでした'); return; }
+    toast('カレンダーを変更しました（' + r.before + ' → ' + r.after + '）' + (r.notified ? '・Chatworkに通知済み' : ''));
+    document.getElementById('changebox').style.display = 'none'; CHG = null;
+  }).catch(function(e) { btn.textContent = 'この内容で変更する'; alert('通信エラー: ' + e); });
+};
 // ---- メモに残す：やりとりから事実だけを抜いて顧客リストの「メモ」列へ ----
 function memoLastEntry(memo) {
   var m = String(memo || '').split(/【(\d{4}\/\d{2}\/\d{2}) LINE】[^\n]*\n?/); // [前, 日付, 本文, 日付, 本文…]
