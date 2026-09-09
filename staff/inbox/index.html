@@ -114,7 +114,7 @@ var TOKEN = '', STAFF = '';
   if (!TOKEN) { window.location.replace('/staff/'); }
 })();
 var API_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
-var ITEMS = [], TAB = 'need', CUR = null, TEMPLATES = null;
+var ITEMS = [], OTHERS = [], TAB = 'need', CUR = null, TEMPLATES = null;
 
 function api(body) { body.action = 'inbox'; body.token = TOKEN; return fetch(API_URL, { method:'POST', body: JSON.stringify(body) }).then(function(r){ return r.json(); }); }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -124,7 +124,7 @@ function shortAt(s) { return String(s || '').replace(/^\d{4}\//, '').replace(/:\
 var BIZ = null; // 業務連絡は開いたときだけ取りに行く
 function loadList() {
   if (!ITEMS.length) {
-    try { var c = JSON.parse(localStorage.getItem('rakuruma_inbox_cache') || 'null'); if (c && c.items) { ITEMS = c.items; renderList(); } } catch(e) {}
+    try { var c = JSON.parse(localStorage.getItem('rakuruma_inbox_cache') || 'null'); if (c && c.items) { ITEMS = c.items; OTHERS = c.others || []; renderList(); } } catch(e) {}
     if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>';
   }
   api({ op:'list' }).then(function(r) {
@@ -132,8 +132,8 @@ function loadList() {
       if (/認証/.test(r.error || '')) { try { localStorage.removeItem('rakuruma_staff_token'); } catch(e) {} window.location.replace('/staff/'); return; }
       document.getElementById('rows').innerHTML = '<div class="empty">' + esc(r.error) + '</div>'; return;
     }
-    ITEMS = r.items || []; STAFF = r.staff || STAFF;
-    try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS })); } catch(e) {}
+    ITEMS = r.items || []; OTHERS = r.others || []; STAFF = r.staff || STAFF;
+    try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
     renderList();
     if (BIZ) loadBiz(true);
   }).catch(function(e) { if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">通信エラー: ' + esc(e) + '</div>'; });
@@ -151,7 +151,7 @@ function itemMatches(it, q) {
 function renderList() {
   var q = normQ(document.getElementById('search').value);
   document.getElementById('searchClear').style.display = q ? 'inline' : 'none';
-  var source = q ? ITEMS.concat(BIZ || []) : ((TAB === 'biz') ? (BIZ || []) : ITEMS);
+  var source = q ? ITEMS.concat(BIZ || []).concat(OTHERS) : ((TAB === 'biz') ? (BIZ || []) : ITEMS);
   var items = source.filter(function(it) {
     if (q) return itemMatches(it, q);
     if (TAB === 'need') return it.needsReply;
@@ -170,11 +170,12 @@ function renderList() {
       if (it.customer.shakenExpiry) tags += '<span class="tag t-shaken">車検 ' + esc(it.customer.shakenExpiry) + '</span>';
       if (it.customer.teiki) tags += '<span class="tag t-teiki">定期プラン</span>';
     } else tags += '<span class="tag t-new">新規・未登録</span>';
-    if (!it.needsReply) tags += '<span class="tag t-done">対応済み</span>';
+    if (it.noLog) tags += '<span class="tag t-done">やりとりの記録なし</span>';
+    else if (!it.needsReply) tags += '<span class="tag t-done">対応済み</span>';
     var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
     return '<div class="row ' + (it.needsReply ? 'need' : 'done') + '" data-i="' + source.indexOf(it) + '">'
       + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
-      + '<div class="m">' + (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText) + '</div>' + tags + badge + '</div></div>';
+      + '<div class="m">' + (it.noLog ? '受信箱に記録がまだありません（開いて送れます）' : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>';
   }).join('');
   Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
 }
