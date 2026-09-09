@@ -30,6 +30,7 @@
   .n span { font-size:12px; color:#9AA1AC; font-weight:400; white-space:nowrap; }
   .m { font-size:13px; color:#8E95A0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:3px; line-height:1.4; }
   .tag { display:inline-block; font-size:10.5px; font-weight:600; border-radius:4px; padding:1px 6px; margin-top:5px; margin-right:4px; background:#F1F3F5; color:#5A6472; line-height:1.5; }
+  .t-sched { background:#E5EEFA; color:#1F4E9C; font-weight:700; }
   .t-new { background:#FFF1DB; color:#B06A00; } .t-cust { background:#E6F5EC; color:#1F7A45; } .t-biz { background:#E5EEFA; color:#2B5FA6; } .t-done { background:#F1F3F5; color:#6B7480; } .t-shaken { background:#EFE8FA; color:#6A3FB5; } .t-teiki { background:#E1F3F2; color:#1F6F6A; }
   .badge { background:#E53E3E; color:#fff; font-size:12px; font-weight:700; border-radius:10px; padding:1px 7px; margin-left:6px; vertical-align:1px; }
   .empty { padding:40px 20px; text-align:center; color:var(--mute); font-size:14px; }
@@ -114,7 +115,7 @@
 
 <div id="thread">
   <div class="hdrwrap">
-  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
+  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
   <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnMemo" style="display:none">📝 メモに残す</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -238,6 +239,7 @@ function renderList() {
   document.getElementById('rows').innerHTML = items.map(function(it, i) {
     var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
     var tags = '';
+    if (it.sched && it.sched.length) tags += '<span class="tag t-sched">⏰ ' + esc(String(it.sched[0].at).slice(5).replace(/^0/, '').replace('/0', '/')) + ' 送信予約' + (it.sched.length > 1 ? '×' + it.sched.length : '') + '</span>';
     if (it.src === 'biz') tags += '<span class="tag t-biz">工場・取引先</span>';
     else if (it.customer) {
       if (it.customer.car) tags += '<span class="tag t-cust">' + esc(it.customer.car) + '</span>';
@@ -276,7 +278,7 @@ function openThread(it) {
     document.getElementById('btnLink').style.display = 'none';
     document.getElementById('btnMemo').style.display = 'none';
     document.getElementById('memobox').style.display = 'none';
-    showMemoLine('');
+    showMemoLine(''); showSchedLine(null);
     document.getElementById('note').textContent = '';
     document.getElementById('schedlist').innerHTML = '';
     document.getElementById('msgs').innerHTML = '<div class="sys">LINEがまだ紐付いていません。上の候補から本人を選ぶと、やりとりと送信ができるようになります</div>';
@@ -295,6 +297,7 @@ function openThread(it) {
   document.getElementById('btnMemo').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
   document.getElementById('memobox').style.display = 'none';
   showMemoLine(it.customer && it.customer.memo);
+  showSchedLine(it.sched);
   document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
   if (cachedT) scrollBottom(); else window.scrollTo(0, 0);
   loadSched();
@@ -428,7 +431,10 @@ document.getElementById('btnDraft').onclick = function() {
 function loadSched() {
   var box = document.getElementById('schedlist'); box.innerHTML = '';
   if (!CUR) return;
+  var target = CUR;
   api({ op:'scheduleList', uid: CUR.uid }).then(function(r) {
+    if (CUR !== target) return;
+    if (r.ok) { target.sched = (r.items || []).map(function(x) { return { id: x.id, at: x.at, text: x.text }; }); showSchedLine(target.sched); }
     if (!r.ok || !r.items.length) return;
     box.innerHTML = r.items.map(function(x) {
       return '<div style="background:#EEF4FF;border:1px solid #2B6CB0;border-radius:10px;padding:8px 10px;margin:8px 0;font-size:13px"><b>⏰ ' + esc(x.at) + ' に送信予定</b>'
@@ -506,6 +512,13 @@ function memoLastEntry(memo) {
   var m = String(memo || '').split(/【(\d{4}\/\d{2}\/\d{2}) LINE】[^\n]*\n?/); // [前, 日付, 本文, 日付, 本文…]
   if (m.length < 3) return null;
   return { date: m[m.length - 2], text: String(m[m.length - 1] || '').trim() };
+}
+function showSchedLine(list) {
+  var el = document.getElementById('tSched');
+  if (!list || !list.length) { el.style.display = 'none'; el.textContent = ''; return; }
+  var x = list[0]; var d = String(x.at || '');
+  el.style.display = 'block'; el.textContent = '⏰ ' + d.slice(5).replace(/^0/, '').replace('/0', '/') + ' に送信予約' + (list.length > 1 ? '（ほか' + (list.length - 1) + '件）' : '') + '：' + String(x.text || '').split('\n')[0].slice(0, 40);
+  el.title = list.map(function(y) { return y.at + ' ' + y.text; }).join('\n');
 }
 function showMemoLine(memo) {
   var el = document.getElementById('tMemo'); var last = memoLastEntry(memo);
