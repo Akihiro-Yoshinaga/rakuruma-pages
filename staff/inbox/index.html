@@ -109,6 +109,11 @@
     <textarea id="schedText" rows="3" placeholder="送る本文（下の返信欄に入れた文をそのまま使えます）" style="width:100%;margin-top:6px;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;font-family:inherit"></textarea>
     <div style="margin-top:8px;display:flex;gap:8px"><span class="abtn" id="schedUse">返信欄の文を使う</span><span class="abtn ok" id="schedAdd">この日時で登録</span></div>
   </div>
+  <div id="pickbox" class="linkbox" style="display:none">
+    <b>このお客様のLINEを選ぶ</b>（LINEの表示名で探します。表示名はカタカナや英語のこともあります）
+    <input id="pq" placeholder="LINEの表示名（例：ウケカワ）">
+    <div id="phits"></div>
+  </div>
   <div id="linkbox" class="linkbox" style="display:none">
     <b>顧客リストと紐付け</b>（名前か電話で検索。無ければ新規登録）
     <input id="q" placeholder="名前 または 電話番号">
@@ -175,6 +180,7 @@ function loadList() {
     ITEMS = r.items || []; OTHERS = r.others || []; STAFF = r.staff || STAFF;
     try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
     renderList();
+    if (PENDING_OPEN) { var po = ITEMS.concat(OTHERS).filter(function(x) { return x.uid === PENDING_OPEN; })[0]; PENDING_OPEN = ''; if (po) openThread(po); }
     if (BIZ) loadBiz(true);
   }).catch(function(e) { if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">通信エラー: ' + esc(e) + '</div>'; });
 }
@@ -183,7 +189,7 @@ function loadBiz(silent) {
   api({ op:'listBiz' }).then(function(r) { BIZ = (r.ok && r.items) || []; if (TAB === 'biz') renderList(); });
 }
 
-function normQ(t) { return String(t || '').toLowerCase().replace(/[\s\u3000]+/g, ''); }
+function normQ(t) { return String(t || '').toLowerCase().replace(/[\s\u3000]+/g, '').replace(/[\u30a1-\u30f6]/g, function(c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); }); }
 function itemMatches(it, q) {
   var c = it.customer || {};
   return [c.name, c.kana, c.car, c.phone, it.displayName, it.partner, it.lastText].some(function(v) { return normQ(v).indexOf(q) >= 0; });
@@ -210,12 +216,13 @@ function renderList() {
       if (it.customer.shakenExpiry) tags += '<span class="tag t-shaken">車検 ' + esc(it.customer.shakenExpiry) + '</span>';
       if (it.customer.teiki) tags += '<span class="tag t-teiki">定期プラン</span>';
     } else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
-    if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
+    if (it.noLine) tags += '<span class="tag t-new">LINE未連携</span>';
+    else if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
     else if (!it.needsReply) tags += '<span class="tag t-done">対応済み</span>';
     var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
     return '<div class="row ' + (it.needsReply ? 'need' : 'done') + (CUR && CUR.uid === it.uid ? ' sel' : '') + '" data-i="' + source.indexOf(it) + '" data-uid="' + esc(it.uid) + '">'
       + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
-      + '<div class="m">' + (it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : '顧客リスト未登録。開いて紐付けてから送れます') : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>';
+      + '<div class="m">' + (it.noLine ? '顧客リストにLINEが未登録。開いてLINE側の名前を選ぶと送れます' : it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : '顧客リスト未登録。開いて紐付けてから送れます') : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>';
   }).join('');
   Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
 }
@@ -227,6 +234,25 @@ function openThread(it) {
   document.getElementById('thread').style.display = 'block';
   Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.classList.toggle('sel', el.getAttribute('data-uid') === it.uid); });
   document.getElementById('linkbox').style.display = 'none';
+  document.getElementById('pickbox').style.display = it.noLine ? 'block' : 'none';
+  document.querySelector('.compose').style.display = it.noLine ? 'none' : '';
+  document.getElementById('btnDone').style.display = it.noLine ? 'none' : '';
+  document.getElementById('btnSched').style.display = it.noLine ? 'none' : '';
+  document.getElementById('schedbox').style.display = 'none';
+  if (it.noLine) {
+    var nm0 = (it.customer && it.customer.name) ? it.customer.name + ' さん' : '（名前なし）';
+    document.getElementById('tName').textContent = nm0;
+    document.getElementById('tSub').textContent = (it.customer && it.customer.car) || '';
+    document.getElementById('tRefresh').style.display = 'none';
+    var cust0 = document.getElementById('tCust'); cust0.style.display = 'inline-block'; cust0.href = API_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN);
+    document.getElementById('btnLink').style.display = 'none';
+    document.getElementById('note').textContent = '';
+    document.getElementById('schedlist').innerHTML = '';
+    document.getElementById('msgs').innerHTML = '<div class="sys">LINEがまだ紐付いていません。上の候補から本人を選ぶと、やりとりと送信ができるようになります</div>';
+    document.getElementById('pq').value = ''; renderPick();
+    window.scrollTo(0, 0);
+    return;
+  }
   var cachedT = threadCacheGet(it.uid);
   if (cachedT) renderMsgs(it, cachedT, true); else document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
   var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
@@ -445,6 +471,35 @@ document.getElementById('search').addEventListener('input', function() { if (thi
 document.getElementById('searchClear').onclick = function() { var i = document.getElementById('search'); i.value = ''; renderList(); i.focus(); };
 
 // ---- 顧客リストとの紐付け ----
+// LINE未連携のお客様に、LINE側の候補（受信箱の未登録者・ID自動取得一覧）から本人を選んで紐付ける
+var PENDING_OPEN = '';
+function pickCandidates() {
+  var q = normQ(document.getElementById('pq').value);
+  var recent = ITEMS.filter(function(x) { return x.uid && !x.customer; }).map(function(x) { return { uid: x.uid, dn: x.displayName || '（表示名なし）', when: x.lastAt, hint: (x.lastDir === '送信' ? '↩ ' : '') + String(x.lastText || '').slice(0, 40) }; });
+  var friends = OTHERS.filter(function(x) { return x.uid && !x.customer; }).map(function(x) { return { uid: x.uid, dn: x.displayName || '（表示名なし）', when: x.firstSeen ? x.firstSeen + '〜' : '', hint: '' }; });
+  friends.sort(function(a, b) { return a.when < b.when ? 1 : -1; });
+  var all = recent.concat(friends);
+  if (q) all = all.filter(function(c) { return normQ(c.dn).indexOf(q) >= 0; });
+  return all.slice(0, q ? 30 : 15);
+}
+function renderPick() {
+  var cands = pickCandidates(); var box = document.getElementById('phits');
+  box.innerHTML = cands.length ? cands.map(function(c) {
+    return '<div class="hit"><div><b>' + esc(c.dn) + '</b><br><span style="color:#718096">' + esc(c.when) + (c.hint ? '　' + esc(c.hint) : '') + '</span></div><span class="abtn ok" data-uid="' + esc(c.uid) + '" data-dn="' + esc(c.dn) + '">この人</span></div>';
+  }).join('') : '<div style="color:#718096;padding:6px 0">該当なし（LINE側で1通もやりとりが無い人は出ません）</div>';
+  Array.prototype.forEach.call(box.querySelectorAll('.abtn'), function(el) {
+    el.onclick = function() {
+      if (!CUR || !CUR.noLine) return;
+      var cname = CUR.customer.name, row = CUR.customer.row, uid = el.getAttribute('data-uid');
+      if (!confirm('LINE「' + el.getAttribute('data-dn') + '」を ' + cname + ' さん（顧客リスト）に紐付けます。同じ電話番号の他の車両の行にも入れます。よろしいですか？')) return;
+      api({ op:'link', uid: uid, row: row, expect: cname, samePhone: 1 }).then(function(r) {
+        if (!r.ok) { alert(r.error || '失敗'); return; }
+        toast('紐付けました（' + ((r.rows || [row]).length) + '行）'); PENDING_OPEN = uid; document.getElementById('search').value = ''; loadList();
+      }).catch(function(e) { alert('通信エラー: ' + e); });
+    };
+  });
+}
+document.getElementById('pq').addEventListener('input', renderPick);
 document.getElementById('btnLink').onclick = function() {
   var box = document.getElementById('linkbox'); box.style.display = box.style.display === 'none' ? 'block' : 'none';
   document.getElementById('q').value = CUR.displayName || ''; searchCust();
@@ -462,7 +517,7 @@ function searchCust() {
     Array.prototype.forEach.call(document.querySelectorAll('#hits .abtn'), function(el) {
       el.onclick = function() {
         if (!confirm(el.getAttribute('data-name') + ' さんの行にこのLINEを紐付けます。よろしいですか？')) return;
-        api({ op:'link', uid: CUR.uid, row: el.getAttribute('data-row'), expect: el.getAttribute('data-name') }).then(function(r) {
+        api({ op:'link', uid: CUR.uid, row: el.getAttribute('data-row'), expect: el.getAttribute('data-name'), samePhone: 1 }).then(function(r) {
           if (!r.ok) { alert(r.error || '失敗'); return; }
           toast('紐付けました'); loadList(); document.getElementById('back').onclick();
         });
