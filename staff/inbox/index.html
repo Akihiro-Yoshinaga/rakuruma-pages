@@ -63,9 +63,29 @@
   .linkbox { background:#FFF8E7; border:1px solid #E8A33D; margin:8px 12px; border-radius:10px; padding:10px 12px; font-size:13px; }
   .linkbox input { width:100%; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; margin-top:6px; }
   .hit { padding:6px 0; border-bottom:1px solid #F0E6CC; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+
+  /* ---- PC幅：左に一覧・右にスレッド（公式LINEのチャット画面と同じ構成） ---- */
+  .emptyPane { display:none; }
+  @media (min-width: 900px) {
+    html, body { height:100%; overflow:hidden; }
+    body { display:flex; }
+    #list { display:block !important; flex:0 0 400px; width:400px; height:100vh; overflow-y:auto; border-right:1px solid var(--line); }
+    #thread { display:flex !important; flex-direction:column; flex:1; min-width:0; height:100vh; position:relative; }
+    body.nocur #thread { display:none !important; }
+    body.nocur .emptyPane { display:flex; flex:1; align-items:center; justify-content:center; color:var(--mute); font-size:15px; background:var(--bg); flex-direction:column; gap:6px; }
+    .hdr .back { display:none; }
+    .msgs { flex:1; overflow-y:auto; padding-bottom:20px; min-height:0; }
+    body.gracing .msgs { padding-bottom:120px; }
+    .compose { position:static; padding:10px 16px 14px; }
+    .bub { max-width:70%; }
+    #grace { left:416px !important; right:16px !important; bottom:170px !important; }
+    .toast { bottom:190px; }
+    .row.sel { background:#EEF2F8; }
+    .row:hover { background:#F4F6FA; }
+  }
 </style>
 </head>
-<body>
+<body class="nocur">
 
 <div id="list">
   <div class="top"><a class="back" href="/staff/" style="color:#fff;text-decoration:none">‹</a><div class="ttl">受信箱</div><div class="cnt" id="cnt"></div><a class="lnk" id="reload" href="#">更新</a></div>
@@ -100,6 +120,7 @@
     <div class="box"><label class="send" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:10px 12px;cursor:pointer">📷<input type="file" id="photo" accept="image/*" style="display:none"></label><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button></div>
   </div>
 </div>
+<div class="emptyPane" id="emptyPane"><div style="font-size:40px">💬</div><div>左の一覧から選ぶと、ここにやりとりが出ます</div></div>
 <div class="toast" id="toast"></div>
 <div id="grace" style="display:none;position:fixed;left:12px;right:12px;bottom:150px;background:#1A202C;color:#fff;border-radius:14px;padding:12px 14px;z-index:10;box-shadow:0 6px 20px rgba(0,0,0,.25);display:none;align-items:center;gap:10px">
   <div style="flex:1;font-size:14px;font-weight:700"><span id="graceLabel">送信します</span> <span id="graceSec" style="color:#D9BC7A"></span></div>
@@ -120,6 +141,8 @@ var ITEMS = [], OTHERS = [], TAB = 'need', CUR = null, TEMPLATES = null;
 function api(body) { body.action = 'inbox'; body.token = TOKEN; return fetch(API_URL, { method:'POST', body: JSON.stringify(body) }).then(function(r){ return r.json(); }); }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
+function isDesktop() { return window.matchMedia('(min-width: 900px)').matches; }
+function scrollBottom() { var m = document.getElementById('msgs'); if (isDesktop()) m.scrollTop = m.scrollHeight; else scrollBottom(); }
 function shortAt(s) { return String(s || '').replace(/^\d{4}\//, '').replace(/:\d{2}$/, ''); }
 
 var BIZ = null; // 業務連絡は開いたときだけ取りに行く
@@ -174,7 +197,7 @@ function renderList() {
     if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
     else if (!it.needsReply) tags += '<span class="tag t-done">対応済み</span>';
     var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
-    return '<div class="row ' + (it.needsReply ? 'need' : 'done') + '" data-i="' + source.indexOf(it) + '">'
+    return '<div class="row ' + (it.needsReply ? 'need' : 'done') + (CUR && CUR.uid === it.uid ? ' sel' : '') + '" data-i="' + source.indexOf(it) + '" data-uid="' + esc(it.uid) + '">'
       + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
       + '<div class="m">' + (it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : '顧客リスト未登録。開いて紐付けてから送れます') : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>';
   }).join('');
@@ -183,8 +206,10 @@ function renderList() {
 
 function openThread(it) {
   CUR = it;
+  document.body.classList.remove('nocur');
   document.getElementById('list').style.display = 'none';
   document.getElementById('thread').style.display = 'block';
+  Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.classList.toggle('sel', el.getAttribute('data-uid') === it.uid); });
   document.getElementById('linkbox').style.display = 'none';
   var cachedT = threadCacheGet(it.uid);
   if (cachedT) renderMsgs(it, cachedT, true); else document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
@@ -233,7 +258,7 @@ function renderMsgs(it, msgs, fromCache) {
     if (fromCache) html += '<div class="sys" id="msgsRefreshing">最新を確認中…</div>';
     document.getElementById('msgs').innerHTML = html || '<div class="sys">記録がありません</div>';
     if (pend) document.getElementById('msgs').appendChild(pend);
-    window.scrollTo(0, document.body.scrollHeight);
+    scrollBottom();
 }
 
 function renderTpl() {
@@ -264,7 +289,7 @@ function showPending(inner) {
   var sys = box.querySelector('.sys'); if (sys && box.children.length === 1) box.innerHTML = '';
   var d = document.createElement('div'); d.className = 'bub out pending'; d.id = 'pending';
   d.innerHTML = inner + '<div class="meta">送信待ち（' + GRACE_SEC + '秒以内なら取り消せます）</div>';
-  box.appendChild(d); document.body.classList.add('gracing'); window.scrollTo(0, document.body.scrollHeight);
+  box.appendChild(d); document.body.classList.add('gracing'); scrollBottom();
   return d;
 }
 function removePending() { var d = document.getElementById('pending'); if (d) d.remove(); document.body.classList.remove('gracing'); }
@@ -439,7 +464,7 @@ document.getElementById('btnNew').onclick = function() {
 };
 
 loadList();
-setInterval(function() { if (document.getElementById('list').style.display !== 'none') loadList(); }, 90000);
+setInterval(function() { if (isDesktop() || document.getElementById('list').style.display !== 'none') loadList(); }, 90000);
 </script>
 </body>
 </html>
