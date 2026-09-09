@@ -663,3 +663,25 @@ for smartphone
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* 固定CTAバーのLINEボタン：共通CSS（.button_area .flexbox .button_g の padding:14px 0 / width:48%）に負けて
+   文字が箱の下端にずれていたのを修正（2026-09-09）。行の高さに依存しないよう flex で中央寄せする */
+.button_area .flexbox .button_g {
+    width: auto;
+    height: 48px;
+    padding: 0 22px;
+    margin-left: 16px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+.button_area .flexbox .button_g a {
+    display: block;
+    height: auto;
+    line-height: 1.2;
+    color: #fff;
+}
