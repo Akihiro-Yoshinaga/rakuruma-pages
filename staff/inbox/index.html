@@ -580,7 +580,7 @@ document.getElementById('chgApply').onclick = function() {
     var dur = new Date(CHG.newEnd.replace(/-/g, '/')) - new Date(CHG.newStart.replace(/-/g, '/')); var e1c = new Date(s1.getTime() + dur);
     if (!confirm(title + '\n' + fmtJa(f(s1)) + '〜' + f(e1c).slice(11) + '\n' + (CHG.calendarName || '施工共有') + 'カレンダーに予定を作ります。よろしいですか？')) return;
     btn.textContent = '作成中…';
-    api({ op:'changeApply', action: 'create', uid: target.uid, calendarId: CHG.calendarId, title: title, start: f(s1), end: f(e1c), location: CHG.location || '', note: CHG.reason || '' }).then(function(r) {
+    api({ op:'changeApply', mode: 'create', uid: target.uid, calendarId: CHG.calendarId, title: title, start: f(s1), end: f(e1c), location: CHG.location || '', note: CHG.reason || '' }).then(function(r) {
       btn.textContent = 'この内容で予定を作る';
       if (!r.ok) { alert(r.error || '作成できませんでした'); return; }
       toast('予定を作りました（' + r.when + '）' + (r.notified ? '・Chatworkに通知済み' : ''));
