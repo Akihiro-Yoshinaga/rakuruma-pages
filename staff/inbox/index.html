@@ -543,6 +543,7 @@ function proposeChange(it, auto) {
   if (!auto) { box.style.display = 'block'; body.textContent = ''; st.textContent = '（やりとりと今後の予定を確認中…）'; }
   api({ op:'changeProposal', uid: it.uid }).then(function(r) {
     if (CUR !== it) return;
+    document.getElementById('chgEdit').style.display = 'none'; document.getElementById('chgTitleWrap').style.display = 'none';
     if (!r.ok) { if (!auto) { st.textContent = ''; body.textContent = r.error || '判定できませんでした'; } return; }
     if (!r.change) {
       if (auto) return;
