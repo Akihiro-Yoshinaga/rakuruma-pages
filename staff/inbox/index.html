@@ -129,7 +129,7 @@
   <div id="changebox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
     <b>📅 日程変更の提案</b> <span id="chgStatus" style="color:#718096"></span>
     <div id="chgBody" style="margin-top:6px;font-size:14px;line-height:1.5"></div>
-    <div id="chgEdit" style="display:none;margin-top:6px"><span style="font-size:12px;color:#718096">新しい日時</span><div style="display:flex;gap:8px;margin-top:4px"><input type="date" id="chgDate" style="flex:1"><input type="time" id="chgTime" style="flex:1"></div></div>
+    <div id="chgEdit" style="display:none;margin-top:6px"><div id="chgTitleWrap" style="display:none;margin-bottom:6px"><span style="font-size:12px;color:#718096">予定名</span><input id="chgTitle" style="width:100%;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;margin-top:4px"></div><span style="font-size:12px;color:#718096">新しい日時</span><div style="display:flex;gap:8px;margin-top:4px"><input type="date" id="chgDate" style="flex:1"><input type="time" id="chgTime" style="flex:1"></div></div>
     <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="chgApply" style="display:none">この内容で変更する</span><span class="abtn" id="chgClose">閉じる</span></div>
   </div>
   <div id="memobox" class="linkbox" style="display:none;background:#F3FBF4;border-color:#38A169">
@@ -550,9 +550,19 @@ function proposeChange(it, auto) {
       return;
     }
     CHG = r; box.style.display = 'block'; st.textContent = auto ? '（AIがやりとりから読み取りました）' : '';
-    body.innerHTML = '<div><b>' + esc(r.event.title) + '</b> <span style="color:#718096">[' + esc(r.event.calendarName) + ']</span></div>'
-      + '<div style="margin-top:4px">' + esc(fmtJa(r.event.start)) + '〜' + esc(r.event.end.slice(11)) + '　→　<b style="color:#C05621">' + esc(fmtJa(r.newStart)) + '</b>〜' + esc(r.newEnd.slice(11)) + '</div>'
-      + '<div style="margin-top:4px;font-size:12px;color:#718096">根拠：' + esc(r.reason) + (r.quote ? '（「' + esc(r.quote) + '」）' : '') + (r.event.recurring ? '　※繰り返し予定のこの回だけ動かします' : '') + '</div>';
+    if (r.action === 'create') {
+      body.innerHTML = '<div><b>新しい予定を作成</b> <span style="color:#718096">[' + esc(r.calendarName || '施工共有') + ']</span></div>'
+        + '<div style="margin-top:4px"><b style="color:#C05621">' + esc(fmtJa(r.newStart)) + '</b>〜' + esc(r.newEnd.slice(11)) + (r.location ? '　<span style="color:#718096">' + esc(r.location) + '</span>' : '') + '</div>'
+        + '<div style="margin-top:4px;font-size:12px;color:#718096">根拠：' + esc(r.reason) + (r.quote ? '（「' + esc(r.quote) + '」）' : '') + '</div>';
+      document.getElementById('chgTitleWrap').style.display = 'block'; document.getElementById('chgTitle').value = r.title || '';
+      document.getElementById('chgApply').textContent = 'この内容で予定を作る';
+    } else {
+      body.innerHTML = '<div><b>' + esc(r.event.title) + '</b> <span style="color:#718096">[' + esc(r.event.calendarName) + ']</span></div>'
+        + '<div style="margin-top:4px">' + esc(fmtJa(r.event.start)) + '〜' + esc(r.event.end.slice(11)) + '　→　<b style="color:#C05621">' + esc(fmtJa(r.newStart)) + '</b>〜' + esc(r.newEnd.slice(11)) + '</div>'
+        + '<div style="margin-top:4px;font-size:12px;color:#718096">根拠：' + esc(r.reason) + (r.quote ? '（「' + esc(r.quote) + '」）' : '') + (r.event.recurring ? '　※繰り返し予定のこの回だけ動かします' : '') + '</div>';
+      document.getElementById('chgTitleWrap').style.display = 'none';
+      document.getElementById('chgApply').textContent = 'この内容で変更する';
+    }
     document.getElementById('chgDate').value = r.newStart.slice(0, 10).replace(/\//g, '-'); document.getElementById('chgTime').value = r.newStart.slice(11, 16);
     document.getElementById('chgEdit').style.display = 'block'; document.getElementById('chgApply').style.display = 'inline-block';
   }).catch(function(e) { if (!auto) { st.textContent = ''; body.textContent = '通信エラー: ' + e; } });
@@ -562,11 +572,25 @@ document.getElementById('chgClose').onclick = function() { document.getElementBy
 document.getElementById('chgApply').onclick = function() {
   if (!CUR || !CHG) return;
   var d = document.getElementById('chgDate').value, t = document.getElementById('chgTime').value; if (!d || !t) { alert('日時を入れてください'); return; }
-  var s0 = new Date(CHG.event.start.replace(/-/g, '/')), e0 = new Date(CHG.event.end.replace(/-/g, '/'));
-  var s1 = new Date(d.replace(/-/g, '/') + ' ' + t); var e1 = new Date(s1.getTime() + (e0 - s0));
   var pad = function(n) { return (n < 10 ? '0' : '') + n; }; var f = function(x) { return x.getFullYear() + '/' + pad(x.getMonth() + 1) + '/' + pad(x.getDate()) + ' ' + pad(x.getHours()) + ':' + pad(x.getMinutes()); };
+  var s1 = new Date(d.replace(/-/g, '/') + ' ' + t); var btn = this; var target = CUR;
+  if (CHG.action === 'create') {
+    var title = document.getElementById('chgTitle').value.trim(); if (!title) { alert('予定名を入れてください'); return; }
+    var dur = new Date(CHG.newEnd.replace(/-/g, '/')) - new Date(CHG.newStart.replace(/-/g, '/')); var e1c = new Date(s1.getTime() + dur);
+    if (!confirm(title + '\n' + fmtJa(f(s1)) + '〜' + f(e1c).slice(11) + '\n' + (CHG.calendarName || '施工共有') + 'カレンダーに予定を作ります。よろしいですか？')) return;
+    btn.textContent = '作成中…';
+    api({ op:'changeApply', action: 'create', uid: target.uid, calendarId: CHG.calendarId, title: title, start: f(s1), end: f(e1c), location: CHG.location || '', note: CHG.reason || '' }).then(function(r) {
+      btn.textContent = 'この内容で予定を作る';
+      if (!r.ok) { alert(r.error || '作成できませんでした'); return; }
+      toast('予定を作りました（' + r.when + '）' + (r.notified ? '・Chatworkに通知済み' : ''));
+      document.getElementById('changebox').style.display = 'none'; CHG = null;
+    }).catch(function(e) { btn.textContent = 'この内容で予定を作る'; alert('通信エラー: ' + e); });
+    return;
+  }
+  var s0 = new Date(CHG.event.start.replace(/-/g, '/')), e0 = new Date(CHG.event.end.replace(/-/g, '/'));
+  var e1 = new Date(s1.getTime() + (e0 - s0));
   if (!confirm(CHG.event.title + '\n' + fmtJa(CHG.event.start) + ' → ' + fmtJa(f(s1)) + '\nカレンダーを変更します。よろしいですか？')) return;
-  var btn = this; btn.textContent = '変更中…'; var target = CUR;
+  btn.textContent = '変更中…';
   api({ op:'changeApply', uid: target.uid, calendarId: CHG.event.calendarId, eventId: CHG.event.eventId, start: f(s1), end: f(e1), origStart: CHG.event.start, note: CHG.reason || '' }).then(function(r) {
     btn.textContent = 'この内容で変更する';
     if (!r.ok) { alert(r.error || '変更できませんでした'); return; }
