@@ -192,7 +192,7 @@ function api(body) {
 }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
-function revealBox(el) { if (!el || isDesktop()) return; try { var top = el.getBoundingClientRect().top + window.scrollY - 120; window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); } }
+function revealBox(el) { if (!el || isDesktop()) return; try { var hw = document.querySelector('.hdrwrap'); var off = (hw ? hw.offsetHeight : 110) + 8; var top = el.getBoundingClientRect().top + window.scrollY - off; window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); } }
 function isDesktop() { return window.matchMedia('(min-width: 900px)').matches; }
 function scrollBottom() { var m = document.getElementById('msgs'); if (isDesktop()) m.scrollTop = m.scrollHeight; else window.scrollTo(0, document.body.scrollHeight); }
 // 一覧の時刻表記は公式LINEアプリと同じ：今日=HH:MM／昨日=昨日／6日以内=曜日／それ以前=M/D
@@ -543,8 +543,10 @@ function maybeProposeChange(it, msgs) {
 function proposeChange(it, auto) {
   var box = document.getElementById('changebox'), body = document.getElementById('chgBody'), st = document.getElementById('chgStatus');
   document.getElementById('chgApply').style.display = 'none'; document.getElementById('chgEdit').style.display = 'none'; CHG = null;
-  if (!auto) { box.style.display = 'block'; body.textContent = ''; st.textContent = '（やりとりと今後の予定を確認中… 10〜20秒かかります）'; revealBox(box); }
+  var btnC = document.getElementById('btnChange');
+  if (!auto) { box.style.display = 'block'; body.textContent = ''; st.textContent = '（やりとりと今後の予定を確認中… 10〜20秒かかります）'; btnC.textContent = '確認中…'; revealBox(box); setTimeout(function() { revealBox(box); }, 400); }
   api({ op:'changeProposal', uid: it.uid }).then(function(r) {
+    btnC.textContent = '予定変更・作成';
     if (CUR !== it) return;
     document.getElementById('chgEdit').style.display = 'none'; document.getElementById('chgTitleWrap').style.display = 'none';
     if (!r.ok) { if (!auto) { st.textContent = ''; body.textContent = r.error || '判定できませんでした'; } return; }
@@ -571,7 +573,7 @@ function proposeChange(it, auto) {
     }
     document.getElementById('chgDate').value = r.newStart.slice(0, 10).replace(/\//g, '-'); document.getElementById('chgTime').value = r.newStart.slice(11, 16);
     document.getElementById('chgEdit').style.display = 'block'; document.getElementById('chgApply').style.display = 'inline-block';
-  }).catch(function(e) { if (!auto) { st.textContent = ''; body.textContent = '通信エラー: ' + e; } });
+  }).catch(function(e) { btnC.textContent = '予定変更・作成'; if (!auto) { st.textContent = ''; body.textContent = '通信エラー: ' + e; } });
 }
 document.getElementById('btnChange').onclick = function() { if (CUR) proposeChange(CUR, false); };
 document.getElementById('chgManual').onclick = function() {
