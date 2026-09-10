@@ -349,8 +349,9 @@ function renderMsgs(it, msgs, fromCache) {
       var av = ((it.customer && it.customer.name) || it.partner || it.displayName || '？').charAt(0);
       var body = m.text || ('（' + m.kind + '）');
       var inner;
-      if (m.img) inner = '<a href="' + esc(m.img.view || m.img.full) + '" target="_blank" rel="noopener"><img src="' + esc(m.img.thumb) + '" alt="画像" style="max-width:100%;border-radius:10px;display:block"></a>';
-      else if (m.kind === '画像') inner = '（画像：まだ取り込めていません。数分後に更新してください）';
+      if (m.img) inner = '<a href="' + esc(m.img.view || m.img.full) + '" target="_blank" rel="noopener"><img src="' + esc(m.img.thumb) + '" alt="画像" style="max-width:100%;border-radius:10px;display:block" onerror="if(!this.dataset.alt){this.dataset.alt=1;this.src=\'' + esc(m.img.thumb2 || '') + '\';}"></a>' + (m.file && m.file.name && !/^line_/.test(m.file.name) ? '<div class="meta">📎 ' + esc(m.file.name) + '</div>' : '');
+      else if (m.file) inner = '📎 <a href="' + esc(m.file.view) + '" target="_blank" rel="noopener">' + esc(m.file.name) + '</a>';
+      else if (m.kind === '画像' || m.kind === 'ファイル') inner = '（' + (m.kind === 'ファイル' ? '📎 ' + esc(m.text || 'ファイル') + '：' : '画像：') + 'まだ取り込めていません。数分後に更新してください）';
       else inner = esc(body);
       var mt = '<div class="mt">' + esc(String(m.at || '').slice(11, 16)) + (isIn ? '' : '<br>' + esc(String(m.kind || '').replace(/（.*）$/, '').replace(/^返信$/, '返信'))) + '</div>';
       if (isIn) html += '<div class="mrow in"><div class="mav">' + esc(av) + '</div><div class="bub in">' + inner + '</div>' + mt + '</div>';
