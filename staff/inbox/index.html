@@ -65,8 +65,9 @@
   textarea { flex:1; border:1.5px solid #CBD5E0; border-radius:14px; padding:10px 12px; font-size:16px; font-family:inherit; resize:none; min-height:44px; max-height:140px; }
   .send { background:var(--navy); color:#fff; font-weight:800; border:0; border-radius:14px; padding:12px 16px; font-size:15px; cursor:pointer; }
   .send:disabled { opacity:.5; }
-  .actions { display:flex; gap:8px; padding:8px 12px; background:#fff; border-bottom:1px solid var(--line); flex-wrap:wrap; }
-  .abtn { font-size:12px; font-weight:800; border-radius:8px; padding:6px 10px; background:#fff; border:1.5px solid var(--navy); color:var(--navy); cursor:pointer; text-decoration:none; }
+  .actions { display:flex; gap:6px; padding:8px 12px; background:#fff; border-bottom:1px solid var(--line); flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .actions .abtn { white-space:nowrap; flex:0 0 auto; }
+  .abtn { font-size:12px; font-weight:800; border-radius:8px; padding:6px 9px; background:#fff; border:1.5px solid var(--navy); color:var(--navy); cursor:pointer; text-decoration:none; }
   .abtn.ok { border-color:#38A169; color:#38A169; }
   .note { font-size:12px; color:#C05621; font-weight:700; padding:6px 12px 0; }
   .toast { position:fixed; left:50%; bottom:130px; transform:translateX(-50%); background:#1A202C; color:#fff; font-size:13px; padding:8px 14px; border-radius:10px; display:none; z-index:9; }
@@ -117,7 +118,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">✓ 対応済みにする</span><span class="abtn" id="btnSched">⏰ 予約送信</span><span class="abtn" id="btnMemo" style="display:none">📝 メモに残す</span><span class="abtn" id="btnChange" style="display:none">📅 日程変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
@@ -127,10 +128,10 @@
     <div style="margin-top:8px;display:flex;gap:8px"><span class="abtn" id="schedUse">返信欄の文を使う</span><span class="abtn ok" id="schedAdd">この日時で登録</span></div>
   </div>
   <div id="changebox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
-    <b>📅 日程変更の提案</b> <span id="chgStatus" style="color:#718096"></span>
+    <b>予定の変更・作成</b> <span id="chgStatus" style="color:#718096"></span>
     <div id="chgBody" style="margin-top:6px;font-size:14px;line-height:1.5"></div>
     <div id="chgEdit" style="display:none;margin-top:6px"><div id="chgTitleWrap" style="display:none;margin-bottom:6px"><span style="font-size:12px;color:#718096">予定名</span><input id="chgTitle" style="width:100%;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;margin-top:4px"></div><span style="font-size:12px;color:#718096">新しい日時</span><div style="display:flex;gap:8px;margin-top:4px"><input type="date" id="chgDate" style="flex:1"><input type="time" id="chgTime" style="flex:1"></div></div>
-    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="chgApply" style="display:none">この内容で変更する</span><span class="abtn" id="chgClose">閉じる</span></div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="chgApply" style="display:none">この内容で変更する</span><span class="abtn" id="chgManual">手で新しい予定を作る</span><span class="abtn" id="chgClose">閉じる</span></div>
   </div>
   <div id="memobox" class="linkbox" style="display:none;background:#F3FBF4;border-color:#38A169">
     <b>メモに残す</b> <span id="memoBasis" style="color:#718096"></span>
@@ -569,6 +570,19 @@ function proposeChange(it, auto) {
   }).catch(function(e) { if (!auto) { st.textContent = ''; body.textContent = '通信エラー: ' + e; } });
 }
 document.getElementById('btnChange').onclick = function() { if (CUR) proposeChange(CUR, false); };
+document.getElementById('chgManual').onclick = function() {
+  if (!CUR || !CUR.customer) return;
+  var c = CUR.customer; var sei = String(c.name || '').trim().split(/[\s\u3000]+/)[0];
+  var d = new Date(Date.now() + 86400000); var pad = function(n) { return (n < 10 ? '0' : '') + n; };
+  var st = d.getFullYear() + '/' + pad(d.getMonth() + 1) + '/' + pad(d.getDate()) + ' 10:00';
+  CHG = { action: 'create', title: sei + 'さん 予定' + (c.car ? ' ' + c.car : ''), newStart: st, newEnd: st.slice(0, 11) + '11:00', calendarId: 'akihiro.55590@gmail.com', calendarName: '施工共有', location: c.address || '', reason: '手動で作成' };
+  var box = document.getElementById('changebox'), body = document.getElementById('chgBody');
+  box.style.display = 'block'; document.getElementById('chgStatus').textContent = '';
+  body.innerHTML = '<div><b>新しい予定を作成</b> <span style="color:#718096">[施工共有]</span></div><div style="margin-top:4px;font-size:12px;color:#718096">予定名と日時を入れて「この内容で予定を作る」。場所は顧客リストの住所（' + esc(c.address || '未登録') + '）</div>';
+  document.getElementById('chgTitleWrap').style.display = 'block'; document.getElementById('chgTitle').value = CHG.title;
+  document.getElementById('chgDate').value = st.slice(0, 10).replace(/\//g, '-'); document.getElementById('chgTime').value = '10:00';
+  document.getElementById('chgEdit').style.display = 'block'; document.getElementById('chgApply').style.display = 'inline-block'; document.getElementById('chgApply').textContent = 'この内容で予定を作る';
+};
 document.getElementById('chgClose').onclick = function() { document.getElementById('changebox').style.display = 'none'; CHG = null; };
 document.getElementById('chgApply').onclick = function() {
   if (!CUR || !CHG) return;
