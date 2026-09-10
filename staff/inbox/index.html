@@ -377,8 +377,9 @@ document.getElementById('text').addEventListener('keydown', function(e) { if ((e
 if (isDesktop()) document.getElementById('text').placeholder = 'Command + Enterで送信 / Enterで改行（送信すると記録に残ります）';
 
 // ---- 送信までの猶予（15秒。押し間違い・宛先違いをここで止める） ----
-var GRACE_SEC = 15, graceTimer = null, graceTick = null;
+var GRACE_SEC = 0, graceTimer = null, graceTick = null; // 2026-09-10 猶予を廃止（誤送信はLINE公式アプリの送信取消で対応）。戻すなら秒数を入れる
 function withGrace(label, run, onCancel) {
+  if (!GRACE_SEC) { run(); return; }
   var box = document.getElementById('grace');
   if (graceTimer) { alert('前の送信の猶予中です。終わってからもう一度お願いします'); return; }
   var left = GRACE_SEC;
@@ -393,7 +394,7 @@ function showPending(inner) {
   var box = document.getElementById('msgs');
   var sys = box.querySelector('.sys'); if (sys && box.children.length === 1) box.innerHTML = '';
   var d = document.createElement('div'); d.className = 'bub out pending'; d.id = 'pending';
-  d.innerHTML = inner + '<div class="meta">送信待ち（' + GRACE_SEC + '秒以内なら取り消せます）</div>';
+  d.innerHTML = inner + '<div class="meta">' + (GRACE_SEC ? '送信待ち（' + GRACE_SEC + '秒以内なら取り消せます）' : '送信中…') + '</div>';
   box.appendChild(d); document.body.classList.add('gracing'); scrollBottom();
   return d;
 }
