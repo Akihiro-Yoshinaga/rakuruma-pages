@@ -461,12 +461,22 @@ document.getElementById('btnDraft').onclick = function() {
   var intent = document.getElementById('intent').value.trim();
   var btn = this; btn.disabled = true; btn.textContent = '作成中…';
   var recent = (threadCacheGet(CUR.uid) || []).slice(-12).map(function(m) { return { dir: m.dir, kind: m.kind, text: m.text || '', at: m.at }; });
-  api({ op:'draft', uid: CUR.uid, src: CUR.src, intent: intent, recent: recent }).then(function(r) {
+  var target = CUR, tries = 0;
+  function run() {
+    tries++;
+    return api({ op:'draft', uid: target.uid, src: target.src, intent: intent, recent: recent }).then(function(r) {
+      // GASのPOST応答が稀に別ページのJSONに化ける（ok:true だが text が無い）→ もう一度だけ取り直す
+      if (r && r.ok && typeof r.text !== 'string') { if (tries < 2) { btn.textContent = '作成中…（再試行）'; return run(); } return { ok: false, error: '応答が壊れていました。もう一度押してください' }; }
+      return r;
+    });
+  }
+  run().then(function(r) {
     btn.disabled = false; btn.textContent = 'AI生成';
+    if (CUR !== target) return;
     if (!r.ok) { alert('AI生成できませんでした: ' + (r.error || '')); return; }
     var ta = document.getElementById('text'); ta.value = r.text; autosize(); ta.focus();
     toast('AI生成した文を入れました。直してから送信してください');
-  }).catch(function(e) { btn.disabled = false; btn.textContent = 'AI生成'; alert('通信エラー: ' + e); });
+  }).catch(function(e) { btn.disabled = false; btn.textContent = 'AI生成'; alert('通信エラー: ' + ((e && e.message) || e)); });
 };
 // ---- 予約送信 ----
 function loadSched() {
@@ -685,6 +695,7 @@ function openMemo(afterDone) {
     if (CUR !== target) return;
     if (!r.ok) { basis.textContent = ''; ta.placeholder = r.error || '作れませんでした'; return; }
     if (r.empty) { basis.textContent = '（' + r.basis + 'にやりとりがありません）'; ta.placeholder = '残したいことがあれば手で書いて保存'; if (afterDone) box.style.display = 'none'; return; }
+    if (typeof r.draft !== 'string') { basis.textContent = ''; ta.placeholder = '応答が壊れていました。もう一度「メモ」を押してください'; return; }
     basis.textContent = '（' + r.basis + '・' + r.count + '件から作成）';
     ta.value = r.draft; ta.placeholder = ''; ta.focus();
   }).catch(function(e) { ta.placeholder = '通信エラー: ' + e; });
