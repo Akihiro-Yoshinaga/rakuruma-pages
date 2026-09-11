@@ -20,6 +20,8 @@
   .tabs { display:flex; border-bottom:1px solid var(--line); background:#fff; position:sticky; top:52px; z-index:4; }
   .tabs div { flex:1; text-align:center; padding:12px 0; font-size:15px; font-weight:600; color:#8A94A6; cursor:pointer; }
   .tabs .on { color:var(--navy); border-bottom:3px solid var(--navy); }
+  .teiki { display:inline-block; background:var(--navy); color:#fff; font-size:11px; font-weight:800; line-height:18px; width:18px; height:18px; border-radius:4px; text-align:center; margin-right:5px; vertical-align:2px; }
+  .hdr .teiki { background:#fff; color:var(--navy); }
   .tabbadge { display:inline-block; min-width:18px; height:18px; line-height:18px; padding:0 5px; margin-left:4px; border-radius:9px; background:#E53E3E; color:#fff; font-size:11px; font-weight:700; text-align:center; vertical-align:1px; }
   .row { display:flex; gap:13px; padding:13px 16px 13px 20px; border-bottom:1px solid #EEF0F3; align-items:center; cursor:pointer; min-height:90px; }
   .row.done { opacity:.7; }
@@ -239,6 +241,22 @@ function itemMatches(it, q) {
   var c = it.customer || {};
   return [c.name, c.kana, c.car, c.phone, it.displayName, it.partner, it.lastText].some(function(v) { return normQ(v).indexOf(q) >= 0; });
 }
+// 車ごとのタグ：複数台なら「車名 車検 日付」を車ごとに。1台なら従来どおり
+function vehicleLine(c) {
+  var vs = (c.vehicles && c.vehicles.length) ? c.vehicles : [{ car: c.car, shakenExpiry: c.shakenExpiry }];
+  return vs.map(function(v) { return (v.car || '車名なし') + (v.shakenExpiry ? '（車検 ' + v.shakenExpiry + '）' : ''); }).join('・');
+}
+function vehicleTags(c) {
+  var vs = (c.vehicles && c.vehicles.length) ? c.vehicles : [{ car: c.car, shakenExpiry: c.shakenExpiry }];
+  var t = '';
+  if (vs.length > 1) {
+    vs.forEach(function(v) { if (!v.car && !v.shakenExpiry) return; t += '<span class="tag t-cust">' + esc(v.car || '車名なし') + (v.shakenExpiry ? ' <span style="color:#6A3FB5">車検 ' + esc(v.shakenExpiry) + '</span>' : '') + '</span>'; });
+  } else {
+    if (c.car) t += '<span class="tag t-cust">' + esc(c.car) + '</span>';
+    if (c.shakenExpiry) t += '<span class="tag t-shaken">車検 ' + esc(c.shakenExpiry) + '</span>';
+  }
+  return t;
+}
 function renderList() {
   var q = normQ(document.getElementById('search').value);
   document.getElementById('searchClear').style.display = q ? 'inline' : 'none';
@@ -261,17 +279,13 @@ function renderList() {
     var tags = '';
     if (it.sched && it.sched.length) tags += '<span class="tag t-sched">⏰ ' + esc(String(it.sched[0].at).slice(5).replace(/^0/, '').replace('/0', '/')) + ' 送信予約' + (it.sched.length > 1 ? '×' + it.sched.length : '') + '</span>';
     if (it.src === 'biz') tags += '<span class="tag t-biz">工場・取引先</span>';
-    else if (it.customer) {
-      if (it.customer.car) tags += '<span class="tag t-cust">' + esc(it.customer.car) + '</span>';
-      if (it.customer.shakenExpiry) tags += '<span class="tag t-shaken">車検 ' + esc(it.customer.shakenExpiry) + '</span>';
-      if (it.customer.teiki) tags += '<span class="tag t-teiki">定期プラン</span>';
-    } else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
+    else if (it.customer) tags += vehicleTags(it.customer); else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
     if (it.noLine) tags += '<span class="tag t-new">LINE未連携</span>';
     else if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
     // 「対応済み」のタグは出さない（要対応は赤丸で分かる・2026-09-11 吉永さん指示）
     var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
     return '<div class="row ' + (it.needsReply ? 'need' : 'done') + (CUR && CUR.uid === it.uid ? ' sel' : '') + '" data-i="' + source.indexOf(it) + '" data-uid="' + esc(it.uid) + '">'
-      + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
+      + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
       + '<div class="m">' + (it.noLine ? '顧客リストにLINEが未登録。開いてLINE側の名前を選ぶと送れます' : it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : '顧客リスト未登録。開いて紐付けてから送れます') : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>';
   }).join('');
   Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
@@ -309,8 +323,8 @@ function openThread(it) {
   var cachedT = threadCacheGet(it.uid);
   if (cachedT) renderMsgs(it, cachedT, true); else document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
   var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
-  document.getElementById('tName').textContent = name;
-  document.getElementById('tSub').textContent = it.src === 'biz' ? '工場・取引先（ラクルマ ご依頼・相談）' : (it.customer ? [it.customer.car, it.customer.shakenExpiry ? '車検満了 ' + it.customer.shakenExpiry : '', it.customer.teiki ? '定期プラン' : ''].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
+  document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
+  document.getElementById('tSub').textContent = it.src === 'biz' ? '工場・取引先（ラクルマ ご依頼・相談）' : (it.customer ? vehicleLine(it.customer) : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
@@ -592,7 +606,7 @@ document.getElementById('tName').onclick = function() {
   var target = CUR;
   api({ op:'rename', uid: target.uid, name: name }).then(function(r) {
     if (!r.ok) { alert(r.error || '変更できませんでした'); return; }
-    target.customer.name = r.name; document.getElementById('tName').textContent = r.name + ' さん';
+    target.customer.name = r.name; document.getElementById('tName').innerHTML = (target.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(r.name + ' さん');
     ITEMS.concat(OTHERS).forEach(function(x) { if (x.uid === target.uid && x.customer) x.customer.name = r.name; });
     try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
     renderList(); toast('名前を変更しました（' + r.old + ' → ' + r.name + '・顧客リスト' + r.rows.length + '行）');
