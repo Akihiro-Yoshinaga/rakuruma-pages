@@ -736,14 +736,19 @@ document.getElementById('btnLink').onclick = function() {
 };
 var searchTimer = null;
 document.getElementById('q').addEventListener('input', function() { clearTimeout(searchTimer); searchTimer = setTimeout(searchCust, 400); });
+var SEARCH_SEQ = 0;
 function searchCust() {
   var q = document.getElementById('q').value.trim();
   if (!q) { document.getElementById('hits').innerHTML = ''; return; }
+  var seq = ++SEARCH_SEQ;
+  document.getElementById('hits').innerHTML = '<div style="color:#718096;padding:6px 0">「' + esc(q) + '」を顧客リストから検索中…</div>';
   api({ op:'search', q: q }).then(function(r) {
+    if (seq !== SEARCH_SEQ) return; // 打ち直しで古い結果が後から来たときは捨てる
+    if (!r.ok) { document.getElementById('hits').innerHTML = '<div style="color:#C05621;padding:6px 0">検索できませんでした：' + esc(r.error || '') + '</div>'; return; }
     var hits = (r.ok && r.hits) || [];
     document.getElementById('hits').innerHTML = hits.length ? hits.map(function(h) {
       return '<div class="hit"><div><b>' + esc(h.name) + '</b> ' + esc(h.car) + '<br><span style="color:#718096">' + esc(h.phone) + (h.uid ? '・LINE紐付け済み' : '') + '</span></div><span class="abtn" data-row="' + h.row + '" data-name="' + esc(h.name) + '">この人</span></div>';
-    }).join('') : '<div style="color:#718096;padding:6px 0">該当なし</div>';
+    }).join('') : '<div style="color:#718096;padding:6px 0">「' + esc(q) + '」は該当なし（電話番号でも探せます）</div>';
     Array.prototype.forEach.call(document.querySelectorAll('#hits .abtn'), function(el) {
       el.onclick = function() {
         if (!confirm(el.getAttribute('data-name') + ' さんの行にこのLINEを紐付けます。よろしいですか？')) return;
@@ -753,7 +758,7 @@ function searchCust() {
         });
       };
     });
-  });
+  }).catch(function(e) { if (seq === SEARCH_SEQ) document.getElementById('hits').innerHTML = '<div style="color:#C05621;padding:6px 0">通信エラー。もう一度入力してください</div>'; });
 }
 document.getElementById('btnNew').onclick = function() {
   var name = prompt('お客様のお名前（姓 名）', document.getElementById('q').value.trim() || (CUR.displayName || ''));
