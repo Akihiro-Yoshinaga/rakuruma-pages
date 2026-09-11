@@ -244,7 +244,7 @@ function itemMatches(it, q) {
 // 車ごとのタグ：複数台なら「車名 車検 日付」を車ごとに。1台なら従来どおり
 // 表示名：LINE連絡先名（このLINEの相手）があればそれを優先。顧客本人は補足に出す
 function custLabel(it) { var c = it.customer; if (!c) return null; return (c.contact ? c.contact : c.name) + ' さん'; }
-function custNote(c) { return (c && c.contact && c.name) ? '顧客：' + c.name + ' さん' : ''; }
+function custNote(c) { return (c && c.contact && c.name) ? '名義：' + c.name + ' さん' + (c.company ? '（' + c.company + '）' : '') : ''; }
 function vehicleLine(c) {
   var vs = (c.vehicles && c.vehicles.length) ? c.vehicles : [{ car: c.car, shakenExpiry: c.shakenExpiry }];
   return vs.map(function(v) { return (v.car || '車名なし') + (v.shakenExpiry ? '（車検 ' + v.shakenExpiry + '）' : ''); }).join('・');
@@ -351,7 +351,7 @@ function openThread(it) {
       // サーバーの最新の顧客情報で見出しを更新（名前・LINE連絡先名・車・メモ）。一覧のキャッシュが古くても正しく出す
       it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo);
       if (r.customer.name) it.customer.name = r.customer.name;
-      it.customer.contact = r.customer.contact || ''; it.customer.car = r.customer.car || it.customer.car; it.customer.vehicles = r.customer.vehicles || it.customer.vehicles; it.customer.teiki = r.customer.teiki || it.customer.teiki;
+      it.customer.contact = r.customer.contact || ''; it.customer.company = r.customer.company || ''; it.customer.car = r.customer.car || it.customer.car; it.customer.vehicles = r.customer.vehicles || it.customer.vehicles; it.customer.teiki = r.customer.teiki || it.customer.teiki;
       document.getElementById('tName').innerHTML = (it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(custLabel(it));
       document.getElementById('tSub').textContent = [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・');
     }
