@@ -190,9 +190,18 @@ function api(body) {
     return fetch(API_URL, { method:'POST', body: payload, signal: ctl ? ctl.signal : undefined }).then(function(r) { if (timer) clearTimeout(timer); return r.text(); }, function(e) { if (timer) clearTimeout(timer); throw e; })
       .then(function(t) { try { return JSON.parse(t); } catch (e) { var err = new Error('Google側が混み合っています（応答が読めません）。数秒おいてもう一度'); err.html = true; throw err; } });
   }
-  if (!canRetry) return once(0).catch(function(e) { if (e && e.html) { return new Promise(function(res) { setTimeout(res, 2000); }).then(function() { return once(0); }); } throw e; });
-  // 読み取り系：9秒で打ち切り→やり直し。応答がHTML（Google側の不調）なら2秒おいてもう一度
-  return once(9000).catch(function() { return once(0); }).catch(function(e) { if (e && e.html) { return new Promise(function(res) { setTimeout(res, 2000); }).then(function() { return once(0); }); } throw e; });
+  // Google側の不調（応答がHTML）は数秒〜数十秒で回復することが多いので、3秒・6秒おいて計3回まで試す。
+  // 途中で打ち切って投げ直すと実行が積み上がって余計に遅くなるため、打ち切りは25秒と長めにし、読み取り系だけ
+  function wait(ms) { return new Promise(function(res) { setTimeout(res, ms); }); }
+  function attempt(n, timeoutMs) {
+    return once(timeoutMs).catch(function(e) {
+      var retryable = (e && e.html) || (e && e.name === 'AbortError') || (e && /Failed to fetch|NetworkError|Load failed/.test(String(e.message || e)));
+      if (retryable && n < 3) return wait(n === 1 ? 3000 : 6000).then(function() { return attempt(n + 1, 0); });
+      throw e;
+    });
+  }
+  if (!canRetry) return attempt(1, 0);
+  return attempt(1, 25000);
 }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
@@ -736,6 +745,7 @@ document.getElementById('back').onclick = function() {
   document.getElementById('thread').style.display = 'none';
   document.getElementById('list').style.display = 'block';
   renderList();
+  loadList(); // 一覧に戻ったら新着を取り直す
 };
 document.getElementById('reload').onclick = function(e) { e.preventDefault(); if (LIST_MANUAL) return; loadList(true); };
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
@@ -829,7 +839,34 @@ document.getElementById('btnNew').onclick = function() {
 };
 
 loadList();
-setInterval(function() { if (isDesktop() || document.getElementById('list').style.display !== 'none') loadList(); }, 90000);
+setInterval(function() { if (document.visibilityState !== 'visible') return; if (isDesktop() || document.getElementById('list').style.display !== 'none') loadList(); }, 90000);
+// 開いているトークは30秒ごとに新着を取り直す（変化があったときだけ描き直す）。画面に戻ったときも即時に更新
+var THREAD_POLLING = false;
+function pollThread() {
+  if (!CUR || CUR.noLine || !CUR.uid || graceTimer || THREAD_POLLING) return;
+  if (document.getElementById('thread').style.display === 'none' && !isDesktop()) return;
+  var target = CUR; THREAD_POLLING = true;
+  api({ op:'thread', uid: target.uid, src: target.src }).then(function(r) {
+    THREAD_POLLING = false;
+    if (CUR !== target || !r.ok || !Array.isArray(r.messages)) return;
+    var cur = threadCacheGet(target.uid) || [];
+    var a = cur.length ? cur[cur.length - 1] : null, b = r.messages.length ? r.messages[r.messages.length - 1] : null;
+    var changed = cur.length !== r.messages.length || (a && b && (a.at !== b.at || a.text !== b.text)) || (!a !== !b);
+    if (!changed) return;
+    threadCachePut(target.uid, r.messages);
+    var atBottom = isDesktop() ? (function() { var m = document.getElementById('msgs'); return m.scrollHeight - m.scrollTop - m.clientHeight < 80; })() : (window.innerHeight + window.scrollY >= document.body.scrollHeight - 80);
+    renderMsgs(target, r.messages, false);
+    if (b && b.dir === '受信') { target.needsReply = true; target.unread = (target.unread || 0) + 1; target.lastAt = b.at; target.lastText = String(b.text || '').slice(0, 80); target.lastDir = b.dir; toast('新しいメッセージが届きました'); }
+    if (!atBottom) toast('新着があります（下にスクロール）');
+    maybeProposeChange(target, r.messages);
+  }).catch(function() { THREAD_POLLING = false; });
+}
+setInterval(function() { if (document.visibilityState === 'visible') pollThread(); }, 30000);
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState !== 'visible') return;
+  if (isDesktop() || document.getElementById('list').style.display !== 'none') loadList();
+  pollThread();
+});
 </script>
 </body>
 </html>
