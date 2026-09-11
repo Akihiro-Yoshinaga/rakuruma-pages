@@ -185,10 +185,12 @@ function api(body) {
   function once(timeoutMs) {
     var ctl = timeoutMs ? new AbortController() : null;
     var timer = ctl ? setTimeout(function() { ctl.abort(); }, timeoutMs) : null;
-    return fetch(API_URL, { method:'POST', body: payload, signal: ctl ? ctl.signal : undefined }).then(function(r) { if (timer) clearTimeout(timer); return r.json(); }, function(e) { if (timer) clearTimeout(timer); throw e; });
+    return fetch(API_URL, { method:'POST', body: payload, signal: ctl ? ctl.signal : undefined }).then(function(r) { if (timer) clearTimeout(timer); return r.text(); }, function(e) { if (timer) clearTimeout(timer); throw e; })
+      .then(function(t) { try { return JSON.parse(t); } catch (e) { var err = new Error('Google側が混み合っています（応答が読めません）。数秒おいてもう一度'); err.html = true; throw err; } });
   }
-  if (!canRetry) return once(0);
-  return once(9000).catch(function() { return once(0); });
+  if (!canRetry) return once(0).catch(function(e) { if (e && e.html) { return new Promise(function(res) { setTimeout(res, 2000); }).then(function() { return once(0); }); } throw e; });
+  // 読み取り系：9秒で打ち切り→やり直し。応答がHTML（Google側の不調）なら2秒おいてもう一度
+  return once(9000).catch(function() { return once(0); }).catch(function(e) { if (e && e.html) { return new Promise(function(res) { setTimeout(res, 2000); }).then(function() { return once(0); }); } throw e; });
 }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
@@ -326,7 +328,7 @@ function openThread(it) {
     if (r.customer && it.customer) { it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo); }
     renderMsgs(it, r.messages || [], false);
     maybeProposeChange(it, r.messages || []);
-  }).catch(function() { document.getElementById('tRefresh').style.display = 'none'; if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">通信エラー。右上の更新か、開き直してください</div>'; });
+  }).catch(function(e) { document.getElementById('tRefresh').style.display = 'none'; if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc((e && e.message) || '通信エラー') + '</div><div class="sys" style="cursor:pointer;background:var(--navy);color:#fff" onclick="openThread(CUR)">もう一度読み込む</div>'; else toast('最新を取れませんでした（前回の内容を表示中）'); });
   if (!TEMPLATES) api({ op:'templates' }).then(function(r) { TEMPLATES = (r.ok && r.templates) || []; renderTpl(); }); else renderTpl();
 }
 // スレッドの直近表示を端末に残し、次に開いたとき一瞬で出す（裏で最新を取り直す）
@@ -735,17 +737,31 @@ document.getElementById('btnLink').onclick = function() {
   document.getElementById('q').value = CUR.displayName || ''; searchCust();
 };
 var searchTimer = null;
-document.getElementById('q').addEventListener('input', function() { clearTimeout(searchTimer); searchTimer = setTimeout(searchCust, 400); });
+document.getElementById('q').addEventListener('input', function() { clearTimeout(searchTimer); searchTimer = setTimeout(searchCust, 200); });
 var SEARCH_SEQ = 0;
 function searchCust() {
   var q = document.getElementById('q').value.trim();
   if (!q) { document.getElementById('hits').innerHTML = ''; return; }
   var seq = ++SEARCH_SEQ;
+  // まず手元の一覧（顧客リスト全員分の名前・電話・車名を含む）で即時に探す。見つからなければサーバーに聞く
+  var nq = normQ(q), dq = q.replace(/-/g, '');
+  var seen = {}, local = [];
+  ITEMS.concat(OTHERS).forEach(function(x) {
+    var c = x.customer; if (!c) return;
+    var key = c.row; if (seen[key]) return;
+    var ph = String(c.phone || '').replace(/-/g, '');
+    if (normQ(c.name).indexOf(nq) >= 0 || (dq && ph && ph.indexOf(dq) >= 0)) { seen[key] = 1; local.push({ row: c.row, name: c.name, phone: c.phone || '', car: c.car || '', uid: x.uid || '' }); }
+  });
+  if (local.length) { renderHits(local.slice(0, 10), q); return; }
   document.getElementById('hits').innerHTML = '<div style="color:#718096;padding:6px 0">「' + esc(q) + '」を顧客リストから検索中…</div>';
   api({ op:'search', q: q }).then(function(r) {
     if (seq !== SEARCH_SEQ) return; // 打ち直しで古い結果が後から来たときは捨てる
     if (!r.ok) { document.getElementById('hits').innerHTML = '<div style="color:#C05621;padding:6px 0">検索できませんでした：' + esc(r.error || '') + '</div>'; return; }
-    var hits = (r.ok && r.hits) || [];
+    renderHits((r.ok && r.hits) || [], q);
+  }).catch(function(e) { if (seq === SEARCH_SEQ) document.getElementById('hits').innerHTML = '<div style="color:#C05621;padding:6px 0">通信エラー。もう一度入力してください</div>'; });
+}
+function renderHits(hits, q) {
+  {
     document.getElementById('hits').innerHTML = hits.length ? hits.map(function(h) {
       return '<div class="hit"><div><b>' + esc(h.name) + '</b> ' + esc(h.car) + '<br><span style="color:#718096">' + esc(h.phone) + (h.uid ? '・LINE紐付け済み' : '') + '</span></div><span class="abtn" data-row="' + h.row + '" data-name="' + esc(h.name) + '">この人</span></div>';
     }).join('') : '<div style="color:#718096;padding:6px 0">「' + esc(q) + '」は該当なし（電話番号でも探せます）</div>';
@@ -758,7 +774,7 @@ function searchCust() {
         });
       };
     });
-  }).catch(function(e) { if (seq === SEARCH_SEQ) document.getElementById('hits').innerHTML = '<div style="color:#C05621;padding:6px 0">通信エラー。もう一度入力してください</div>'; });
+  }
 }
 document.getElementById('btnNew').onclick = function() {
   var name = prompt('お客様のお名前（姓 名）', document.getElementById('q').value.trim() || (CUR.displayName || ''));
