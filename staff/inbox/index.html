@@ -460,7 +460,8 @@ document.getElementById('btnDraft').onclick = function() {
   if (!CUR) return;
   var intent = document.getElementById('intent').value.trim();
   var btn = this; btn.disabled = true; btn.textContent = '作成中…';
-  api({ op:'draft', uid: CUR.uid, src: CUR.src, intent: intent }).then(function(r) {
+  var recent = (threadCacheGet(CUR.uid) || []).slice(-12).map(function(m) { return { dir: m.dir, kind: m.kind, text: m.text || '', at: m.at }; });
+  api({ op:'draft', uid: CUR.uid, src: CUR.src, intent: intent, recent: recent }).then(function(r) {
     btn.disabled = false; btn.textContent = 'AI生成';
     if (!r.ok) { alert('AI生成できませんでした: ' + (r.error || '')); return; }
     var ta = document.getElementById('text'); ta.value = r.text; autosize(); ta.focus();
