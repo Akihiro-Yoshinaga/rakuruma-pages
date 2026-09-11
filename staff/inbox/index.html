@@ -619,7 +619,7 @@ function proposeChange(it, auto) {
     } else {
       body.innerHTML = '<div><b>' + esc(r.event.title) + '</b> <span style="color:#718096">[' + esc(r.event.calendarName) + ']</span></div>'
         + '<div style="margin-top:4px">' + esc(fmtJa(r.event.start)) + '〜' + esc(r.event.end.slice(11)) + '　→　<b style="color:#C05621">' + esc(fmtJa(r.newStart)) + '</b>〜' + esc(r.newEnd.slice(11)) + '</div>'
-        + '<div style="margin-top:4px;font-size:12px;color:#718096">根拠：' + esc(r.reason) + (r.quote ? '（「' + esc(r.quote) + '」）' : '') + (r.event.recurring ? '　※繰り返し予定のこの回だけ動かします' : '') + '</div>';
+        + '<div style="margin-top:4px;font-size:12px;color:#718096">根拠：' + esc(r.reason) + (r.quote ? '（「' + esc(r.quote) + '」）' : '') + (r.event.recurring ? '　※繰り返し予定のこの回だけ動かします' : '') + '　※他のカレンダーに同じ題名・同じ日時の予定があれば一緒に動かします</div>';
       document.getElementById('chgTitleWrap').style.display = 'none';
       document.getElementById('chgApply').textContent = 'この内容で変更する';
     }
@@ -683,7 +683,7 @@ document.getElementById('chgApply').onclick = function() {
   api({ op:'changeApply', uid: target.uid, calendarId: CHG.event.calendarId, eventId: CHG.event.eventId, start: f(s1), end: f(e1), origStart: CHG.event.start, note: CHG.reason || '' }).then(function(r) {
     btn.textContent = 'この内容で変更する';
     if (!r.ok) { alert(r.error || '変更できませんでした'); return; }
-    toast('カレンダーを変更しました（' + r.before + ' → ' + r.after + '）' + (r.notified ? '・Chatworkに通知済み' : ''));
+    toast('カレンダーを変更しました（' + r.before + ' → ' + r.after + '）' + (r.also && r.also.length ? '・' + r.also.join('・') + 'のカレンダーも同時に移動' : '') + (r.notified ? '・Chatworkに通知済み' : ''));
     document.getElementById('changebox').style.display = 'none'; CHG = null;
   }).catch(function(e) { btn.textContent = 'この内容で変更する'; alert('通信エラー: ' + e); });
 };
