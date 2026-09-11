@@ -239,9 +239,12 @@ function loadBiz(silent) {
 function normQ(t) { return String(t || '').toLowerCase().replace(/[\s\u3000]+/g, '').replace(/[\u30a1-\u30f6]/g, function(c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); }); }
 function itemMatches(it, q) {
   var c = it.customer || {};
-  return [c.name, c.kana, c.car, c.phone, it.displayName, it.partner, it.lastText].some(function(v) { return normQ(v).indexOf(q) >= 0; });
+  return [c.name, c.contact, c.kana, c.car, c.phone, it.displayName, it.partner, it.lastText].some(function(v) { return normQ(v).indexOf(q) >= 0; });
 }
 // 車ごとのタグ：複数台なら「車名 車検 日付」を車ごとに。1台なら従来どおり
+// 表示名：LINE連絡先名（このLINEの相手）があればそれを優先。顧客本人は補足に出す
+function custLabel(it) { var c = it.customer; if (!c) return null; return (c.contact ? c.contact : c.name) + ' さん'; }
+function custNote(c) { return (c && c.contact && c.name) ? '顧客：' + c.name + ' さん' : ''; }
 function vehicleLine(c) {
   var vs = (c.vehicles && c.vehicles.length) ? c.vehicles : [{ car: c.car, shakenExpiry: c.shakenExpiry }];
   return vs.map(function(v) { return (v.car || '車名なし') + (v.shakenExpiry ? '（車検 ' + v.shakenExpiry + '）' : ''); }).join('・');
@@ -275,8 +278,9 @@ function renderList() {
   if (tabBiz) tabBiz.innerHTML = '工場・取引先' + (needBiz ? '<span class="tabbadge">' + needBiz + '</span>' : '');
   if (!items.length) { document.getElementById('rows').innerHTML = '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : 'まだ記録がありません')) + '</div>'; return; }
   document.getElementById('rows').innerHTML = items.map(function(it, i) {
-    var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
+    var name = (it.customer && it.customer.name) ? custLabel(it) : (it.partner || it.displayName || '（表示名なし）');
     var tags = '';
+    if (it.customer && it.customer.contact) tags += '<span class="tag t-done">' + esc(custNote(it.customer)) + '</span>';
     if (it.sched && it.sched.length) tags += '<span class="tag t-sched">⏰ ' + esc(String(it.sched[0].at).slice(5).replace(/^0/, '').replace('/0', '/')) + ' 送信予約' + (it.sched.length > 1 ? '×' + it.sched.length : '') + '</span>';
     if (it.src === 'biz') tags += '<span class="tag t-biz">工場・取引先</span>';
     else if (it.customer) tags += vehicleTags(it.customer); else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
@@ -322,9 +326,9 @@ function openThread(it) {
   }
   var cachedT = threadCacheGet(it.uid);
   if (cachedT) renderMsgs(it, cachedT, true); else document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
-  var name = (it.customer && it.customer.name) ? it.customer.name + ' さん' : (it.partner || it.displayName || '（表示名なし）');
+  var name = (it.customer && it.customer.name) ? custLabel(it) : (it.partner || it.displayName || '（表示名なし）');
   document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
-  document.getElementById('tSub').textContent = it.src === 'biz' ? '工場・取引先（ラクルマ ご依頼・相談）' : (it.customer ? vehicleLine(it.customer) : 'LINE表示名: ' + (it.displayName || '不明'));
+  document.getElementById('tSub').textContent = it.src === 'biz' ? '工場・取引先（ラクルマ ご依頼・相談）' : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
@@ -436,6 +440,7 @@ document.getElementById('btnSend').onclick = function() {
   var btn = this; var target = CUR; var sentText = text;
   ta.value = ''; autosize();
   showPending(esc(sentText));
+  setTimeout(function() { if (document.getElementById('pending') && CUR === target) { toast('送信の応答が遅いので確認しています…'); openThread(target); } }, 25000);
   withGrace(((target.customer && target.customer.name) || target.partner || target.displayName || '') + ' へ送信', function() {
   btn.disabled = true;
   api({ op:'send', uid: target.uid, src: target.src, text: sentText }).then(function(r) {
