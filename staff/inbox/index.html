@@ -117,7 +117,7 @@
 
 <div id="thread">
   <div class="hdrwrap">
-  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
+  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
   <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -576,6 +576,22 @@ function proposeChange(it, auto) {
   }).catch(function(e) { btnC.textContent = '予定変更・作成'; if (!auto) { st.textContent = ''; body.textContent = '通信エラー: ' + e; } });
 }
 document.getElementById('btnChange').onclick = function() { if (CUR) proposeChange(CUR, false); };
+// 見出しの名前をタップ→顧客リストの「名前」を変更（LINE表示名やアプリ側のあだ名は変わらない）
+document.getElementById('tName').onclick = function() {
+  if (!CUR || CUR.src !== 'cust') return;
+  if (!CUR.customer) { alert('顧客リストに紐付いていない人の名前は変えられません。先に「顧客リストに紐付け」をしてください'); return; }
+  var cur = String(CUR.customer.name || '');
+  var name = prompt('お客様の名前（顧客リストに保存されます。姓 名 の形で）', cur);
+  if (name === null) return; name = name.trim(); if (!name || name === cur) return;
+  var target = CUR;
+  api({ op:'rename', uid: target.uid, name: name }).then(function(r) {
+    if (!r.ok) { alert(r.error || '変更できませんでした'); return; }
+    target.customer.name = r.name; document.getElementById('tName').textContent = r.name + ' さん';
+    ITEMS.concat(OTHERS).forEach(function(x) { if (x.uid === target.uid && x.customer) x.customer.name = r.name; });
+    try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
+    renderList(); toast('名前を変更しました（' + r.old + ' → ' + r.name + '・顧客リスト' + r.rows.length + '行）');
+  }).catch(function(e) { alert('通信エラー: ' + e); });
+};
 document.getElementById('chgManual').onclick = function() {
   if (!CUR || !CUR.customer) return;
   var c = CUR.customer; var sei = String(c.name || '').trim().split(/[\s\u3000]+/)[0];
