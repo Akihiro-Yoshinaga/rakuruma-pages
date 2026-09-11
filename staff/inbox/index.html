@@ -347,7 +347,14 @@ function openThread(it) {
     document.getElementById('tRefresh').style.display = 'none';
     if (!r.ok) { if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error) + '</div>'; return; }
     threadCachePut(it.uid, r.messages || []);
-    if (r.customer && it.customer) { it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo); }
+    if (r.customer && it.customer) {
+      // サーバーの最新の顧客情報で見出しを更新（名前・LINE連絡先名・車・メモ）。一覧のキャッシュが古くても正しく出す
+      it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo);
+      if (r.customer.name) it.customer.name = r.customer.name;
+      it.customer.contact = r.customer.contact || ''; it.customer.car = r.customer.car || it.customer.car; it.customer.vehicles = r.customer.vehicles || it.customer.vehicles; it.customer.teiki = r.customer.teiki || it.customer.teiki;
+      document.getElementById('tName').innerHTML = (it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(custLabel(it));
+      document.getElementById('tSub').textContent = [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・');
+    }
     renderMsgs(it, r.messages || [], false);
     maybeProposeChange(it, r.messages || []);
   }).catch(function(e) { document.getElementById('tRefresh').style.display = 'none'; if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc((e && e.message) || '通信エラー') + '</div><div class="sys" style="cursor:pointer;background:var(--navy);color:#fff" onclick="openThread(CUR)">もう一度読み込む</div>'; else toast('最新を取れませんでした（前回の内容を表示中）'); });
