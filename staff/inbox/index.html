@@ -262,7 +262,7 @@ function renderList() {
     } else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
     if (it.noLine) tags += '<span class="tag t-new">LINE未連携</span>';
     else if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
-    else if (!it.needsReply) tags += '<span class="tag t-done">対応済み</span>';
+    // 「対応済み」のタグは出さない（要対応は赤丸で分かる・2026-09-11 吉永さん指示）
     var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
     return '<div class="row ' + (it.needsReply ? 'need' : 'done') + (CUR && CUR.uid === it.uid ? ' sel' : '') + '" data-i="' + source.indexOf(it) + '" data-uid="' + esc(it.uid) + '">'
       + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
