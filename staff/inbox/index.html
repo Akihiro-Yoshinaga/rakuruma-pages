@@ -48,7 +48,8 @@
   .rowwrap { position:relative; overflow:hidden; }
   .rowwrap .row { position:relative; z-index:1; background:#fff; transition:transform .15s ease-out; }
   .rowwrap .row.swiping { transition:none; }
-  .hideBtn { position:absolute; top:0; right:0; bottom:0; width:96px; background:#E53E3E; color:#fff; font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .hideBtn { position:absolute; top:0; right:0; bottom:0; width:96px; background:#E53E3E; color:#fff; font-size:14px; font-weight:800; display:none; align-items:center; justify-content:center; cursor:pointer; }
+  .rowwrap.swiping .hideBtn, .rowwrap.open .hideBtn { display:flex; } /* スワイプ中と開いた行だけ描く（対応済み行は半透明なので常時描くと赤が透ける） */
   .t-hidden { background:#FDE8E8; color:#B42318; font-weight:700; }
   .hdr .sub { font-size:12px; color:#D9BC7A; font-weight:600; }
   .msgs { padding:12px 8px 150px; display:flex; flex-direction:column; gap:16px; background:var(--bg); min-height:60vh; }
@@ -258,8 +259,15 @@ function loadList(manual) {
   }).catch(function(e) { if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">通信エラー: ' + esc(e) + '</div>'; listDone_('更新できませんでした：' + ((e && e.message) || '通信エラー')); });
 }
 function loadBiz(silent) {
+  // 前回の一覧を先に出す（読み込みに数秒かかるため）。失敗しても「読み込み中…」のままにしない（2026-09-15 吉永さん指摘）
+  if (BIZ === null) { try { var cb = JSON.parse(localStorage.getItem('rakuruma_inbox_biz') || 'null'); if (cb && cb.items) { BIZ = cb.items; renderList(); silent = true; } } catch(e) {} }
   if (!silent) document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>';
-  api({ op:'listBiz' }).then(function(r) { if (!r.ok || !Array.isArray(r.items)) { if (TAB === 'biz' && !BIZ) document.getElementById('rows').innerHTML = '<div class="empty">読み込めませんでした。右上の「更新」を押してください</div>'; return; } BIZ = r.items; renderList(); });
+  function fail(msg) { if (TAB === 'biz' && !BIZ) document.getElementById('rows').innerHTML = '<div class="empty">読み込めませんでした（' + esc(msg || '') + '）。右上の「更新」を押してください</div>'; listDone_('工場・取引先を更新できませんでした：' + (msg || '')); }
+  api({ op:'listBiz' }).then(function(r) {
+    if (!r.ok || !Array.isArray(r.items)) { fail(r.error || '応答が不正'); return; }
+    BIZ = r.items; try { localStorage.setItem('rakuruma_inbox_biz', JSON.stringify({ at: Date.now(), items: BIZ })); } catch(e) {}
+    renderList(); if (TAB === 'biz') listDone_('更新しました');
+  }).catch(function(e) { fail((e && e.message) || String(e)); });
 }
 
 function normQ(t) { return String(t || '').toLowerCase().replace(/[\s\u3000]+/g, '').replace(/[\u30a1-\u30f6]/g, function(c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); }); }
@@ -327,7 +335,7 @@ function renderList() {
 }
 // 一覧の行を右→左にスワイプすると「非表示」ボタンが出る。ボタンを押すと一覧から消える（サーバーに印を残すのでiPhoneとPCで揃う）
 var SWIPE_OPEN = null, SWIPE_JUST = false;
-function swipeClose() { if (SWIPE_OPEN) { SWIPE_OPEN.style.transform = ''; SWIPE_OPEN = null; } }
+function swipeClose() { if (SWIPE_OPEN) { SWIPE_OPEN.style.transform = ''; SWIPE_OPEN.parentNode.classList.remove('open'); SWIPE_OPEN = null; } }
 function hideItem(it) {
   if (!it || !it.uid) return;
   swipeClose();
@@ -348,18 +356,18 @@ function hideItem(it) {
   rows.addEventListener('touchmove', function(e) {
     if (!row) return;
     var t = e.touches[0]; var dx = t.clientX - sx, dy = t.clientY - sy;
-    if (horiz === null) { if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return; horiz = Math.abs(dx) > Math.abs(dy); if (!horiz) { row = null; return; } row.classList.add('swiping'); }
+    if (horiz === null) { if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return; horiz = Math.abs(dx) > Math.abs(dy); if (!horiz) { row = null; return; } row.classList.add('swiping'); row.parentNode.classList.add('swiping'); }
     e.preventDefault();
     var x = Math.max(-96, Math.min(0, base + dx));
     row.style.transform = 'translateX(' + x + 'px)';
   }, { passive: false });
   rows.addEventListener('touchend', function(e) {
     if (!row) return;
-    var r = row; row = null; r.classList.remove('swiping');
+    var r = row; row = null; r.classList.remove('swiping'); r.parentNode.classList.remove('swiping');
     if (!horiz) return;
     var m = /translateX\((-?[\d.]+)px\)/.exec(r.style.transform || ''); var x = m ? parseFloat(m[1]) : 0;
     SWIPE_JUST = true; setTimeout(function() { SWIPE_JUST = false; }, 350);
-    if (x < -48) { r.style.transform = 'translateX(-96px)'; SWIPE_OPEN = r; } else { r.style.transform = ''; if (SWIPE_OPEN === r) SWIPE_OPEN = null; }
+    if (x < -48) { r.style.transform = 'translateX(-96px)'; r.parentNode.classList.add('open'); SWIPE_OPEN = r; } else { r.style.transform = ''; r.parentNode.classList.remove('open'); if (SWIPE_OPEN === r) SWIPE_OPEN = null; }
   });
 })();
 
@@ -831,7 +839,7 @@ window.addEventListener('popstate', function() {
 })();
 // 顧客管理リンクは押した瞬間に「いま開いているトーク」の行番号で作り直す（別人の詳細が開いた報告への保険・2026-09-15）
 document.getElementById('tCust').onclick = function() { if (CUR && CUR.customer && CUR.customer.row) this.href = MAIN_GAS_URL + '?action=customerDetail&row=' + CUR.customer.row + '&token=' + encodeURIComponent(TOKEN); };
-document.getElementById('reload').onclick = function(e) { e.preventDefault(); if (LIST_MANUAL) return; loadList(true); };
+document.getElementById('reload').onclick = function(e) { e.preventDefault(); if (LIST_MANUAL) return; if (TAB === 'biz') { LIST_MANUAL = true; var rb1 = document.getElementById('reload'); rb1.textContent = '更新中…'; rb1.style.opacity = '.7'; loadBiz(true); } else loadList(true); };
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
   el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); var sq = document.getElementById('search'); if (sq.value) { sq.value = ''; } /* 検索中にタブを押したら検索を解除して切り替える（2026-09-15 吉永さん指摘「工場を押しても開かない」） */ renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
 });
