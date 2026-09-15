@@ -364,6 +364,7 @@ function hideItem(it) {
 })();
 
 function openThread(it) {
+  if (!CUR || CUR.uid !== it.uid) { var intent0 = document.getElementById('intent'); if (intent0) intent0.value = ''; } // 別の人を開いたらAI生成の指示文をリセット（2026-09-15 吉永さん指摘）
   CUR = it;
   if (it.hidden && it.uid) { it.hidden = false; api({ op:'unhide', uid: it.uid, src: it.src }).catch(function(){}); }
   // スマホ：トークを開いたら履歴を1つ積む → iPhoneの端からのスワイプ（ブラウザの「戻る」）で一覧に戻れる
