@@ -423,6 +423,7 @@ function openThread(it) {
       // サーバーの最新の顧客情報で見出しを更新（名前・LINE連絡先名・車・メモ）。一覧のキャッシュが古くても正しく出す
       it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo);
       if (r.customer.name) it.customer.name = r.customer.name;
+      if (r.customer.row) { it.customer.row = r.customer.row; document.getElementById('tCust').href = MAIN_GAS_URL + '?action=customerDetail&row=' + r.customer.row + '&token=' + encodeURIComponent(TOKEN); } // 顧客リストの行番号もサーバーの最新に合わせる（一覧キャッシュが古いと別人の詳細が開く）
       it.customer.contact = r.customer.contact || ''; it.customer.company = r.customer.company || ''; it.customer.car = r.customer.car || it.customer.car; it.customer.vehicles = r.customer.vehicles || it.customer.vehicles; it.customer.teiki = r.customer.teiki || it.customer.teiki;
       document.getElementById('tName').innerHTML = (it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(custLabel(it));
       document.getElementById('tSub').textContent = [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・');
@@ -830,7 +831,7 @@ window.addEventListener('popstate', function() {
 })();
 document.getElementById('reload').onclick = function(e) { e.preventDefault(); if (LIST_MANUAL) return; loadList(true); };
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
-  el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
+  el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); var sq = document.getElementById('search'); if (sq.value) { sq.value = ''; } /* 検索中にタブを押したら検索を解除して切り替える（2026-09-15 吉永さん指摘「工場を押しても開かない」） */ renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
 });
 document.getElementById('search').addEventListener('input', function() { if (this.value.trim() && BIZ === null) loadBiz(false); renderList(); });
 document.getElementById('searchClear').onclick = function() { var i = document.getElementById('search'); i.value = ''; renderList(); i.focus(); };
