@@ -41,6 +41,15 @@
   .hdrwrap { position:sticky; top:0; z-index:5; }
   .hdr { background:var(--navy); color:#fff; padding:12px 14px; display:flex; align-items:center; gap:10px; }
   .hdr .nm { font-size:17px; font-weight:800; }
+  /* 戻る「‹」は押せる範囲を44px角以上に（2026-09-15 吉永さん指摘：小さくて押しづらい） */
+  .hdr .back { font-size:30px; font-weight:800; line-height:1; min-width:44px; min-height:44px; margin:-10px 0 -10px -10px; padding:0 8px 4px 6px; display:flex; align-items:center; justify-content:center; cursor:pointer; border-radius:8px; }
+  .hdr .back:active { background:rgba(255,255,255,.18); }
+  /* 一覧の右→左スワイプで「非表示」ボタンが出る（LINEと同じ。新着が来ると戻る） */
+  .rowwrap { position:relative; overflow:hidden; }
+  .rowwrap .row { position:relative; z-index:1; background:#fff; transition:transform .15s ease-out; }
+  .rowwrap .row.swiping { transition:none; }
+  .hideBtn { position:absolute; top:0; right:0; bottom:0; width:96px; background:#E53E3E; color:#fff; font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .t-hidden { background:#FDE8E8; color:#B42318; font-weight:700; }
   .hdr .sub { font-size:12px; color:#D9BC7A; font-weight:600; }
   .msgs { padding:12px 8px 150px; display:flex; flex-direction:column; gap:16px; background:var(--bg); min-height:60vh; }
   .mrow { display:flex; align-items:flex-end; gap:8px; }
@@ -283,6 +292,7 @@ function renderList() {
   var source = q ? ITEMS.concat(BIZ || []).concat(OTHERS) : ((TAB === 'biz') ? (BIZ || []) : ITEMS);
   var items = source.filter(function(it) {
     if (q) return itemMatches(it, q);
+    if (it.hidden) return false; // 非表示（検索では出す）
     if (TAB === 'need') return it.needsReply;
     return true;
   });
@@ -301,19 +311,63 @@ function renderList() {
     if (it.sched && it.sched.length) tags += '<span class="tag t-sched">⏰ ' + esc(String(it.sched[0].at).slice(5).replace(/^0/, '').replace('/0', '/')) + ' 送信予約' + (it.sched.length > 1 ? '×' + it.sched.length : '') + '</span>';
     if (it.src === 'biz') tags += '<span class="tag t-biz">工場・取引先</span>';
     else if (it.customer) tags += vehicleTags(it.customer); else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
+    if (it.hidden) tags += '<span class="tag t-hidden">非表示中（開くと戻ります）</span>';
     if (it.noLine) tags += '<span class="tag t-new">LINE未連携</span>';
     else if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
     // 「対応済み」のタグは出さない（要対応は赤丸で分かる・2026-09-11 吉永さん指示）
     var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
-    return '<div class="row ' + (it.needsReply ? 'need' : 'done') + (CUR && CUR.uid === it.uid ? ' sel' : '') + '" data-i="' + source.indexOf(it) + '" data-uid="' + esc(it.uid) + '">'
+    return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (CUR && CUR.uid === it.uid ? ' sel' : '') + '" data-i="' + source.indexOf(it) + '" data-uid="' + esc(it.uid) + '">'
       + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
-      + '<div class="m">' + (it.noLine ? '顧客リストにLINEが未登録。開いてLINE側の名前を選ぶと送れます' : it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : '顧客リスト未登録。開いて紐付けてから送れます') : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>';
+      + '<div class="m">' + (it.noLine ? '顧客リストにLINEが未登録。開いてLINE側の名前を選ぶと送れます' : it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : '顧客リスト未登録。開いて紐付けてから送れます') : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>'
+      + (it.hidden || it.noLog || it.noLine ? '' : '<div class="hideBtn" data-i="' + source.indexOf(it) + '">非表示</div>') + '</div>';
   }).join('');
-  Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ if (SWIPE_JUST) return; if (SWIPE_OPEN) { swipeClose(); return; } openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
+  Array.prototype.forEach.call(document.querySelectorAll('.hideBtn'), function(el) { el.onclick = function(e){ e.stopPropagation(); hideItem(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
+  SWIPE_OPEN = null;
 }
+// 一覧の行を右→左にスワイプすると「非表示」ボタンが出る。ボタンを押すと一覧から消える（サーバーに印を残すのでiPhoneとPCで揃う）
+var SWIPE_OPEN = null, SWIPE_JUST = false;
+function swipeClose() { if (SWIPE_OPEN) { SWIPE_OPEN.style.transform = ''; SWIPE_OPEN = null; } }
+function hideItem(it) {
+  if (!it || !it.uid) return;
+  swipeClose();
+  it.hidden = true; renderList();
+  try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
+  toast('非表示にしました（新着が来ると戻ります）');
+  api({ op:'hide', uid: it.uid, src: it.src }).then(function(r) { if (!r.ok) { it.hidden = false; renderList(); alert(r.error || '非表示にできませんでした'); } }).catch(function() { it.hidden = false; renderList(); toast('通信に失敗したので戻しました'); });
+}
+(function() {
+  var rows = document.getElementById('rows'); var sx = 0, sy = 0, row = null, horiz = null, base = 0;
+  rows.addEventListener('touchstart', function(e) {
+    if (isDesktop()) return;
+    var t = e.touches[0]; row = e.target.closest ? e.target.closest('.rowwrap .row') : null;
+    if (!row || !row.parentNode.querySelector('.hideBtn')) { row = null; return; }
+    sx = t.clientX; sy = t.clientY; horiz = null; base = (SWIPE_OPEN === row) ? -96 : 0;
+    if (SWIPE_OPEN && SWIPE_OPEN !== row) swipeClose();
+  }, { passive: true });
+  rows.addEventListener('touchmove', function(e) {
+    if (!row) return;
+    var t = e.touches[0]; var dx = t.clientX - sx, dy = t.clientY - sy;
+    if (horiz === null) { if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return; horiz = Math.abs(dx) > Math.abs(dy); if (!horiz) { row = null; return; } row.classList.add('swiping'); }
+    e.preventDefault();
+    var x = Math.max(-96, Math.min(0, base + dx));
+    row.style.transform = 'translateX(' + x + 'px)';
+  }, { passive: false });
+  rows.addEventListener('touchend', function(e) {
+    if (!row) return;
+    var r = row; row = null; r.classList.remove('swiping');
+    if (!horiz) return;
+    var m = /translateX\((-?[\d.]+)px\)/.exec(r.style.transform || ''); var x = m ? parseFloat(m[1]) : 0;
+    SWIPE_JUST = true; setTimeout(function() { SWIPE_JUST = false; }, 350);
+    if (x < -48) { r.style.transform = 'translateX(-96px)'; SWIPE_OPEN = r; } else { r.style.transform = ''; if (SWIPE_OPEN === r) SWIPE_OPEN = null; }
+  });
+})();
 
 function openThread(it) {
   CUR = it;
+  if (it.hidden && it.uid) { it.hidden = false; api({ op:'unhide', uid: it.uid, src: it.src }).catch(function(){}); }
+  // スマホ：トークを開いたら履歴を1つ積む → iPhoneの端からのスワイプ（ブラウザの「戻る」）で一覧に戻れる
+  if (!isDesktop() && !(history.state && history.state.inboxThread)) { try { history.pushState({ inboxThread: 1 }, ''); } catch (e) {} }
   document.body.classList.remove('nocur');
   document.getElementById('list').style.display = 'none';
   document.getElementById('thread').style.display = 'block';
@@ -749,12 +803,30 @@ document.getElementById('btnDone').onclick = function() {
   api({ op:'done', uid: CUR.uid }).then(function(r) { if (r.ok) { toast('対応済みにしました'); CUR.needsReply = false; CUR.unread = 0; } else alert(r.error || '失敗'); });
 };
 
-document.getElementById('back').onclick = function() {
+function showList() {
   document.getElementById('thread').style.display = 'none';
   document.getElementById('list').style.display = 'block';
   renderList();
   loadList(); // 一覧に戻ったら新着を取り直す
+}
+document.getElementById('back').onclick = function() {
+  if (!isDesktop() && history.state && history.state.inboxThread) { try { history.back(); return; } catch (e) {} }
+  showList();
 };
+window.addEventListener('popstate', function() {
+  if (isDesktop()) return;
+  if (document.getElementById('thread').style.display !== 'none') showList();
+});
+// トーク画面を左端から右へスワイプ → 一覧へ戻る（2026-09-15 吉永さん要望。Safariの端スワイプは上の履歴で拾う）
+(function() {
+  var th = document.getElementById('thread'); var sx = 0, sy = 0, on = false;
+  th.addEventListener('touchstart', function(e) { var t = e.touches[0]; on = !isDesktop() && t.clientX <= 40; sx = t.clientX; sy = t.clientY; }, { passive: true });
+  th.addEventListener('touchend', function(e) {
+    if (!on) return; on = false;
+    var t = e.changedTouches[0]; var dx = t.clientX - sx, dy = t.clientY - sy;
+    if (dx > 70 && Math.abs(dy) < 60) document.getElementById('back').onclick();
+  });
+})();
 document.getElementById('reload').onclick = function(e) { e.preventDefault(); if (LIST_MANUAL) return; loadList(true); };
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
   el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
