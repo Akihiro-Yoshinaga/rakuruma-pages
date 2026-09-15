@@ -829,6 +829,8 @@ window.addEventListener('popstate', function() {
     if (dx > 70 && Math.abs(dy) < 60) document.getElementById('back').onclick();
   });
 })();
+// 顧客管理リンクは押した瞬間に「いま開いているトーク」の行番号で作り直す（別人の詳細が開いた報告への保険・2026-09-15）
+document.getElementById('tCust').onclick = function() { if (CUR && CUR.customer && CUR.customer.row) this.href = MAIN_GAS_URL + '?action=customerDetail&row=' + CUR.customer.row + '&token=' + encodeURIComponent(TOKEN); };
 document.getElementById('reload').onclick = function(e) { e.preventDefault(); if (LIST_MANUAL) return; loadList(true); };
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
   el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); var sq = document.getElementById('search'); if (sq.value) { sq.value = ''; } /* 検索中にタブを押したら検索を解除して切り替える（2026-09-15 吉永さん指摘「工場を押しても開かない」） */ renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
