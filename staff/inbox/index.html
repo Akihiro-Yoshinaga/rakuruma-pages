@@ -175,33 +175,41 @@ var TOKEN = '', STAFF = '';
   else { try { TOKEN = localStorage.getItem('rakuruma_staff_token') || ''; } catch(e) {} }
   if (!TOKEN) { window.location.replace('/staff/'); }
 })();
-var API_URL = 'https://script.google.com/macros/s/AKfycbxdfdeYlUCvEH5wB4zLHjzGWRoJaFqX0Y0F0pSNrpURcYYLH_rlvlHfv-cLLXfS41bqNw/exec'; /* 受信箱専用GAS（06_tools/inbox-gas）2026-09-09 */ var MAIN_GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+var API_URL_DIRECT = 'https://script.google.com/macros/s/AKfycbxdfdeYlUCvEH5wB4zLHjzGWRoJaFqX0Y0F0pSNrpURcYYLH_rlvlHfv-cLLXfS41bqNw/exec'; /* 受信箱専用GAS（06_tools/inbox-gas）2026-09-09 */
+/* 2026-09-15: 楽天モバイル→script.google.com が平均18秒・最大76秒で詰まる（VPSからは1.2秒）ため、さくらVPSの中継（Caddy＋Node・~/rakuruma-bot/inbox-proxy）を優先し、中継が落ちているときだけ直接GASへ */
+var API_URL = 'https://133-167-93-192.sslip.io/'; var MAIN_GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 var ITEMS = [], OTHERS = [], TAB = 'all', CUR = null, TEMPLATES = null; // 2026-09-10 「未対応」タブは廃止（未対応は赤丸とタブのバッジで示す）
 
-// 読み取り系は9秒で打ち切って1回だけやり直す（GAS側でたまに30〜40秒止まることがある。送信系はやり直さない）
+// 読み取り系は25秒で打ち切って計3回まで（GAS側でたまに30〜40秒止まることがある。送信系は基本やり直さない）
 var API_RETRY_OPS = { list:1, listBiz:1, thread:1, templates:1, scheduleList:1, search:1 };
 function api(body) {
   body.action = 'inbox'; body.token = TOKEN;
   var payload = JSON.stringify(body);
   var canRetry = !!API_RETRY_OPS[body.op] && typeof AbortController !== 'undefined';
-  function once(timeoutMs) {
+  function once(url, timeoutMs) {
     var ctl = timeoutMs ? new AbortController() : null;
     var timer = ctl ? setTimeout(function() { ctl.abort(); }, timeoutMs) : null;
-    return fetch(API_URL, { method:'POST', body: payload, signal: ctl ? ctl.signal : undefined }).then(function(r) { if (timer) clearTimeout(timer); return r.text(); }, function(e) { if (timer) clearTimeout(timer); throw e; })
+    return fetch(url, { method:'POST', body: payload, signal: ctl ? ctl.signal : undefined }).then(function(r) { if (timer) clearTimeout(timer); return r.text(); }, function(e) { if (timer) clearTimeout(timer); throw e; })
       .then(function(t) { try { return JSON.parse(t); } catch (e) { var err = new Error('Google側が混み合っています（応答が読めません）。数秒おいてもう一度'); err.html = true; throw err; } });
   }
-  // Google側の不調（応答がHTML）は数秒〜数十秒で回復することが多いので、3秒・6秒おいて計3回まで試す。
-  // 途中で打ち切って投げ直すと実行が積み上がって余計に遅くなるため、打ち切りは25秒と長めにし、読み取り系だけ
   function wait(ms) { return new Promise(function(res) { setTimeout(res, ms); }); }
+  function retryable(e) { return (e && e.html) || (e && e.name === 'AbortError') || (e && /Failed to fetch|NetworkError|Load failed/.test(String(e.message || e))); }
+  // 1回目・2回目は中継（VPS）、3回目は直接GAS。中継が落ちている（ネットワーク失敗）ときは待たずにすぐ直接GASへ
   function attempt(n, timeoutMs) {
-    return once(timeoutMs).catch(function(e) {
-      var retryable = (e && e.html) || (e && e.name === 'AbortError') || (e && /Failed to fetch|NetworkError|Load failed/.test(String(e.message || e)));
-      if (retryable && n < 3) return wait(n === 1 ? 3000 : 6000).then(function() { return attempt(n + 1, 0); });
+    var url = n < 3 ? API_URL : API_URL_DIRECT;
+    return once(url, timeoutMs).catch(function(e) {
+      if (!retryable(e)) throw e;
+      var netFail = e && e.name !== 'AbortError' && !e.html;
+      if (canRetry) {
+        if (n < 3) return wait(netFail ? 0 : (n === 1 ? 3000 : 6000)).then(function() { return attempt(netFail ? 3 : n + 1, 0); });
+        throw e;
+      }
+      // 送信系：中継に届かなかった（ネットワーク失敗）ときだけ直接GASへ1回。GASまで届いて応答がHTMLの場合は実行済みの可能性があるので投げ直さない
+      if (n === 1 && netFail) return once(API_URL_DIRECT, 0);
       throw e;
     });
   }
-  if (!canRetry) return attempt(1, 0);
-  return attempt(1, 25000);
+  return attempt(1, canRetry ? 25000 : 0);
 }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
