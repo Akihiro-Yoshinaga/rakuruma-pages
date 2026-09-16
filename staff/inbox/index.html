@@ -51,6 +51,9 @@
   .hideBtn { position:absolute; top:0; right:0; bottom:0; width:96px; background:#E53E3E; color:#fff; font-size:14px; font-weight:800; display:none; align-items:center; justify-content:center; cursor:pointer; }
   .rowwrap.swiping .hideBtn, .rowwrap.open .hideBtn { display:flex; } /* スワイプ中と開いた行だけ描く（対応済み行は半透明なので常時描くと赤が透ける） */
   .t-hidden { background:#FDE8E8; color:#B42318; font-weight:700; }
+  .bf { display:flex; align-items:flex-start; gap:8px; margin-top:6px; }
+  .bf > span { flex:0 0 64px; font-size:12px; color:#718096; padding-top:9px; }
+  .bf input, .bf textarea { flex:1; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; font-family:inherit; min-width:0; }
   .hdr .sub { font-size:12px; color:#D9BC7A; font-weight:600; }
   .msgs { padding:12px 8px 150px; display:flex; flex-direction:column; gap:16px; background:var(--bg); min-height:60vh; }
   .mrow { display:flex; align-items:flex-end; gap:8px; }
@@ -130,7 +133,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
@@ -144,6 +147,20 @@
     <div id="chgBody" style="margin-top:6px;font-size:14px;line-height:1.5"></div>
     <div id="chgEdit" style="display:none;margin-top:6px"><div id="chgTitleWrap" style="display:none;margin-bottom:6px"><span style="font-size:12px;color:#718096">予定名</span><input id="chgTitle" style="width:100%;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;margin-top:4px"></div><span style="font-size:12px;color:#718096">新しい日時</span><div style="display:flex;gap:8px;margin-top:4px"><input type="date" id="chgDate" style="flex:1"><input type="time" id="chgTime" style="flex:1"></div></div>
     <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="chgApply" style="display:none">この内容で変更する</span><span class="abtn" id="chgManual">手で新しい予定を作る</span><span class="abtn" id="chgClose">閉じる</span></div>
+  </div>
+  <div id="bookbox" class="linkbox" style="display:none;background:#EEF7FF;border-color:#2B6CB0">
+    <b>予約登録の下書き</b> <span id="bookStatus" style="color:#718096"></span>
+    <div style="font-size:12px;color:#718096;margin-top:2px">やりとりからAIが抜き出した内容です。直してから「予約登録ページを開く」を押すと、提携工場の経路で入力済みの登録画面が開きます（登録ボタンはそちらで）</div>
+    <div id="bookForm" style="display:none;margin-top:8px;display:none">
+      <div class="bf"><span>工場名</span><input id="bkPartner"></div>
+      <div class="bf"><span>訪問日時</span><input id="bkDate" type="datetime-local"></div>
+      <div class="bf"><span>車種</span><input id="bkCar" placeholder="例：トヨタ プリウス"></div>
+      <div class="bf"><span>作業内容</span><input id="bkMenu" placeholder="例：ドラレコ取付"></div>
+      <div class="bf"><span>作業場所</span><input id="bkAddr" placeholder="住所・引取先（分かれば）"></div>
+      <div class="bf"><span>備考</span><textarea id="bkNote" rows="3"></textarea></div>
+      <div id="bkSummary" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="bookOpen" style="display:none">予約登録ページを開く（入力済み）</span><span class="abtn" id="bookClose">閉じる</span></div>
   </div>
   <div id="memobox" class="linkbox" style="display:none;background:#F3FBF4;border-color:#38A169">
     <b>メモに残す</b> <span id="memoBasis" style="color:#718096"></span>
@@ -414,6 +431,8 @@ function openThread(it) {
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
   document.getElementById('btnMemo').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
   document.getElementById('btnChange').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
+  document.getElementById('btnBook').style.display = (it.src === 'biz') ? '' : 'none';
+  document.getElementById('bookbox').style.display = 'none';
   document.getElementById('memobox').style.display = 'none';
   document.getElementById('changebox').style.display = 'none';
   CHG = null;
@@ -700,6 +719,40 @@ function proposeChange(it, auto) {
   }).catch(function(e) { btnC.textContent = '予定変更・作成'; if (!auto) { st.textContent = ''; body.textContent = '通信エラー: ' + e; } });
 }
 document.getElementById('btnChange').onclick = function() { if (CUR) proposeChange(CUR, false); };
+// 工場・取引先トーク → 予約登録の下書き（2026-09-17）。AIが抜き出し→人が直す→予約登録ページを入力済みで開く
+document.getElementById('btnBook').onclick = function() { if (CUR) bookingDraft(CUR); };
+document.getElementById('bookClose').onclick = function() { document.getElementById('bookbox').style.display = 'none'; };
+function bookingDraft(it) {
+  var box = document.getElementById('bookbox'), st = document.getElementById('bookStatus'), form = document.getElementById('bookForm'), btn = document.getElementById('btnBook');
+  box.style.display = 'block'; form.style.display = 'none'; document.getElementById('bookOpen').style.display = 'none';
+  st.textContent = '（やりとりを読んでいます… 10〜20秒）'; btn.textContent = '読込中…';
+  revealBox(box);
+  api({ op:'bookingDraft', uid: it.uid }).then(function(r) {
+    btn.textContent = '予約登録';
+    if (CUR !== it) return;
+    if (!r.ok) { st.textContent = ''; document.getElementById('bkSummary').textContent = ''; form.style.display = 'none'; alert(r.error || '下書きを作れませんでした'); return; }
+    var d = r.draft || {};
+    document.getElementById('bkPartner').value = r.partner || it.partner || '';
+    document.getElementById('bkDate').value = d.visitDate || '';
+    document.getElementById('bkCar').value = d.car || '';
+    document.getElementById('bkMenu').value = d.menu || '';
+    document.getElementById('bkAddr').value = d.address || '';
+    var note = d.note || '';
+    if (d.count > 1) note = (note ? note + '\n' : '') + '台数：' + d.count + '台' + (d.cars && d.cars.length ? '（' + d.cars.join('／') + '）' : '') + '。2台目以降は登録画面の「2台目以降」に入れる';
+    document.getElementById('bkNote').value = note;
+    document.getElementById('bkSummary').textContent = (d.summary ? '要約：' + d.summary : '') + (d.confidence === 'low' ? '（自信なし・要確認）' : '');
+    st.textContent = r.partner ? '' : '（この連絡先に取引先名が未設定です。工場名を入れてください）';
+    form.style.display = 'block'; document.getElementById('bookOpen').style.display = '';
+    if (!r.partner) document.getElementById('bkPartner').focus();
+  }).catch(function(e) { btn.textContent = '予約登録'; st.textContent = ''; alert('通信エラー: ' + ((e && e.message) || e)); });
+}
+document.getElementById('bookOpen').onclick = function() {
+  var d = { partner: document.getElementById('bkPartner').value.trim(), visitDate: document.getElementById('bkDate').value, car: document.getElementById('bkCar').value.trim(), menu: document.getElementById('bkMenu').value.trim(), address: document.getElementById('bkAddr').value.trim(), note: document.getElementById('bkNote').value.trim() };
+  if (!d.partner) { alert('工場名を入れてください'); return; }
+  if (!d.visitDate) { if (!confirm('訪問日時が空です。登録画面で入れますか？')) return; }
+  var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  window.open(MAIN_GAS_URL + '?action=upload&token=' + encodeURIComponent(TOKEN) + '&prefill=' + b64, '_blank');
+};
 // 見出しの名前をタップ→顧客リストの「名前」を変更（LINE表示名やアプリ側のあだ名は変わらない）
 document.getElementById('tName').onclick = function() {
   if (!CUR || CUR.src !== 'cust') return;
