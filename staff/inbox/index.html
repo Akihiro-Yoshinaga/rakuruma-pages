@@ -62,6 +62,7 @@
   .mav { width:34px; height:34px; border-radius:50%; background:#CBD5E0; color:#fff; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; flex:0 0 34px; align-self:flex-start; }
   .mt { font-size:12px; color:#8E95A0; white-space:nowrap; line-height:1.3; flex:0 0 auto; padding-bottom:4px; }
   .mrow.out .mt { text-align:right; }
+  .bub a.blink { color:inherit; text-decoration:underline; word-break:break-all; }
   .bub { max-width:calc(100% - 36px); padding:16px 14px; border-radius:18px; font-size:16px; line-height:1.35; white-space:pre-wrap; word-break:break-word; }
   .mrow.in .bub { max-width:calc(100% - 96px); }
   .bub.in { background:#F1F3F5; align-self:flex-start; }
@@ -239,6 +240,8 @@ function api(body) {
   return attempt(1, canRetry ? 25000 : 0);
 }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+/* 本文中のURLをタップで開けるリンクにする（2026-09-17 Google Meetのリンク等が開けなかった） */
+function linkify(s) { return esc(s).replace(/https?:\/\/[A-Za-z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]+/g, function(u) { var cut = u.search(/&(quot|lt|gt);/); var rest = ''; if (cut >= 0) { rest = u.slice(cut); u = u.slice(0, cut); } var t = u.match(/[).,;:!?']+$/); var tail = t ? t[0] : ''; if (tail) u = u.slice(0, -tail.length); return '<a class="blink" href="' + u + '" target="_blank" rel="noopener">' + u + '</a>' + tail + rest; }); }
 function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function(){ t.style.display = 'none'; }, 2200); }
 function revealBox(el) { if (!el || isDesktop()) return; try { var hw = document.querySelector('.hdrwrap'); var off = (hw ? hw.offsetHeight : 110) + 8; var top = el.getBoundingClientRect().top + window.scrollY - off; window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); } }
 function isDesktop() { return window.matchMedia('(min-width: 900px)').matches; }
@@ -493,7 +496,7 @@ function renderMsgs(it, msgs, fromCache) {
       if (m.img) inner = '<a href="' + esc(m.img.view || m.img.full) + '" target="_blank" rel="noopener"><img src="' + esc(m.img.thumb) + '" alt="画像" style="max-width:100%;border-radius:10px;display:block" onerror="if(!this.dataset.alt){this.dataset.alt=1;this.src=\'' + esc(m.img.thumb2 || '') + '\';}"></a>' + (m.file && m.file.name && !/^line_/.test(m.file.name) ? '<div class="meta">📎 ' + esc(m.file.name) + '</div>' : '');
       else if (m.file) inner = '📎 <a href="' + esc(m.file.view) + '" target="_blank" rel="noopener">' + esc(m.file.name) + '</a>';
       else if (m.kind === '画像' || m.kind === 'ファイル') inner = '（' + (m.kind === 'ファイル' ? '📎 ' + esc(m.text || 'ファイル') + '：' : '画像：') + 'まだ取り込めていません。数分後に更新してください）';
-      else inner = esc(body);
+      else inner = linkify(body);
       var mt = '<div class="mt">' + esc(String(m.at || '').slice(11, 16)) + (isIn ? '' : '<br>' + esc(String(m.kind || '').replace(/（.*）$/, '').replace(/^返信$/, '返信'))) + '</div>';
       if (isIn) html += '<div class="mrow in"><div class="mav">' + esc(av) + '</div><div class="bub in">' + inner + '</div>' + mt + '</div>';
       else html += '<div class="mrow out">' + mt + '<div class="bub out">' + inner + '</div></div>';
