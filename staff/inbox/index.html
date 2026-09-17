@@ -54,6 +54,8 @@
   .bf { display:flex; align-items:flex-start; gap:8px; margin-top:6px; }
   .bf > span { flex:0 0 64px; font-size:12px; color:#718096; padding-top:9px; }
   .bf input, .bf textarea { flex:1; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; font-family:inherit; min-width:0; }
+  .schip { padding:7px 12px; border:1.5px solid #CBD5E0; border-radius:16px; font-size:13px; font-weight:700; color:#4A5568; cursor:pointer; background:#fff; }
+  .schip.on { background:var(--navy); color:#fff; border-color:var(--navy); }
   .hdr .sub { font-size:12px; color:#D9BC7A; font-weight:600; }
   .msgs { padding:12px 8px 150px; display:flex; flex-direction:column; gap:16px; background:var(--bg); min-height:60vh; }
   .mrow { display:flex; align-items:flex-end; gap:8px; }
@@ -159,9 +161,13 @@
       <div class="bf"><span>作業内容</span><input id="bkMenu" placeholder="例：ドラレコ取付"></div>
       <div class="bf"><span>作業場所</span><input id="bkAddr" placeholder="住所・引取先（分かれば）"></div>
       <div class="bf"><span>備考</span><textarea id="bkNote" rows="3"></textarea></div>
+      <div class="bf"><span>担当</span><div id="bkStaff" style="flex:1;display:flex;gap:6px;flex-wrap:wrap"></div></div>
+      <div class="bf"><span>料金</span><input id="bkPrice" inputmode="numeric" placeholder="円（空でも可）"></div>
+      <div class="bf"><span>2台目以降</span><textarea id="bkExtra" rows="2" placeholder="1行に1台：車種｜作業｜料金（例：ホンダ フィット｜ドラレコ取付｜15000）"></textarea></div>
       <div id="bkSummary" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
+      <div id="bkResult" style="display:none;margin-top:8px;padding:8px 10px;background:#F0FFF4;border:1px solid #38A169;border-radius:8px;font-size:13px;line-height:1.5"></div>
     </div>
-    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="bookOpen" style="display:none">予約登録ページを開く（入力済み）</span><span class="abtn" id="bookClose">閉じる</span></div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="bookRegister" style="display:none">この内容で予約登録する</span><span class="abtn" id="bookOpen" style="display:none">登録ページで直す</span><span class="abtn" id="bookClose">閉じる</span></div>
   </div>
   <div id="memobox" class="linkbox" style="display:none;background:#F3FBF4;border-color:#38A169">
     <b>メモに残す</b> <span id="memoBasis" style="color:#718096"></span>
@@ -747,10 +753,53 @@ function bookingDraft(it) {
     document.getElementById('bkNote').value = note;
     document.getElementById('bkSummary').textContent = (d.summary ? '要約：' + d.summary : '') + (d.confidence === 'low' ? '（自信なし・要確認）' : '');
     st.textContent = r.partner ? '' : '（この連絡先に取引先名が未設定です。工場名を入れてください）';
-    form.style.display = 'block'; document.getElementById('bookOpen').style.display = '';
+    document.getElementById('bkPrice').value = ''; document.getElementById('bkExtra').value = '';
+    document.getElementById('bkResult').style.display = 'none'; BOOK_REQ_ID = null;
+    renderStaffChips(['吉永']);
+    form.style.display = 'block'; document.getElementById('bookOpen').style.display = ''; document.getElementById('bookRegister').style.display = '';
     if (!r.partner) document.getElementById('bkPartner').focus();
   }).catch(function(e) { btn.textContent = '予約登録'; st.textContent = ''; alert('通信エラー: ' + ((e && e.message) || e)); });
 }
+// 段階2（2026-09-17）：受信箱の中で登録まで完結。予約登録ページと同じ registerReservation を inbox-gas 経由で呼ぶ
+var BOOK_STAFF = ['吉永', '飯田', '清水', '高橋'], BOOK_REQ_ID = null;
+function renderStaffChips(sel) {
+  var box = document.getElementById('bkStaff'); box.innerHTML = '';
+  BOOK_STAFF.forEach(function(n) {
+    var c = document.createElement('span'); c.className = 'schip' + (sel.indexOf(n) >= 0 ? ' on' : ''); c.textContent = n;
+    c.onclick = function() { var on = c.classList.contains('on'); if (on && box.querySelectorAll('.schip.on').length === 1) return; c.classList.toggle('on'); };
+    box.appendChild(c);
+  });
+}
+function bookStaffSelected() { return Array.prototype.map.call(document.querySelectorAll('#bkStaff .schip.on'), function(c) { return c.textContent; }); }
+function bookExtraCars() {
+  return document.getElementById('bkExtra').value.split('\n').map(function(l) { return l.trim(); }).filter(Boolean).map(function(l) {
+    var a = l.split(/[｜|]/).map(function(x) { return x.trim(); }); return { car: a[0] || '', menu: a[1] || '', price: a[2] || '' };
+  }).filter(function(c) { return c.car; });
+}
+document.getElementById('bookRegister').onclick = function() {
+  var it = CUR; if (!it) return;
+  var d = { uid: it.uid, partner: document.getElementById('bkPartner').value.trim(), visitDate: document.getElementById('bkDate').value, car: document.getElementById('bkCar').value.trim(), menu: document.getElementById('bkMenu').value.trim(), address: document.getElementById('bkAddr').value.trim(), note: document.getElementById('bkNote').value.trim(), price: document.getElementById('bkPrice').value.trim(), staff: bookStaffSelected(), extraCars: bookExtraCars() };
+  if (!d.partner) { alert('工場名を入れてください'); return; }
+  if (!d.visitDate) { alert('訪問日時を入れてください（提携工場の依頼は日時が必須です）'); return; }
+  if (!d.car) { alert('車種を入れてください'); return; }
+  if (!d.menu) { alert('作業内容を入れてください'); return; }
+  var when = d.visitDate.replace('T', ' ');
+  if (!confirm('この内容で予約登録します。カレンダー登録とChatwork通知も行われます。\n\n' + d.partner + '\n' + when + '\n' + d.car + '／' + d.menu + (d.extraCars.length ? '\n＋' + d.extraCars.length + '台' : '') + '\n担当：' + d.staff.join('・') + (d.price ? '\n料金：' + d.price + '円' : ''))) return;
+  if (!BOOK_REQ_ID) { try { BOOK_REQ_ID = crypto.randomUUID(); } catch (e) { BOOK_REQ_ID = 'ib' + Date.now() + Math.random().toString(16).slice(2); } }
+  d.requestId = BOOK_REQ_ID;
+  var btn = document.getElementById('bookRegister'); btn.textContent = '登録中…'; btn.style.pointerEvents = 'none';
+  api({ op:'bookingRegister', data: d }).then(function(r) {
+    btn.textContent = 'この内容で予約登録する'; btn.style.pointerEvents = '';
+    if (!r.ok) { alert('登録できませんでした: ' + (r.error || '')); return; }
+    BOOK_REQ_ID = null;
+    var res = document.getElementById('bkResult');
+    res.innerHTML = '<b>予約登録しました</b>' + (r.duplicate ? '（同じ内容が直前に登録済みだったので二重登録はしていません）' : '') + '<br>' + esc(d.partner) + '　' + esc(when) + '　' + esc(d.car) + '／' + esc(d.menu) + (r.reportUrl ? '<br><a href="' + esc(r.reportUrl) + '" target="_blank">作業報告URL</a>' : '');
+    res.style.display = 'block';
+    document.getElementById('bookRegister').style.display = 'none';
+    toast('予約登録しました');
+    it.needsReply = false; it.unread = 0; renderList();
+  }).catch(function(e) { btn.textContent = 'この内容で予約登録する'; btn.style.pointerEvents = ''; alert('通信エラー: ' + ((e && e.message) || e) + '\n登録されたかは予約一覧かカレンダーで確認してください。同じ内容でもう一度押しても二重登録にはなりません'); });
+};
 document.getElementById('bookOpen').onclick = function() {
   var d = { partner: document.getElementById('bkPartner').value.trim(), visitDate: document.getElementById('bkDate').value, car: document.getElementById('bkCar').value.trim(), menu: document.getElementById('bkMenu').value.trim(), address: document.getElementById('bkAddr').value.trim(), note: document.getElementById('bkNote').value.trim() };
   if (!d.partner) { alert('工場名を入れてください'); return; }
