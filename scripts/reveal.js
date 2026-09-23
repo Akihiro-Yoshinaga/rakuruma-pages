@@ -43,7 +43,18 @@
         if (!targets.length) return;
         var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) {
-                if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+                if (e.isIntersecting) {
+                    var el = e.target;
+                    el.classList.add('is-in');
+                    io.unobserve(el);
+                    // 現れ終わったらクラスを外す。.rv-fade.is-in の transform:translateY(0) が
+                    // 各ページの :hover の持ち上げ（同じ詳細度・後読み）を打ち消し、
+                    // 「画面の下にあったカードだけホバーで浮かない」原因になっていた（2026-09-23）
+                    setTimeout(function () {
+                        el.classList.remove('rv-fade', 'is-in');
+                        el.style.transitionDelay = '';
+                    }, 1200);
+                }
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
         targets.forEach(function (el) {

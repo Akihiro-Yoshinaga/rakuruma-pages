@@ -97,6 +97,7 @@
     background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3);
     border-radius: 14px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     padding: 15px 14px 13px; text-decoration: none; display: block;
+    transition: transform .2s ease, background .2s ease;
   }
   .hero-card-name { font-size: 15.5px; font-weight: 800; color: #fff; letter-spacing: 0.02em; }
   .hero-card-desc { font-size: 11px; color: rgba(255,255,255,0.78); margin-top: 4px; }
@@ -113,6 +114,11 @@
     padding: 15px 20px;
     text-decoration: none;
     transition: transform .15s ease;
+  }
+  /* サイト共通：ボタン2px・カード型リンク3px持ち上げ（タッチ端末は動かさない） */
+  @media (hover: hover) {
+    .btn:hover { transform: translateY(-2px); }
+    .hero-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.2); }
   }
   .btn:active { transform: scale(.98); }
   .btn-line {

@@ -404,9 +404,11 @@
       box-shadow: var(--shadow-light);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
+    @media (hover: hover) {
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-medium);
+      }
     }
 
     .btn-line {
@@ -424,9 +426,11 @@
       box-shadow: var(--shadow-medium);
     }
 
-    .btn-line:hover {
-      transform: translateY(-2px);
-      opacity: var(--opacity-hover);
+    @media (hover: hover) {
+      .btn-line:hover {
+        transform: translateY(-2px);
+        opacity: var(--opacity-hover);
+      }
     }
 
     .hero-trust {
@@ -884,8 +888,11 @@
       scroll-snap-align: start;
     }
 
-    .work-card:hover {
-      transform: translateY(-4px);
+    /* 動く＝押せる：リンクになっている実績カードだけ持ち上げる（カード3px・ボタン2px） */
+    @media (hover: hover) {
+      .work-card.is-link:hover {
+        transform: translateY(-3px);
+      }
     }
 
     .work-card-img {
@@ -1243,9 +1250,11 @@
       transition: var(--transition-smooth);
     }
 
-    .line-demo-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+    @media (hover: hover) {
+      .line-demo-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+      }
     }
 
     .line-demo-btn small {
@@ -1280,10 +1289,7 @@
       min-height: 140px;
     }
 
-    .service-killer-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-heavy);
-    }
+    /* クリックできない情報カードはホバーで動かさない（動く＝押せる） */
 
     .service-killer-img {
       width: 260px;
@@ -1414,8 +1420,11 @@
       transition: var(--transition-smooth);
     }
 
-    .service-consult-btn:hover {
-      opacity: var(--opacity-hover);
+    @media (hover: hover) {
+      .service-consult-btn:hover {
+        transform: translateY(-2px);
+        opacity: var(--opacity-hover);
+      }
     }
 
 
@@ -1542,9 +1551,6 @@
       transition: var(--transition-fast);
     }
 
-    .tesla-card:hover {
-      background: rgba(255,255,255,0.1);
-    }
 
     .tesla-card-icon {
       font-size: 28px;
@@ -2217,9 +2223,11 @@
       flex-shrink: 0;
     }
 
-    .price-cta-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+    @media (hover: hover) {
+      .price-cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 32px rgba(60,196,122,0.55);
+      }
     }
 
     .price-cta-btn-icon {
@@ -2437,9 +2445,11 @@
       transition: var(--transition-smooth);
     }
 
-    .float-line:hover {
-      transform: scale(1.05);
-      opacity: var(--opacity-hover);
+    @media (hover: hover) {
+      .float-line:hover {
+        transform: scale(1.05);
+        opacity: var(--opacity-hover);
+      }
     }
 
     /* FV表示中はフローティングボタンを隠す（リングバッジと重なるため） */
@@ -3267,7 +3277,9 @@
 .rk-crosslink__card>*{position:relative;z-index:1;}
 .rk-crosslink__card--wash{background-image:url(/assets/images/image_top_sp.jpg);}
 .rk-crosslink__card--works{background-image:url(/assets/images/works-diagnosis.jpg);background-position:center 30%;}
-.rk-crosslink__card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.2);}
+@media (hover: hover) {
+  .rk-crosslink__card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.2);}
+}
 .rk-crosslink__name{font-size:17px;font-weight:800;}
 .rk-crosslink__desc{font-size:12px;color:rgba(255,255,255,.88);margin-top:5px;line-height:1.65;}
 .rk-crosslink__more{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.5);border-radius:40px;padding:6px 14px;}

@@ -65,8 +65,13 @@
     color: #fff;
     background: rgba(255,255,255,.12);
     backdrop-filter: blur(6px);
+    transition: transform .2s ease, box-shadow .2s ease;
   }
   .btn--gold { background: var(--gold); border-color: var(--gold); color: var(--navy-deep); }
+  /* サイト共通：ボタンはホバーで2px持ち上げ（タッチ端末は動かさない） */
+  @media (hover: hover) {
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+  }
 
   main { padding: 8px 0 64px; }
   section { padding: 44px 0 0; }

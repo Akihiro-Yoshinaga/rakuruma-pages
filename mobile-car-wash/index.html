@@ -341,16 +341,20 @@ body.rk-menu-open .rk-menu-panel {
     box-shadow: 0 6px 24px rgba(0, 59, 139, 0.35);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.wash-cta__btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 32px rgba(0, 59, 139, 0.45);
+@media (hover: hover) {
+  .wash-cta__btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(0, 59, 139, 0.45);
+  }
 }
 .wash-cta__btn--line {
     background: linear-gradient(135deg, #0bd463 0%, #06B34C 100%);
     box-shadow: 0 6px 24px rgba(6, 199, 85, 0.35);
 }
-.wash-cta__btn--line:hover {
-    box-shadow: 0 10px 32px rgba(6, 199, 85, 0.45);
+@media (hover: hover) {
+  .wash-cta__btn--line:hover {
+      box-shadow: 0 10px 32px rgba(6, 199, 85, 0.45);
+  }
 }
 .wash-cta__icon {
     font-size: 22px;
@@ -382,16 +386,20 @@ body.rk-menu-open .rk-menu-panel {
 a[href^="https://lin.ee"] {
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-a[href^="https://lin.ee"]:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(6, 199, 85, 0.45) !important;
+@media (hover: hover) {
+  a[href^="https://lin.ee"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(6, 199, 85, 0.45) !important;
+  }
 }
 #rakuruma-form-wrap .rf-submit-btn {
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-#rakuruma-form-wrap .rf-submit-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(37, 99, 168, 0.45);
+@media (hover: hover) {
+  #rakuruma-form-wrap .rf-submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(37, 99, 168, 0.45);
+  }
 }
 
 /* ===== PC用ファーストビュー（LPデザイン規定 2026-08-21 準拠: 動画全面＋下グラデ＋下寄せコピー） ===== */
@@ -508,9 +516,11 @@ a[href^="https://lin.ee"]:hover {
         display: block;
         transition: background 0.2s ease, transform 0.15s ease;
     }
-    .hero__pc-card:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
+    @media (hover: hover) {
+      .hero__pc-card:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateY(-3px);
+      }
     }
     .hero__pc-card-name {
         display: block;
@@ -548,10 +558,12 @@ a[href^="https://lin.ee"]:hover {
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.button_area .flexbox .button_b:hover,
-.button_area .flexbox .button_g:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+@media (hover: hover) {
+  .button_area .flexbox .button_b:hover,
+  .button_area .flexbox .button_g:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  }
 }
 /* PC: 全幅の白帯をやめて右下フローティングのコンパクト表示に */
 @media (min-width: 600px) {
@@ -2897,13 +2909,17 @@ a[href^="https://lin.ee"]:hover {
                 box-shadow: 0 10px 32px rgba(0, 0, 0, 0.14);
                 transition: transform 0.25s ease, box-shadow 0.25s ease;
             }
-            .rk-banner:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+            @media (hover: hover) {
+              .rk-banner:hover {
+                  transform: translateY(-3px);
+                  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+              }
             }
             .rk-banner__img { height: 230px; }
             .rk-banner__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
-            .rk-banner:hover .rk-banner__img img { transform: scale(1.05); }
+            @media (hover: hover) {
+              .rk-banner:hover .rk-banner__img img { transform: scale(1.05); }
+            }
             .rk-banner__overlay {
                 position: absolute; inset: 0;
                 background: linear-gradient(to top, rgba(8, 18, 36, 0.88) 0%, rgba(8, 18, 36, 0.38) 55%, rgba(8, 18, 36, 0.08) 100%);
@@ -2938,7 +2954,9 @@ a[href^="https://lin.ee"]:hover {
                 box-shadow: 0 4px 18px rgba(13, 39, 72, 0.06);
                 transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             }
-            .rkb:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(13, 39, 72, 0.12); border-color: #b9c9de; }
+            @media (hover: hover) {
+              .rkb:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(13, 39, 72, 0.12); border-color: #b9c9de; }
+            }
             .rkb__badge {
                 flex: 0 0 68px; width: 68px; height: 68px; border-radius: 50%;
                 background: #003B8B; color: #fff;
