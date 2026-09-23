@@ -14,6 +14,7 @@
 - HTMLに数字を直書きしない。必ず `<span data-curama-count>596</span>` ／ `<span data-curama-rating>4.92</span>` の形にして、ページ末尾で `<script src="/scripts/stats.js" defer></script>` を読み込む（GASの `action=curamaStats` が店舗全体の最新値で書き換える）。
 - 予備値（JSが失敗したときに見える値）は**店舗全体**の数字（現在 4.92／596件）に揃える。個別サービスの評価（4.93など）を混ぜない。
 - 洗車の「口コミ◯件すべて★5」のような**サービス別の主張**も直書きしない。`<span data-curama-wash-count>30</span>`／`<span data-curama-wash-claim>すべて★5</span>`／`<span data-curama-wash-avg>5.0</span>` を使う（同じAPIが `washCount/washFive/washAvg` を返し、★5でない口コミが入れば表示が「★5が◯件」に自動で変わる）。
+- Googleの口コミ件数・評価も同じAPIが `googleCount/googleRating`（GBP APIから6時間ごと）で返す。HTMLは `<span data-google-stat hidden>／Google 口コミ<span data-google-count></span>件 ★<span data-google-rating></span></span>` の形（数字は書かない。値が来たときだけ表示される）。
 - 「No.1」「最安」「地域一」などの最上級表現は書かない（くらマ出店者ガイドライン・景表法。根拠の明示が必要）。
 - meta description・OGP など JS で書き換えられない場所には数字を書かない。
 - 「○年○月現在」の固定日付つきの主張（例：エリア内24件すべて★5）は新規に書かない。書くなら検証できる現在の事実に限り、月次で見直す前提を注記する。

@@ -2153,7 +2153,10 @@
         padding: 60px 20px;
       }
     }
-  </style>
+  /* Google口コミ（stats.jsが値を入れたときだけ表示。改行して1行で見せる） */
+.google-stat:not([hidden]) { display: block; }
+.google-stat--inline:not([hidden]) { display: inline; }
+</style>
 <script type="text/javascript">
 (function(c,l,a,r,i,t,y){
     if(!/(^|\.)rakuruma\.com$/.test(location.hostname))return;
@@ -2228,7 +2231,7 @@
       <div class="fv-copy">
         <h1 class="fv-head"><span class="fv-head-area">世田谷/目黒/渋谷/品川/港区</span><br>クルマの管理を、<br>まるごとラクに。</h1>
         <p class="fv-second">時間を大切にしたい人の<br>プロによる自宅カーケア</p>
-        <p class="fv-rating"><span class="star">★</span><span data-curama-rating>4.92</span>（くらしのマーケット 口コミ<span data-curama-count>596</span>件）<a class="rating-link" href="#voice">口コミを読む →</a></p>
+        <p class="fv-rating"><span class="star">★</span><span data-curama-rating>4.92</span>（くらしのマーケット 口コミ<span data-curama-count>604</span>件）<span class="google-stat google-stat--inline" data-google-stat hidden>／Google 口コミ<span data-google-count></span>件 ★<span data-google-rating></span></span><a class="rating-link" href="#voice">口コミを読む →</a></p>
       </div>
     </div>
   </div>
@@ -2261,12 +2264,12 @@
     </div>
     <div class="hero-rating">
       <span><span class="star">★</span><span class="num" data-curama-rating>4.92</span></span>
-      <small>くらしのマーケット 口コミ<span data-curama-count>596</span>件</small>
+      <small>くらしのマーケット 口コミ<span data-curama-count>604</span>件<span class="google-stat" data-google-stat hidden>Google 口コミ<span data-google-count></span>件 ★<span data-google-rating></span></span></small>
       <a class="rating-link" href="#voice">口コミを読む →</a>
     </div>
   </div>
 </section>
-<p class="hero-note">※ くらしのマーケットに寄せられた口コミの件数・平均評価より（自動更新）。</p>
+<p class="hero-note">※ くらしのマーケットとGoogleに寄せられた口コミの件数・平均評価より（自動更新）。</p>
 
 <!-- VOICE：口コミ（ジャーニー段階②＝初回の不安を消す。FV直下に本文を露出） -->
 
@@ -2490,7 +2493,7 @@
     <h2 class="section-title">お客様の声</h2>
     <div class="voice-rating-bar">
       <span class="star">★</span><span class="voice-rating-num" data-curama-rating>4.92</span>
-      <small>くらしのマーケット 口コミ<span data-curama-count>596</span>件の平均評価</small>
+      <small>くらしのマーケット 口コミ<span data-curama-count>604</span>件の平均評価<span class="google-stat" data-google-stat hidden>Google 口コミ<span data-google-count></span>件 ★<span data-google-rating></span></span></small>
     </div>
     <div class="voice-tabs" id="voiceTabs" role="tablist" aria-label="口コミの絞り込み">
       <button type="button" class="voice-tab voice-tab--active" data-cat="all" aria-selected="true">すべて</button>

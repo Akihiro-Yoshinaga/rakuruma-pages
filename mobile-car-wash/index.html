@@ -170,6 +170,9 @@
     .service .service_list .flexbox .smallhead { width: 100%; margin-bottom: 16px; }
     .service .service_list .flexbox .image_frame { width: 48.5%; margin-bottom: 10px; }
 }
+/* Google口コミ（stats.jsが値を入れたときだけ表示。改行して1行で見せる） */
+.google-stat:not([hidden]) { display: block; }
+.google-stat--inline:not([hidden]) { display: inline; }
 </style>
 <style>
 /* ===== このページ専用: レイアウト統一 ===== */
@@ -1300,13 +1303,13 @@ a[href^="https://lin.ee"]:hover {
                         <div class="image_pic img_l" style="background-image: url(/assets/uploads/2025/09/YOSH0212.webp); background-size: cover; background-position: center;">
                             <div class="pt-badge">
                                 <span class="pt-badge-star"><span class="gold">★</span> <span data-curama-rating>4.92</span></span>
-                                <span class="pt-badge-sub">くらしのマーケット総合評価・口コミ<span data-curama-count>596</span>件</span>
+                                <span class="pt-badge-sub">くらしのマーケット総合評価・口コミ<span data-curama-count>604</span>件<span class="google-stat" data-google-stat hidden>Google 口コミ<span data-google-count></span>件 ★<span data-google-rating></span></span></span>
                             </div>
                         </div>
                     </div>
                     <div class="textarea">
                         <div class="pt-num">POINT 1</div>
-                        <div class="pt-head"><span data-curama-count>596</span>件の口コミが証明する<br>★<span data-curama-rating>4.92</span>の仕上がり</div>
+                        <div class="pt-head"><span data-curama-count>604</span>件の口コミが証明する<br>★<span data-curama-rating>4.92</span>の仕上がり</div>
                         <div class="pt-body">くらしのマーケットで総合★<span data-curama-rating>4.92</span>。くらしのマーケットアワード2025にも入賞しました。数字は、一台ずつの仕上がりに満足いただけた積み重ねです。</div>
                     </div>
                 </li>
@@ -1657,7 +1660,7 @@ a[href^="https://lin.ee"]:hover {
                 <div class="rv-stats-line">
                     <span class="rv-stats-line__main"><span class="star">★</span><span data-curama-wash-avg>5.0</span><small>／5.0</small></span>
                     <span class="rv-stats-line__label">出張洗車の口コミ<span data-curama-wash-count>30</span>件 <span data-curama-wash-claim>すべて★5</span><sup>※1</sup></span>
-                    <span class="rv-stats-line__sub">店舗全体では 口コミ<span data-curama-count>596</span>件・総合★<span data-curama-rating>4.92</span></span>
+                    <span class="rv-stats-line__sub">店舗全体では くらしのマーケット 口コミ<span data-curama-count>604</span>件・総合★<span data-curama-rating>4.92</span><span class="google-stat" data-google-stat hidden>Google 口コミ<span data-google-count></span>件 ★<span data-google-rating></span></span></span>
                 </div>
                 <style>
                     .rv-stats-line {
