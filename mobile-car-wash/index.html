@@ -36,6 +36,22 @@
 /* FVの黄色をページ共通ゴールドに統一（このページのみ） */
 .hero--wp .hero__copy-highlight { color: #c9ab6a; }
 .hero--wp .hero__badge-rank { color: #c9ab6a; }
+/* FVバッジの実績行: 「No.1」用の巨大サイズ（64px〜）を「30件 すべて★5」用に読める大きさへ */
+.hero--wp .hero__badge-rank {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: clamp(20px, 5.6vw, 28px);
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.hero--wp .hero__badge-rank-count {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: #ffffff;
+    margin-right: 0.3em;
+}
 /* スマホ微調整: 見出しサイズ・比較表の折り返し・バナー整列 */
 @media (max-width: 599px) {
     /* 見出しは22pxに落とし、brと合わせて自然な2行に */
@@ -912,7 +928,7 @@ a[href^="https://lin.ee"]:hover {
             <div class="hero__badge hero__badge--area">
                 <span class="hero__badge-location">世田谷｜目黒｜渋谷｜品川｜港区</span>
                 <span class="hero__badge-caption"> 出張洗車の口コミ<span class="hero__badge-note">※1</span></span>
-                <span class="hero__badge-rank"><span data-curama-wash-claim>すべて★5</span></span>
+                <span class="hero__badge-rank"><span class="hero__badge-rank-count"><span data-curama-wash-count>30</span>件</span><span data-curama-wash-claim>すべて★5</span></span>
             </div>
 
             <div class="hero__badge hero__badge--rank">
