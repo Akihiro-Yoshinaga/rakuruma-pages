@@ -1092,11 +1092,28 @@ function pollThread() {
   }).catch(function() { THREAD_POLLING = false; });
 }
 setInterval(function() { if (document.visibilityState === 'visible') pollThread(); }, 30000);
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState !== 'visible') return;
+// 即時反映（2026-09-24）：VPSからの押し込み（Server-Sent Events）。LINEが届いた瞬間・送った瞬間に一覧とトークを取り直す。
+// 30秒ごとの取り直しは予備。画面に戻ったときは接続し直して即取りに行く
+var ES = null;
+function connectEvents() {
+  if (typeof EventSource === 'undefined' || !TOKEN) return;
+  if (ES) { try { ES.close(); } catch (e) {} ES = null; }
+  try { ES = new EventSource(API_URL + 'events?token=' + encodeURIComponent(TOKEN)); } catch (e) { ES = null; return; }
+  ES.onmessage = function(ev) {
+    var d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+    if (!d || d.type !== 'update') return;
+    if (d.src === 'biz') { if (BIZ !== null || TAB === 'biz') loadBiz(true); } else loadList();
+    if (CUR && CUR.uid === d.uid && (CUR.src || 'cust') === (d.src || 'cust')) pollThread();
+  };
+}
+function onBackToPage() {
   if (isDesktop() || document.getElementById('list').style.display !== 'none') loadList();
   pollThread();
-});
+  connectEvents();
+}
+document.addEventListener('visibilitychange', function() { if (document.visibilityState === 'visible') onBackToPage(); });
+window.addEventListener('pageshow', function(e) { if (e.persisted) onBackToPage(); });
+setTimeout(connectEvents, 1500);
 </script>
 </body>
 </html>
