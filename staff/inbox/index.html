@@ -145,7 +145,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
@@ -153,6 +153,14 @@
     <div style="display:flex;gap:8px;margin-top:6px"><input type="date" id="schedDate" style="flex:1"><input type="time" id="schedTime" value="18:00" style="flex:1"></div>
     <textarea id="schedText" rows="3" placeholder="送る本文（下の返信欄に入れた文をそのまま使えます）" style="width:100%;margin-top:6px;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;font-family:inherit"></textarea>
     <div style="margin-top:8px;display:flex;gap:8px"><span class="abtn" id="schedUse">返信欄の文を使う</span><span class="abtn ok" id="schedAdd">この日時で登録</span></div>
+  </div>
+  <div id="paybox" class="linkbox" style="display:none;background:#F0FFF4;border-color:#2F855A">
+    <b>決済リンク</b> <span id="payStatus" style="color:#718096"></span>
+    <div style="font-size:12px;color:#718096;margin-top:2px">金額（税込）と品名を入れて発行。リンクは1回払われると自動で使えなくなります。発行後に本文へ差し込んで送ってください</div>
+    <div class="bf"><span>金額</span><input id="payAmount" inputmode="numeric" placeholder="例：7700（税込・円）"></div>
+    <div class="bf"><span>品名</span><input id="payName" placeholder="例：出張洗車（SM）9/24分"></div>
+    <div id="payResult" style="display:none;margin-top:8px;padding:8px 10px;background:#fff;border:1px solid #9AE6B4;border-radius:8px;font-size:13px;line-height:1.6"></div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="payCreate">発行する</span><span class="abtn" id="payInsert" style="display:none">本文に差し込む</span><span class="abtn" id="payOff" style="display:none">無効にする</span><span class="abtn" id="payClose">閉じる</span></div>
   </div>
   <div id="changebox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
     <b>予定の変更・作成</b> <span id="chgStatus" style="color:#718096"></span>
@@ -424,6 +432,8 @@ function openThread(it) {
   document.querySelector('.compose').style.display = it.noLine ? 'none' : '';
   document.getElementById('btnDone').style.display = it.noLine ? 'none' : '';
   document.getElementById('btnSched').style.display = it.noLine ? 'none' : '';
+  document.getElementById('btnPay').style.display = (it.src === 'cust' && !it.noLine) ? '' : 'none';
+  document.getElementById('paybox').style.display = 'none'; document.getElementById('payResult').style.display = 'none'; PAY = null;
   document.getElementById('schedbox').style.display = 'none';
   if (it.noLine) {
     var nm0 = (it.customer && it.customer.name) ? it.customer.name + ' さん' : '（名前なし）';
@@ -657,6 +667,44 @@ function loadSched() {
     });
   });
 }
+// 決済リンク（Stripe）：発行→金額とURLを確認→本文に差し込む（2026-09-24）
+var PAY = null;
+document.getElementById('btnPay').onclick = function() {
+  var box = document.getElementById('paybox'); var open = box.style.display === 'none';
+  box.style.display = open ? 'block' : 'none';
+  if (open) { document.getElementById('payStatus').textContent = ''; revealBox(box); document.getElementById('payAmount').focus(); }
+};
+document.getElementById('payClose').onclick = function() { document.getElementById('paybox').style.display = 'none'; };
+document.getElementById('payCreate').onclick = function() {
+  var it = CUR; if (!it) return;
+  var amount = document.getElementById('payAmount').value.replace(/[^\d]/g, ''), name = document.getElementById('payName').value.trim();
+  if (!amount || parseInt(amount, 10) < 50) { alert('金額（税込・50円以上）を入れてください'); return; }
+  if (!name) { alert('品名を入れてください'); return; }
+  if (!confirm('この内容で決済リンクを発行します。\n\n品名：' + name + '\n金額：¥' + Number(amount).toLocaleString() + '（税込）\n\n発行だけでは送られません。次の画面でURLを確認してから本文に差し込みます')) return;
+  var btn = this; btn.textContent = '発行中…'; btn.style.pointerEvents = 'none'; document.getElementById('payStatus').textContent = '';
+  api({ op:'payLink', uid: it.uid, amount: amount, name: name, note: (it.customer && it.customer.name) || '' }).then(function(r) {
+    btn.textContent = '発行する'; btn.style.pointerEvents = '';
+    if (!r || !r.ok) { alert('発行できませんでした: ' + ((r && r.error) || '')); return; }
+    PAY = r;
+    var res = document.getElementById('payResult');
+    res.innerHTML = '<b>発行しました</b><br>品名：' + esc(r.name) + '<br>金額：¥' + Number(r.amount).toLocaleString() + '（税込）<br>URL：<a href="' + esc(r.url) + '" target="_blank">' + esc(r.url) + '</a><br><span style="color:#718096">1回払われると自動で無効になります。間違えたら「無効にする」</span>';
+    res.style.display = 'block'; document.getElementById('payInsert').style.display = ''; document.getElementById('payOff').style.display = '';
+  }).catch(function(e) { btn.textContent = '発行する'; btn.style.pointerEvents = ''; alert('通信エラー: ' + ((e && e.message) || e)); });
+};
+document.getElementById('payInsert').onclick = function() {
+  if (!PAY) return;
+  var ta = document.getElementById('text');
+  var who = (CUR && CUR.customer && (CUR.customer.contact || CUR.customer.name)) ? String(CUR.customer.contact || CUR.customer.name).trim().split(/[\s\u3000]+/)[0] + 'さん' : '';
+  var body = (who ? who + ' ' : '') + 'お世話になっております。\n' + PAY.name + '（¥' + Number(PAY.amount).toLocaleString() + '・税込）のお支払いは、以下のリンクからカードでお願いいたします。\n' + PAY.url + '\nお手数ですが、よろしくお願いいたします。';
+  ta.value = (ta.value.trim() ? ta.value.trim() + '\n\n' : '') + body; autosize(); ta.focus();
+  document.getElementById('paybox').style.display = 'none';
+  toast('本文に差し込みました。直してから送信してください');
+};
+document.getElementById('payOff').onclick = function() {
+  if (!PAY || !confirm('このリンクを無効にします。よろしいですか？')) return;
+  var id = PAY.id;
+  api({ op:'payLinkOff', uid: CUR.uid, id: id }).then(function(r) { if (r && r.ok) { toast('無効にしました'); PAY = null; document.getElementById('payResult').style.display = 'none'; document.getElementById('payInsert').style.display = 'none'; document.getElementById('payOff').style.display = 'none'; } else alert('無効化できませんでした: ' + ((r && r.error) || '')); });
+};
 document.getElementById('btnSched').onclick = function() {
   var box = document.getElementById('schedbox');
   var open = box.style.display === 'none';
