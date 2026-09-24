@@ -101,6 +101,22 @@ body {
 }
 .shaken-cars { margin-top: 12px; }
 
+/* 今後のお伺い予定（定期利用プラン。共有カレンダーから毎回取得） */
+.visit { background: #fff; padding: 16px; border-bottom: 1px solid #e2e8f0; }
+.visit-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.visit-icon { font-size: 22px; }
+.visit-title { font-size: 16px; font-weight: 800; color: #003B8B; }
+.visit-row { padding: 10px 0; border-top: 1px solid #edf2f7; }
+.visit-row:first-of-type { border-top: none; }
+.visit-date { font-size: 16px; font-weight: 800; color: #1a202c; }
+.visit-date .visit-time { margin-left: 6px; }
+.visit-next {
+  display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px;
+  background: #003B8B; color: #fff; font-size: 12px; font-weight: 700; vertical-align: middle;
+}
+.visit-cars { font-size: 13px; color: #4a5568; margin-top: 2px; }
+.visit-note { font-size: 12px; color: #718096; margin-top: 10px; line-height: 1.6; }
+
 /* お車の状態（季節点検の所見。確認日つき・3ヶ月でグレー化） */
 .cond { background: #fff; padding: 16px; border-bottom: 1px solid #e2e8f0; }
 .cond-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -411,7 +427,7 @@ function getCachedData() { try { return JSON.parse(localStorage.getItem(LS_DATA_
 function saveCachedData(d) {
   try {
     localStorage.setItem(LS_DATA_KEY, JSON.stringify({
-      customerName: d.customerName, inspExpiry: d.inspExpiry, reports: d.reports, cars: d.cars || []
+      customerName: d.customerName, inspExpiry: d.inspExpiry, reports: d.reports, cars: d.cars || [], visits: d.visits || []
     }));
   } catch (e) {}
 }
@@ -747,6 +763,8 @@ function render(data) {
     + '  <div class="greeting-sub">いつもご利用いただきありがとうございます。</div>'
     + '</div>';
 
+  html += renderVisits(data.visits || window._pendingVisits);
+
   window._cars = data.cars || (window._pendingCars || []);
   if (data.inspExpiry || window._cars.length > 0 || !window._carsDone) {
     html += '<div class="shaken">';
@@ -811,6 +829,7 @@ function render(data) {
   document.getElementById('content').innerHTML = html;
   show('content');
   refreshCars();
+  refreshVisits();
   // URLからcode/lineIdを消す（リロード時は使用済みcodeではなくキャッシュのlineIdで再取得される）
   if (window.location.search) {
     try { history.replaceState(null, '', '/mypage/'); } catch (e) {}
@@ -843,6 +862,43 @@ function refreshCars() {
     .catch(function() { window._carsDone = true; if (window._data) render(window._data); });
 }
 
+// 定期利用プランの今後のお伺い予定。予定が無い人（定期プラン以外）はブロックごと出さない
+function renderVisits(visits) {
+  if (!visits || visits.length === 0) return '';
+  var html = '<div class="visit">'
+    + '<div class="visit-head"><div class="visit-icon">📅</div><div class="visit-title">今後のお伺い予定</div></div>';
+  visits.forEach(function(v, i) {
+    html += '<div class="visit-row">'
+      + '<div class="visit-date">' + escapeHtml(v.date) + '<span class="visit-time">' + escapeHtml(v.time) + '〜</span>'
+      + (i === 0 ? '<span class="visit-next">次回</span>' : '') + '</div>'
+      + (v.cars ? '<div class="visit-cars">' + escapeHtml(v.cars) + '</div>' : '')
+      + '</div>';
+  });
+  html += '<div class="visit-note">※ 天候やスケジュールの都合により、日時が変更となる場合があります。変更の際はLINEでご連絡いたします。<br>'
+    + 'ご都合が悪い日がありましたら、前日18:00までにLINEでお知らせください。</div>'
+    + '</div>';
+  return html;
+}
+
+// 予定はカレンダーから毎回読む（日程変更をすぐ反映するため）。履歴を描いたあとに取りに行く
+function refreshVisits() {
+  if (window._visitsLoaded) return;
+  window._visitsLoaded = true;
+  var token = getToken();
+  if (!token) return;
+  fetch(GAS_URL + '?action=mypageSchedule&token=' + encodeURIComponent(token))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (!d.ok || !Array.isArray(d.visits)) return;
+      if (!window._data) { window._pendingVisits = d.visits; return; }
+      if (JSON.stringify(window._data.visits || []) === JSON.stringify(d.visits)) return; // 変化なしなら描き直さない
+      window._data.visits = d.visits;
+      saveCachedData(window._data);
+      render(window._data);
+    })
+    .catch(function() {});
+}
+
 // GASから履歴データを取得（code＝ログイン直後 または token＝発行済み）
 // silent=true のときは、すでに表示中のキャッシュを残したまま裏で更新する
 function fetchHistory(query, silent) {
@@ -853,6 +909,8 @@ function fetchHistory(query, silent) {
       if (d.ok) {
         window._refreshing = false;
         window._carsLoaded = false; // 最新の履歴に合わせて登録車も取り直す
+        window._visitsLoaded = false;
+        if (window._data && window._data.visits && !d.visits) d.visits = window._data.visits; // 取り直すまでの間は前回の予定を出しておく
         render(d);
       } else if (silent) {
         window._refreshing = false; // 裏更新の失敗は黙って捨てる（表示中のキャッシュを残す）
@@ -937,7 +995,7 @@ function submitPhone() {
     if (cached && cached.reports) {
       window._refreshing = true;
       render({ customerName: cached.customerName, inspExpiry: cached.inspExpiry,
-               reports: cached.reports, cars: cached.cars || [] });
+               reports: cached.reports, cars: cached.cars || [], visits: cached.visits || [] });
       fetchHistory('token=' + encodeURIComponent(token) + rmSrcQuery(), true);
       return;
     }
