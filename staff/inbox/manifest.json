@@ -3,8 +3,8 @@
   "short_name": "受信箱",
   "scope": "/staff/inbox/",
   "display": "standalone",
-  "background_color": "#182F66",
-  "theme_color": "#182F66",
+  "background_color": "#06C755",
+  "theme_color": "#06C755",
   "icons": [
     {
       "src": "icon-192.png",
