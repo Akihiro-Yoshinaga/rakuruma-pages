@@ -88,6 +88,7 @@
   .abtn { font-size:12px; font-weight:800; border-radius:8px; padding:6px 9px; background:#fff; border:1.5px solid var(--navy); color:var(--navy); cursor:pointer; text-decoration:none; }
   .abtn.ok { border-color:#38A169; color:#38A169; }
   .note { font-size:12px; color:#C05621; font-weight:700; padding:6px 12px 0; }
+  #toBottom { position:fixed; right:14px; bottom:170px; z-index:8; display:none; align-items:center; gap:4px; background:var(--navy); color:#fff; font-size:13px; font-weight:700; padding:9px 14px; border-radius:20px; box-shadow:0 3px 10px rgba(0,0,0,.25); cursor:pointer; }
   .toast { position:fixed; left:50%; bottom:130px; transform:translateX(-50%); background:#1A202C; color:#fff; font-size:13px; padding:8px 14px; border-radius:10px; display:none; z-index:9; }
   .linkbox { background:#FFF8E7; border:1px solid #E8A33D; margin:8px 12px; border-radius:10px; padding:10px 12px; font-size:13px; }
   .linkbox input { width:100%; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; margin-top:6px; }
@@ -117,6 +118,7 @@
     .av { width:52px; height:52px; flex:0 0 52px; }
     #grace { left:416px !important; right:16px !important; bottom:170px !important; }
     .toast { bottom:190px; }
+    #toBottom { position:absolute; right:24px; bottom:170px; }
     .row.sel { background:#EEF2F8; }
     .row:hover { background:#F4F6FA; }
   }
@@ -188,6 +190,7 @@
   </div>
   <div class="note" id="note"></div>
   <div class="msgs" id="msgs"></div>
+  <div id="toBottom" onclick="scrollBottom(); updateToBottomBtn();">↓ 最新へ</div>
   <div class="compose">
     <div class="tpl" id="tpl"></div>
     <div class="box" style="margin-bottom:8px"><input id="intent" placeholder="どう返したい？（例：来週の午前で調整したい・やんわり）" style="flex:1;border:1.5px solid #C3A054;border-radius:14px;padding:9px 12px;font-size:15px;font-family:inherit"><button class="send" id="btnDraft" style="background:#C3A054">AI生成</button></div>
@@ -490,7 +493,7 @@ function dayLabel(d) {
   if (diff === 0) return '今日'; if (diff === 1) return '昨日';
   return (+m[2]) + '/' + (+m[3]) + '(' + w + ')' + (m[1] !== String(today.getFullYear()) ? ' ' + m[1] : '');
 }
-function renderMsgs(it, msgs, fromCache) {
+function renderMsgs(it, msgs, fromCache, keepPos) {
     var html = '', lastDay = '';
     (msgs || []).forEach(function(m) {
       var day = String(m.at || '').slice(0, 10);
@@ -509,10 +512,21 @@ function renderMsgs(it, msgs, fromCache) {
     });
     var pend = (CUR === it && graceTimer) ? document.getElementById('pending') : null;
     document.getElementById('tRefresh').style.display = fromCache ? 'inline-block' : 'none';
-    document.getElementById('msgs').innerHTML = html || '<div class="sys">記録がありません</div>';
-    if (pend) document.getElementById('msgs').appendChild(pend);
-    scrollBottom();
+    var m0 = document.getElementById('msgs');
+    var before = isDesktop() ? { top: m0.scrollTop, h: m0.scrollHeight } : { top: window.scrollY, h: document.body.scrollHeight };
+    m0.innerHTML = html || '<div class="sys">記録がありません</div>';
+    if (pend) m0.appendChild(pend);
+    if (keepPos) {
+      // 自動更新のとき：読んでいた位置を保つ（増えた高さぶんは下に足されるだけなので同じ位置でよい）。2026-09-24 吉永さん指摘
+      if (isDesktop()) m0.scrollTop = before.top; else window.scrollTo(0, before.top);
+    } else scrollBottom();
+    updateToBottomBtn();
 }
+// 「↓ 最新へ」ボタン：下端から離れているときだけ出す
+function nearBottom() { if (isDesktop()) { var m = document.getElementById('msgs'); return m.scrollHeight - m.scrollTop - m.clientHeight < 120; } return window.innerHeight + window.scrollY >= document.body.scrollHeight - 120; }
+function updateToBottomBtn() { var b = document.getElementById('toBottom'); if (!b) return; var show = document.getElementById('thread').style.display !== 'none' && !nearBottom(); b.style.display = show ? 'flex' : 'none'; }
+window.addEventListener('scroll', updateToBottomBtn, { passive: true });
+document.getElementById('msgs').addEventListener('scroll', updateToBottomBtn, { passive: true });
 
 function renderTpl() {
   document.getElementById('tpl').innerHTML = (TEMPLATES || []).map(function(t, i) { return '<div data-i="' + i + '">' + esc(t.label) + '</div>'; }).join('');
@@ -728,8 +742,7 @@ function proposeChange(it, auto) {
       return;
     }
     CHG = r; box.style.display = 'block'; st.textContent = auto ? '（AIがやりとりから読み取りました）' : '';
-    if (auto) toast('予定の変更・作成の提案があります（上に表示）');
-    revealBox(box);
+    if (auto) toast('予定の変更・作成の提案があります（上に表示）'); else revealBox(box); // 自動で出た提案では画面を動かさない（2026-09-24 吉永さん指摘）
     if (r.action === 'create') {
       body.innerHTML = '<div><b>新しい予定を作成</b> <span style="color:#718096">[' + esc(r.calendarName || '施工共有') + ']</span></div>'
         + '<div style="margin-top:4px"><b style="color:#C05621">' + esc(fmtJa(r.newStart)) + '</b>〜' + esc(r.newEnd.slice(11)) + (r.location ? '　<span style="color:#718096">' + esc(r.location) + '</span>' : '') + '</div>'
@@ -1072,7 +1085,7 @@ function pollThread() {
     if (!changed) return;
     threadCachePut(target.uid, r.messages);
     var atBottom = isDesktop() ? (function() { var m = document.getElementById('msgs'); return m.scrollHeight - m.scrollTop - m.clientHeight < 80; })() : (window.innerHeight + window.scrollY >= document.body.scrollHeight - 80);
-    renderMsgs(target, r.messages, false);
+    renderMsgs(target, r.messages, false, !atBottom);
     if (b && b.dir === '受信') { target.needsReply = true; target.unread = (target.unread || 0) + 1; target.lastAt = b.at; target.lastText = String(b.text || '').slice(0, 80); target.lastDir = b.dir; toast('新しいメッセージが届きました'); }
     if (!atBottom) toast('新着があります（下にスクロール）');
     maybeProposeChange(target, r.messages);
