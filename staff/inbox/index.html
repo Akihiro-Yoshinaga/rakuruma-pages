@@ -571,8 +571,8 @@ document.getElementById('btnSend').onclick = function() {
         else { removePending(); ta.value = sentText; autosize(); alert('送信を確認できませんでした。スレッドを見て、届いていなければもう一度送ってください'); }
       });
     }
-    if (!r.ok) { removePending(); ta.value = sentText; autosize(); alert('送信できませんでした: ' + (r.error || '')); return; }
-    toast('送信しました（記録済み）');
+    if (!r.ok) { removePending(); ta.value = sentText; autosize(); alert('送信できませんでした: ' + (r.error || '') + '\n\n※押し直す前に、相手のトークに同じ文が届いていないか確認してください（応答だけ失敗して実際は届いていることがあります）'); return; }
+    toast(r.dup ? '直前に同じ内容を送信済みだったので、今回は送っていません' : '送信しました（記録済み）');
     target.needsReply = false; target.unread = 0;
     if (CUR === target) openThread(CUR);
   }).catch(function(e) { btn.disabled = false; removePending(); ta.value = sentText; autosize(); alert('通信エラー: ' + e); });
