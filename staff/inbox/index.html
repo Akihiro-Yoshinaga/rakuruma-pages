@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>LINE受信箱 | ラクルマ</title>
+<!-- ホーム画面に追加すると単独のアプリ画面として開く（タブが増えない・2026-09-24 吉永さん要望） -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="受信箱">
+<meta name="theme-color" content="#182F66">
 <style>
   :root { --navy:#182F66; --gold:#C3A054; --ink:#1A202C; --sub:#4A5568; --mute:#A0AEC0; --line:#E2E8F0; --bg:#F7FAFC; }
   * { box-sizing:border-box; }
@@ -208,7 +215,7 @@
 var TOKEN = '', STAFF = '';
 (function() {
   var m = window.location.hash.match(/[#&]t=([^&]+)/) || window.location.search.match(/[?&]token=([^&]+)/);
-  if (m) { TOKEN = decodeURIComponent(m[1]); try { localStorage.setItem('rakuruma_staff_token', TOKEN); } catch(e) {} history.replaceState(null, '', window.location.pathname); }
+  if (m) { TOKEN = decodeURIComponent(m[1]); try { localStorage.setItem('rakuruma_staff_token', TOKEN); } catch(e) {} } // URLのtokenは消さない：「ホーム画面に追加」した起動URLにtokenが残り、アプリの保存領域が別でも開ける（2026-09-24）
   else { try { TOKEN = localStorage.getItem('rakuruma_staff_token') || ''; } catch(e) {} }
   if (!TOKEN) { window.location.replace('/staff/'); }
 })();
