@@ -215,7 +215,7 @@ var API_URL = 'https://133-167-93-192.sslip.io/'; var MAIN_GAS_URL = 'https://sc
 var ITEMS = [], OTHERS = [], TAB = 'all', CUR = null, TEMPLATES = null; // 2026-09-10 「未対応」タブは廃止（未対応は赤丸とタブのバッジで示す）
 
 // 読み取り系は25秒で打ち切って計3回まで（GAS側でたまに30〜40秒止まることがある。送信系は基本やり直さない）
-var API_RETRY_OPS = { list:1, listBiz:1, thread:1, templates:1, scheduleList:1, search:1 };
+var API_RETRY_OPS = { list:1, listBiz:1, thread:1, templates:1, scheduleList:1, search:1, sendStatus:1 };
 function api(body) {
   body.action = 'inbox'; body.token = TOKEN;
   var payload = JSON.stringify(body);
@@ -561,21 +561,38 @@ document.getElementById('btnSend').onclick = function() {
   setTimeout(function() { if (document.getElementById('pending') && CUR === target) { toast('送信の応答が遅いので確認しています…'); openThread(target); } }, 25000);
   withGrace(((target.customer && target.customer.name) || target.partner || target.displayName || '') + ' へ送信', function() {
   btn.disabled = true;
-  api({ op:'send', uid: target.uid, src: target.src, text: sentText }).then(function(r) {
+  // 送信操作ごとに固有の番号（sendId）。サーバーは同じ番号を二度送らないので、失敗時の自動再送・押し直しが二重にならない（2026-09-24）
+  var sendId = (function() { try { return crypto.randomUUID(); } catch (e) { return 's' + Date.now() + Math.random().toString(16).slice(2); } })();
+  function newUuid() { try { return crypto.randomUUID(); } catch (e) { return 's' + Date.now() + Math.random().toString(16).slice(2); } }
+  function pendingMeta(msg) { var d = document.getElementById('pending'); if (d) { var m = d.querySelector('.meta'); if (m) m.textContent = msg; } }
+  function done(ok, msg) {
     btn.disabled = false;
-    if (r && r.ok === undefined) {
-      // GASの応答が別ページに化けることが稀にある。送れているかをスレッドで確かめてから判断する
-      return api({ op:'thread', uid: target.uid, src: target.src }).then(function(t) {
-        var sent = (t.ok && (t.messages || []).some(function(m) { return m.dir === '送信' && m.text === sentText; }));
-        if (sent) { toast('送信しました（記録済み）'); target.needsReply = false; target.unread = 0; if (CUR === target) openThread(CUR); }
-        else { removePending(); ta.value = sentText; autosize(); alert('送信を確認できませんでした。スレッドを見て、届いていなければもう一度送ってください'); }
-      });
-    }
-    if (!r.ok) { removePending(); ta.value = sentText; autosize(); alert('送信できませんでした: ' + (r.error || '') + '\n\n※押し直す前に、相手のトークに同じ文が届いていないか確認してください（応答だけ失敗して実際は届いていることがあります）'); return; }
-    toast(r.dup ? '直前に同じ内容を送信済みだったので、今回は送っていません' : '送信しました（記録済み）');
-    target.needsReply = false; target.unread = 0;
-    if (CUR === target) openThread(CUR);
-  }).catch(function(e) { btn.disabled = false; removePending(); ta.value = sentText; autosize(); alert('通信エラー: ' + e); });
+    if (ok) { toast(msg || '送信しました（記録済み）'); target.needsReply = false; target.unread = 0; if (CUR === target) openThread(CUR); }
+    else { removePending(); if (CUR === target) { ta.value = sentText; autosize(); } alert(msg); }
+  }
+  function verify(round) {
+    // 届いたかを送信記録で確かめる。届いていれば成功、未送信なら同じ sendId で再送、記録が読めなければ少し待ってもう一度
+    pendingMeta('送信結果を確認中…（Google側の応答待ち）');
+    setTimeout(function() {
+      api({ op:'sendStatus', uid: target.uid, src: target.src, text: sentText }).then(function(st) {
+        if (st && st.ok && st.delivered) return done(true);
+        if (st && st.ok && !st.delivered) { if (round < 3) return attempt(round + 1); return done(false, '送信できませんでした（3回試しました）。少し時間をおいてもう一度お願いします'); }
+        if (round < 3) return verify(round + 1);
+        done(false, 'Google側の応答がなく、届いたか確認できませんでした。相手のトークを開いて届いていなければもう一度送ってください');
+      }).catch(function() { if (round < 3) return verify(round + 1); done(false, 'Google側の応答がなく、届いたか確認できませんでした。相手のトークを開いて届いていなければもう一度送ってください'); });
+    }, round === 1 ? 4000 : 8000);
+  }
+  function attempt(round) {
+    pendingMeta(round === 1 ? '送信中…' : '送信中…（' + round + '回目・Google側が詰まっています）');
+    api({ op:'send', uid: target.uid, src: target.src, text: sentText, sendId: sendId }).then(function(r) {
+      if (r && r.ok) return done(true, r.dup ? '直前に同じ内容を送信済みだったので、今回は送っていません' : '送信しました（記録済み）');
+      if (r && r.ok === undefined) return verify(round);           // 応答が別ページに化けた
+      if (r && r.uncertain) return verify(round);                  // サーバーが「届いたか分からない」と言っている
+      if (r && /認証|本文が|長すぎ|uidが不正/.test(String(r.error || ''))) return done(false, '送信できませんでした: ' + r.error);
+      return verify(round);                                         // その他の失敗も、まず届いたかを確かめる
+    }).catch(function() { verify(round); });
+  }
+  attempt(1);
   }, function() { removePending(); if (CUR === target) { ta.value = sentText; autosize(); ta.focus(); } });
 };
 
@@ -667,8 +684,9 @@ document.getElementById('photo').addEventListener('change', function() {
     showPending('<img src="' + dataUrl + '" alt="送信する写真" style="max-width:100%;border-radius:10px;display:block">');
     withGrace('写真を送信', function() {
     toast('送信中…');
-    api({ op:'sendImage', uid: target.uid, src: target.src, dataUrl: dataUrl }).then(function(r) {
-      if (r && r.ok === undefined) { toast('送信結果を確認中…'); return openThread(CUR); }
+    var imgSendId = (function() { try { return crypto.randomUUID(); } catch (e) { return 'i' + Date.now() + Math.random().toString(16).slice(2); } })();
+    api({ op:'sendImage', uid: target.uid, src: target.src, dataUrl: dataUrl, sendId: imgSendId }).then(function(r) {
+      if (r && (r.ok === undefined || r.uncertain)) { toast('送信結果を確認中…（トークを見て、届いていなければもう一度）'); return openThread(CUR); }
       if (!r.ok) { removePending(); alert('送れませんでした: ' + (r.error || '')); return; }
       toast('写真を送りました（記録済み）'); if (CUR === target) openThread(CUR);
     }).catch(function(e) { removePending(); alert('通信エラー: ' + e); });
