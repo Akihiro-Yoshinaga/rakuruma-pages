@@ -615,16 +615,38 @@ function showPending(inner) {
 }
 function removePending() { var d = document.getElementById('pending'); if (d) d.remove(); document.body.classList.remove('gracing'); }
 function clearGrace() { clearTimeout(graceTimer); clearInterval(graceTick); graceTimer = null; graceTick = null; document.getElementById('grace').style.display = 'none'; document.body.classList.remove('gracing'); }
-document.getElementById('btnSend').onclick = function() {
+// 送信ボタン：押す＝通常送信／長押し（PCは右クリック）＝「🔕 ミュートで送信」メニュー（通知音なし・2026-09-25）
+(function() {
+  var b = document.getElementById('btnSend'), lp = null, fired = false;
+  b.style.webkitTouchCallout = 'none'; b.style.webkitUserSelect = 'none'; b.style.userSelect = 'none';
+  function menu() {
+    closeMenu();
+    if (!CUR || !document.getElementById('text').value.trim()) { toast('本文を入れてから長押ししてください'); return; }
+    var r = b.getBoundingClientRect();
+    var m = document.createElement('div'); m.id = 'muteMenu';
+    m.style.cssText = 'position:fixed;z-index:60;right:' + Math.max(8, window.innerWidth - r.right) + 'px;bottom:' + (window.innerHeight - r.top + 8) + 'px;background:#fff;border:1.5px solid var(--navy);border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.18);overflow:hidden;font-size:15px';
+    m.innerHTML = '<div id="muteGo" style="padding:12px 16px;cursor:pointer;font-weight:700;color:var(--navy);white-space:nowrap">🔕 ミュートで送信<div style="font-size:11px;font-weight:400;color:#718096;margin-top:2px">相手のスマホで通知音が鳴りません</div></div>';
+    document.body.appendChild(m);
+    document.getElementById('muteGo').onclick = function(e) { e.stopPropagation(); closeMenu(); sendNow(b, true); };
+    setTimeout(function() { document.addEventListener('click', closeMenu, { once: true }); }, 0);
+  }
+  function closeMenu() { var m = document.getElementById('muteMenu'); if (m) m.remove(); }
+  b.addEventListener('pointerdown', function() { fired = false; clearTimeout(lp); lp = setTimeout(function() { fired = true; if (navigator.vibrate) try { navigator.vibrate(15); } catch (e) {} menu(); }, 500); });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(function(ev) { b.addEventListener(ev, function() { clearTimeout(lp); }); });
+  b.addEventListener('contextmenu', function(e) { e.preventDefault(); if (!fired) { fired = true; menu(); } });
+  // 長押しを離したときのclickはメニューを閉じないように止める
+  b.onclick = function(e) { if (fired) { fired = false; e.preventDefault(); e.stopPropagation(); return; } sendNow(b, false); };
+})();
+function sendNow(btn, silent) {
   if (!CUR) return;
   var ta = document.getElementById('text'); var text = ta.value.trim();
   if (!text) return;
   if (graceTimer) { alert('前の送信の猶予中です。終わってからもう一度お願いします'); return; }
-  var btn = this; var target = CUR; var sentText = text;
+  var target = CUR; var sentText = text;
   ta.value = ''; autosize();
-  showPending(esc(sentText));
+  showPending((silent ? '🔕 ' : '') + esc(sentText));
   setTimeout(function() { if (document.getElementById('pending') && CUR === target) { toast('送信の応答が遅いので確認しています…'); openThread(target); } }, 25000);
-  withGrace(((target.customer && target.customer.name) || target.partner || target.displayName || '') + ' へ送信', function() {
+  withGrace(((target.customer && target.customer.name) || target.partner || target.displayName || '') + (silent ? ' へミュートで送信' : ' へ送信'), function() {
   btn.disabled = true;
   // 送信操作ごとに固有の番号（sendId）。サーバーは同じ番号を二度送らないので、失敗時の自動再送・押し直しが二重にならない（2026-09-24）
   var sendId = (function() { try { return crypto.randomUUID(); } catch (e) { return 's' + Date.now() + Math.random().toString(16).slice(2); } })();
@@ -632,7 +654,7 @@ document.getElementById('btnSend').onclick = function() {
   function pendingMeta(msg) { var d = document.getElementById('pending'); if (d) { var m = d.querySelector('.meta'); if (m) m.textContent = msg; } }
   function done(ok, msg) {
     btn.disabled = false;
-    if (ok) { toast(msg || '送信しました（記録済み）'); target.needsReply = false; target.unread = 0; if (CUR === target) openThread(CUR); if (CONFIRM_DONE_RE.test(sentText)) setTimeout(function() { if (CUR === target) showConfirmBar(target, '作業完了の連絡を送りました。施工確定を忘れずに', jstToday()); }, 800); }
+    if (ok) { toast(msg || (silent ? '🔕 ミュートで送信しました（記録済み）' : '送信しました（記録済み）')); target.needsReply = false; target.unread = 0; if (CUR === target) openThread(CUR); if (CONFIRM_DONE_RE.test(sentText)) setTimeout(function() { if (CUR === target) showConfirmBar(target, '作業完了の連絡を送りました。施工確定を忘れずに', jstToday()); }, 800); }
     else { removePending(); if (CUR === target) { ta.value = sentText; autosize(); } alert(msg); }
   }
   function verify(round) {
@@ -649,8 +671,8 @@ document.getElementById('btnSend').onclick = function() {
   }
   function attempt(round) {
     pendingMeta(round === 1 ? '送信中…' : '送信中…（' + round + '回目・Google側が詰まっています）');
-    api({ op:'send', uid: target.uid, src: target.src, text: sentText, sendId: sendId }).then(function(r) {
-      if (r && r.ok) return done(true, r.dup ? '直前に同じ内容を送信済みだったので、今回は送っていません' : '送信しました（記録済み）');
+    api({ op:'send', uid: target.uid, src: target.src, text: sentText, sendId: sendId, silent: silent ? '1' : '' }).then(function(r) {
+      if (r && r.ok) return done(true, r.dup ? '直前に同じ内容を送信済みだったので、今回は送っていません' : (silent ? '🔕 ミュートで送信しました（記録済み）' : '送信しました（記録済み）'));
       if (r && r.ok === undefined) return verify(round);           // 応答が別ページに化けた
       if (r && r.uncertain) return verify(round);                  // サーバーが「届いたか分からない」と言っている
       if (r && /認証|本文が|長すぎ|uidが不正/.test(String(r.error || ''))) return done(false, '送信できませんでした: ' + r.error);
@@ -659,7 +681,7 @@ document.getElementById('btnSend').onclick = function() {
   }
   attempt(1);
   }, function() { removePending(); if (CUR === target) { ta.value = sentText; autosize(); ta.focus(); } });
-};
+}
 
 document.getElementById('btnDraft').onclick = function() {
   if (!CUR) return;
