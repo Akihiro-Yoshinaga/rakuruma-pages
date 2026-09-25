@@ -147,6 +147,7 @@
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
   <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
+  <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
     <b>予約送信</b>（決めた日時に自動で送ります。前日リマインドなどに）
@@ -324,9 +325,24 @@ function itemMatches(it, q) {
 // 工場・取引先の表示：「取引先名（担当者名）」。取引先名が未設定ならLINEの表示名だけ
 function bizLabel(it) { var p = it.partner || '', d = it.displayName || ''; if (p && d && p !== d) return p + '（' + d + '）'; return p || d || '（表示名なし）'; }
 // 見出しに「次回 M/D(曜) HH:MM 予定名」を出す（VPSが6時間キャッシュ・2026-09-25）
+// 施工確定への導線（2026-09-25）：作業完了の連絡を送ったあと、または今日その人の施工予定があるとき、ダッシュボードの施工確定をその日・その人で開く
+var DASH_URL = 'https://script.google.com/macros/s/AKfycbwVF0zpW_SQ0wLBySCOBnv1VjMbN-Kjipf6OQXepHHkBa1QLth_A2mK6RvByFbcrgDcIQ/exec';
+var CONFIRM_DONE_RE = /(作業|施工|洗車|整備|点検|取り?付け)[^。\n]{0,8}(終了|完了|終わり)|お車[^。\n]{0,8}(戻し|お戻し|返却)|納車/;
+function jstToday() { var d = new Date(Date.now() + 9 * 3600000); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0'); }
+function showConfirmBar(it, reason, dateStr) {
+  if (!it || it.src === 'biz' || !it.customer || !it.customer.name) return;
+  var bar = document.getElementById('confirmBar'); if (!bar) return;
+  var sei = String(it.customer.name).trim().split(/[\s\u3000]+/)[0];
+  var date = dateStr || jstToday();
+  document.getElementById('confirmBarText').textContent = reason;
+  document.getElementById('confirmBarLink').href = DASH_URL + '?confirm=' + date + '&who=' + encodeURIComponent(sei);
+  bar.style.display = 'flex';
+}
+document.getElementById('confirmBarClose').onclick = function() { document.getElementById('confirmBar').style.display = 'none'; };
 function loadNextEvent(it) {
   var el = document.getElementById('tNext'); if (!el) return;
   el.textContent = ''; el.style.display = 'none';
+  var cb = document.getElementById('confirmBar'); if (cb) cb.style.display = 'none';
   if (!it || it.src === 'biz' || !it.customer || !it.customer.name) return;
   var target = it;
   api({ op:'nextEvent', uid: it.uid, name: it.customer.name }).then(function(r) {
@@ -337,6 +353,7 @@ function loadNextEvent(it) {
     if (m) { var d = new Date(+m[1], +m[2] - 1, +m[3]); when = (+m[2]) + '/' + (+m[3]) + '(' + '日月火水木金土'.charAt(d.getDay()) + ') ' + m[4]; }
     var title = String(r.ev.title || '').replace(/^\S+\s*(さん|様)?\s*/, '').slice(0, 24);
     el.textContent = '次回 ' + when + (title ? '　' + title : ''); el.style.display = 'block';
+    if (m && (m[1] + '-' + m[2] + '-' + m[3]) === jstToday()) showConfirmBar(target, '本日の施工：' + when + (title ? '　' + title : '') + '。終わったら施工確定を', jstToday());
   }).catch(function() {});
 }
 function custLabel(it) { var c = it.customer; if (!c) return null; return (c.contact ? c.contact : c.name) + ' さん'; }
@@ -615,7 +632,7 @@ document.getElementById('btnSend').onclick = function() {
   function pendingMeta(msg) { var d = document.getElementById('pending'); if (d) { var m = d.querySelector('.meta'); if (m) m.textContent = msg; } }
   function done(ok, msg) {
     btn.disabled = false;
-    if (ok) { toast(msg || '送信しました（記録済み）'); target.needsReply = false; target.unread = 0; if (CUR === target) openThread(CUR); }
+    if (ok) { toast(msg || '送信しました（記録済み）'); target.needsReply = false; target.unread = 0; if (CUR === target) openThread(CUR); if (CONFIRM_DONE_RE.test(sentText)) setTimeout(function() { if (CUR === target) showConfirmBar(target, '作業完了の連絡を送りました。施工確定を忘れずに', jstToday()); }, 800); }
     else { removePending(); if (CUR === target) { ta.value = sentText; autosize(); } alert(msg); }
   }
   function verify(round) {
