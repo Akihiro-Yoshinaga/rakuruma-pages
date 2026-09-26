@@ -300,12 +300,19 @@ function manualReload() {
   var rb = document.getElementById('reload'); rb.textContent = '更新中…'; rb.style.opacity = '.7';
   loadList(true); loadBiz(true, true);
 }
-function loadList(manual) {
+// 開いたとき・画面に戻ったとき（2026-09-26 吉永さん要望「工場もお客様も開いたら更新されているように」）：
+// 保存済みの一覧を先に出し、お客様と工場・取引先を同時にキャッシュ無しで取り直す。数秒内の二重起動（visibilitychange＋pageshow）は1回にまとめる
+var LAST_FORCE_AT = 0;
+function refreshBoth() {
+  var now = Date.now(); if (now - LAST_FORCE_AT < 8000) return; LAST_FORCE_AT = now;
+  loadList(false, true); loadBiz(true, true);
+}
+function loadList(manual, force) {
   if (!ITEMS.length) {
     try { var c = JSON.parse(localStorage.getItem('rakuruma_inbox_cache') || 'null'); if (c && c.items) { ITEMS = c.items; OTHERS = c.others || []; renderList(); } } catch(e) {}
     if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>';
   }
-  var q = { op:'list' }; if (manual) q.nocache = 1;
+  var q = { op:'list' }; if (manual || force) q.nocache = 1;
   api(q).then(function(r) {
     if (!r.ok) {
       if (/認証/.test(r.error || '')) { try { localStorage.removeItem('rakuruma_staff_token'); } catch(e) {} window.location.replace('/staff/'); return; }
@@ -317,7 +324,7 @@ function loadList(manual) {
     renderList();
     if (PENDING_OPEN) { var po = ITEMS.concat(OTHERS).filter(function(x) { return x.uid === PENDING_OPEN; })[0]; PENDING_OPEN = ''; if (po) openThread(po); }
     listDone_('お客様を更新しました（' + new Date().toTimeString().slice(0, 5) + '・未対応 ' + ITEMS.filter(function(x) { return x.needsReply; }).length + '件）', manual);
-    if (!manual) loadBiz(true); // 工場・取引先のバッジを出すため常に裏で読む（手動更新のときは manualReload が同時に読んでいる）
+    if (!manual && !force) loadBiz(true); // 工場・取引先のバッジを出すため常に裏で読む（手動更新・開いた直後は同時に読んでいる）
   }).catch(function(e) { if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">通信エラー: ' + esc(e) + '</div>'; listDone_('更新できませんでした：' + ((e && e.message) || '通信エラー'), manual); });
 }
 function loadBiz(silent, force) {
@@ -1102,7 +1109,7 @@ function showList() {
   document.getElementById('thread').style.display = 'none';
   document.getElementById('list').style.display = 'block';
   renderList();
-  loadList(); // 一覧に戻ったら新着を取り直す
+  refreshBoth(); // 一覧に戻ったら新着を取り直す（お客様・工場の両方）
 }
 document.getElementById('back').onclick = function() {
   if (!isDesktop() && history.state && history.state.inboxThread) { try { history.back(); return; } catch (e) {} }
@@ -1215,7 +1222,7 @@ document.getElementById('btnNew').onclick = function() {
   });
 };
 
-loadList();
+refreshBoth();
 setInterval(function() { if (document.visibilityState !== 'visible') return; if (isDesktop() || document.getElementById('list').style.display !== 'none') loadList(); }, 90000);
 // 開いているトークは30秒ごとに新着を取り直す（変化があったときだけ描き直す）。画面に戻ったときも即時に更新
 var THREAD_POLLING = false;
@@ -1254,7 +1261,7 @@ function connectEvents() {
   };
 }
 function onBackToPage() {
-  if (isDesktop() || document.getElementById('list').style.display !== 'none') loadList();
+  if (isDesktop() || document.getElementById('list').style.display !== 'none') refreshBoth();
   pollThread();
   connectEvents();
 }
