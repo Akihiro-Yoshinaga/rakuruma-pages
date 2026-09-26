@@ -1,194 +1,433 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>複数台の車管理｜ラクルマ</title>
-<meta name="description" content="社用車・複数台の洗車・点検・車検をまとめてお任せ。世田谷区・目黒区・渋谷区エリアの出張カーケアサービス。">
-<meta property="og:title" content="複数台の車管理｜ラクルマ">
-<meta property="og:description" content="社用車・複数台の洗車・点検・車検をまとめてお任せ。世田谷区・目黒区・渋谷区エリアの出張カーケアサービス。">
-<meta property="og:image" content="https://rakuruma.com/assets/uploads/2023/02/rakuruma_ogp.jpg">
-<meta property="og:url" content="https://rakuruma.com/corporate/">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/rakuruma-style.css">
-<link rel="stylesheet" href="/corporate/corporate_style.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script type="text/javascript">
-(function(c,l,a,r,i,t,y){
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社用車の出張洗車・点検｜法人のお客様へ｜ラクルマ</title>
+  <meta name="description" content="社員が洗車に行く時間はゼロに、お客様を乗せる車はいつもきれいに。会社の駐車場で社用車をまとめて洗車し、季節ごとに年4回、国家一級整備士が状態を点検します。世田谷区・目黒区・渋谷区、港区・品川区にも伺います。">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="社用車の出張洗車・点検｜法人のお客様へ｜ラクルマ">
+  <meta property="og:description" content="社員が洗車に行く時間はゼロに、お客様を乗せる車はいつもきれいに。会社の駐車場で社用車をまとめて洗車し、季節ごとに年4回、国家一級整備士が状態を点検します。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rakuruma.com/corporate/">
+  <meta property="og:image" content="https://rakuruma.com/assets/uploads/2023/02/rakuruma_ogp.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://rakuruma.com/corporate/">
+  <link rel="stylesheet" href="/design-tokens.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/corporate/corporate_style.css?v=20260922k">
+  <script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
     if(!/(^|\.)rakuruma\.com$/.test(location.hostname))return;
     try{if(localStorage.getItem("rk_owner")==="1")return;}catch(e){}
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", "xwvd9yxire");
-</script>
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "xwvd9yxire");
+  </script>
 </head>
 <body>
 
-<!-- ヒーロー -->
-<section class="top bk_blue">
-<div class="area_l colorfont_w">
-<div class="header flexbox">
-<h1><a href="/"><img decoding="async" src="/assets/images/logo_rakuruma_w.svg" alt="ラクルマ"></a></h1>
-<p class="fonts">対応地域：<br class="sp">世田谷区/目黒区/渋谷区</p>
-</div>
-<div class="top_image image_frame">
-<div class="image_pic pc" style="background-image: url(/assets/images/image_top_pc.png);"></div>
-<div class="image_pic sp"><img decoding="async" src="/assets/images/image_top_sp.jpg" alt="出張洗車ならラクルマ"></div>
-<div class="top_textarea">
-<p class="head_copy"><span class="head_copy_div fonts">世田谷区/目黒区/渋谷区</span><br />社用車の管理を、<br />もっとラクに。</p>
-<p class="second_copy">複数台まとめて、全部お任せ。<br>出張洗車・点検・車検を一括代行</p>
-</div>
-</div>
-</div>
+<header>
+  <div class="header-brand">
+    <a href="https://rakuruma.com" class="logo">
+      <img src="/assets/images/logo.svg" alt="ラクルマ" style="height:34px;width:auto;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <span class="logo-text" style="display:none;">ラクルマ</span>
+    </a>
+  </div>
+  <button class="menu-btn" id="menuBtn" aria-label="メニューを開閉" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<div class="menu-overlay" onclick="toggleMenu()"></div>
+<nav class="menu-panel" aria-label="ページ内メニュー">
+  <div class="menu-divider">このページ</div>
+  <a href="#pain" onclick="toggleMenu()">こんなお悩みに</a>
+  <a href="#service" onclick="toggleMenu()">お任せいただけること</a>
+  <a href="#report" onclick="toggleMenu()">毎回のレポート</a>
+  <a href="#time" onclick="toggleMenu()">社員の時間の比較</a>
+  <a href="#case" onclick="toggleMenu()">活用事例</a>
+  <a href="#mechanic" onclick="toggleMenu()">伺う整備士</a>
+  <a href="#plan" onclick="toggleMenu()">料金</a>
+  <a href="#flow" onclick="toggleMenu()">ご利用の流れ</a>
+  <a href="#check" onclick="toggleMenu()">導入前にご確認ください</a>
+  <a href="#faq" onclick="toggleMenu()">よくあるご質問</a>
+  <div class="menu-divider">その他のサービス</div>
+  <a href="/mobile-car-wash/">出張洗車</a>
+  <a href="/maintenance/">出張整備・車検</a>
+  <a href="/partner/">整備工場・販売店さま向け</a>
+  <a href="#contact" onclick="toggleMenu()" class="menu-line">無料でお見積りをもらう</a>
+</nav>
+
+<!-- FVのビフォー／アフター（hero-ba-*.jpg）は動画からの切り出し（仮）。9/24・9/26に同じ構図で撮った写真へ差し替える -->
+<section class="hero hero--split">
+  <span class="hero-area">世田谷・目黒・渋谷／港区・品川区</span>
+  <div class="hero-split">
+    <div class="hero-content">
+      <h1 class="hero-title">社用車の洗車も点検も、<br>会社の駐車場で。</h1>
+      <p class="hero-subtitle">社員が洗車に行く時間は、ゼロに。</p>
+      <div class="hero-cta">
+        <a class="btn-line" href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener">LINEで台数と場所を送る</a>
+        <a class="btn-primary" href="#contact">フォームでお見積りをもらう</a>
+      </div>
+      <p class="hero-cta-note">台数と場所を送るだけ。2営業日以内にご返信します。</p>
+      <div class="hero-stats">
+        <div class="hstat"><span class="n">1,000<small>件以上</small></span><span class="l">累計施工実績</span></div>
+        <div class="hstat"><span class="n"><span data-curama-count>596</span><small>件</small></span><span class="l">口コミ ★<span data-curama-rating>4.92</span></span></div>
+      </div>
+      <p class="hero-note">※口コミ件数・評価はくらしのマーケットの店舗全体の数字です。施工件数は自社実績です。</p>
+    </div>
+    <div class="hero-visual">
+      <figure class="hero-ba">
+        <div class="hero-ba-item"><img src="/assets/images/service_wash_before.jpg" alt="洗車前の社用車" fetchpriority="high"><span class="hero-ba-tag">BEFORE</span></div>
+        <div class="hero-ba-item"><img src="/assets/images/service_wash_after.jpg" alt="洗車後の社用車"><span class="hero-ba-tag is-after">AFTER</span></div>
+        <figcaption class="hero-ba-cap">洗車・室内清掃・点検まで、1台約80分</figcaption>
+      </figure>
+    </div>
+  </div>
 </section>
 
-<!-- 課題感 -->
-<section class="introduction">
-<div class="area_s">
-<h2 class="headline fontxl bold">こんな<span class="colorfont_b">お困りごと</span>はありませんか？</h2>
-<ul class="flexbox fontm">
-<li class="bk_gr"><img decoding="async" src="/assets/images/icon_check.svg">台数が多くて、それぞれの洗車・点検の管理が大変・・・</li>
-<li class="bk_gr"><img decoding="async" src="/assets/images/icon_check.svg">車を業者に持っていく時間と手間がかかる・・・</li>
-<li class="bk_gr"><img decoding="async" src="/assets/images/icon_check.svg">車検のタイミングがバラバラで、管理が煩雑・・・</li>
-<li class="bk_gr"><img decoding="async" src="/assets/images/icon_check.svg">誰か信頼できる人にまとめて任せたい・・・</li>
-</ul>
-</div>
-<div class="bk_lb">
-<div class="area_s">
-<div class="subhead colorfont_b bold flexbox">
-<p>そんなお困りごとを</p>
-<p><img decoding="async" src="/assets/images/logo.svg" alt="ラクルマ"></p>
-<p>なら解決します。</p>
-</div>
-<div class="textarea flexbox">
-<div class="image_frame">
-<div class="image_pic" style="background-image: url(/assets/images/image_solution.jpg);"></div>
-</div>
-<div class="discription fonts">台数が増えるほど、管理の手間も増える。<br />ラクルマは複数台まとめて対応可能。<br />洗車・点検・車検のスケジュール管理もお任せください。<br />国家整備士がまとめてご自宅・駐車場へ伺います。</div>
-</div>
-</div>
-</div>
+<section id="pain" class="pain-section">
+  <div class="section-inner">
+    <p class="section-label">FOR YOU</p>
+    <h2 class="section-title">社用車について、こんなお悩みはありませんか</h2>
+    <div class="pain-grid">
+      <div class="pain" data-reveal><img class="pain-img" src="pain-d-1.jpg" alt="社員が洗車に出かけて空いたままのデスク" width="880" height="660" loading="lazy"><h3>洗車に行くと、<br>1時間以上戻ってこない</h3><p>近くに洗車場がなく、社員の時間が消える</p></div>
+      <div class="pain" data-reveal><img class="pain-img" src="pain-d-2.jpg" alt="汚れた社用車にお客様をご案内している場面" width="880" height="660" loading="lazy"><h3>汚れたまま、<br>お客様を乗せている</h3><p>そのうち誰も洗車に行かなくなる</p></div>
+      <div class="pain" data-reveal><img class="pain-img" src="pain-d-3.jpg" alt="点検のために遠くの工場まで車を運転していく社員" width="880" height="660" loading="lazy"><h3>点検や車検で、<br>持っていくのが手間</h3><p>車を出す時間が取れない</p></div>
+      <div class="pain" data-reveal><img class="pain-img" src="pain-d-4.jpg" alt="車検の日がそれぞれ違う3台の社用車" width="880" height="660" loading="lazy"><h3>車検の時期が、<br>台ごとにバラバラ</h3><p>把握しきれない</p></div>
+    </div>
+  </div>
 </section>
 
-<!-- サービス内容 -->
-<section class="point area_l">
-<h2 class="headline fontxl bold">まとめてお任せできる<span class="colorfont_b">3つのサービス</span></h2>
-<ul class="content_container">
-<li class="flexbox">
-<div class="image_frame">
-<div class="image_pic img_l" style="background-image: url(/assets/images/image_2.jpg);"></div>
-</div>
-<div class="textarea">
-<div class="subhead fontll bold">
-<div class="montserrat colorfont_b">SERVICE 1</div>
-<div class="smallhead">出張洗車・室内清掃</div>
-</div>
-<div class="fonts">ボディ洗車・ホイール清掃・室内掃除機・除菌など。駐車場へ直接伺うので、持ち込み不要。水なし洗車剤使用のため、月極・マンション駐車場でも対応可能です。</div>
-</div>
-</li>
-<li class="flexbox">
-<div class="textarea">
-<div class="subhead fontll bold">
-<div class="montserrat colorfont_b">SERVICE 2</div>
-<div class="smallhead">定期点検・コンディション管理</div>
-</div>
-<div class="fonts">バッテリー・タイヤ・ウォッシャー液・各種消耗品のチェック。各車両ごとにカルテを作成し、コンディションを継続管理します。</div>
-</div>
-<div class="image_frame">
-<div class="image_pic img_r" style="background-image: url(/assets/images/image_3.jpg);"></div>
-</div>
-</li>
-<li class="flexbox">
-<div class="image_frame">
-<div class="image_pic img_l" style="background-image: url(/assets/images/image_4.jpg);"></div>
-</div>
-<div class="textarea">
-<div class="subhead fontll bold">
-<div class="montserrat colorfont_b">SERVICE 3</div>
-<div class="smallhead">車検・整備の代行</div>
-</div>
-<div class="fonts">車検のスケジュール管理から手続き・整備まで一括代行。台数分の車検タイミングを把握し、事前にご連絡するので見落としがありません。</div>
-</div>
-</li>
-</ul>
+<section id="service" class="service-section">
+  <div class="section-inner">
+    <p class="section-label">SERVICE</p>
+    <h2 class="section-title">お任せいただけること</h2>
+    <div class="svc-grid">
+      <div class="svc" data-reveal>
+        <img class="svc-img" src="/assets/images/service_img_5.jpg" alt="駐車場での出張洗車" loading="lazy">
+        <div class="svc-body"><span class="svc-num">01</span><h3>出張洗車・室内清掃</h3><p>会社の駐車場で全台まとめて、またはお店の前で1台ずつ。水なし洗車なので電源・水道は不要。月極・マンション駐車場でも施工できます。</p></div>
+      </div>
+      <div class="svc" data-reveal>
+        <img class="svc-img" src="/assets/images/service_img_1.jpg" alt="バッテリーの点検" loading="lazy">
+        <div class="svc-body"><span class="svc-num">02</span><h3>季節ごと・年4回の点検<span class="svc-tag">定期プランに標準</span></h3><p>3月・6月・9月・12月に国家一級整備士がバッテリー・タイヤ・消耗品を点検。追加料金なし。消耗品の交換も駐車場でできます。</p></div>
+      </div>
+      <div class="svc" data-reveal>
+        <img class="svc-img" src="/assets/images/service_shaken.jpg" alt="ボンネットを開けて点検する整備士" loading="lazy">
+        <div class="svc-body"><span class="svc-num">03</span><h3>整備・取付・車検</h3><p>ドライブレコーダーやモニターの取付、車検（駐車場でお預かりし提携工場で実施）も、ご希望のときだけ承ります。リース車も可。</p></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- 料金・プラン -->
-<section class="plan bk_lb">
-<div class="area_s">
-<h2 class="headline headline_br bold"><span class="fontxl montserrat">PLAN</span><span class="colorfont_b fontm">定期利用プラン</span></h2>
-<p class="discription fonts">台数・頻度に合わせてプランをお選びいただけます。複数台のご利用はお気軽にご相談ください。</p>
-<div class="plan_container">
-<div class="plan_middle flexbox">
-<div class="plan_box bk_w">
-<p class="fontll bold colorfont_b">１ヶ月に２回プラン<span class="fontss">（月額）</span></p>
-<p class="fontll bold">15,000円〜<span class="fontss">（7,500円/1回）</span></p>
-</div>
-<div class="plan_box bk_w">
-<p class="fontll bold colorfont_b">月１回プラン<span class="fontss">（月額）</span></p>
-<p class="fontll bold">7,900円〜</p>
-</div>
-<div class="plan_box bk_w">
-<p class="fontll bold colorfont_b">２ヶ月に１回プラン<span class="fontss">（2ヶ月に1回決済）</span></p>
-<p class="fontll bold">8,900円〜</p>
-</div>
-</div>
-<p class="fontss attention">※税込み・出張費込み　※料金表の詳細は<a href="/price_list">こちら</a></p>
-</div>
-</div>
+<section id="report" class="report-section">
+  <div class="section-inner">
+    <p class="section-label">REPORT</p>
+    <h2 class="section-title">作業のたびに写真、<br class="sp-br">季節ごとに点検の結果が届きます</h2>
+    <div class="rep-grid">
+      <div class="rep" data-reveal>
+        <div class="rep-media rep-pair">
+          <figure><img src="/assets/images/service_wash_before.jpg" alt="洗車前" loading="lazy"><figcaption>BEFORE</figcaption></figure>
+          <figure><img src="/assets/images/service_wash_after.jpg" alt="洗車後" loading="lazy"><figcaption>AFTER</figcaption></figure>
+        </div>
+        <div class="rep-body"><span class="term-when">毎回</span><h3>作業写真（ビフォー／アフター）</h3><p>どの車を、どこまで洗ったかが写真で分かります。</p></div>
+      </div>
+      <div class="rep" data-reveal>
+        <div class="rep-media"><img src="/corporate/report-mypage.png" alt="マイページの「お車の状態」画面" loading="lazy"></div>
+        <div class="rep-body"><span class="term-when">年4回・季節の点検のとき</span><h3>車の状態と、交換の目安</h3><p>点検は年4回（3月・6月・9月・12月）。バッテリー・タイヤ・オイル・ワイパーの状態を、LINEのマイページでいつでも確認できます。<small>画面は見本のデータです。</small></p></div>
+      </div>
+      <div class="rep" data-reveal>
+        <div class="rep-media"><img src="/corporate/report-line.png" alt="LINEで届く作業報告" loading="lazy"></div>
+        <div class="rep-body"><span class="term-when">毎回</span><h3>次回の車検日も、こちらで把握</h3><p>作業内容と写真をその日のうちにお送りします。車検の時期が近づいたらご連絡します。車検はご希望のときだけ承ります。いつもの工場に出していただいても構いません。<small>画面は見本のデータです。</small></p></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ご利用の流れ -->
-<section class="howtouse area_l">
-<h2 class="headline headline_br bold"><span class="fontxl montserrat">HOW TO USE</span><span class="colorfont_b fontm">ご利用の流れ</span></h2>
-<p class="discription fonts">まずはLINEでお気軽にご相談ください。台数・頻度・エリアを確認してプランをご提案します。</p>
-<ol class="step_list colorfont_w">
-<li class="flexbox">
-<div class="subhead fontll"><span class="montserrat fontm">STEP 1</span><br />LINEでご相談</div>
-<p class="fonts">台数・車種・対応エリア・ご希望の頻度をLINEでご連絡ください。最適なプランをご提案します。</p>
-</li>
-<li class="flexbox">
-<div class="subhead fontll"><span class="montserrat fontm">STEP 2</span><br />お試し訪問</div>
-<p class="fonts">まずは1台・1回からお試しいただけます。実際の作業クオリティをご確認ください。</p>
-</li>
-<li class="flexbox">
-<div class="subhead fontll"><span class="montserrat fontm">STEP 3</span><br />定期プラン開始</div>
-<p class="fonts">ご満足いただけたら定期プランへ。スケジュール・台数・サービス内容は柔軟に調整できます。</p>
-</li>
-<li class="flexbox">
-<div class="subhead fontll"><span class="montserrat fontm">STEP 4</span><br />継続管理</div>
-<p class="fonts">車両ごとにカルテを作成。点検・車検のタイミングもラクルマが管理し、事前にご連絡します。</p>
-</li>
-</ol>
+<section id="time" class="time-section">
+  <div class="section-inner">
+    <p class="section-label">BEFORE / AFTER</p>
+    <h2 class="section-title">洗車に使っていた時間が、仕事の時間に変わります。</h2>
+    <div class="ba-grid">
+      <div class="ba-main" data-reveal>
+        <p class="ba-label">社員1人が洗車に使う時間<span>1回あたり・当社試算</span></p>
+        <p class="ba-figure"><span class="ba-before">90<small>分</small></span><span class="ba-arrow">→</span><span class="ba-after">1<small>分</small></span></p>
+        <p class="ba-sub">洗車場への往復と待ち時間が、<b>お車の鍵を預けるだけ</b>になります。</p>
+      </div>
+      <div class="ba-year" data-reveal>
+        <p class="ba-year-label">社用車3台・月1回なら</p>
+        <p class="ba-year-figure">53<small>時間／年</small></p>
+        <p class="ba-year-sub">洗車にかかる労働時間を削減できます</p>
+      </div>
+    </div>
+    <div class="cmp-table" data-reveal>
+      <div class="cmp-head"><span></span><span>これまで<em>社員が対応</em></span><span class="is-after">ラクルマ<em>すべておまかせ</em></span></div>
+      <div class="cmp-row"><span class="ck"><svg class="ic ic-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 7v5l3 3"/></svg>洗車の手間</span><span class="cb"><i class="mk mk-x" aria-hidden="true"></i>社員が洗車場へ</span><span class="ca"><i class="mk mk-o" aria-hidden="true"></i>駐車場で完了</span></div>
+      <div class="cmp-row"><span class="ck"><svg class="ic ic-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg>見た目</span><span class="cb"><i class="mk mk-x" aria-hidden="true"></i>汚れてから気づく</span><span class="ca"><i class="mk mk-o" aria-hidden="true"></i>いつもきれい</span></div>
+      <div class="cmp-row"><span class="ck"><svg class="ic ic-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h-1a2 2 0 0 0 -2 2v3.5a5.5 5.5 0 0 0 11 0v-3.5a2 2 0 0 0 -2 -2h-1"/><path d="M8 15a6 6 0 1 0 12 0v-3"/><path d="M11 3v2"/><path d="M6 3v2"/><path d="M20 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></svg>車の状態</span><span class="cb"><i class="mk mk-x" aria-hidden="true"></i>誰も見ていない</span><span class="ca"><i class="mk mk-o" aria-hidden="true"></i>年4回、季節ごとに点検</span></div>
+      <div class="cmp-row"><span class="ck"><svg class="ic ic-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></svg>トラブル</span><span class="cb"><i class="mk mk-x" aria-hidden="true"></i>壊れてから</span><span class="ca"><i class="mk mk-o" aria-hidden="true"></i>壊れる前に</span></div>
+      <div class="cmp-row"><span class="ck"><svg class="ic ic-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></svg>車検</span><span class="cb"><i class="mk mk-x" aria-hidden="true"></i>台ごとに持ち込む</span><span class="ca"><i class="mk mk-o" aria-hidden="true"></i>時期をお知らせ、代行も可</span></div>
+    </div>
+    <p class="note">※当社試算。洗車場への往復と洗車待ちで1回90分、月1回・3台・12ヶ月の場合（約53時間）。洗車場までの距離や混み具合で変わります。</p>
+  </div>
 </section>
 
-<!-- エリア -->
-<section class="map area_s">
-<h2 class="headline headline_br bold"><span class="fontxl montserrat">AREA</span><span class="colorfont_b fontm">サービス提供エリア</span></h2>
-<p class="discription fonts"><span class="bold">世田谷区/目黒区/渋谷区</span><br />サービス提供エリアは順次拡大中です。エリア外の方もまずはご相談ください。</p>
-<img decoding="async" src="/assets/images/map.png" alt="エリアマップ">
+<!--
+  掲載了承：港区（塩谷様・虎ノ門不動産）＝未取得 ／ 品川区（平田様・フロンティアホーム）＝未取得（2026-09-11 了承依頼中）
+  了承が取れたら .case-name の中身を社名に差し替える。金額は載せない。
+-->
+<section id="case" class="case-section">
+  <div class="section-inner">
+    <p class="section-label">CASE</p>
+    <h2 class="section-title">導入事例</h2>
+    <p class="section-sub">実際にご利用いただいている2社と、はじめての会社様向けの形です。金額は定価で計算した目安です。</p>
+    <div class="case-grid">
+      <article class="case" data-reveal>
+        <div class="case-photo"><img src="/corporate/case-toranomon-1.jpg" alt="虎ノ門不動産様の社用車。地下駐車場で洗車後" loading="lazy"></div>
+        <div class="case-body">
+          <p class="case-name">虎ノ門不動産様（港区）</p>
+          <p class="case-cars">社用車3台</p>
+          <div class="case-spec"><span class="k">頻度</span><span class="v">月1回・地下駐車場で1台ずつ</span><span class="k">料金</span><span class="v"><b>23,700</b>円／月〜<small>（3台・月1回プラン・定価）</small></span></div>
+          <dl class="case-rows">
+            <div class="case-row"><dt>きっかけ</dt><dd>社員が洗車に行くと、1時間以上戻ってこない</dd></div>
+            <div class="case-row"><dt>変わったこと</dt><dd>社員の方が洗車に行くことがなくなりました。<b>2年以上ご利用中</b></dd></div>
+          </dl>
+        </div>
+      </article>
+      <article class="case" data-reveal>
+        <div class="case-photo"><img src="/corporate/case-frontier-1.jpg" alt="フロンティアホーム様の社用車。お店の前で洗車後" loading="lazy" style="object-position:center top"></div>
+        <div class="case-body">
+          <p class="case-name">フロンティアホーム様（品川区）</p>
+          <p class="case-cars">社用車2台</p>
+          <div class="case-spec"><span class="k">頻度</span><span class="v">週1回・お店の前で1台ずつ</span><span class="k">料金</span><span class="v"><b>30,000</b>円／月〜<small>（2台・月2回プラン・定価。週1回はお見積り）</small></span></div>
+          <dl class="case-rows">
+            <div class="case-row"><dt>きっかけ</dt><dd>お客様を乗せる車を、いつもきれいにしておきたい</dd></div>
+            <div class="case-row"><dt>変わったこと</dt><dd>「悪くなる前に教えてもらえるのが安心」。<b>車内のブルーレイプレーヤーの取付</b>もご依頼いただきました</dd></div>
+          </dl>
+        </div>
+      </article>
+      <article class="case case-trial" data-reveal>
+        <div class="case-body">
+          <p class="case-name">はじめての会社様</p>
+          <p class="case-cars">まず1台・1回</p>
+          <div class="case-spec"><span class="k">頻度</span><span class="v">1回だけ</span><span class="k">料金</span><span class="v"><b>7,900</b>円〜<small>（1台・定価）</small></span></div>
+          <p class="case-text">仕上がりとレポートを見てから、定期プランにするか決められます。台数分をまとめてお試しいただくこともできます。</p>
+          <a class="case-cta" href="#contact">まず1台、相談する</a>
+        </div>
+      </article>
+    </div>
+    <p class="note">※社名・車種・写真は、掲載のご了承をいただいた範囲で表記しています。料金は税込・出張費込みの定価で、実際のご利用金額ではありません。</p>
+  </div>
 </section>
 
-<!-- お問い合わせ -->
-<section class="contact area_s">
-<h2 class="headline headline_br bold"><span class="fontxl montserrat">CONTACT</span><span class="colorfont_b fontm">まずはご相談ください</span></h2>
-<p class="discription fonts">台数・エリア・ご希望の頻度など、お気軽にLINEまたはお問い合わせフォームよりご連絡ください。</p>
-<div class="button fonts bold"><a href="/contact">お問い合わせ</a></div>
+<section id="mechanic" class="mechanic-section">
+  <div class="section-inner">
+    <p class="section-label">MECHANIC</p>
+    <h2 class="section-title">伺う整備士</h2>
+    <p class="section-sub">国家1級整備士の代表が、点検と施工の品質を管理します。</p>
+    <div class="prof" data-reveal>
+      <img class="pface" src="/assets/images/team-yoshinaga.jpg" alt="ラクルマ代表 吉永明拓">
+      <div class="ptxt">
+        <p class="pqual">国家一級自動車整備士</p>
+        <p class="pname">吉永 明拓<span>（ラクルマ代表）</span></p>
+        <p class="pbody">ホンダディーラーに8年在籍したのち、2023年3月にラクルマを開業。出張整備を専業として累計1,000件以上を施工してまいりました。<br>洗車で伺うたびに車を見ているので、小さな変化に早く気づけます。施工は私または研修を受けたスタッフがお伺いし、点検と品質の管理は私が行います。</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- 固定CTAボタン -->
-<div class="button_area bk_w">
-<div class="flexbox">
-<div class="button_b fonts bold"><a href="/reservation_form/">初回体験を予約する</a></div>
-<div class="button_g fonts bold"><a href="https://lin.ee/r0BAZkR0">無料LINE相談</a></div>
-</div>
-</div>
+<section id="plan" class="plan-section">
+  <div class="section-inner">
+    <p class="section-label">PLAN</p>
+    <h2 class="section-title">1台あたりの料金</h2>
+    <p class="section-sub">全プランに室内清掃・年4回の点検・作業レポートが含まれます。同じ駐車場の複数台は、まとめて施工します。</p>
+    <div class="price-table">
+      <div class="price-head"><span>プラン</span><span>セダン・コンパクト<em>SMサイズ</em></span><span>SUV・ミニバン<em>LXサイズ</em></span></div>
+      <div class="price-row">
+        <div class="pn">月1回プラン<span class="pt">月額</span></div>
+        <span class="pp">¥7,900</span>
+        <span class="pp">¥8,900</span>
+      </div>
+      <div class="price-row">
+        <div class="pn">1ヶ月に2回プラン<span class="pt">月額｜1回あたり ¥7,500（SUV・ミニバン ¥8,000）</span></div>
+        <span class="pp">¥15,000</span>
+        <span class="pp">¥16,000</span>
+      </div>
+      <div class="price-row">
+        <div class="pn">2ヶ月に1回プラン<span class="pt">2ヶ月に1回の決済</span></div>
+        <span class="pp">¥7,900</span>
+        <span class="pp">¥8,900</span>
+      </div>
+    </div>
+    <div class="price-note">
+      <p>金額は税込・出張費込みです。SUV（全長4.5m以上）・ミニバン・全長4.8m以上のセダンはSUV・ミニバンの料金です。区分の詳細は<a href="/price_list/#size">料金表</a>をご覧ください。点検で見つかった整備や取付は、別途お見積りのうえご依頼いただけます。</p>
+    </div>
+  </div>
+</section>
 
+<section id="cta-mid" class="cta-mid">
+  <div class="cta-mid-band" data-reveal>
+    <p class="cta-mid-title">まずは1台、1回だけ。</p>
+    <p class="cta-mid-sub">台数と場所を送るだけ。2営業日以内にご返信します。</p>
+    <div class="cta-buttons">
+      <a class="btn-line" href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener">LINEで台数と場所を送る</a>
+      <a class="btn-primary" href="#contact">フォームでお見積りをもらう</a>
+    </div>
+  </div>
+</section>
+
+<section id="flow" class="flow-section">
+  <div class="section-inner">
+    <p class="section-label">FLOW</p>
+    <h2 class="section-title">ご利用の流れ</h2>
+    <p class="section-sub">まずは1台、1回だけで大丈夫です。仕上がりとレポートをご確認ください。</p>
+    <div class="flow-grid">
+      <div class="step" data-reveal>
+        <img class="step-img" src="/assets/uploads/2025/10/partner-step-1.jpg" alt="スマホでLINEを操作する手元" loading="lazy">
+        <div class="step-body"><span class="sn">01</span><h3>LINEかフォームで、台数と場所を</h3><p>社用車の台数と駐車場の場所をお知らせください。2営業日以内に、日程とお見積りをお送りします。</p></div>
+      </div>
+      <div class="step" data-reveal>
+        <img class="step-img" src="/assets/uploads/2025/10/partner-step-2.jpg" alt="車の鍵の受け渡し" loading="lazy">
+        <div class="step-body"><span class="sn">02</span><h3>まず1台、1回だけ</h3><p>当日は鍵をお預かりするだけです。仕上がりと、写真つきのレポートをご確認ください。</p></div>
+      </div>
+      <div class="step" data-reveal>
+        <img class="step-img" src="/assets/images/image_2.jpg" alt="駐車場で社用車を洗車するラクルマのスタッフ" loading="lazy">
+        <div class="step-body"><span class="sn">03</span><h3>定期プランへ</h3><p>ご満足いただけたら定期プランへ。台数・頻度は柔軟に調整できます。季節ごとの点検と、次回車検日のご案内が始まります。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="check" class="check-section">
+  <div class="section-inner">
+    <p class="section-label">CHECK</p>
+    <h2 class="section-title">導入前にご確認ください</h2>
+    <div class="check-grid">
+      <div class="chk" data-reveal><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z"/><path d="M15 9h.01"/></svg><h3>立ち会いは不要です</h3><p>お車の鍵をお預かりするだけ。作業後は写真つきでご報告します。</p></div>
+      <div class="chk" data-reveal><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.8 15.5a6 6 0 0 0 -1.2 -4.6l-4.89 -7.26c-.42 -.625 -1.287 -.803 -1.936 -.397a1.376 1.376 0 0 0 -.41 .397l-1.37 2.03"/><path d="M7.5 7.5l-1.9 2.8c-1.695 2.838 -1.035 6.441 1.567 8.546a7 7 0 0 0 7.5 .8"/><path d="M3 3l18 18"/></svg><h3>水道・電源は不要です</h3><p>水なし洗車のため、駐車場に設備がなくても施工できます。</p></div>
+      <div class="chk" data-reveal><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M9 16v-8h3.5a2 2 0 0 1 0 4h-3.5"/></svg><h3>月極・マンション駐車場も可</h3><p>会社の駐車場でも、借りている駐車場でも伺います。</p></div>
+      <div class="chk" data-reveal><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M10 16l2 -2l2 2"/></svg><h3>定休日は火曜です</h3><p>そのほかの曜日で、貴社のご都合に合わせて日程を組みます。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="faq-section">
+  <div class="section-inner">
+    <p class="section-label">FAQ</p>
+    <h2 class="section-title">よくあるご質問</h2>
+    <details class="qa"><summary>営業時間中に来られると、車が使えなくなりませんか？</summary><p>毎回、決めた曜日・決めた時間に伺います。駐車場がなくても、お店の前に1台ずつ出していただければ作業できます。1台ずつ順に作業しますので、全台を一度に空けていただく必要はありません。洗車・室内清掃・点検まで1台約80分、立ち会いは不要です。全台が出払う日は、日程を前後に動かします。</p></details>
+    <details class="qa"><summary>リース車でも頼めますか？</summary><p>はい。日常のきれいさと状態のチェックは、リース車でもこちらで承れます。</p></details>
+    <details class="qa"><summary>駐車場に水道や電源がありません。</summary><p>水なし洗車のため、電源・水道は不要です。月極・マンションの駐車場でも施工できます。</p></details>
+    <details class="qa"><summary>請求書払いはできますか？</summary><p>対応しております。御社宛てに請求書を発行いたします（弊社は課税事業者です）。締め日・お支払い方法はご相談ください。</p></details>
+    <details class="qa"><summary>車検もお願いできますか？</summary><p>はい。ご希望のときだけで構いません。いつもの工場に出していただいても大丈夫です。ご依頼の場合は駐車場で鍵とお車をお預かりし、国家一級整備士が提携工場で車検を終えてお戻しします。台ごとの車検日はこちらで把握し、時期が近づいたらご連絡します。車種によってお受けできない場合があるため、車検証の写真でご確認ください。詳しくは<a href="/shaken/">出張車検のページ</a>をご覧ください。</p></details>
+    <details class="qa"><summary>台数が増えたり減ったりします。</summary><p>定期プランの台数・頻度は、そのつど調整できます。まずは現在の台数でお知らせください。</p></details>
+    <details class="qa"><summary>対応エリアを教えてください。</summary><p>世田谷区・目黒区・渋谷区を中心に、港区・品川区にも伺っています。エリア外の会社様も、まずはご相談ください。</p></details>
+  </div>
+</section>
+
+<section id="contact" class="cta-section">
+  <h2>無料でお見積り。まずは1台、1回だけ</h2>
+  <p>社用車の台数と駐車場の場所をお知らせください。<br class="sp-br">2営業日以内に、日程とお見積りをご返信します。</p>
+  <div class="cta-buttons cta-buttons--main">
+    <a class="btn-line" href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener">LINEで台数と場所を送る</a>
+  </div>
+  <p class="cta-or">フォームからも送れます</p>
+  <div class="pform-wrap">
+    <p class="pform-title">お見積りのご依頼</p>
+    <p class="pform-sub">入力は1分。お見積りだけでも構いません。営業のお電話はいたしません。</p>
+    <form id="corpForm" novalidate>
+      <div class="pform-grid">
+        <input type="text" id="cf-company" placeholder="会社名（必須）" autocomplete="organization">
+        <input type="text" id="cf-name" placeholder="ご担当者名（必須）" autocomplete="name">
+        <input type="email" id="cf-email" placeholder="メールアドレス（必須）" autocomplete="email">
+        <select id="cf-fleet" aria-label="社用車の台数">
+          <option value="">社用車の台数（必須）</option>
+          <option value="1台">1台</option>
+          <option value="2〜3台">2〜3台</option>
+          <option value="4〜5台">4〜5台</option>
+          <option value="6〜10台">6〜10台</option>
+          <option value="11台以上">11台以上</option>
+        </select>
+      </div>
+      <input type="text" id="cf-place" class="pform-full" placeholder="駐車場の場所（例：港区虎ノ門・月極駐車場）" autocomplete="off">
+      <textarea id="cf-note" rows="2" placeholder="ご質問があればどうぞ（任意）"></textarea>
+      <input type="text" name="fax_number" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+      <div class="pform-foot">
+        <span class="pform-err" id="cf-err"></span>
+        <button type="submit" class="pform-submit" id="cf-submit">フォームでお見積りをもらう</button>
+      </div>
+    </form>
+    <p class="pform-done" id="cf-done" style="display:none">送信しました。2営業日以内に、ご記入いただいたメールアドレスへ日程とお見積りをご返信します。</p>
+  </div>
+  <p class="mail-addr">メール：<a href="mailto:support@rakuruma.com">support@rakuruma.com</a></p>
+  <p class="cta-area">対応エリア：世田谷区・目黒区・渋谷区、港区・品川区。エリア外もご相談ください。</p>
+</section>
+
+<footer>
+  <div class="footer-nav">
+    <a href="/">ホーム</a>
+    <a href="/mobile-car-wash/">出張洗車</a>
+    <a href="/maintenance/">出張整備</a>
+    <a href="/price_list/">料金表</a>
+    <a href="/blog/">作業実績ブログ</a>
+  </div>
+  <p>© 2023 ラクルマ｜世田谷区・目黒区・渋谷区の出張整備・洗車サービス</p>
+  <p style="margin-top:8px;font-size:11px;opacity:0.5;">AYコーポレーション／東京都世田谷区三軒茶屋1-32-8</p>
+</footer>
+
+<a class="float-cta" id="floatCta" href="https://lin.ee/r0BAZkR0" target="_blank" rel="noopener">
+  <span class="fc-main">LINEで台数と場所を送る</span>
+  <span class="fc-sub">台数と場所を送るだけ・2営業日以内に返信</span>
+</a>
+
+<script>
+  function toggleMenu() {
+    document.body.classList.toggle('menu-open');
+  }
+  // FVが見えている間はフローティングCTAを出さない
+  (function () {
+    var hero = document.querySelector('.hero');
+    var cta = document.getElementById('floatCta');
+    if (!hero || !cta || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function (entries) {
+      cta.classList.toggle('is-visible', !entries[0].isIntersecting);
+    }, { threshold: 0 }).observe(hero);
+  })();
+</script>
+<script>
+  // 見積り依頼フォーム（法人問い合わせGASを流用・/partner/ と同じ）
+  (function(){
+    var f=document.getElementById('corpForm');
+    if(!f) return;
+    var FORM_URL='https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var v=function(id){ return (document.getElementById(id).value||'').trim(); };
+      var err=document.getElementById('cf-err');
+      if(f.querySelector('[name="fax_number"]').value) return;
+      if(!v('cf-company')||!v('cf-name')){ err.textContent='会社名とご担当者名をご記入ください'; return; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('cf-email'))){ err.textContent='メールアドレスをご確認ください'; return; }
+      if(!v('cf-fleet')){ err.textContent='社用車の台数をお選びください'; return; }
+      err.textContent='';
+      var btn=document.getElementById('cf-submit');
+      btn.disabled=true; btn.textContent='送信中…';
+      var note=(v('cf-place')?'駐車場：'+v('cf-place')+'\n':'')+v('cf-note')+'\n（法人向けページ /corporate/ より）';
+      var payload={ type:'corporate', company:v('cf-company'), name:v('cf-name'), phone:'', email:v('cf-email'), fleet_size:v('cf-fleet'), note:note, fax_number:'' };
+      fetch(FORM_URL+'?payload='+encodeURIComponent(JSON.stringify(payload)))
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if(d.status==='success'){ f.style.display='none'; document.getElementById('cf-done').style.display='block'; }
+          else { throw 0; }
+        })
+        .catch(function(){ err.textContent='送信できませんでした。お手数ですがLINEまたはメールでご連絡ください'; btn.disabled=false; btn.textContent='無料でお見積りをもらう'; });
+    });
+  })();
+</script>
 <script src="/scripts/journey.js" defer></script>
 <script src="/scripts/reveal.js" defer></script>
+<script src="/scripts/stats.js" defer></script>
 </body>
 </html>
