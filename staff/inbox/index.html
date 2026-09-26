@@ -323,7 +323,8 @@ function itemMatches(it, q) {
 // 車ごとのタグ：複数台なら「車名 車検 日付」を車ごとに。1台なら従来どおり
 // 表示名：LINE連絡先名（このLINEの相手）があればそれを優先。顧客本人は補足に出す
 // 工場・取引先の表示：「取引先名（担当者名）」。取引先名が未設定ならLINEの表示名だけ
-function bizLabel(it) { var p = it.partner || '', d = it.displayName || ''; if (p && d && p !== d) return p + '（' + d + '）'; return p || d || '（表示名なし）'; }
+function bizLabel(it) { var p = it.partner || '', c = it.contact || '', d = it.displayName || ''; var head = p + (c ? (p ? ' ' : '') + c : ''); if (head && d && head !== d) return head + '（' + d + '）'; return head || d || '（表示名なし）'; }
+function bizWho(it) { var c = String((it && it.contact) || '').replace(/(さん|様|さま)$/, '').trim().split(/[\s\u3000]+/)[0]; return c ? c + 'さん' : ''; }
 // 見出しに「次回 M/D(曜) HH:MM 予定名」を出す（VPSが6時間キャッシュ・2026-09-25）
 // 施工確定への導線（2026-09-25）：作業完了の連絡を送ったあと、または今日その人の施工予定があるとき、ダッシュボードの施工確定をその日・その人で開く
 var DASH_URL = 'https://script.google.com/macros/s/AKfycbwVF0zpW_SQ0wLBySCOBnv1VjMbN-Kjipf6OQXepHHkBa1QLth_A2mK6RvByFbcrgDcIQ/exec';
@@ -832,7 +833,7 @@ document.getElementById('photo').addEventListener('change', function() {
 });
 // ---- 差し込み：{名前}→〇〇さん、{車種}→車名 ----
 function fill(text) {
-  var nm = (CUR && CUR.customer && CUR.customer.name) ? String(CUR.customer.name).split(/[\s\u3000]+/)[0] + 'さん' : (CUR && (CUR.partner || CUR.displayName)) || 'お客様';
+  var nm = (CUR && CUR.customer && CUR.customer.name) ? String(CUR.customer.name).split(/[\s\u3000]+/)[0] + 'さん' : (CUR && (bizWho(CUR) || CUR.partner || CUR.displayName)) || 'お客様';
   var car = (CUR && CUR.customer && CUR.customer.car) || 'お車';
   return String(text || '').replace(/\{名前\}/g, nm).replace(/\{車種\}/g, car);
 }
