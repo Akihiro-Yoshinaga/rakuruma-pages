@@ -898,15 +898,21 @@ function bookingDraft(it) {
     var d = r.draft || {};
     document.getElementById('bkPartner').value = r.partner || it.partner || '';
     document.getElementById('bkDate').value = d.visitDate || '';
-    document.getElementById('bkCar').value = d.car || '';
-    document.getElementById('bkMenu').value = d.menu || '';
+    // 複数台（2026-09-26）：AIが車ごとに返した vehicles を1台目＝メイン欄、2台目以降＝「2台目以降」欄へ振り分ける
+    var vs = Array.isArray(d.vehicles) ? d.vehicles.filter(function(v) { return v && v.car; }) : [];
+    var first = vs[0] || {};
+    document.getElementById('bkCar').value = first.car || d.car || '';
+    document.getElementById('bkMenu').value = first.menu || d.menu || '';
     document.getElementById('bkAddr').value = d.address || '';
+    document.getElementById('bkPrice').value = first.price || '';
+    document.getElementById('bkExtra').value = vs.slice(1).map(function(v) { return [v.car, v.menu || '', v.price || ''].join('｜').replace(/｜+$/, ''); }).join('\n');
     var note = d.note || '';
-    if (d.count > 1) note = (note ? note + '\n' : '') + '台数：' + d.count + '台' + (d.cars && d.cars.length ? '（' + d.cars.join('／') + '）' : '') + '。2台目以降は登録画面の「2台目以降」に入れる';
+    var n = Math.max(vs.length, d.count || 0);
+    if (n > 1) note = (note ? note + '\n' : '') + '台数：' + n + '台' + (vs.length > 1 ? '（' + vs.map(function(v) { return v.car; }).join('／') + '）' : (d.cars && d.cars.length ? '（' + d.cars.join('／') + '）' : ''));
+    if (n > 1 && vs.length < n) note += '。2台目以降を「2台目以降」欄で確認';
     document.getElementById('bkNote').value = note;
-    document.getElementById('bkSummary').textContent = (d.summary ? '要約：' + d.summary : '') + (d.confidence === 'low' ? '（自信なし・要確認）' : '');
+    document.getElementById('bkSummary').textContent = (d.summary ? '要約：' + d.summary : '') + (d.confidence === 'low' ? '（自信なし・要確認）' : '') + (vs.length > 1 ? '　※' + vs.length + '台分を「2台目以降」欄に振り分けました。1台につき予約1件になります' : '');
     st.textContent = r.partner ? '' : '（この連絡先に取引先名が未設定です。工場名を入れてください）';
-    document.getElementById('bkPrice').value = ''; document.getElementById('bkExtra').value = '';
     document.getElementById('bkResult').style.display = 'none'; BOOK_REQ_ID = null;
     renderStaffChips(['吉永']);
     form.style.display = 'block'; document.getElementById('bookOpen').style.display = ''; document.getElementById('bookRegister').style.display = '';
@@ -954,7 +960,7 @@ document.getElementById('bookRegister').onclick = function() {
   }).catch(function(e) { btn.textContent = 'この内容で予約登録する'; btn.style.pointerEvents = ''; alert('通信エラー: ' + ((e && e.message) || e) + '\n登録されたかは予約一覧かカレンダーで確認してください。同じ内容でもう一度押しても二重登録にはなりません'); });
 };
 document.getElementById('bookOpen').onclick = function() {
-  var d = { partner: document.getElementById('bkPartner').value.trim(), visitDate: document.getElementById('bkDate').value, car: document.getElementById('bkCar').value.trim(), menu: document.getElementById('bkMenu').value.trim(), address: document.getElementById('bkAddr').value.trim(), note: document.getElementById('bkNote').value.trim() };
+  var d = { partner: document.getElementById('bkPartner').value.trim(), visitDate: document.getElementById('bkDate').value, car: document.getElementById('bkCar').value.trim(), menu: document.getElementById('bkMenu').value.trim(), address: document.getElementById('bkAddr').value.trim(), note: document.getElementById('bkNote').value.trim(), price: document.getElementById('bkPrice').value.trim(), extraCars: bookExtraCars() };
   if (!d.partner) { alert('工場名を入れてください'); return; }
   if (!d.visitDate) { if (!confirm('訪問日時が空です。登録画面で入れますか？')) return; }
   var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
