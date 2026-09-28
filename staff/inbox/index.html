@@ -72,6 +72,13 @@
   .mt { font-size:12px; color:#8E95A0; white-space:nowrap; line-height:1.3; flex:0 0 auto; padding-bottom:4px; }
   .mrow.out .mt { text-align:right; }
   .bub a.blink { color:inherit; text-decoration:underline; word-break:break-all; }
+  /* URLの概要カード（2026-09-28） */
+  .bub .lp { display:block; margin-top:8px; background:#fff; color:#1A202C; border:1px solid #E2E8F0; border-radius:12px; overflow:hidden; text-decoration:none; white-space:normal; max-width:320px; }
+  .bub .lp-img { display:block; width:100%; height:150px; object-fit:cover; background:#EDF2F7; }
+  .bub .lp-b { display:block; padding:9px 11px 10px; }
+  .bub .lp-t { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-weight:700; font-size:15px; line-height:1.35; }
+  .bub .lp-d { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:13px; color:#4A5568; margin-top:3px; line-height:1.4; }
+  .bub .lp-h { display:block; font-size:12px; color:#718096; margin-top:5px; }
   .bub { max-width:calc(100% - 36px); padding:16px 14px; border-radius:18px; font-size:16px; line-height:1.35; white-space:pre-wrap; word-break:break-word; }
   .mrow.in .bub { max-width:calc(100% - 96px); }
   .bub.in { background:#F1F3F5; align-self:flex-start; }
@@ -271,6 +278,51 @@ function toast(m) { var t = document.getElementById('toast'); t.textContent = m;
 function revealBox(el) { if (!el || isDesktop()) return; try { var hw = document.querySelector('.hdrwrap'); var off = (hw ? hw.offsetHeight : 110) + 8; var top = el.getBoundingClientRect().top + window.scrollY - off; window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); } }
 function isDesktop() { return window.matchMedia('(min-width: 900px)').matches; }
 function scrollBottom() { var m = document.getElementById('msgs'); if (isDesktop()) m.scrollTop = m.scrollHeight; else window.scrollTo(0, document.body.scrollHeight); }
+// ---- URLの概要カード（2026-09-28 吉永さん要望）：吹き出しの最初のURLについて、VPSの /ogp でタイトル・説明・画像を取り、吹き出しの下にカードで出す
+// 結果は端末に保存（300件）して、開き直したときは待たずに出す。概要が取れないURLはカードを出さない
+var OGP = {}, OGP_REQ = {};
+try { var oc0 = JSON.parse(localStorage.getItem('rakuruma_inbox_ogp') || 'null'); if (oc0 && typeof oc0 === 'object') OGP = oc0; } catch (e) {}
+function ogpSaveLocal() {
+  try {
+    var ks = Object.keys(OGP);
+    if (ks.length > 300) ks.sort(function(a, b) { return (OGP[a].at || 0) - (OGP[b].at || 0); }).slice(0, ks.length - 300).forEach(function(k) { delete OGP[k]; });
+    localStorage.setItem('rakuruma_inbox_ogp', JSON.stringify(OGP));
+  } catch (e) {}
+}
+function ogpFresh(d) { return d && d.at && (Date.now() - d.at) < (d.t ? 3 * 86400000 : 6 * 3600000); }
+function ogpCardHtml(u, d) {
+  return '<a class="lp" href="' + esc(u) + '" target="_blank" rel="noopener">' +
+    (d.i ? '<img class="lp-img" src="' + esc(d.i) + '" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">' : '') +
+    '<span class="lp-b"><span class="lp-t">' + esc(d.t) + '</span>' + (d.d ? '<span class="lp-d">' + esc(d.d) + '</span>' : '') +
+    '<span class="lp-h">' + esc(d.s ? d.s + '・' + d.h : d.h) + '</span></span></a>';
+}
+function ogpBottomNow() { if (isDesktop()) { var m = document.getElementById('msgs'); return m.scrollHeight - m.scrollTop - m.clientHeight < 80; } return window.innerHeight + window.scrollY >= document.body.scrollHeight - 80; }
+// root 内の吹き出しにカードを付ける。取得済みはその場で付け、未取得は取りに行って届いたら付け直す（下端を見ていたら下端に保つ）
+function attachPreviews(root) {
+  if (!root || !TOKEN) return;
+  Array.prototype.forEach.call(root.querySelectorAll('.bub'), function(b) {
+    if (b.querySelector('.lp')) return;
+    var a = b.querySelector('a.blink'); if (!a) return;
+    var u = a.getAttribute('href') || ''; if (!/^https?:\/\//.test(u)) return;
+    var d = OGP[u];
+    if (ogpFresh(d)) { if (d.t) b.insertAdjacentHTML('beforeend', ogpCardHtml(u, d)); return; }
+    if (OGP_REQ[u]) return;
+    var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null, tm = ctl ? setTimeout(function() { ctl.abort(); }, 15000) : null;
+    OGP_REQ[u] = fetch(API_URL + 'ogp?token=' + encodeURIComponent(TOKEN) + '&url=' + encodeURIComponent(u), { signal: ctl ? ctl.signal : undefined })
+      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        if (r && r.error === 'unauthorized') return; // 認証が切れているだけのときは「概要なし」を覚えない
+        OGP[u] = (r && r.ok && r.t) ? { at: Date.now(), t: r.t, d: r.d || '', i: r.i || '', s: r.s || '', h: r.h || '' } : { at: Date.now() };
+        ogpSaveLocal();
+        if (!OGP[u].t) return;
+        var m0 = document.getElementById('msgs'); var wasBottom = ogpBottomNow();
+        attachPreviews(m0);
+        if (wasBottom) scrollBottom();
+      })
+      .catch(function() {})
+      .then(function() { if (tm) clearTimeout(tm); delete OGP_REQ[u]; });
+  });
+}
 // 一覧の時刻表記は公式LINEアプリと同じ：今日=HH:MM／昨日=昨日／6日以内=曜日／それ以前=M/D
 function shortAt(s) {
   var m = String(s || '').match(/^(\d{4})\/(\d{2})\/(\d{2}) (\d{1,2}:\d{2})/); if (!m) return String(s || '').replace(/^\d{4}\//, '').replace(/:\d{2}$/, '');
@@ -592,6 +644,7 @@ function renderMsgs(it, msgs, fromCache, keepPos) {
     var m0 = document.getElementById('msgs');
     var before = isDesktop() ? { top: m0.scrollTop, h: m0.scrollHeight } : { top: window.scrollY, h: document.body.scrollHeight };
     m0.innerHTML = html || '<div class="sys">記録がありません</div>';
+    attachPreviews(m0); // URLの概要カード（取得済みの分はここで付くので、下のスクロール位置の計算に入る）
     if (pend) m0.appendChild(pend);
     if (keepPos) {
       // 自動更新のとき：読んでいた位置を保つ（増えた高さぶんは下に足されるだけなので同じ位置でよい）。2026-09-24 吉永さん指摘
