@@ -108,6 +108,15 @@
   .linkbox input { width:100%; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; margin-top:6px; }
   .hit { padding:6px 0; border-bottom:1px solid #F0E6CC; display:flex; justify-content:space-between; align-items:center; gap:8px; }
 
+  /* くらマのタブ（2026-09-30・試験中は吉永さんだけ） */
+  .cstat { padding:8px 16px; font-size:12px; color:#4A5568; background:#F7FAFC; border-bottom:1px solid var(--line); }
+  .cstat.bad { background:#FFF5F5; color:#C53030; font-weight:700; }
+  .t-curama { background:#FFF4E5; color:#B35900; font-weight:700; }
+  .t-unopened { background:#FDE8E8; color:#B42318; font-weight:700; }
+  body.cmode .actions > .abtn:not(#btnCDone), body.cmode #tpl, body.cmode #photoLabel, body.cmode #btnSend, body.cmode #tNext, body.cmode #tSched, body.cmode #tMemo, body.cmode #tCust, body.cmode #confirmBar, body.cmode #schedlist { display:none !important; }
+  #btnCDone, #btnCopyOpen, #cwarn { display:none; }
+  body.cmode #btnCDone, body.cmode #btnCopyOpen { display:inline-block; }
+  #cwarn { font-size:12px; color:#C05621; background:#FFFAF0; border:1px solid #F6AD55; border-radius:8px; padding:6px 10px; margin-bottom:8px; line-height:1.5; }
   /* ---- PC幅：左に一覧・右にスレッド（公式LINEのチャット画面と同じ構成） ---- */
   .emptyPane { display:none; }
   @media (min-width: 900px) {
@@ -143,7 +152,7 @@
 <div id="list">
   <div class="top"><a class="back" href="/staff/" style="color:#fff;text-decoration:none">‹</a><div class="ttl">受信箱</div><div class="cnt" id="cnt"></div><a class="lnk" id="reload" href="#">更新</a></div>
   <div class="tabs">
-    <div class="on" data-tab="all">お客様</div><div data-tab="biz">工場・取引先</div>
+    <div class="on" data-tab="all">お客様</div><div data-tab="biz">工場・取引先</div><div data-tab="curama" id="tabCurama" style="display:none">くらマ</div>
   </div>
   <div class="srch"><input id="search" type="search" placeholder="お客様を検索（名前・車種・本文）" autocomplete="off"><span id="searchClear" style="display:none">×</span></div>
   <div id="rows"><div class="empty">読み込み中…</div></div>
@@ -152,7 +161,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -217,7 +226,8 @@
   <div class="compose">
     <div class="tpl" id="tpl"></div>
     <div class="box" style="margin-bottom:8px"><input id="intent" placeholder="どう返したい？（例：来週の午前で調整したい・やんわり）" style="flex:1;border:1.5px solid #C3A054;border-radius:14px;padding:9px 12px;font-size:15px;font-family:inherit"><button class="send" id="btnDraft" style="background:#C3A054">AI生成</button></div>
-    <div class="box"><label class="send" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:10px 12px;cursor:pointer">📷<input type="file" id="photo" multiple accept="image/*" style="display:none"></label><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button></div>
+    <div id="cwarn"></div>
+    <div class="box"><label class="send" id="photoLabel" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:10px 12px;cursor:pointer">📷<input type="file" id="photo" multiple accept="image/*" style="display:none"></label><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button><button class="send" id="btnCopyOpen" style="background:#DD6B20">コピーして<br>くらマを開く</button></div>
   </div>
 </div>
 <div class="emptyPane" id="emptyPane"><div style="font-size:40px">💬</div><div>左の一覧から選ぶと、ここにやりとりが出ます</div></div>
@@ -350,14 +360,14 @@ function manualReload() {
   if (LIST_MANUAL) return;
   LIST_MANUAL = true; MANUAL_PENDING = 2; MANUAL_MSGS = [];
   var rb = document.getElementById('reload'); rb.textContent = '更新中…'; rb.style.opacity = '.7';
-  loadList(true); loadBiz(true, true);
+  loadList(true); loadBiz(true, true); loadCurama(true);
 }
 // 開いたとき・画面に戻ったとき（2026-09-26 吉永さん要望「工場もお客様も開いたら更新されているように」）：
 // 保存済みの一覧を先に出し、お客様と工場・取引先を同時にキャッシュ無しで取り直す。数秒内の二重起動（visibilitychange＋pageshow）は1回にまとめる
 var LAST_FORCE_AT = 0;
 function refreshBoth() {
   var now = Date.now(); if (now - LAST_FORCE_AT < 8000) return; LAST_FORCE_AT = now;
-  loadList(false, true); loadBiz(true, true);
+  loadList(false, true); loadBiz(true, true); loadCurama(true);
 }
 function loadList(manual, force) {
   if (!ITEMS.length) {
@@ -453,6 +463,7 @@ function vehicleTags(c) {
 }
 function renderList() {
   var q = normQ(document.getElementById('search').value);
+  if (TAB === 'curama' && !q) { document.getElementById('searchClear').style.display = 'none'; renderCurama(); return; }
   document.getElementById('searchClear').style.display = q ? 'inline' : 'none';
   var source = q ? ITEMS.concat(BIZ || []).concat(OTHERS) : ((TAB === 'biz') ? (BIZ || []) : ITEMS);
   var items = source.filter(function(it) {
@@ -529,6 +540,7 @@ function hideItem(it) {
 })();
 
 function openThread(it) {
+  setCMode(false);
   if (!CUR || CUR.uid !== it.uid) { var intent0 = document.getElementById('intent'); if (intent0) intent0.value = ''; } // 別の人を開いたらAI生成の指示文をリセット（2026-09-15 吉永さん指摘）
   CUR = it;
   if (it.hidden && it.uid) { it.hidden = false; api({ op:'unhide', uid: it.uid, src: it.src }).catch(function(){}); }
@@ -763,6 +775,7 @@ function sendNow(btn, silent) {
 }
 
 document.getElementById('btnDraft').onclick = function() {
+  if (CURC) { curamaDraft(this); return; }
   if (!CUR) return;
   var intent = document.getElementById('intent').value.trim();
   var btn = this; btn.disabled = true; btn.textContent = '作成中…';
@@ -1299,6 +1312,126 @@ function pollThread() {
   }).catch(function() { THREAD_POLLING = false; });
 }
 setInterval(function() { if (document.visibilityState === 'visible') pollThread(); }, 30000);
+
+// ---- くらマのタブ（2026-09-30）：VPSがくらマの一覧を1分おきに読んで持っている。未読のスレッドは開かない（本文は最新の1通だけ）。
+// 送信はしない：AI下書き→「コピーしてくらマを開く」でくらマのアプリに貼って送る。見えるのは許可された人だけ（試験中は吉永さん）
+var CITEMS = null, CSTATUS = null, CURC = null, CURAMA_ON = false, CURAMA_LOADING = false;
+try { var cc0 = JSON.parse(localStorage.getItem('rakuruma_inbox_curama') || 'null'); if (cc0 && cc0.items) { CITEMS = cc0.items; CSTATUS = cc0.status; CURAMA_ON = true; document.getElementById('tabCurama').style.display = ''; } } catch (e) {}
+function setCMode(on) { document.body.classList.toggle('cmode', !!on); if (!on) { CURC = null; document.getElementById('cwarn').style.display = 'none'; document.getElementById('text').placeholder = '返信を入力（送信すると記録に残ります）'; } }
+function curamaBadge() {
+  var t = document.getElementById('tabCurama'); if (!t || !CURAMA_ON) return;
+  var n = (CITEMS || []).filter(function(x) { return x.needsReply; }).length;
+  t.innerHTML = 'くらマ' + (n ? '<span class="tabbadge">' + n + '</span>' : '');
+}
+var CURAMA_RETRY = 0;
+function loadCurama(silent) {
+  if (CURAMA_LOADING) return; CURAMA_LOADING = true;
+  api({ op: 'curamaList' }).then(function(r) {
+    CURAMA_LOADING = false;
+    // 中継（VPS）がまだこのtokenを確認していないとGASに回って「不明なop」になる → 数秒後に取り直す（一覧の読み込みで確認済みになる）
+    if (r && !r.ok && !r.forbidden && /不明/.test(String(r.error || ''))) { if (CURAMA_RETRY++ < 4) setTimeout(function() { loadCurama(true); }, 5000); return; }
+    if (!r || r.forbidden) { CURAMA_ON = false; document.getElementById('tabCurama').style.display = 'none'; try { localStorage.removeItem('rakuruma_inbox_curama'); } catch (e) {} return; }
+    if (!r.ok || !Array.isArray(r.items)) { if (TAB === 'curama' && !silent) toast('くらマを更新できませんでした'); return; }
+    CURAMA_ON = true; document.getElementById('tabCurama').style.display = '';
+    CITEMS = r.items; CSTATUS = r.status;
+    try { localStorage.setItem('rakuruma_inbox_curama', JSON.stringify({ at: Date.now(), items: CITEMS, status: CSTATUS })); } catch (e) {}
+    curamaBadge();
+    if (TAB === 'curama' && !normQ(document.getElementById('search').value)) renderCurama();
+  }).catch(function() { CURAMA_LOADING = false; });
+}
+function curamaStatusHtml() {
+  var st = CSTATUS || {};
+  if (!st.lastOkAt) return '<div class="cstat bad">くらマをまだ読めていません</div>';
+  var age = Math.round((Date.now() - st.lastOkAt) / 60000);
+  var hm = new Date(st.lastOkAt).toTimeString().slice(0, 5);
+  var bad = !!st.error || age >= 6;
+  return '<div class="cstat' + (bad ? ' bad' : '') + '">' + (bad ? '⚠ ' : '') + 'くらマ最終取得 ' + hm + '（' + (age <= 0 ? 'たった今' : age + '分前') + '）'
+    + (st.error ? '<br>' + esc(st.error) : '') + (bad ? '<br>更新が止まっています。くらマのアプリで直接確認してください' : '') + '</div>';
+}
+function renderCurama() {
+  var rows = document.getElementById('rows');
+  curamaBadge();
+  if (!CITEMS) { rows.innerHTML = curamaStatusHtml() + '<div class="empty">読み込み中…</div>'; return; }
+  var need = CITEMS.filter(function(x) { return x.needsReply; }).length;
+  document.getElementById('cnt').textContent = 'くらマ未対応 ' + need + '件';
+  rows.innerHTML = curamaStatusHtml() + CITEMS.map(function(it, i) {
+    var tags = '<span class="tag t-curama">' + esc(it.service || 'くらマ') + '</span>';
+    if (it.resLine) tags += '<span class="tag t-sched">' + esc(it.resLine) + '</span>';
+    if (it.unopened) tags += '<span class="tag t-unopened">くらマで未開封</span>';
+    var badge = it.needsReply ? '<span class="badge" title="返信していない">!</span>' : '';
+    return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (CURC && CURC.id === it.id ? ' sel' : '') + '" data-ci="' + i + '">'
+      + '<div class="av" style="' + (it.needsReply ? 'background:#DD6B20' : '') + '">' + esc(String(it.name || '？').charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(it.name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
+      + '<div class="m">' + (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText) + '</div>' + tags + badge + '</div></div></div>';
+  }).join('');
+  Array.prototype.forEach.call(rows.querySelectorAll('.row[data-ci]'), function(el) { el.onclick = function() { openCurama(CITEMS[parseInt(el.getAttribute('data-ci'), 10)]); }; });
+}
+function openCurama(it, refresh) {
+  if (!it) return;
+  var same = CURC && CURC.id === it.id;
+  CUR = null; CURC = it; setCMode(true); CURC = it;
+  if (!refresh) {
+    if (!same) { document.getElementById('intent').value = ''; document.getElementById('text').value = ''; document.getElementById('cwarn').style.display = 'none'; }
+    if (!isDesktop() && !(history.state && history.state.inboxThread)) { try { history.pushState({ inboxThread: 1 }, ''); } catch (e) {} }
+    document.body.classList.remove('nocur');
+    document.getElementById('list').style.display = 'none';
+    document.getElementById('thread').style.display = 'block';
+    ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
+    document.querySelector('.compose').style.display = '';
+    document.getElementById('tName').textContent = it.name;
+    document.getElementById('tSub').textContent = 'くらしのマーケット・' + (it.service || '') + (it.resLine ? '・' + it.resLine : '');
+    document.getElementById('tRefresh').style.display = 'none';
+    document.getElementById('note').textContent = '送信はくらマのアプリから（下書きを作って「コピーしてくらマを開く」）';
+    document.getElementById('text').placeholder = '下書き（くらマのアプリに貼って送ります）';
+    document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
+    document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
+    Array.prototype.forEach.call(document.querySelectorAll('.row[data-ci]'), function(el) { el.classList.toggle('sel', CITEMS[parseInt(el.getAttribute('data-ci'), 10)] === it); });
+  }
+  api({ op: 'curamaThread', id: it.id }).then(function(r) {
+    if (CURC !== it) return;
+    if (!r.ok) { document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error || '読めませんでした') + '</div>'; return; }
+    it.openUrl = r.openUrl;
+    var msgs = (r.messages || []).map(function(m) { return { dir: m.dir, at: m.at, text: m.text, kind: m.kind }; });
+    var fake = { uid: '', displayName: it.name };
+    renderMsgs(fake, msgs, false, !!refresh);
+    if (r.partial) { var n = document.createElement('div'); n.className = 'sys'; n.style.cssText = 'background:#FDE8E8;color:#B42318'; n.textContent = 'くらマでまだ開いていないため、最新の1通だけ表示しています（開くと既読になるので、こちらからは開きません）'; document.getElementById('msgs').appendChild(n); }
+  }).catch(function(e) { if (CURC === it) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc((e && e.message) || '通信エラー') + '</div>'; });
+}
+function curamaDraft(btn) {
+  var it = CURC; if (!it) return;
+  var intent = document.getElementById('intent').value.trim();
+  btn.disabled = true; btn.textContent = '作成中…';
+  api({ op: 'curamaDraft', id: it.id, intent: intent }).then(function(r) {
+    btn.disabled = false; btn.textContent = 'AI生成';
+    if (CURC !== it) return;
+    if (!r.ok) { alert('AI生成できませんでした: ' + (r.error || '')); return; }
+    var ta = document.getElementById('text'); ta.value = r.text; autosize(); ta.focus();
+    var w = document.getElementById('cwarn');
+    var notes = (r.warnings || []).slice(); if (r.partial) notes.push('最新の1通だけを読んで作った下書きです（くらマで未開封のため）');
+    if (notes.length) { w.innerHTML = '⚠ ' + notes.map(esc).join('<br>⚠ '); w.style.display = 'block'; } else w.style.display = 'none';
+    toast('下書きを入れました（' + (r.as || '') + 'の名前）。直してからコピーしてください');
+  }).catch(function(e) { btn.disabled = false; btn.textContent = 'AI生成'; alert('通信エラー: ' + ((e && e.message) || e)); });
+}
+document.getElementById('btnCopyOpen').onclick = function() {
+  var it = CURC; if (!it) return;
+  var txt = document.getElementById('text').value;
+  var url = it.openUrl || '';
+  function go() { if (url) window.open(url, '_blank', 'noopener'); }
+  if (!txt.trim()) { go(); return; }
+  var done = function() { toast('コピーしました。くらマで貼り付けて送ってください'); go(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function() { var ta = document.getElementById('text'); ta.select(); try { document.execCommand('copy'); } catch (e) {} done(); });
+  else { var ta = document.getElementById('text'); ta.select(); try { document.execCommand('copy'); } catch (e) {} done(); }
+};
+document.getElementById('btnCDone').onclick = function() {
+  var it = CURC; if (!it) return;
+  var undo = !it.needsReply;
+  api({ op: 'curamaDone', id: it.id, undo: undo ? 1 : 0 }).then(function(r) {
+    if (!r.ok) { alert(r.error || 'できませんでした'); return; }
+    it.needsReply = undo; document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
+    toast(undo ? '未対応に戻しました' : '対応済みにしました（新しいメッセージが来ると戻ります）'); curamaBadge(); loadCurama(true);
+  });
+};
+setTimeout(function() { loadCurama(true); }, 800);
+setInterval(function() { if (document.visibilityState === 'visible' && CURAMA_ON) loadCurama(true); }, 60000);
 // 即時反映（2026-09-24）：VPSからの押し込み（Server-Sent Events）。LINEが届いた瞬間・送った瞬間に一覧とトークを取り直す。
 // 30秒ごとの取り直しは予備。画面に戻ったときは接続し直して即取りに行く
 var ES = null;
@@ -1308,6 +1441,7 @@ function connectEvents() {
   try { ES = new EventSource(API_URL + 'events?token=' + encodeURIComponent(TOKEN)); } catch (e) { ES = null; return; }
   ES.onmessage = function(ev) {
     var d; try { d = JSON.parse(ev.data); } catch (e) { return; }
+    if (d && d.type === 'curama') { loadCurama(true); if (CURC && document.body.classList.contains('cmode')) openCurama(CURC, true); return; }
     if (!d || d.type !== 'update') return;
     if (d.src === 'biz') { if (BIZ !== null || TAB === 'biz') loadBiz(true); } else loadList();
     if (CUR && CUR.uid === d.uid && (CUR.src || 'cust') === (d.src || 'cust')) pollThread();
