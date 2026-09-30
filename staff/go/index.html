@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>ラクルマ｜スタッフ</title>
+<!-- スタッフ用ページへの中継（2026-09-30）。URLには入場券を載せない。
+     この端末に保存した入場券で5分券を作り、予約管理GASのページへ飛ぶ。ブックマーク・ホーム画面に追加してよい
+     （ホーム画面に追加してもSafariで開くよう、ここはアプリ扱いの指定をしない＝Safariの保存場所の入場券が使える） -->
+<style>
+  body { margin:0; font-family:"Hiragino Sans","Noto Sans JP",sans-serif; background:#F7FAFC; color:#1A202C; display:flex; min-height:100vh; align-items:center; justify-content:center; padding:20px; box-sizing:border-box; }
+  .card { background:#fff; border-radius:16px; padding:32px 24px; max-width:420px; width:100%; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,.08); }
+  .msg { font-size:15px; color:#4A5568; line-height:1.7; }
+  .btn { display:inline-block; margin-top:18px; background:#06C755; color:#fff; font-weight:700; text-decoration:none; padding:14px 22px; border-radius:12px; font-size:16px; }
+  .err { color:#C53030; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="card"><div class="msg" id="msg">開いています…</div><div id="act"></div></div>
+<script src="/staff/ticket.js"></script>
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var q = params.get('q') || '';
+  var msg = document.getElementById('msg'), act = document.getElementById('act');
+  // 行き先は予約管理GASのページだけ（?action=… / ?page=…）。ほかのURLへは飛ばさない
+  if (!/^\?(action|page)=[\w-]+(&[\w-]+=[^&#]*)*$/.test(q)) { msg.innerHTML = '<span class="err">開く先が正しくありません</span>'; return; }
+  var LINE_CHANNEL_ID = '2004330318', CALLBACK_URL = 'https://rakuruma.com/staff-callback.html';
+  function login() {
+    StaffTicket.clear();
+    var state = 'go__' + q;
+    var url = 'https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=' + LINE_CHANNEL_ID
+      + '&redirect_uri=' + encodeURIComponent(CALLBACK_URL) + '&state=' + encodeURIComponent(state) + '&scope=profile&initial_amr_display=lineqr';
+    msg.textContent = 'スタッフ用のページです。LINEでログインしてください。';
+    act.innerHTML = '<a class="btn" href="' + url + '">LINEでログイン</a>';
+  }
+  // relogin=1 は予約管理GASが「入場券が通らなかった」と戻してきたとき。直前（30秒以内）にここから飛んだばかりなら
+  // 保存済みの券が通らなかった＝ログインし直す。そうでなければ（券なしのURLから来ただけ）保存済みの券で開き直す
+  var goAt = 0; try { goAt = Number(sessionStorage.getItem('staffGoAt') || 0); } catch (e) {}
+  if (params.get('relogin') === '1' && Date.now() - goAt < 30000) { try { sessionStorage.removeItem('staffGoAt'); } catch (e) {} login(); return; }
+  StaffTicket.init().then(function (t) {
+    if (!t || !/^(st1\.|U[0-9a-f]{32}$)/.test(t)) { login(); return; }
+    return StaffTicket.linkTicket().then(function (r) {
+      if (!r || !r.ok || !r.ticket) { if (r && r.relogin) login(); else { msg.innerHTML = '<span class="err">' + ((r && r.error) || '通信できませんでした') + '</span>'; act.innerHTML = '<a class="btn" href="" onclick="location.reload();return false;">もう一度</a>'; } return; }
+      try { sessionStorage.setItem('staffGoAt', String(Date.now())); } catch (e) {}
+      window.location.replace(StaffTicket.RSV_GAS + q + '&token=' + encodeURIComponent(r.ticket));
+    });
+  }).catch(function () { msg.innerHTML = '<span class="err">通信できませんでした</span>'; act.innerHTML = '<a class="btn" href="" onclick="location.reload();return false;">もう一度</a>'; });
+})();
+</script>
+</body>
+</html>

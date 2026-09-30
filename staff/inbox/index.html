@@ -158,6 +158,7 @@
   </div>
   <div class="srch"><input id="search" type="search" placeholder="お客様を検索（名前・車種・本文）" autocomplete="off"><span id="searchClear" style="display:none">×</span></div>
   <div id="rows"><div class="empty">読み込み中…</div></div>
+  <div id="homePrep" style="display:none;text-align:center;padding:18px 16px 28px;font-size:13px"><a href="#" id="homePrepBtn" style="color:#4A5568">📲 この受信箱をホーム画面に追加する</a></div>
 </div>
 
 <div id="thread">
@@ -239,14 +240,48 @@
   <button id="graceCancel" style="background:#E53E3E;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:800">取り消す</button>
 </div>
 
+<script src="/staff/ticket.js"></script>
 <script>
 var TOKEN = '', STAFF = '';
 (function() {
-  var m = window.location.hash.match(/[#&]t=([^&]+)/) || window.location.search.match(/[?&]token=([^&]+)/);
-  if (m) { TOKEN = decodeURIComponent(m[1]); try { localStorage.setItem('rakuruma_staff_token', TOKEN); } catch(e) {} } // URLのtokenは消さない：「ホーム画面に追加」した起動URLにtokenが残り、アプリの保存領域が別でも開ける（2026-09-24）
-  else { try { TOKEN = localStorage.getItem('rakuruma_staff_token') || ''; } catch(e) {} }
+  // 入場券は端末の中（/staff/ticket.js・2026-09-30〜）。URLには載せない。
+  // ホーム画面アプリの初回は受け渡し番号（#p=…・30分・1回きり）で本券を受け取り、読み込み直す
+  var h = window.location.hash || '';
+  var mt = h.match(/[#&]t=([^&]+)/) || window.location.search.match(/[?&]token=([^&]+)/);
+  if (mt) { StaffTicket.set(decodeURIComponent(mt[1])); } // 旧式のホーム画面URL（切り替えまで）
+  TOKEN = StaffTicket.get();
+  if (/[#&]p=/.test(h) && !/^st1\./.test(TOKEN)) {
+    document.addEventListener('DOMContentLoaded', function() { var r = document.getElementById('rows'); if (r) r.innerHTML = '<div class="empty">この端末の準備をしています…</div>'; });
+    StaffTicket.init().then(function(t) { if (/^st1\./.test(t)) window.location.reload(); else window.location.replace('/staff/'); });
+    throw new Error('pairing'); // 受け取りが済むまでこの先（一覧の読み込み）を動かさない
+  }
   if (!TOKEN) { window.location.replace('/staff/'); }
 })();
+// ホーム画面に追加する準備（ホーム画面のアプリはSafariと保存場所が別なので、30分・1回きりの受け渡し番号をURLに付けてから追加してもらう）
+document.addEventListener('DOMContentLoaded', function() {
+  var box = document.getElementById('homePrep'), btn = document.getElementById('homePrepBtn');
+  var standalone = window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  if (!box || standalone) return;
+  box.style.display = 'block';
+  btn.onclick = function(e) {
+    e.preventDefault();
+    StaffTicket.homeScreenPrep().then(function(r) {
+      if (!r || !r.ok) { alert((r && r.error) || '準備できませんでした'); return; }
+      alert('準備できました。30分以内に、Safariの共有ボタン →「ホーム画面に追加」を押してください。\n（このURLは1回しか使えません。人に送らないでください）');
+    }).catch(function() { alert('通信できませんでした'); });
+  };
+});
+// 予約管理GASのページを開く：押した瞬間に5分券を作ってから開く（URLに本券を載せない）。
+// ポップアップを止められないよう、先に空のタブを開いてから行き先を入れる
+function openStaffPage(q, ev) {
+  if (ev) ev.preventDefault();
+  var w = window.open('about:blank', '_blank');
+  StaffTicket.linkTicket().then(function(r) {
+    if (r && r.ok && r.ticket) { var u = MAIN_GAS_URL + q + '&token=' + encodeURIComponent(r.ticket); if (w) w.location.href = u; else window.location.href = u; }
+    else { if (w) w.close(); if (r && r.relogin) { alert('ログインの有効期限が切れました。ログインし直してください'); StaffTicket.clear(); window.location.replace('/staff/'); } else alert((r && r.error) || '開けませんでした。もう一度押してください'); }
+  }).catch(function() { if (w) w.close(); alert('通信できませんでした。もう一度押してください'); });
+  return false;
+}
 var API_URL_DIRECT = 'https://script.google.com/macros/s/AKfycbxdfdeYlUCvEH5wB4zLHjzGWRoJaFqX0Y0F0pSNrpURcYYLH_rlvlHfv-cLLXfS41bqNw/exec'; /* 受信箱専用GAS（06_tools/inbox-gas）2026-09-09 */
 /* 2026-09-15: 楽天モバイル→script.google.com が平均18秒・最大76秒で詰まる（VPSからは1.2秒）ため、さくらVPSの中継（Caddy＋Node・~/rakuruma-bot/inbox-proxy）を優先し、中継が落ちているときだけ直接GASへ */
 var API_URL = 'https://133-167-93-192.sslip.io/'; var MAIN_GAS_URL = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
@@ -565,7 +600,7 @@ function openThread(it) {
     document.getElementById('tName').textContent = nm0;
     document.getElementById('tSub').textContent = (it.customer && it.customer.car) || '';
     document.getElementById('tRefresh').style.display = 'none';
-    var cust0 = document.getElementById('tCust'); cust0.style.display = 'inline-block'; cust0.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN);
+    var cust0 = document.getElementById('tCust'); cust0.style.display = 'inline-block'; cust0.href = '#';
     document.getElementById('btnLink').style.display = 'none';
     document.getElementById('btnMemo').style.display = 'none'; document.getElementById('btnChange').style.display = 'none';
     document.getElementById('memobox').style.display = 'none'; document.getElementById('changebox').style.display = 'none';
@@ -584,7 +619,7 @@ function openThread(it) {
   loadNextEvent(it);
   document.getElementById('tSub').textContent = it.src === 'biz' ? '工場・取引先（ラクルマ ご依頼・相談）' : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
-  if (it.customer) { cust.style.display = 'inline-block'; cust.href = MAIN_GAS_URL + '?action=customerDetail&row=' + it.customer.row + '&token=' + encodeURIComponent(TOKEN); } else cust.style.display = 'none';
+  if (it.customer) { cust.style.display = 'inline-block'; cust.href = '#'; } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
   document.getElementById('btnMemo').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
   document.getElementById('btnChange').style.display = (it.src === 'cust' && it.customer) ? '' : 'none';
@@ -607,7 +642,7 @@ function openThread(it) {
       // サーバーの最新の顧客情報で見出しを更新（名前・LINE連絡先名・車・メモ）。一覧のキャッシュが古くても正しく出す
       it.customer.memo = r.customer.memo || ''; showMemoLine(it.customer.memo);
       if (r.customer.name) it.customer.name = r.customer.name;
-      if (r.customer.row) { it.customer.row = r.customer.row; document.getElementById('tCust').href = MAIN_GAS_URL + '?action=customerDetail&row=' + r.customer.row + '&token=' + encodeURIComponent(TOKEN); } // 顧客リストの行番号もサーバーの最新に合わせる（一覧キャッシュが古いと別人の詳細が開く）
+      if (r.customer.row) { it.customer.row = r.customer.row; document.getElementById('tCust').href = '#'; } // 顧客リストの行番号もサーバーの最新に合わせる（一覧キャッシュが古いと別人の詳細が開く）
       it.customer.contact = r.customer.contact || ''; it.customer.company = r.customer.company || ''; it.customer.car = r.customer.car || it.customer.car; it.customer.vehicles = r.customer.vehicles || it.customer.vehicles; it.customer.teiki = r.customer.teiki || it.customer.teiki;
       document.getElementById('tName').innerHTML = (it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(custLabel(it));
       document.getElementById('tSub').textContent = [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・');
@@ -1058,7 +1093,7 @@ document.getElementById('bookOpen').onclick = function() {
   if (!d.partner) { alert('工場名を入れてください'); return; }
   if (!d.visitDate) { if (!confirm('訪問日時が空です。登録画面で入れますか？')) return; }
   var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  window.open(MAIN_GAS_URL + '?action=upload&token=' + encodeURIComponent(TOKEN) + '&prefill=' + b64, '_blank');
+  openStaffPage('?action=upload&prefill=' + b64);
 };
 // 見出しの名前をタップ→顧客リストの「名前」を変更（LINE表示名やアプリ側のあだ名は変わらない）
 document.getElementById('tName').onclick = function() {
@@ -1198,7 +1233,7 @@ window.addEventListener('popstate', function() {
   });
 })();
 // 顧客管理リンクは押した瞬間に「いま開いているトーク」の行番号で作り直す（別人の詳細が開いた報告への保険・2026-09-15）
-document.getElementById('tCust').onclick = function() { if (CUR && CUR.customer && CUR.customer.row) this.href = MAIN_GAS_URL + '?action=customerDetail&row=' + CUR.customer.row + '&token=' + encodeURIComponent(TOKEN); };
+document.getElementById('tCust').onclick = function(e) { e.preventDefault(); if (CUR && CUR.customer && CUR.customer.row) openStaffPage('?action=customerDetail&row=' + CUR.customer.row); return false; };
 document.getElementById('reload').onclick = function(e) { e.preventDefault(); manualReload(); };
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
   el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); var sq = document.getElementById('search'); if (sq.value) { sq.value = ''; } /* 検索中にタブを押したら検索を解除して切り替える（2026-09-15 吉永さん指摘「工場を押しても開かない」） */ renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };

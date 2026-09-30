@@ -69,23 +69,20 @@ if (error || !code) {
       showError((d && d.error) ? d.error : 'ログインに失敗しました。もう一度お試しください。');
       return;
     }
-    // スタッフツール置き場（rakuruma.com/staff/）へ戻る場合。
-    // トークンはクエリでなくハッシュで渡す（サーバーのアクセスログやRefererに残さないため）。
-    if (state.split('__')[0] === 'staffHome') {
-      window.location.replace('https://rakuruma.com/staff/#t=' + encodeURIComponent(d.token));
-      return;
-    }
-    // stateからリダイレクト先を復元
+    // 入場券（署名つき・90日）はこの端末の中にだけ保存し、URLには載せない（2026-09-30〜）。
+    try { localStorage.setItem('rakuruma_staff_token', d.token); } catch (e) {}
     var parts  = state.split('__');
     var action = parts[0] || 'customers';
-    var param  = parts[1] || '';
-    var dest;
-    if (action === 'customerDetailByPhone') {
-      dest = GAS_URL + '?action=customerDetailByPhone&phone=' + encodeURIComponent(param) + '&token=' + encodeURIComponent(d.token);
-    } else {
-      dest = GAS_URL + '?action=' + action + (param ? '&row=' + encodeURIComponent(param) : '') + '&token=' + encodeURIComponent(d.token);
-    }
-    window.location.href = dest;
+    var param  = parts.slice(1).join('__');
+    if (action === 'staffHome') { window.location.replace('https://rakuruma.com/staff/'); return; }
+    if (action === 'inbox')     { window.location.replace('https://rakuruma.com/staff/inbox/'); return; }
+    var q;
+    if (action === 'go') q = param;
+    else if (action === 'customerDetailByPhone') q = '?action=customerDetailByPhone&phone=' + encodeURIComponent(param);
+    else if (action === 'customerJump') q = '?action=customerJump&q=' + encodeURIComponent(param);
+    else q = '?action=' + encodeURIComponent(action) + (param ? '&row=' + encodeURIComponent(param) : '');
+    // 予約管理GASのページへは中継（5分券）を通す
+    window.location.replace('https://rakuruma.com/staff/go/?q=' + encodeURIComponent(q));
   })
   .catch(function(e) { showError('通信エラーが発生しました。再度お試しください。'); });
 }

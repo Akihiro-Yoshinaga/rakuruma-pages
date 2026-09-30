@@ -177,12 +177,23 @@
     </div>
   </div>
 
+  <p id="homePrepP" style="text-align:center;font-size:13px;margin:8px 0 20px"><a href="#" onclick="return homePrep(event)" style="color:#4A5568">📲 この画面をホーム画面に追加する</a></p>
   <footer>ラクルマスタッフ専用ページ  <div class="footer-sns" style="margin:26px 0 18px;"><p style="font-size:12px;opacity:.6;margin:0 0 12px;">施工事例・車のメンテナンス情報を発信中</p><div style="display:flex;justify-content:center;align-items:center;gap:28px;"><a href="https://www.instagram.com/rakuruma.car/" target="_blank" rel="noopener" aria-label="Instagram" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#ig-grad)"/><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16.6" cy="7.4" r="1" fill="#fff"/></svg><span style="font-size:11px;">Instagram</span></a><a href="https://www.youtube.com/@rakuruma2023" target="_blank" rel="noopener" aria-label="YouTube" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="5" fill="#FF0000"/><path d="M10 8.5v7l6-3.5z" fill="#fff"/></svg><span style="font-size:11px;">YouTube</span></a></div></div>
 </footer>
 
 </div>
 
+<script src="/staff/ticket.js"></script>
 <script>
+// ホーム画面に追加する準備（ホーム画面のアプリはSafariと保存場所が別。30分・1回きりの受け渡し番号をURLに付けてから追加する）
+function homePrep(e) {
+  if (e) e.preventDefault();
+  StaffTicket.homeScreenPrep().then(function (r) {
+    if (!r || !r.ok) { alert((r && r.error) || '準備できませんでした'); return; }
+    alert('準備できました。30分以内に、Safariの共有ボタン →「ホーム画面に追加」を押してください。\n（このURLは1回しか使えません。人に送らないでください）');
+  }).catch(function () { alert('通信できませんでした'); });
+  return false;
+}
 // 予約管理GAS（リンク集・顧客管理・ブログ一覧はここ。LINEユーザーIDをtokenとして渡す）
 var RSV_GAS = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
 // LINEログインのチャンネルID。client_idは認可URLに載る公開値なので直書きしてよい（シークレットは絶対に置かない）
@@ -211,17 +222,9 @@ document.getElementById('loginBtn').href =
 (function init() {
   var token = '';
 
-  // ログイン直後：staff-callback.html が #t=... で戻してくる
-  var m = window.location.hash.match(/[#&]t=([^&]+)/);
-  if (m) {
-    token = decodeURIComponent(m[1]);
-    try { localStorage.setItem(STORAGE_KEY, token); } catch (e) {}
-    // アドレスバーからトークンを消す（共有・スクショで漏れるのを防ぐ）
-    history.replaceState(null, '', window.location.pathname);
-  } else {
-    try { token = localStorage.getItem(STORAGE_KEY) || ''; } catch (e) {}
-  }
-
+  // 入場券は端末の中（ticket.js）。ホーム画面アプリの初回は受け渡し番号（#p=）で受け取る
+  StaffTicket.init().then(function (t) { token = t; start(); });
+  function start() {
   if (!token) { showGate(); return; }
 
   // 保存済みトークンがあればまずツールを表示する（GASの応答待ち2〜5秒を体感から消す）。
@@ -239,6 +242,7 @@ document.getElementById('loginBtn').href =
     .catch(function () {
       // 通信できないときはツールを出したままにする（オフラインで締め出さない）
     });
+  }
 })();
 
 function showGate(msg) {
@@ -250,10 +254,10 @@ function showGate(msg) {
 }
 
 function showTools(token) {
-  // 予約管理GASのリンクにトークンを差し込む（これで各ページで再ログインしなくて済む）
+  // 予約管理GASのリンクは中継（/staff/go/）を通す。URLに入場券を載せない（押した瞬間に5分券を作る）
   var links = document.querySelectorAll('a.tool[data-gas="rsv"]');
   for (var i = 0; i < links.length; i++) {
-    links[i].href = RSV_GAS + links[i].getAttribute('data-q') + '&token=' + encodeURIComponent(token);
+    links[i].href = StaffTicket.goUrl(links[i].getAttribute('data-q'));
   }
   el.loading.style.display = 'none';
   el.gate.style.display    = 'none';
