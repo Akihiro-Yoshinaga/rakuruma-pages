@@ -113,6 +113,8 @@
   .cstat.bad { background:#FFF5F5; color:#C53030; font-weight:700; }
   .t-curama { background:#FFF4E5; color:#B35900; font-weight:700; }
   .t-unopened { background:#FDE8E8; color:#B42318; font-weight:700; }
+  .t-red { background:#E53E3E; color:#fff; font-weight:800; } .t-yellow { background:#FEFCBF; color:#975A16; font-weight:700; } .t-green { background:#E6F5EC; color:#1F7A45; }
+  .t-deep { background:#EDE9FE; color:#5B21B6; font-weight:700; }
   body.cmode .actions > .abtn:not(#btnCDone), body.cmode #tpl, body.cmode #photoLabel, body.cmode #btnSend, body.cmode #tNext, body.cmode #tSched, body.cmode #tMemo, body.cmode #tCust, body.cmode #confirmBar, body.cmode #schedlist { display:none !important; }
   #btnCDone, #btnCopyOpen, #cwarn { display:none; }
   body.cmode #btnCDone, body.cmode #btnCopyOpen { display:inline-block; }
@@ -1355,12 +1357,16 @@ function renderCurama() {
   var need = CITEMS.filter(function(x) { return x.needsReply; }).length;
   document.getElementById('cnt').textContent = 'くらマ未対応 ' + need + '件';
   rows.innerHTML = curamaStatusHtml() + CITEMS.map(function(it, i) {
-    var tags = '<span class="tag t-curama">' + esc(it.service || 'くらマ') + '</span>';
+    var tags = '';
+    if (it.level === '赤') tags += '<span class="tag t-red">要判断</span>'; else if (it.level === '黄') tags += '<span class="tag t-yellow">日程・確認</span>'; else if (it.level === '緑') tags += '<span class="tag t-green">定型</span>';
+    if (it.deep === 'claimed') tags += '<span class="tag t-deep">Macで調査中</span>'; else if (it.deep === 'pending') tags += '<span class="tag t-deep">Macの調査待ち</span>'; else if (it.deep === 'sent') tags += '<span class="tag t-deep">Macから送信済み</span>';
+    tags += '<span class="tag t-curama">' + esc(it.service || 'くらマ') + '</span>';
     if (it.resLine) tags += '<span class="tag t-sched">' + esc(it.resLine) + '</span>';
     if (it.unopened) tags += '<span class="tag t-unopened">くらマで未開封</span>';
     var badge = it.needsReply ? '<span class="badge" title="返信していない">!</span>' : '';
     return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (CURC && CURC.id === it.id ? ' sel' : '') + '" data-ci="' + i + '">'
       + '<div class="av" style="' + (it.needsReply ? 'background:#DD6B20' : '') + '">' + esc(String(it.name || '？').charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(it.name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
+      + (it.point ? '<div class="m" style="color:' + (it.level === '赤' ? '#C53030' : '#4A5568') + ';font-weight:700">' + (it.level === '赤' ? '判断：' : '') + esc(it.point) + '</div>' : '')
       + '<div class="m">' + (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText) + '</div>' + tags + badge + '</div></div></div>';
   }).join('');
   Array.prototype.forEach.call(rows.querySelectorAll('.row[data-ci]'), function(el) { el.onclick = function() { openCurama(CITEMS[parseInt(el.getAttribute('data-ci'), 10)]); }; });
@@ -1380,7 +1386,7 @@ function openCurama(it, refresh) {
     document.getElementById('tName').textContent = it.name;
     document.getElementById('tSub').textContent = 'くらしのマーケット・' + (it.service || '') + (it.resLine ? '・' + it.resLine : '');
     document.getElementById('tRefresh').style.display = 'none';
-    document.getElementById('note').textContent = '送信はくらマのアプリから（下書きを作って「コピーしてくらマを開く」）';
+    document.getElementById('note').textContent = (it.level === '赤' && it.point ? '要判断：' + it.point + (it.deep ? '（Macの深掘りチャットあり）' : '') + '　' : '') + '送信はくらマのアプリから（下書きを作って「コピーしてくらマを開く」）';
     document.getElementById('text').placeholder = '下書き（くらマのアプリに貼って送ります）';
     document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
     document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
