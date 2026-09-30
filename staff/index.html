@@ -94,7 +94,7 @@
   <div id="tools">
     <div class="group-title">よく使う</div>
 
-    <a class="tool" data-gas="rsv" data-q="?page=links">
+    <a class="tool" data-tool="links" data-gas="rsv" data-q="?page=links">
       <div class="icon">🔗</div>
       <div class="txt">
         <div class="name">リンク集・定型文</div>
@@ -103,7 +103,7 @@
       <div class="arrow">›</div>
     </a>
 
-    <a class="tool" href="/staff/inbox/">
+    <a class="tool" data-tool="inbox" href="/staff/inbox/">
       <div class="icon">💬</div>
       <div class="txt">
         <div class="name">LINE受信箱</div>
@@ -112,7 +112,7 @@
       <div class="arrow">›</div>
     </a>
 
-    <a class="tool" data-gas="rsv" data-q="?action=customers">
+    <a class="tool" data-tool="customers" data-gas="rsv" data-q="?action=customers">
       <div class="icon">👥</div>
       <div class="txt">
         <div class="name">顧客管理</div>
@@ -121,7 +121,7 @@
       <div class="arrow">›</div>
     </a>
 
-    <a class="tool" href="https://script.google.com/macros/s/AKfycbwVF0zpW_SQ0wLBySCOBnv1VjMbN-Kjipf6OQXepHHkBa1QLth_A2mK6RvByFbcrgDcIQ/exec">
+    <a class="tool" data-tool="dashboard" href="https://script.google.com/macros/s/AKfycbwVF0zpW_SQ0wLBySCOBnv1VjMbN-Kjipf6OQXepHHkBa1QLth_A2mK6RvByFbcrgDcIQ/exec">
       <div class="icon green">📊</div>
       <div class="txt">
         <div class="name">経営ダッシュボード</div>
@@ -132,7 +132,7 @@
 
     <div class="group-title">作業・現場</div>
 
-    <a class="tool" href="https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=wash">
+    <a class="tool" data-tool="wash" href="https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=wash">
       <div class="icon green">🧽</div>
       <div class="txt">
         <div class="name">洗車 作業手順書</div>
@@ -141,7 +141,7 @@
       <div class="arrow">›</div>
     </a>
 
-    <a class="tool" href="https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=seibi">
+    <a class="tool" data-tool="seibi" href="https://script.google.com/macros/s/AKfycbx9XT-LpLl7wHuWFtPbyEjVeVvIODja20mppovJ5YZ4_3f_UvcpZllOzeAbu1T8IxDH/exec?p=seibi">
       <div class="icon green">🔧</div>
       <div class="txt">
         <div class="name">整備 作業手順書</div>
@@ -152,7 +152,7 @@
 
     <div class="group-title">発信・記事</div>
 
-    <a class="tool" data-gas="rsv" data-q="?page=blogTodo">
+    <a class="tool" data-tool="blogTodo" data-gas="rsv" data-q="?page=blogTodo">
       <div class="icon orange">📝</div>
       <div class="txt">
         <div class="name">未処理ブログ一覧</div>
@@ -161,7 +161,7 @@
       <div class="arrow">›</div>
     </a>
 
-    <a class="tool" href="https://script.google.com/macros/s/AKfycbwANLZLYa-PXyKelTHlNjs2em0_HceyUxrw2LPD6Fh6yVrasnGvN8APdEbU7zAiYrpW/exec">
+    <a class="tool" data-tool="affiliate" href="https://script.google.com/macros/s/AKfycbwANLZLYa-PXyKelTHlNjs2em0_HceyUxrw2LPD6Fh6yVrasnGvN8APdEbU7zAiYrpW/exec">
       <div class="icon orange">✍️</div>
       <div class="txt">
         <div class="name">アフィリ記事生成ツール</div>
@@ -235,7 +235,7 @@ document.getElementById('loginBtn').href =
   fetch(RSV_GAS + '?action=staffCheck&token=' + encodeURIComponent(token))
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      if (d && d.valid) return; // 有効。表示済みのまま
+      if (d && d.valid) { saveTools(d.tools); applyTools(d.tools === undefined ? null : d.tools); return; } // 有効。使えるページだけ表示
       clearToken();
       showGate('ログインの有効期限が切れました。もう一度ログインしてください。');
     })
@@ -259,13 +259,29 @@ function showTools(token) {
   for (var i = 0; i < links.length; i++) {
     links[i].href = StaffTicket.goUrl(links[i].getAttribute('data-q'));
   }
+  applyTools(savedTools());
   el.loading.style.display = 'none';
   el.gate.style.display    = 'none';
   el.tools.style.display   = 'block';
   el.logout.style.display  = 'block';
 }
 
+// スタッフごとに使えるページ（予約管理GASの staffCheck が返す。null＝全部）。前回の結果を先に当てて、ちらつきを防ぐ
+function savedTools() { try { var v = localStorage.getItem('rakuruma_staff_tools'); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+function saveTools(t) { try { if (Array.isArray(t)) localStorage.setItem('rakuruma_staff_tools', JSON.stringify(t)); else localStorage.removeItem('rakuruma_staff_tools'); } catch (e) {} }
+function applyTools(tools) {
+  var all = document.querySelectorAll('a.tool[data-tool]');
+  for (var i = 0; i < all.length; i++) all[i].style.display = (!Array.isArray(tools) || tools.indexOf(all[i].getAttribute('data-tool')) !== -1) ? '' : 'none';
+  // 中身が全部隠れた見出しは隠す
+  var secs = document.querySelectorAll('#tools .group-title');
+  for (var j = 0; j < secs.length; j++) {
+    var n = secs[j].nextElementSibling, any = false;
+    while (n && !(n.classList && n.classList.contains('group-title'))) { if (n.matches && (n.matches('a.tool') ? n.style.display !== 'none' : n.querySelector && [].some.call(n.querySelectorAll('a.tool'), function (a) { return a.style.display !== 'none'; }))) any = true; n = n.nextElementSibling; }
+    secs[j].style.display = any ? '' : 'none';
+  }
+}
 function clearToken() {
+  try { localStorage.removeItem('rakuruma_staff_tools'); } catch (e) {}
   try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 }
 
