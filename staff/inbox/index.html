@@ -116,8 +116,8 @@
   .t-red { background:#E53E3E; color:#fff; font-weight:800; } .t-yellow { background:#FEFCBF; color:#975A16; font-weight:700; } .t-green { background:#E6F5EC; color:#1F7A45; }
   .t-deep { background:#EDE9FE; color:#5B21B6; font-weight:700; }
   body.cmode .actions > .abtn:not(#btnCDone), body.cmode #tpl, body.cmode #photoLabel, body.cmode #btnSend, body.cmode #tNext, body.cmode #tSched, body.cmode #tMemo, body.cmode #tCust, body.cmode #confirmBar, body.cmode #schedlist { display:none !important; }
-  #btnCDone, #btnCopyOpen, #cwarn { display:none; }
-  body.cmode #btnCDone, body.cmode #btnCopyOpen { display:inline-block; }
+  #btnCDone, #btnCSend, #cCopyRow, #cwarn { display:none; }
+  body.cmode #btnCDone, body.cmode #btnCSend { display:inline-block; } body.cmode #cCopyRow { display:block; }
   #cwarn { font-size:12px; color:#C05621; background:#FFFAF0; border:1px solid #F6AD55; border-radius:8px; padding:6px 10px; margin-bottom:8px; line-height:1.5; }
   /* ---- PC幅：左に一覧・右にスレッド（公式LINEのチャット画面と同じ構成） ---- */
   .emptyPane { display:none; }
@@ -230,7 +230,8 @@
     <div class="tpl" id="tpl"></div>
     <div class="box" style="margin-bottom:8px"><input id="intent" placeholder="どう返したい？（例：来週の午前で調整したい・やんわり）" style="flex:1;border:1.5px solid #C3A054;border-radius:14px;padding:9px 12px;font-size:15px;font-family:inherit"><button class="send" id="btnDraft" style="background:#C3A054">AI生成</button></div>
     <div id="cwarn"></div>
-    <div class="box"><label class="send" id="photoLabel" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:10px 12px;cursor:pointer">📷<input type="file" id="photo" multiple accept="image/*" style="display:none"></label><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button><button class="send" id="btnCopyOpen" style="background:#DD6B20">コピーして<br>くらマを開く</button></div>
+    <div class="box"><label class="send" id="photoLabel" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:10px 12px;cursor:pointer">📷<input type="file" id="photo" multiple accept="image/*" style="display:none"></label><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button><button class="send" id="btnCSend" style="background:#DD6B20">くらマに<br>送信</button></div>
+    <div id="cCopyRow" style="text-align:right;margin-top:4px"><a href="#" id="btnCopyOpen" style="font-size:12px;color:#718096">コピーしてくらマのアプリで開く</a></div>
   </div>
 </div>
 <div class="emptyPane" id="emptyPane"><div style="font-size:40px">💬</div><div>左の一覧から選ぶと、ここにやりとりが出ます</div></div>
@@ -1422,8 +1423,8 @@ function openCurama(it, refresh) {
     document.getElementById('tName').textContent = it.name;
     document.getElementById('tSub').textContent = 'くらしのマーケット・' + (it.service || '') + (it.resStatus ? '・' + it.resStatus : '') + (it.resLine ? '・' + it.resLine : '');
     document.getElementById('tRefresh').style.display = 'none';
-    document.getElementById('note').textContent = (it.level === '赤' && it.point ? '要判断：' + it.point + (it.deep ? '（Macの深掘りチャットあり）' : '') + '　' : '') + '送信はくらマのアプリから（下書きを作って「コピーしてくらマを開く」）';
-    document.getElementById('text').placeholder = '下書き（くらマのアプリに貼って送ります）';
+    document.getElementById('note').textContent = (it.level === '赤' && it.point ? '要判断：' + it.point + (it.deep ? '（Macの深掘りチャットあり）' : '') + '　' : '') + '「くらマに送信」でくらマに届きます（誰かが先に返信していたら止まります）';
+    document.getElementById('text').placeholder = 'くらマに送る文（AI生成の下書きを直してから送信）';
     document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
     document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
     Array.prototype.forEach.call(document.querySelectorAll('.row[data-ci]'), function(el) { el.classList.toggle('sel', CITEMS[parseInt(el.getAttribute('data-ci'), 10)] === it); });
@@ -1453,7 +1454,23 @@ function curamaDraft(btn) {
     toast('下書きを入れました（' + (r.as || '') + 'の名前）。直してからコピーしてください');
   }).catch(function(e) { btn.disabled = false; btn.textContent = 'AI生成'; alert('通信エラー: ' + ((e && e.message) || e)); });
 }
-document.getElementById('btnCopyOpen').onclick = function() {
+// くらマに送信（2026-10-01）：VPSがくらマへ投稿する。先に誰かが返信していたら止まる・同じ本文は二度送らない。
+// 届いたか分からないときは再送しない（くらマのアプリで確認してもらう）
+document.getElementById('btnCSend').onclick = function() {
+  var it = CURC; if (!it) return;
+  var ta = document.getElementById('text'); var txt = ta.value.trim();
+  if (!txt) { alert('送る文を入れてください'); return; }
+  if (!confirm((it.name || 'お客様') + 'さんに、くらマで送信します。よろしいですか？\n\n' + txt.slice(0, 200) + (txt.length > 200 ? '…' : ''))) return;
+  var btn = this; btn.disabled = true; btn.innerHTML = '送信中…';
+  api({ op: 'curamaSend', id: it.id, text: txt }).then(function(r) {
+    btn.disabled = false; btn.innerHTML = 'くらマに<br>送信';
+    if (r && r.ok) { ta.value = ''; autosize(); document.getElementById('cwarn').style.display = 'none'; toast('くらマに送信しました'); it.needsReply = false; curamaBadge(); openCurama(it, true); loadCurama(true); return; }
+    if (r && r.uncertain) { alert('送信できたか確認できませんでした。再送はせず、くらマのアプリで届いているか確かめてください。'); return; }
+    alert((r && r.error) || '送信できませんでした');
+  }).catch(function(e) { btn.disabled = false; btn.innerHTML = 'くらマに<br>送信'; alert('通信エラーで、送信できたか分かりません。再送はせず、くらマのアプリで確かめてください。'); });
+};
+document.getElementById('btnCopyOpen').onclick = function(e) {
+  if (e) e.preventDefault();
   var it = CURC; if (!it) return;
   var txt = document.getElementById('text').value;
   var url = it.openUrl || '';
