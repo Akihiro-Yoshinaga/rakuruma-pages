@@ -66,7 +66,7 @@ if (error || !code) {
   .then(function(r) { return r.json(); })
   .then(function(d) {
     if (!d || !d.ok || !d.token) {
-      showError((d && d.error) ? d.error : 'ログインに失敗しました。もう一度お試しください。');
+      showError(((d && d.error) ? d.error : 'ログインに失敗しました。もう一度お試しください。') + (d && d.lineError ? '（' + d.lineError + '）' : ''), true);
       return;
     }
     // 入場券（署名つき・90日）はこの端末の中にだけ保存し、URLには載せない（2026-09-30〜）。
@@ -87,12 +87,14 @@ if (error || !code) {
   .catch(function(e) { showError('通信エラーが発生しました。再度お試しください。'); });
 }
 
-function showError(msg) {
+function showError(msg, retry) {
   document.querySelector('.spinner').style.display = 'none';
   document.querySelector('.msg').style.display = 'none';
   var el = document.getElementById('errMsg');
   el.textContent = msg;
   el.style.display = 'block';
+  // ログインのコードは1回しか使えないので、この画面の再読み込みでは直らない。最初からやり直す入口を出す
+  if (retry) { var a = document.createElement('a'); a.href = 'https://rakuruma.com/staff/'; a.textContent = 'ログインをやり直す'; a.style.cssText = 'display:inline-block;margin-top:18px;background:#06C755;color:#fff;font-weight:700;text-decoration:none;padding:12px 20px;border-radius:12px'; el.parentNode.appendChild(a); }
 }
 </script>
 </body>
