@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/partner/partner_style.css?v=20260923">
+  <link rel="stylesheet" href="/partner/partner_style.css?v=20261001">
   <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
     if(!/(^|\.)rakuruma\.com$/.test(location.hostname))return;
@@ -107,6 +107,24 @@
         <ul>
           <li>車検や整備でお忙しいとき、電装品・用品の取付だけを代わりにお引き受けします</li>
           <li>お付き合いの外注先が空かないときだけ、代わりにお受けします</li>
+        </ul>
+      </div>
+      <div class="uc">
+        <p class="uc-who">保険代理店・車両管理のご担当者さまへ</p>
+        <h3>保険会社から届く事業者向けドラレコの取付を、会社の駐車場で</h3>
+        <ul>
+          <li>損保ジャパン「スマイリングロード」など、通信型ドラレコの取付を出張でお引き受けします。車を取付店へ運ぶ手間はかかりません</li>
+          <li>作業前後の確認（録画・駐車監視の動作、警告灯の変化）を写真つきで記録し、そのままご報告に使えます</li>
+          <li>1台から。導入で台数がまとまるときもご相談ください　<a class="uc-link" href="/blog/1790562261107/">取付事例：法人のハイエース →</a></li>
+        </ul>
+      </div>
+      <div class="uc">
+        <p class="uc-who">営業車・送迎車をお使いの会社さまへ</p>
+        <h3>車が止まっている時間に、まとめて取付</h3>
+        <ul>
+          <li>日中は営業や送迎で出払う車も、休日や夜間（日程は調整のうえ）に駐車場で作業します</li>
+          <li>ドラレコは少数台ならこちらで手配します。御社でご用意の商品の取付も承ります</li>
+          <li>台数が多いときは、1日でまとめて施工できる段取りをご提案します</li>
         </ul>
       </div>
     </div>
@@ -296,6 +314,8 @@
     <details class="qa"><summary>複数台まとめてお願いできますか？</summary><p>対応可能です。台数と作業内容をお知らせいただければ、1日でまとめて施工できる段取りをご提案します。</p></details>
     <details class="qa"><summary>作業はどこで行いますか？</summary><p>御社の工場・店頭にお伺いしての作業も、御社のお客様のご自宅へ直接お伺いしての作業も可能です。ご都合のよい方をお選びください。</p></details>
     <details class="qa"><summary>どこまでの作業をお願いできますか？</summary><p>電装品・用品の取付が中心です。分解整備にあたる作業は、認証を受けた提携工場と連携して対応いたします。作業範囲は事前にご相談ください。</p></details>
+    <details class="qa"><summary>夜間や休日に作業できますか？</summary><p>休日も営業しています。夜間は日程を調整のうえ対応します。お車を使わない時間帯をお知らせください。</p></details>
+    <details class="qa"><summary>ドラレコなどの商品も手配してもらえますか？</summary><p>少数台であれば、こちらで手配いたします。台数が多い場合や機種のご指定がある場合は、御社でご用意いただいた商品の取付も承ります。</p></details>
   </div>
 </section>
 
@@ -318,6 +338,13 @@
         <input type="tel" id="pf-phone" placeholder="お電話番号" autocomplete="tel">
         <input type="email" id="pf-email" placeholder="メールアドレス（必須）" autocomplete="email">
       </div>
+      <select id="pf-kind" class="pform-kind" aria-label="ご相談の種類">
+        <option value="">ご相談の種類（任意）</option>
+        <option>電装品・用品の取付</option>
+        <option>事業者向けドラレコ（保険会社の貸与品など）</option>
+        <option>複数台・定期のご依頼</option>
+        <option>その他</option>
+      </select>
       <textarea id="pf-note" rows="3" placeholder="ご相談内容（例：持ち込みドラレコの取付を月2〜3台お願いしたい）"></textarea>
       <input type="text" name="fax_number" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
       <div class="pform-foot">
@@ -497,7 +524,7 @@
       err.textContent='';
       var btn=document.getElementById('pf-submit');
       btn.disabled=true; btn.textContent='送信中…';
-      var payload={ type:'corporate', company:v('pf-company'), name:v('pf-name'), phone:v('pf-phone'), email:v('pf-email'), fleet_size:'（工場・販売店LPより）', note:v('pf-note'), fax_number:'' };
+      var payload={ type:'corporate', company:v('pf-company'), name:v('pf-name'), phone:v('pf-phone'), email:v('pf-email'), fleet_size:'（工場・販売店LPより）', note:(v('pf-kind')?'【'+v('pf-kind')+'】':'')+v('pf-note'), fax_number:'' };
       fetch(FORM_URL+'?payload='+encodeURIComponent(JSON.stringify(payload)))
         .then(function(r){ return r.json(); })
         .then(function(d){
