@@ -623,7 +623,7 @@ function openThread(it) {
   var name = (it.customer && it.customer.name) ? custLabel(it) : bizLabel(it);
   document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
   loadNextEvent(it);
-  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
+  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = '#'; } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
