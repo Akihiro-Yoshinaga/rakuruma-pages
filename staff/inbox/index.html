@@ -257,6 +257,7 @@ var TOKEN = '', STAFF = '';
     throw new Error('pairing'); // 受け取りが済むまでこの先（一覧の読み込み）を動かさない
   }
   if (!TOKEN) { window.location.replace('/staff/'); }
+  else StaffTicket.autoHomePrep(); // iPhoneのブラウザでは、共有→ホーム画面に追加だけでログイン済みアイコンができるように
 })();
 // ホーム画面に追加する準備（ホーム画面のアプリはSafariと保存場所が別なので、30分・1回きりの受け渡し番号をURLに付けてから追加してもらう）
 document.addEventListener('DOMContentLoaded', function() {
@@ -268,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     StaffTicket.homeScreenPrep().then(function(r) {
       if (!r || !r.ok) { alert((r && r.error) || '準備できませんでした'); return; }
-      alert('準備できました。30分以内に、Safariの共有ボタン →「ホーム画面に追加」を押してください。\n（このURLは1回しか使えません。人に送らないでください）');
+      alert('準備できました。30分以内に、ブラウザの共有ボタン →「ホーム画面に追加」を押してください。\n（このURLは1回しか使えません。人に送らないでください）');
     }).catch(function() { alert('通信できませんでした'); });
   };
 });

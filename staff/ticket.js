@@ -50,6 +50,16 @@
       return r;
     });
   }
-  w.StaffTicket = { KEY: KEY, RSV_GAS: RSV_GAS, get: get, set: set, clear: clear, init: init, linkTicket: linkTicket, homeScreenPrep: homeScreenPrep,
+  // iPhone/iPadのブラウザ（Chrome・Safari）で開いているあいだは、受け渡し番号を先に用意してURLに付けておく。
+  // こうすると、共有 →「ホーム画面に追加」だけで、ログイン済みのアイコンができる（ボタンを押す手順が要らない・2026-10-01）。
+  // 番号は30分・1回きりなので、25分ごとに作り直す。アプリとして開いているときやパソコンでは何もしない
+  function isAppMode() { return !!(w.navigator.standalone || (w.matchMedia && w.matchMedia('(display-mode: standalone)').matches)); }
+  function autoHomePrep() {
+    if (isAppMode() || !/iPhone|iPad|iPod/.test(w.navigator.userAgent || '')) return;
+    if (!/^st1\./.test(get())) return;
+    homeScreenPrep().catch(function () {});
+    setInterval(function () { if (document.visibilityState === 'visible') homeScreenPrep().catch(function () {}); }, 25 * 60000);
+  }
+  w.StaffTicket = { KEY: KEY, isAppMode: isAppMode, autoHomePrep: autoHomePrep, RSV_GAS: RSV_GAS, get: get, set: set, clear: clear, init: init, linkTicket: linkTicket, homeScreenPrep: homeScreenPrep,
     goUrl: function (q) { return '/staff/go/?q=' + encodeURIComponent(q); } };
 })(window);

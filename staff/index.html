@@ -93,14 +93,13 @@
   <!-- ホーム画面のアイコン（アプリとして開いた）ときの案内。ここでLINEログインしてもSafari側に保存され、アイコン側には入らない（2026-10-01） -->
   <div class="gate" id="gateApp" style="display:none;text-align:left">
     <p style="text-align:center;font-weight:700">このアイコンを作り直してください</p>
-    <p style="font-size:14px;line-height:1.8">ホーム画面のアイコンは、Safariとログインの保存場所が別です。次の手順で作り直すと、次からはログインなしで開けます（1回だけ）。</p>
+    <p style="font-size:14px;line-height:1.8">ホーム画面のアイコンは、ブラウザとログインの保存場所が別です。次の手順で作り直すと、次からはログインなしで開けます（1回だけ）。</p>
     <ol style="font-size:14px;line-height:1.9;padding-left:1.4em;margin:8px 0">
-      <li>Safariで <b>rakuruma.com/staff/</b> を開き、LINEでログインする</li>
-      <li>いちばん下の「📲 この画面をホーム画面に追加する」を押す</li>
-      <li>30分以内に、Safariの共有ボタン →「ホーム画面に追加」</li>
+      <li>いつも使っているブラウザ（ChromeやSafari）で <b>rakuruma.com/staff/</b> を開き、LINEでログインする</li>
+      <li>アイコンにしたい画面（スタッフ用トップか受信箱）を開く</li>
+      <li>共有ボタン →「ホーム画面に追加」</li>
       <li>古いアイコン（いま開いているもの）は削除する</li>
     </ol>
-    <a class="btn-line" href="https://rakuruma.com/staff/" target="_blank" rel="noopener" style="background:#182F66">Safariで開く</a>
   </div>
 
   <div id="tools">
@@ -203,7 +202,7 @@ function homePrep(e) {
   if (e) e.preventDefault();
   StaffTicket.homeScreenPrep().then(function (r) {
     if (!r || !r.ok) { alert((r && r.error) || '準備できませんでした'); return; }
-    alert('準備できました。30分以内に、Safariの共有ボタン →「ホーム画面に追加」を押してください。\n（このURLは1回しか使えません。人に送らないでください）');
+    alert('準備できました。30分以内に、ブラウザの共有ボタン →「ホーム画面に追加」を押してください。\n（このURLは1回しか使えません。人に送らないでください）');
   }).catch(function () { alert('通信できませんでした'); });
   return false;
 }
@@ -275,6 +274,7 @@ function showTools(token) {
     links[i].href = StaffTicket.goUrl(links[i].getAttribute('data-q'));
   }
   applyTools(savedTools());
+  StaffTicket.autoHomePrep(); // iPhoneのブラウザでは、共有→ホーム画面に追加だけでログイン済みアイコンができるように
   el.loading.style.display = 'none';
   el.gate.style.display    = 'none';
   el.tools.style.display   = 'block';
