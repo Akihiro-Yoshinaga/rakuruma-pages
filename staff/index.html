@@ -90,6 +90,18 @@
     <a class="btn-line" id="loginBtn" href="#">LINEでログイン</a>
     <p class="note">一度ログインすれば、次からはこの画面を<br>飛ばして開けます。</p>
   </div>
+  <!-- ホーム画面のアイコン（アプリとして開いた）ときの案内。ここでLINEログインしてもSafari側に保存され、アイコン側には入らない（2026-10-01） -->
+  <div class="gate" id="gateApp" style="display:none;text-align:left">
+    <p style="text-align:center;font-weight:700">このアイコンを作り直してください</p>
+    <p style="font-size:14px;line-height:1.8">ホーム画面のアイコンは、Safariとログインの保存場所が別です。次の手順で作り直すと、次からはログインなしで開けます（1回だけ）。</p>
+    <ol style="font-size:14px;line-height:1.9;padding-left:1.4em;margin:8px 0">
+      <li>Safariで <b>rakuruma.com/staff/</b> を開き、LINEでログインする</li>
+      <li>いちばん下の「📲 この画面をホーム画面に追加する」を押す</li>
+      <li>30分以内に、Safariの共有ボタン →「ホーム画面に追加」</li>
+      <li>古いアイコン（いま開いているもの）は削除する</li>
+    </ol>
+    <a class="btn-line" href="https://rakuruma.com/staff/" target="_blank" rel="noopener" style="background:#182F66">Safariで開く</a>
+  </div>
 
   <div id="tools">
     <div class="group-title">よく使う</div>
@@ -186,6 +198,7 @@
 <script src="/staff/ticket.js"></script>
 <script>
 // ホーム画面に追加する準備（ホーム画面のアプリはSafariと保存場所が別。30分・1回きりの受け渡し番号をURLに付けてから追加する）
+document.addEventListener('DOMContentLoaded', function () { if (isAppMode()) { var hp = document.getElementById('homePrepP'); if (hp) hp.style.display = 'none'; } });
 function homePrep(e) {
   if (e) e.preventDefault();
   StaffTicket.homeScreenPrep().then(function (r) {
@@ -245,10 +258,12 @@ document.getElementById('loginBtn').href =
   }
 })();
 
+function isAppMode() { return !!(window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)); }
 function showGate(msg) {
   el.loading.style.display = 'none';
   el.tools.style.display   = 'none';
   el.logout.style.display  = 'none';
+  if (isAppMode()) { document.getElementById('gateApp').style.display = 'block'; return; }
   el.gate.style.display    = 'block';
   if (msg) { el.err.textContent = msg; el.err.style.display = 'block'; }
 }
