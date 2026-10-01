@@ -72,6 +72,8 @@
   .mt { font-size:12px; color:#8E95A0; white-space:nowrap; line-height:1.3; flex:0 0 auto; padding-bottom:4px; }
   .mrow.out .mt { text-align:right; }
   .bub a.blink { color:inherit; text-decoration:underline; word-break:break-all; }
+  /* グループのトーク：発言者名（2026-10-01） */
+  .msnd { font-size:12px; color:#718096; margin:6px 0 -2px 46px; font-weight:600; }
   /* URLの概要カード（2026-09-28） */
   .bub .lp { display:block; margin-top:8px; background:#fff; color:#1A202C; border:1px solid #E2E8F0; border-radius:12px; overflow:hidden; text-decoration:none; white-space:normal; max-width:320px; }
   .bub .lp-img { display:block; width:100%; height:150px; object-fit:cover; background:#EDF2F7; }
@@ -449,7 +451,9 @@ function itemMatches(it, q) {
 // 車ごとのタグ：複数台なら「車名 車検 日付」を車ごとに。1台なら従来どおり
 // 表示名：LINE連絡先名（このLINEの相手）があればそれを優先。顧客本人は補足に出す
 // 工場・取引先の表示：「取引先名（担当者名）」。取引先名が未設定ならLINEの表示名だけ
-function bizLabel(it) { var p = it.partner || '', c = it.contact || '', d = it.displayName || ''; var head = p + (c ? (p ? ' ' : '') + c : ''); if (head && d && head !== d) return head + '（' + d + '）'; return head || d || '（表示名なし）'; }
+function bizLabel(it) { var p = it.partner || '', c = it.contact || '', d = it.displayName || ''; if (it.isGroup) return '👥 ' + (p ? p + ' ' : '') + 'グループ' + (d && d !== 'グループ' ? '（' + d + '）' : ''); var head = p + (c ? (p ? ' ' : '') + c : ''); if (head && d && head !== d) return head + '（' + d + '）'; return head || d || '（表示名なし）'; }
+// グループの発言者の呼び名：個人の連絡先に担当者名があればそれ（後藤さん）、無ければLINE表示名
+function groupSenderLabel(m) { var b = (BIZ || []).filter(function(x) { return x.uid === m.senderUid; })[0]; return (b && bizWho(b)) || m.sender || ''; }
 function bizWho(it) { var c = String((it && it.contact) || '').replace(/(さん|様|さま)$/, '').trim().split(/[\s\u3000]+/)[0]; return c ? c + 'さん' : ''; }
 // 見出しに「次回 M/D(曜) HH:MM 予定名」を出す（VPSが6時間キャッシュ・2026-09-25）
 // 施工確定への導線（2026-09-25）：作業完了の連絡を送ったあと、または今日その人の施工予定があるとき、ダッシュボードの施工確定をその日・その人で開く
@@ -619,7 +623,7 @@ function openThread(it) {
   var name = (it.customer && it.customer.name) ? custLabel(it) : bizLabel(it);
   document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
   loadNextEvent(it);
-  document.getElementById('tSub').textContent = it.src === 'biz' ? '工場・取引先（ラクルマ ご依頼・相談）' : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
+  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = '#'; } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
@@ -674,12 +678,15 @@ function dayLabel(d) {
   return (+m[2]) + '/' + (+m[3]) + '(' + w + ')' + (m[1] !== String(today.getFullYear()) ? ' ' + m[1] : '');
 }
 function renderMsgs(it, msgs, fromCache, keepPos) {
-    var html = '', lastDay = '';
+    var html = '', lastDay = '', lastSnd = '';
     (msgs || []).forEach(function(m) {
       var day = String(m.at || '').slice(0, 10);
-      if (day !== lastDay) { html += '<div class="sys">' + esc(dayLabel(day)) + '</div>'; lastDay = day; }
+      if (day !== lastDay) { html += '<div class="sys">' + esc(dayLabel(day)) + '</div>'; lastDay = day; lastSnd = ''; }
       var isIn = m.dir === '受信';
       var av = ((it.customer && it.customer.name) || it.partner || it.displayName || '？').charAt(0);
+      var snd = (it.isGroup && isIn) ? groupSenderLabel(m) : '';
+      if (snd) { av = snd.charAt(0); if (snd !== lastSnd) html += '<div class="msnd">' + esc(snd) + '</div>'; }
+      lastSnd = isIn ? snd : '';
       var body = m.text || ('（' + m.kind + '）');
       var inner;
       if (m.img) inner = '<a href="' + esc(m.img.view || m.img.full) + '" target="_blank" rel="noopener"><img src="' + esc(m.img.thumb) + '" alt="画像" style="max-width:100%;border-radius:10px;display:block" onerror="if(!this.dataset.alt){this.dataset.alt=1;this.src=\'' + esc(m.img.thumb2 || '') + '\';}"></a>' + (m.file && m.file.name && !/^line_/.test(m.file.name) ? '<div class="meta">📎 ' + esc(m.file.name) + '</div>' : '');
@@ -818,7 +825,7 @@ document.getElementById('btnDraft').onclick = function() {
   if (!CUR) return;
   var intent = document.getElementById('intent').value.trim();
   var btn = this; btn.disabled = true; btn.textContent = '作成中…';
-  var recent = (threadCacheGet(CUR.uid) || []).slice(-12).map(function(m) { return { dir: m.dir, kind: m.kind, text: m.text || '', at: m.at }; });
+  var recent = (threadCacheGet(CUR.uid) || []).slice(-12).map(function(m) { return { dir: m.dir, kind: m.kind, text: m.text || '', at: m.at, sender: m.sender || '', senderUid: m.senderUid || '' }; });
   var target = CUR, tries = 0;
   function run() {
     tries++;
@@ -964,6 +971,11 @@ document.getElementById('photo').addEventListener('change', function() {
 // ---- 差し込み：{名前}→〇〇さん、{車種}→車名 ----
 function fill(text) {
   var nm = (CUR && CUR.customer && CUR.customer.name) ? String(CUR.customer.name).split(/[\s\u3000]+/)[0] + 'さん' : (CUR && (bizWho(CUR) || CUR.partner || CUR.displayName)) || 'お客様';
+  if (CUR && CUR.isGroup) { // グループは直前に発言した人（担当者名が分かるときだけ）。分からなければ「皆さま」
+    var gm = (threadCacheGet(CUR.uid) || []).filter(function(m) { return m.dir === '受信' && m.senderUid; }).pop();
+    var gb = gm ? (BIZ || []).filter(function(x) { return x.uid === gm.senderUid; })[0] : null;
+    nm = (gb && bizWho(gb)) || '皆さま';
+  }
   var car = (CUR && CUR.customer && CUR.customer.car) || 'お車';
   return String(text || '').replace(/\{名前\}/g, nm).replace(/\{車種\}/g, car);
 }
