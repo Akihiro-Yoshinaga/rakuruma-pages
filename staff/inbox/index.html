@@ -73,7 +73,7 @@
   .mrow.out .mt { text-align:right; }
   .bub a.blink { color:inherit; text-decoration:underline; word-break:break-all; }
   /* グループのトーク：発言者名（2026-10-01） */
-  .msnd { font-size:12px; color:#718096; margin:6px 0 -2px 46px; font-weight:600; }
+  .msnd { font-size:13px; color:#4A5568; margin:8px 0 -2px 46px; font-weight:700; }
   /* URLの概要カード（2026-09-28） */
   .bub .lp { display:block; margin-top:8px; background:#fff; color:#1A202C; border:1px solid #E2E8F0; border-radius:12px; overflow:hidden; text-decoration:none; white-space:normal; max-width:320px; }
   .bub .lp-img { display:block; width:100%; height:150px; object-fit:cover; background:#EDF2F7; }
@@ -685,7 +685,7 @@ function renderMsgs(it, msgs, fromCache, keepPos) {
       var isIn = m.dir === '受信';
       var av = ((it.customer && it.customer.name) || it.partner || it.displayName || '？').charAt(0);
       var snd = (it.isGroup && isIn) ? groupSenderLabel(m) : '';
-      if (snd) { av = snd.charAt(0); if (snd !== lastSnd) html += '<div class="msnd">' + esc(snd) + '</div>'; }
+      if (snd) { av = snd.charAt(0); html += '<div class="msnd">' + esc(snd) + '</div>'; } // グループは毎回名前を出す（丸の1文字だけだと誰か分かりにくい・2026-10-02 吉永さん指摘）
       lastSnd = isIn ? snd : '';
       var body = m.text || ('（' + m.kind + '）');
       var inner;
