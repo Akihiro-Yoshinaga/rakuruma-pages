@@ -166,7 +166,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く（Mac）</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -1390,6 +1390,8 @@ function loadCurama(silent) {
     if (TAB === 'curama' && !normQ(document.getElementById('search').value)) renderCurama();
   }).catch(function() { CURAMA_LOADING = false; });
 }
+// MacのClaudeアプリを開くリンク（claude://）はMacでしか開けないので、Macのときだけ出す（iPadはMacと名乗るのでタッチの有無で分ける）
+var IS_MAC = /Macintosh/.test(navigator.userAgent || '') && !(navigator.maxTouchPoints > 1);
 function curamaStatusHtml() {
   var st = CSTATUS || {};
   if (!st.lastOkAt) return '<div class="cstat bad">くらマをまだ読めていません</div>';
@@ -1403,7 +1405,7 @@ function curamaStatusHtml() {
     var wAge = Math.round((Date.now() - st.watchAt) / 60000), hNow = new Date().getHours();
     var wBad = hNow >= 8 && hNow < 21 && wAge >= 10;
     html += '<div class="cstat' + (wBad ? ' bad' : '') + '">' + (wBad ? '⚠ Macの見張りが止まっています（最終確認 ' : '見張り：最終確認 ') + new Date(st.watchAt).toTimeString().slice(0, 5) + '・' + (wAge <= 0 ? 'たった今' : wAge + '分前') + (wBad ? '）' : '')
-      + (st.watchLink ? '　<a href="' + esc(st.watchLink) + '" style="font-weight:700">見張り役のチャットを開く（Mac）</a>' : '') + (wBad ? '<br>開いて「見張り再開」と送ってください' : '') + '</div>';
+      + (st.watchLink && IS_MAC ? '　<a href="' + esc(st.watchLink) + '" style="font-weight:700">見張り役のチャットを開く</a>' : '') + (wBad ? '<br>' + (IS_MAC ? '開いて' : 'Macで見張り役のチャットを開いて') + '「見張り再開」と送ってください' : '') + '</div>';
   }
   return html;
 }
@@ -1447,7 +1449,7 @@ function openCurama(it, refresh) {
     document.getElementById('note').textContent = (it.level === '赤' && it.point ? '要判断：' + it.point + (it.deep ? '（Macの深掘りチャットあり）' : '') + '　' : '') + '「くらマに送信」でくらマに届きます（誰かが先に返信していたら止まります）';
     document.getElementById('text').placeholder = 'くらマに送る文（AI生成の下書きを直してから送信）';
     document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
-    var dl = document.getElementById('btnCDeep'); if (it.deepLink) { dl.href = it.deepLink; dl.style.display = 'inline-block'; dl.title = it.deepTitle || ''; } else dl.style.display = 'none';
+    var dl = document.getElementById('btnCDeep'); if (it.deepLink && IS_MAC) { dl.href = it.deepLink; dl.style.display = 'inline-block'; dl.title = it.deepTitle || ''; } else dl.style.display = 'none';
     document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
     Array.prototype.forEach.call(document.querySelectorAll('.row[data-ci]'), function(el) { el.classList.toggle('sel', CITEMS[parseInt(el.getAttribute('data-ci'), 10)] === it); });
   }
