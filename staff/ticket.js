@@ -24,7 +24,8 @@
     var mp = (w.location.search || '').match(/[?&]p=([^&]+)/) || h.match(/[#&]p=([^&]+)/), mt = h.match(/[#&]t=([^&]+)/);
     var done = Promise.resolve(get());
     if (mt) { set(decodeURIComponent(mt[1])); done = Promise.resolve(get()); }
-    if (mp) {
+    // 番号の受け取りは、この端末に本券がまだ無いとき（＝ホーム画面のアイコンの初回）だけ。ブラウザ側で番号を使い切らない
+    if (mp && !/^st1\./.test(get())) {
       var code = decodeURIComponent(mp[1]);
       done = post({ op: 'pair', code: code }).then(function (r) { if (r && r.ok && r.token) set(r.token); return get(); }, function () { return get(); });
     }
@@ -55,11 +56,22 @@
   // こうすると、共有 →「ホーム画面に追加」だけで、ログイン済みのアイコンができる（ボタンを押す手順が要らない・2026-10-01）。
   // 番号は30分・1回きりなので、25分ごとに作り直す。アプリとして開いているときやパソコンでは何もしない
   function isAppMode() { return !!(w.navigator.standalone || (w.matchMedia && w.matchMedia('(display-mode: standalone)').matches)); }
+  // Chromeは「ページを読み込んだときのURL」でアイコンを作る（表示だけ書き換えても入らない・2026-10-02 実測）。
+  // そこで番号を付けたURLで読み込み直す。読み込み直しは番号を作ったときだけ（25分たつまで同じ番号を使う）
   function autoHomePrep() {
     if (isAppMode() || !/iPhone|iPad|iPod/.test(w.navigator.userAgent || '')) return;
     if (!/^st1\./.test(get())) return;
-    homeScreenPrep().catch(function () {});
-    setInterval(function () { if (document.visibilityState === 'visible') homeScreenPrep().catch(function () {}); }, 25 * 60000);
+    var cur = (w.location.search || '').match(/[?&]p=([^&]+)/);
+    var madeAt = 0; try { madeAt = Number(sessionStorage.getItem('staffPairAt') || 0); } catch (e) {}
+    function renew() {
+      post({ op: 'pairNew', token: get() }).then(function (r) {
+        if (!r || !r.ok || !r.code) return;
+        try { sessionStorage.setItem('staffPairAt', String(Date.now())); } catch (e) {}
+        w.location.replace(w.location.pathname + '?p=' + encodeURIComponent(r.code));
+      }).catch(function () {});
+    }
+    if (!cur || Date.now() - madeAt > 25 * 60000) renew();
+    setInterval(function () { if (document.visibilityState === 'visible') { var m = 0; try { m = Number(sessionStorage.getItem('staffPairAt') || 0); } catch (e) {} if (Date.now() - m > 25 * 60000) renew(); } }, 60000);
   }
   w.StaffTicket = { KEY: KEY, isAppMode: isAppMode, autoHomePrep: autoHomePrep, RSV_GAS: RSV_GAS, get: get, set: set, clear: clear, init: init, linkTicket: linkTicket, homeScreenPrep: homeScreenPrep,
     goUrl: function (q) { return '/staff/go/?q=' + encodeURIComponent(q); } };
