@@ -20,7 +20,8 @@
   // URLの #p=（受け渡し番号）/ #t=（ログイン直後・旧式）を読み、端末に保存して、アドレスバーからは消す
   function init() {
     var h = w.location.hash || '';
-    var mp = h.match(/[#&]p=([^&]+)/), mt = h.match(/[#&]t=([^&]+)/);
+    // 受け渡し番号は ?p=（ChromeからiPhoneのホーム画面に追加すると #… が落ちることがあるため・2026-10-02）。旧 #p= も読む
+    var mp = (w.location.search || '').match(/[?&]p=([^&]+)/) || h.match(/[#&]p=([^&]+)/), mt = h.match(/[#&]t=([^&]+)/);
     var done = Promise.resolve(get());
     if (mt) { set(decodeURIComponent(mt[1])); done = Promise.resolve(get()); }
     if (mp) {
@@ -46,7 +47,7 @@
     var t = get();
     if (!/^st1\./.test(t)) return Promise.resolve({ ok: false, error: 'いったんログインし直してから、もう一度押してください' });
     return post({ op: 'pairNew', token: t }).then(function (r) {
-      if (r && r.ok && r.code) { try { history.replaceState(null, '', w.location.pathname + w.location.search + '#p=' + encodeURIComponent(r.code)); } catch (e) {} }
+      if (r && r.ok && r.code) { try { history.replaceState(null, '', w.location.pathname + '?p=' + encodeURIComponent(r.code)); } catch (e) {} }
       return r;
     });
   }

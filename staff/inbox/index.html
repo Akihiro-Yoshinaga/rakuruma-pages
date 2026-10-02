@@ -253,10 +253,15 @@ var TOKEN = '', STAFF = '';
   var mt = h.match(/[#&]t=([^&]+)/) || window.location.search.match(/[?&]token=([^&]+)/);
   if (mt) { StaffTicket.set(decodeURIComponent(mt[1])); } // 旧式のホーム画面URL（切り替えまで）
   TOKEN = StaffTicket.get();
-  if (/[#&]p=/.test(h) && !/^st1\./.test(TOKEN)) {
+  if ((/[#&]p=/.test(h) || /[?&]p=/.test(window.location.search)) && !/^st1\./.test(TOKEN)) {
     document.addEventListener('DOMContentLoaded', function() { var r = document.getElementById('rows'); if (r) r.innerHTML = '<div class="empty">この端末の準備をしています…</div>'; });
     StaffTicket.init().then(function(t) { if (/^st1\./.test(t)) window.location.reload(); else window.location.replace('/staff/'); });
     throw new Error('pairing'); // 受け取りが済むまでこの先（一覧の読み込み）を動かさない
+  }
+  if (!TOKEN && StaffTicket.isAppMode()) {
+    // ホーム画面のアイコン（アプリ）で入場券が無い：トップへ飛ぶと枠の外になるので、ここで作り直し方を出す
+    document.addEventListener('DOMContentLoaded', function() { var r = document.getElementById('rows'); if (r) r.innerHTML = '<div class="empty" style="text-align:left;line-height:1.8;color:#4A5568"><b>このアイコンを作り直してください</b><br>1. いつも使っているブラウザ（ChromeやSafari）で rakuruma.com/staff/ を開き、LINEでログイン<br>2. 受信箱を開いて、一覧が出たら 共有 →「ホーム画面に追加」<br>3. このアイコンは削除</div>'; });
+    throw new Error('no-token-app');
   }
   if (!TOKEN) { window.location.replace('/staff/'); }
   else StaffTicket.autoHomePrep(); // iPhoneのブラウザでは、共有→ホーム画面に追加だけでログイン済みアイコンができるように
