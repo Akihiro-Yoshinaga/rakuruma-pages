@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>事例掲載のご確認｜ラクルマ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #003B8B; --navy: #071b35; --gold: #c9ab6a; --mark: #e8a400;
+    --text: #333; --text2: #555; --muted: #999;
+    --line: #e6eaf0; --bg: #f6f7f9; --ok: #1f7a4d; --ng: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; font-size: 15px; line-height: 1.7; -webkit-text-size-adjust: 100%; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px 48px; }
+  header { background: var(--navy); color: #fff; padding: 22px 16px 20px; }
+  header .wrap { padding-bottom: 0; }
+  header .brand { display: block; height: 40px; width: auto; }
+  header h1 { margin: 6px 0 8px; font-size: 21px; line-height: 1.45; }
+  header p { margin: 0; font-size: 14px; color: rgba(255,255,255,.85); }
+  h2 { font-size: 16px; margin: 28px 0 4px; color: var(--navy); }
+  .hint { font-size: 13px; color: var(--text2); margin: 0 0 12px; }
+
+  .label { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--blue); margin: 22px 0 8px; }
+  .label span { background: var(--blue); color: #fff; border-radius: 3px; padding: 1px 8px; font-size: 12px; white-space: nowrap; flex: none; }
+  .shot { display: block; width: 100%; border-radius: 6px; border: 1px solid var(--line); box-shadow: 0 2px 10px rgba(7,27,53,.06); background: #fff; }
+  .note { font-size: 12px; color: var(--text2); margin: 8px 2px 0; }
+
+  /* 項目（既定はOK。NGのときだけ押す） */
+  .items { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .item { display: flex; align-items: center; gap: 12px; padding: 14px 14px; border-top: 1px solid var(--line); }
+  .item:first-child { border-top: none; }
+  .item.is-ng { background: #fdf3f2; }
+  .num { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--mark); color: #fff; font: 700 15px/28px 'Montserrat', sans-serif; text-align: center; }
+  .num.plain { background: #c3cad5; }
+  .item-body { flex: 1; min-width: 0; }
+  .item-title { font-weight: 700; font-size: 15px; margin: 0; line-height: 1.5; }
+  .item-desc { font-size: 12px; color: var(--text2); margin: 2px 0 0; line-height: 1.6; }
+  .item.is-ng .item-desc .if-ok { display: none; }
+  .item:not(.is-ng) .item-desc .if-ng { display: none; }
+  .item-desc .if-ng { color: var(--ng); font-weight: 700; }
+  .toggle { flex: none; display: flex; border: 1.5px solid #c3cad5; border-radius: 6px; overflow: hidden; }
+  .toggle button { appearance: none; border: 0; background: #fff; color: var(--muted); font: 700 14px 'Noto Sans JP', sans-serif; padding: 9px 12px; cursor: pointer; }
+  .toggle button[aria-pressed="true"].ok { background: var(--blue); color: #fff; }
+  .toggle button[aria-pressed="true"].ng { background: var(--ng); color: #fff; }
+
+  input[type=text], textarea { width: 100%; font: inherit; font-size: 16px; border: 1.5px solid #c3cad5; border-radius: 6px; padding: 10px 12px; background: #fff; }
+  textarea { min-height: 72px; resize: vertical; }
+  label.f { display: block; font-size: 13px; font-weight: 700; margin: 16px 0 6px; }
+  label.f small { font-weight: 400; color: var(--muted); }
+
+  .promise { background: #fff; border-left: 4px solid var(--gold); border-radius: 4px; padding: 12px 16px; margin-top: 24px; font-size: 14px; }
+  .promise ul { margin: 6px 0 0; padding-left: 1.2em; }
+  .summary { text-align: center; font-size: 14px; font-weight: 700; color: var(--navy); margin: 22px 0 0; }
+  .send { display: block; width: 100%; margin-top: 10px; padding: 16px; border: 0; border-radius: 8px; background: var(--blue); color: #fff; font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; }
+  .send:disabled { background: #a9b5c7; cursor: default; }
+  .thanks { background: #fff; border-radius: 8px; padding: 28px 20px; text-align: center; margin-top: 24px; border: 1px solid var(--line); }
+  .thanks .mark { font-size: 40px; color: var(--ok); line-height: 1; }
+  .thanks h2 { margin: 10px 0 6px; }
+  .thanks p { margin: 0; font-size: 14px; color: var(--text2); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <img class="brand" src="https://rakuruma.com/assets/images/logo_rakuruma_w.svg" alt="ラクルマ">
+    <h1 id="title">事例掲載のご確認</h1>
+    <p>同じお悩みをお持ちの会社様へご案内するために、ご利用の様子を紹介させてください。<b>NGのところだけ選んで</b>「送信」を押せば完了です。</p>
+  </div>
+</header>
+
+<main class="wrap" id="form">
+  <div class="label"><span>今の掲載</span>ラクルマのホームページ「活用事例」</div>
+  <img class="shot" src="ex-card-numbered.jpg" alt="ホームページに載っている御社の事例。①写真 ②社名の欄 ③車種の欄 ④いただいたお言葉">
+  <p class="note">いまは社名と車種を伏せて載せています。①〜④の番号は下の項目と対応しています。</p>
+
+  <h2>NGのところだけ教えてください</h2>
+  <p class="hint">すべて「OK」になっています。載せたくないものだけ「NG」を押してください。</p>
+
+  <div class="items">
+    <div class="item" data-key="photo">
+      <span class="num">1</span>
+      <div class="item-body">
+        <p class="item-title">この写真</p>
+        <p class="item-desc"><span class="if-ok">ナンバーは隠しています。社員の方は写しません。</span><span class="if-ng">→ 写真を外します</span></p>
+      </div>
+      <div class="toggle"><button type="button" class="ok">OK</button><button type="button" class="ng">NG</button></div>
+    </div>
+    <div class="item" data-key="name">
+      <span class="num">2</span>
+      <div class="item-body">
+        <p class="item-title" id="name-title">社名を出す</p>
+        <p class="item-desc"><span class="if-ok" id="name-ok">今の「区と業種」の表記を、社名に変えます。</span><span class="if-ng" id="name-ng">→ 今のまま伏せます</span></p>
+      </div>
+      <div class="toggle"><button type="button" class="ok">OK</button><button type="button" class="ng">NG</button></div>
+    </div>
+    <div class="item" data-key="cars">
+      <span class="num">3</span>
+      <div class="item-body">
+        <p class="item-title" id="cars-title">車種を出す</p>
+        <p class="item-desc"><span class="if-ok" id="cars-ok">今の台数の表記を、車種名に変えます。</span><span class="if-ng" id="cars-ng">→ 今のまま台数だけにします</span></p>
+      </div>
+      <div class="toggle"><button type="button" class="ok">OK</button><button type="button" class="ng">NG</button></div>
+    </div>
+    <div class="item" data-key="comment">
+      <span class="num">4</span>
+      <div class="item-body">
+        <p class="item-title">いただいたお言葉</p>
+        <p class="item-desc"><span class="if-ok">お名前は出さずに載せます。</span><span class="if-ng">→ お言葉を外します</span></p>
+      </div>
+      <div class="toggle"><button type="button" class="ok">OK</button><button type="button" class="ng">NG</button></div>
+    </div>
+    <div class="item" data-key="logo">
+      <span class="num plain">5</span>
+      <div class="item-body">
+        <p class="item-title">ロゴと御社サイトへのリンク</p>
+        <p class="item-desc"><span class="if-ok">社名を出す場合に、ロゴとリンクを添えます。</span><span class="if-ng">→ 添えません</span></p>
+      </div>
+      <div class="toggle"><button type="button" class="ok">OK</button><button type="button" class="ng">NG</button></div>
+    </div>
+    <div class="item" data-key="place">
+      <span class="num plain">6</span>
+      <div class="item-body">
+        <p class="item-title">ご提案資料・ご案内メールでも使う</p>
+        <p class="item-desc"><span class="if-ok">ホームページに加えて、他社様へのご提案資料・ご案内メールでも紹介します。</span><span class="if-ng">→ ホームページだけにします</span></p>
+      </div>
+      <div class="toggle"><button type="button" class="ok">OK</button><button type="button" class="ng">NG</button></div>
+    </div>
+  </div>
+
+  <label class="f" for="person">ご担当者のお名前 <small>（任意）</small></label>
+  <input type="text" id="person" autocomplete="name">
+  <label class="f" for="note">ひとこと <small>（任意・気になる点など）</small></label>
+  <textarea id="note"></textarea>
+
+  <div class="promise">
+    <b>お約束</b>
+    <ul>
+      <li>ご利用金額は載せません（料金欄は一般の定価です）。</li>
+      <li>変更する前に、文章と写真を必ずお見せします。</li>
+      <li>取り下げのご希望があれば、すぐに消します。</li>
+    </ul>
+  </div>
+
+  <p class="summary" id="summary"></p>
+  <button type="button" class="send" id="send">この内容で送信する</button>
+</main>
+
+<main class="wrap" id="thanks" hidden>
+  <div class="thanks">
+    <div class="mark">✓</div>
+    <h2>送信しました</h2>
+    <p>ご協力ありがとうございました。<br>変更する前に、文章と写真をお見せします。<br>ラクルマ 吉永</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  // 送信先：予約管理GAS（keisaiConsent.gs）。キーは追記専用。
+  // ⚠️ 会社キーのパラメータは co（c はGASで400になる）
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec';
+  var KEY = 'ks4e8b2d71c9a3';
+
+  // 会社ごとの表示（?c=キー）。画像 ex-card-numbered.jpg はその会社の事例カードを撮ったもの
+  var COMPANIES = {
+    frontier: {
+      companyName: '株式会社フロンティアホーム',
+      anonName: '品川区の不動産会社様',
+      cars: 'LEXUS LM・メルセデス・ベンツ CLA45S',
+      carsCount: '社用車2台'
+    }
+  };
+  var cKey = (new URLSearchParams(location.search).get('c') || '').replace(/[^\w-]/g, '');
+  var C = COMPANIES[cKey];
+  if (C) {
+    document.getElementById('title').textContent = C.companyName + ' 様　事例掲載のご確認';
+    document.getElementById('name-ok').textContent = '「' + C.anonName + '」→「' + C.companyName + ' 様」に変えます。';
+    document.getElementById('cars-ok').textContent = '「' + C.carsCount + '」→「' + C.cars + '」に変えます。';
+  }
+
+  // 送信する値（OK / NG）。シートとChatworkにはこの言葉で残る
+  var WORDS = {
+    photo:   ['よい', '載せない'],
+    name:    ['よい', '匿名で'],
+    cars:    ['よい', '台数だけ'],
+    comment: ['よい（お名前なし）', '載せない'],
+    logo:    ['よい', '載せない'],
+    place:   ['3つともよい', 'HPだけ']
+  };
+  var ng = {};
+
+  function paint(item) {
+    var isNg = !!ng[item.dataset.key];
+    item.classList.toggle('is-ng', isNg);
+    item.querySelector('.ok').setAttribute('aria-pressed', isNg ? 'false' : 'true');
+    item.querySelector('.ng').setAttribute('aria-pressed', isNg ? 'true' : 'false');
+  }
+  function summary() {
+    var n = Object.keys(ng).filter(function (k) { return ng[k]; }).length;
+    document.getElementById('summary').textContent = n === 0 ? 'すべてOKで送信します' : 'NG ' + n + ' 件で送信します';
+  }
+
+  document.querySelectorAll('.item').forEach(function (item) {
+    item.querySelector('.ok').addEventListener('click', function () { ng[item.dataset.key] = false; paint(item); summary(); });
+    item.querySelector('.ng').addEventListener('click', function () { ng[item.dataset.key] = true; paint(item); summary(); });
+    paint(item);
+  });
+  summary();
+
+  document.getElementById('send').addEventListener('click', function () {
+    var btn = this;
+    btn.disabled = true; btn.textContent = '送信しています…';
+    var payload = {};
+    Object.keys(WORDS).forEach(function (k) { payload[k] = WORDS[k][ng[k] ? 1 : 0]; });
+    if (ng.name && !ng.logo) payload.logo = '載せない（社名なし）';
+    payload.companyName = C ? C.companyName : '';
+    payload.person = document.getElementById('person').value.trim();
+    payload.note = document.getElementById('note').value.trim();
+    var url = ENDPOINT + '?keisai=1&k=' + KEY + '&co=' + encodeURIComponent(cKey) + '&a=' + encodeURIComponent(JSON.stringify(payload));
+    // GASは別ドメインなので応答は読めない（no-cors）。届いたかは吉永側のChatwork通知で確認する
+    fetch(url, { mode: 'no-cors' }).then(done, done);
+    function done() {
+      document.getElementById('form').hidden = true;
+      document.getElementById('thanks').hidden = false;
+      window.scrollTo(0, 0);
+    }
+  });
+})();
+</script>
+</body>
+</html>
