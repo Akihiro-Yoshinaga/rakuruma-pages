@@ -1375,6 +1375,16 @@ function curamaBadge() {
   t.innerHTML = 'くらマ' + (n ? '<span class="tabbadge">' + n + '</span>' : '');
 }
 var CURAMA_RETRY = 0;
+// Chatworkの通知などから ?curama=<スレッドID> で来たら、くらマのタブでその件を開く（2026-10-02）
+var CURAMA_OPEN = (window.location.search.match(/[?&]curama=([0-9a-f-]{36})/) || [])[1] || '';
+if (CURAMA_OPEN) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} }
+function curamaOpenPending() {
+  if (!CURAMA_OPEN || !CITEMS) return;
+  var it = CITEMS.filter(function(x) { return x.id === CURAMA_OPEN; })[0]; if (!it) return;
+  CURAMA_OPEN = '';
+  var tab = document.querySelector('.tabs [data-tab="curama"]'); if (tab && TAB !== 'curama') tab.click();
+  openCurama(it);
+}
 function loadCurama(silent) {
   if (CURAMA_LOADING) return; CURAMA_LOADING = true;
   api({ op: 'curamaList' }).then(function(r) {
@@ -1388,6 +1398,7 @@ function loadCurama(silent) {
     try { localStorage.setItem('rakuruma_inbox_curama', JSON.stringify({ at: Date.now(), items: CITEMS, status: CSTATUS })); } catch (e) {}
     curamaBadge();
     if (TAB === 'curama' && !normQ(document.getElementById('search').value)) renderCurama();
+    curamaOpenPending();
   }).catch(function() { CURAMA_LOADING = false; });
 }
 // MacのClaudeアプリを開くリンク（claude://）はMacでしか開けないので、Macのときだけ出す（iPadはMacと名乗るのでタッチの有無で分ける）
