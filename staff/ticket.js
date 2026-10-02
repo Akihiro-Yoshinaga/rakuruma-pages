@@ -59,6 +59,7 @@
   // Chromeは「ページを読み込んだときのURL」でアイコンを作る（表示だけ書き換えても入らない・2026-10-02 実測）。
   // そこで番号を付けたURLで読み込み直す。読み込み直しは番号を作ったときだけ（25分たつまで同じ番号を使う）
   function autoHomePrep() {
+    return; // 2026-10-02 見切り：ChromeからiPhoneのホーム画面に追加するとURLの番号が落ちる → 4桁の承認方式（appCodeFlow）に
     if (isAppMode() || !/iPhone|iPad|iPod/.test(w.navigator.userAgent || '')) return;
     if (!/^st1\./.test(get())) return;
     var cur = (w.location.search || '').match(/[?&]p=([^&]+)/);
@@ -73,6 +74,45 @@
     if (!cur || Date.now() - madeAt > 25 * 60000) renew();
     setInterval(function () { if (document.visibilityState === 'visible') { var m = 0; try { m = Number(sessionStorage.getItem('staffPairAt') || 0); } catch (e) {} if (Date.now() - m > 25 * 60000) renew(); } }, 60000);
   }
-  w.StaffTicket = { KEY: KEY, isAppMode: isAppMode, autoHomePrep: autoHomePrep, RSV_GAS: RSV_GAS, get: get, set: set, clear: clear, init: init, linkTicket: linkTicket, homeScreenPrep: homeScreenPrep,
+  // ---- ホーム画面のアイコンを4桁で承認（2026-10-02）
+  // アイコン側（入場券なし）：4桁を出して、承認されるまで3秒おきに受け取りに行く。受け取れたら保存して読み込み直す
+  function appCodeFlow(box) {
+    var stop = false;
+    function render(html) { if (box) box.innerHTML = html; }
+    function start() {
+      render('<div style="text-align:center;padding:28px 16px;color:#4A5568">番号を用意しています…</div>');
+      post({ op: 'appCode' }).then(function (r) {
+        if (!r || !r.ok) { render('<div style="text-align:center;padding:28px 16px;color:#C53030">' + ((r && r.error) || '番号を用意できませんでした') + '<br><a href="" onclick="location.reload();return false;">もう一度</a></div>'); return; }
+        var until = Date.now() + (r.expiresIn || 300) * 1000;
+        render('<div style="text-align:center;padding:24px 16px;color:#1A202C;line-height:1.7">'
+          + '<div style="font-weight:800;font-size:16px">このアイコンを使えるようにします</div>'
+          + '<div style="font-size:13px;color:#4A5568;margin-top:6px">ログイン済みのブラウザ（ChromeやSafari）でスタッフ用トップか受信箱を開き、いちばん下の「アイコンを承認する」に、この番号を入れてください</div>'
+          + '<div style="font-size:44px;font-weight:800;letter-spacing:12px;margin:18px 0 6px;color:#182F66">' + r.code + '</div>'
+          + '<div style="font-size:12px;color:#718096">5分で切れます。承認されると自動で開きます</div></div>');
+        (function poll() {
+          if (stop) return;
+          if (Date.now() > until) { render('<div style="text-align:center;padding:28px 16px;color:#4A5568">番号の期限が切れました<br><a href="" onclick="location.reload();return false;">新しい番号を出す</a></div>'); return; }
+          post({ op: 'appPoll', pollId: r.pollId }, 10000).then(function (q) {
+            if (q && q.ok && q.token) { set(q.token); stop = true; render('<div style="text-align:center;padding:28px 16px;color:#2F855A;font-weight:700">承認されました。開いています…</div>'); setTimeout(function () { w.location.replace(w.location.pathname); }, 600); return; }
+            if (q && q.expired) { render('<div style="text-align:center;padding:28px 16px;color:#4A5568">番号の期限が切れました<br><a href="" onclick="location.reload();return false;">新しい番号を出す</a></div>'); return; }
+            setTimeout(poll, 3000);
+          }, function () { setTimeout(poll, 5000); });
+        })();
+      }, function () { render('<div style="text-align:center;padding:28px 16px;color:#C53030">通信できませんでした<br><a href="" onclick="location.reload();return false;">もう一度</a></div>'); });
+    }
+    start();
+  }
+  // ログイン済みのブラウザ側：4桁を入れてアイコンを承認する
+  function approveApp() {
+    var t = get();
+    if (!/^st1\./.test(t)) { alert('いったんログインし直してから、もう一度押してください'); return; }
+    var code = (w.prompt('ホーム画面のアイコンに出ている4桁の番号を入れてください') || '').replace(/\D/g, '');
+    if (!code) return;
+    post({ op: 'appApprove', token: t, code: code }).then(function (r) {
+      if (r && r.ok) alert('承認しました。アイコンの画面が数秒で開きます。');
+      else alert((r && r.error) || '承認できませんでした');
+    }, function () { alert('通信できませんでした'); });
+  }
+  w.StaffTicket = { KEY: KEY, isAppMode: isAppMode, autoHomePrep: autoHomePrep, appCodeFlow: appCodeFlow, approveApp: approveApp, RSV_GAS: RSV_GAS, get: get, set: set, clear: clear, init: init, linkTicket: linkTicket, homeScreenPrep: homeScreenPrep,
     goUrl: function (q) { return '/staff/go/?q=' + encodeURIComponent(q); } };
 })(window);

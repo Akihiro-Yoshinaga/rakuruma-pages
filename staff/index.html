@@ -91,16 +91,7 @@
     <p class="note">一度ログインすれば、次からはこの画面を<br>飛ばして開けます。</p>
   </div>
   <!-- ホーム画面のアイコン（アプリとして開いた）ときの案内。ここでLINEログインしてもSafari側に保存され、アイコン側には入らない（2026-10-01） -->
-  <div class="gate" id="gateApp" style="display:none;text-align:left">
-    <p style="text-align:center;font-weight:700">このアイコンを作り直してください</p>
-    <p style="font-size:14px;line-height:1.8">ホーム画面のアイコンは、ブラウザとログインの保存場所が別です。次の手順で作り直すと、次からはログインなしで開けます（1回だけ）。</p>
-    <ol style="font-size:14px;line-height:1.9;padding-left:1.4em;margin:8px 0">
-      <li>いつも使っているブラウザ（ChromeやSafari）で <b>rakuruma.com/staff/</b> を開き、LINEでログインする</li>
-      <li>アイコンにしたい画面（スタッフ用トップか受信箱）を開く</li>
-      <li>共有ボタン →「ホーム画面に追加」</li>
-      <li>古いアイコン（いま開いているもの）は削除する</li>
-    </ol>
-  </div>
+  <div class="gate" id="gateApp" style="display:none"></div>
 
   <div id="tools">
     <div class="group-title">よく使う</div>
@@ -188,7 +179,7 @@
     </div>
   </div>
 
-  <p id="homePrepP" style="text-align:center;font-size:13px;margin:8px 0 20px"><a href="#" onclick="return homePrep(event)" style="color:#4A5568">📲 この画面をホーム画面に追加する</a></p>
+  <p id="homePrepP" style="text-align:center;font-size:13px;margin:8px 0 20px"><a href="#" onclick="StaffTicket.approveApp();return false;" style="color:#4A5568">📲 ホーム画面のアイコンを承認する（4桁）</a></p>
   <footer>ラクルマスタッフ専用ページ  <div class="footer-sns" style="margin:26px 0 18px;"><p style="font-size:12px;opacity:.6;margin:0 0 12px;">施工事例・車のメンテナンス情報を発信中</p><div style="display:flex;justify-content:center;align-items:center;gap:28px;"><a href="https://www.instagram.com/rakuruma.car/" target="_blank" rel="noopener" aria-label="Instagram" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#ig-grad)"/><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16.6" cy="7.4" r="1" fill="#fff"/></svg><span style="font-size:11px;">Instagram</span></a><a href="https://www.youtube.com/@rakuruma2023" target="_blank" rel="noopener" aria-label="YouTube" style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;color:inherit;text-decoration:none;opacity:.9;"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="5" fill="#FF0000"/><path d="M10 8.5v7l6-3.5z" fill="#fff"/></svg><span style="font-size:11px;">YouTube</span></a></div></div>
 </footer>
 
@@ -262,7 +253,7 @@ function showGate(msg) {
   el.loading.style.display = 'none';
   el.tools.style.display   = 'none';
   el.logout.style.display  = 'none';
-  if (isAppMode()) { document.getElementById('gateApp').style.display = 'block'; return; }
+  if (isAppMode()) { var ga = document.getElementById('gateApp'); ga.style.display = 'block'; StaffTicket.appCodeFlow(ga); return; } // ホーム画面のアイコン：4桁の承認（2026-10-02）
   el.gate.style.display    = 'block';
   if (msg) { el.err.textContent = msg; el.err.style.display = 'block'; }
 }
@@ -274,7 +265,6 @@ function showTools(token) {
     links[i].href = StaffTicket.goUrl(links[i].getAttribute('data-q'));
   }
   applyTools(savedTools());
-  StaffTicket.autoHomePrep(); // iPhoneのブラウザでは、共有→ホーム画面に追加だけでログイン済みアイコンができるように
   el.loading.style.display = 'none';
   el.gate.style.display    = 'none';
   el.tools.style.display   = 'block';

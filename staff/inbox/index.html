@@ -160,7 +160,7 @@
   </div>
   <div class="srch"><input id="search" type="search" placeholder="お客様を検索（名前・車種・本文）" autocomplete="off"><span id="searchClear" style="display:none">×</span></div>
   <div id="rows"><div class="empty">読み込み中…</div></div>
-  <div id="homePrep" style="display:none;text-align:center;padding:18px 16px 28px;font-size:13px"><a href="#" id="homePrepBtn" style="color:#4A5568">📲 この受信箱をホーム画面に追加する</a></div>
+  <div id="homePrep" style="display:none;text-align:center;padding:18px 16px 28px;font-size:13px"><a href="#" id="homePrepBtn" style="color:#4A5568">📲 ホーム画面のアイコンを承認する（4桁）</a></div>
 </div>
 
 <div id="thread">
@@ -255,12 +255,13 @@ var TOKEN = '', STAFF = '';
   TOKEN = StaffTicket.get();
   if ((/[#&]p=/.test(h) || /[?&]p=/.test(window.location.search)) && !/^st1\./.test(TOKEN)) {
     document.addEventListener('DOMContentLoaded', function() { var r = document.getElementById('rows'); if (r) r.innerHTML = '<div class="empty">この端末の準備をしています…</div>'; });
-    StaffTicket.init().then(function(t) { if (/^st1\./.test(t)) window.location.reload(); else window.location.replace('/staff/'); });
+    StaffTicket.init().then(function(t) { if (/^st1\./.test(t)) window.location.reload(); else window.location.replace(window.location.pathname); }); // 失敗したら番号なしで開き直す＝4桁の承認画面へ
     throw new Error('pairing'); // 受け取りが済むまでこの先（一覧の読み込み）を動かさない
   }
   if (!TOKEN && StaffTicket.isAppMode()) {
     // ホーム画面のアイコン（アプリ）で入場券が無い：トップへ飛ぶと枠の外になるので、ここで作り直し方を出す
-    document.addEventListener('DOMContentLoaded', function() { var r = document.getElementById('rows'); if (r) r.innerHTML = '<div class="empty" style="text-align:left;line-height:1.8;color:#4A5568"><b>このアイコンを作り直してください</b><br>1. いつも使っているブラウザ（ChromeやSafari）で rakuruma.com/staff/ を開き、LINEでログイン<br>2. 受信箱を開いて、一覧が出たら 共有 →「ホーム画面に追加」<br>3. このアイコンは削除</div>'; });
+    // 4桁の番号を出して、ログイン済みのブラウザで承認してもらう（2026-10-02）
+    document.addEventListener('DOMContentLoaded', function() { StaffTicket.appCodeFlow(document.getElementById('rows')); });
     throw new Error('no-token-app');
   }
   if (!TOKEN) { window.location.replace('/staff/'); }
@@ -272,13 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var standalone = window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
   if (!box || standalone) return;
   box.style.display = 'block';
-  btn.onclick = function(e) {
-    e.preventDefault();
-    StaffTicket.homeScreenPrep().then(function(r) {
-      if (!r || !r.ok) { alert((r && r.error) || '準備できませんでした'); return; }
-      alert('準備できました。30分以内に、ブラウザの共有ボタン →「ホーム画面に追加」を押してください。\n（このURLは1回しか使えません。人に送らないでください）');
-    }).catch(function() { alert('通信できませんでした'); });
-  };
+  btn.onclick = function(e) { e.preventDefault(); StaffTicket.approveApp(); };
 });
 // 予約管理GASのページを開く：押した瞬間に5分券を作ってから開く（URLに本券を載せない）。
 // ポップアップを止められないよう、先に空のタブを開いてから行き先を入れる
