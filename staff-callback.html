@@ -75,6 +75,8 @@ if (error || !code) {
     var action = parts[0] || 'customers';
     var param  = parts.slice(1).join('__');
     if (action === 'staffHome') { window.location.replace('https://rakuruma.com/staff/'); return; }
+    // ログイン前に開こうとしたページへ戻る（例 /staff/inbox/?curama=…）。サイト内の /staff/ 以下だけ
+    if (action === 'next' && /^\/staff\/[^\s]*$/.test(param) && param.indexOf('//') === -1) { window.location.replace('https://rakuruma.com' + param); return; }
     if (action === 'inbox')     { window.location.replace('https://rakuruma.com/staff/inbox/'); return; }
     var q;
     if (action === 'go') q = param;

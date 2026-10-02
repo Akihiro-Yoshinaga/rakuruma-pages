@@ -203,6 +203,8 @@ var RSV_GAS = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W
 var LINE_CHANNEL_ID = '2004330318';
 var CALLBACK_URL    = 'https://rakuruma.com/staff-callback.html';
 var STORAGE_KEY     = 'rakuruma_staff_token';
+// ログインのあとに戻る先（受信箱などが ?next=/staff/… で送ってくる）。サイト内の /staff/ 以下だけ受け付ける
+var NEXT_PATH = (function () { var m = window.location.search.match(/[?&]next=([^&]+)/); var p = m ? decodeURIComponent(m[1]) : ''; return /^\/staff\/[^\s]*$/.test(p) && p.indexOf('//') === -1 ? p : ''; })();
 
 var el = {
   loading: document.getElementById('loading'),
@@ -217,7 +219,7 @@ document.getElementById('loginBtn').href =
   + '?response_type=code'
   + '&client_id=' + LINE_CHANNEL_ID
   + '&redirect_uri=' + encodeURIComponent(CALLBACK_URL)
-  + '&state=staffHome'
+  + '&state=' + encodeURIComponent(NEXT_PATH ? 'next__' + NEXT_PATH : 'staffHome')
   + '&scope=profile'
   // PCではQRログインを最初から出す（メール＋パスワード＋2段階認証を省く）。スマホのLINEアプリ内では影響なし
   + '&initial_amr_display=lineqr';
@@ -229,6 +231,7 @@ document.getElementById('loginBtn').href =
   StaffTicket.init().then(function (t) { token = t; start(); });
   function start() {
   if (!token) { showGate(); return; }
+  if (NEXT_PATH && /^st1\./.test(token)) { window.location.replace(NEXT_PATH); return; } // ログイン済みなら行き先へ
 
   // 保存済みトークンがあればまずツールを表示する（GASの応答待ち2〜5秒を体感から消す）。
   // 有効確認は裏で走らせ、許可リストから外れていた場合だけログイン画面に切り替える。

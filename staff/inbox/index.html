@@ -264,7 +264,7 @@ var TOKEN = '', STAFF = '';
     document.addEventListener('DOMContentLoaded', function() { StaffTicket.appCodeFlow(document.getElementById('rows')); });
     throw new Error('no-token-app');
   }
-  if (!TOKEN) { window.location.replace('/staff/'); }
+  if (!TOKEN) { window.location.replace('/staff/?next=' + encodeURIComponent(window.location.pathname + window.location.search)); } // ログインのあと、このページ（?curama=…など）に戻る
   else StaffTicket.autoHomePrep(); // iPhoneのブラウザでは、共有→ホーム画面に追加だけでログイン済みアイコンができるように
 })();
 // ホーム画面に追加する準備（ホーム画面のアプリはSafariと保存場所が別なので、30分・1回きりの受け渡し番号をURLに付けてから追加してもらう）
