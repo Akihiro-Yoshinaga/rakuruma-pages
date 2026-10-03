@@ -208,6 +208,19 @@
     </div>
     <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="bookRegister" style="display:none">この内容で予約登録する</span><span class="abtn" id="bookOpen" style="display:none">登録ページで直す</span><span class="abtn" id="bookClose">閉じる</span></div>
   </div>
+  <div id="cconfbox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
+    <b>くらマで予約を確定する</b> <span id="ccfStatus" style="color:#718096"></span>
+    <div style="font-size:12px;color:#718096;margin-top:2px">くらマの予約詳細ページの「訪問日時を選択する→予約を確定する」と同じ操作です。確定するとお客様に通知が届き、くらマの手数料が確定します。確定後に住所・電話番号が開示され、そのまま予約登録に進めます</div>
+    <div id="ccfForm" style="display:none;margin-top:8px">
+      <div id="ccfInfo" style="font-size:13px;color:#2D3748;line-height:1.5"></div>
+      <div class="bf"><span>希望日</span><div id="ccfDates" style="flex:1;display:flex;flex-direction:column;gap:6px"></div></div>
+      <div class="bf"><span>訪問日</span><input id="ccfDate" type="date"></div>
+      <div class="bf"><span>開始時刻</span><select id="ccfTime" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"></select></div>
+      <div class="bf"><span>所要</span><select id="ccfHours" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"></select></div>
+      <div id="ccfNote" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="ccfGo" style="display:none;background:#DD6B20;border-color:#DD6B20;color:#fff">くらマで予約を確定する</span><span class="abtn" id="ccfClose">閉じる</span></div>
+  </div>
   <div id="cbookbox" class="linkbox" style="display:none;background:#EEF7FF;border-color:#2B6CB0">
     <b>くらマ予約の登録</b> <span id="cbkStatus" style="color:#718096"></span>
     <div style="font-size:12px;color:#718096;margin-top:2px">くらマの予約情報（名前・電話・住所・日時・料金・支払い）と、やりとりからAIが抜き出した車種・部品です。直してから登録すると、予約一覧・カレンダー・顧客管理に入り、Chatworkに通知されます</div>
@@ -1473,7 +1486,7 @@ function openCurama(it, refresh) {
     document.body.classList.remove('nocur');
     document.getElementById('list').style.display = 'none';
     document.getElementById('thread').style.display = 'block';
-    ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
+    ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox', 'cconfbox'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
     document.querySelector('.compose').style.display = '';
     document.getElementById('tName').textContent = it.name;
     curamaBookShow(it);
@@ -1546,8 +1559,52 @@ document.getElementById('btnCopyOpen').onclick = function(e) {
 // くらマ予約 → 予約登録（2026-10-03）。確定済みの件だけ。くらマの予約情報＋AIの抜き出しを入力済みにし、直してから予約管理GASへ登録（工場トークの「予約登録」と同じ入口・経路は「くらしのマーケット」）
 function curamaBookShow(it) {
   var b = document.getElementById('btnCBook');
-  if (!it || it.official || it.resId !== 1 || it.cancelled) { b.style.display = 'none'; return; }
-  b.style.display = ''; b.textContent = it.booked ? '予約登録済み' : '予約登録';
+  if (!it || it.official || it.cancelled || !(it.resId === 0 || it.resId === 1)) { b.style.display = 'none'; return; }
+  b.style.display = ''; b.textContent = it.resId === 0 ? 'くらマ予約を確定' : (it.booked ? '予約登録済み' : '予約登録');
+}
+// 予約確定（2026-10-03）：リクエスト中の件だけ。希望日と開始時刻・所要を選び、確認してからくらマで確定→続けて予約登録の箱を開く
+document.getElementById('ccfClose').onclick = function() { document.getElementById('cconfbox').style.display = 'none'; };
+function curamaConfirmUI(it) {
+  var box = document.getElementById('cconfbox'), st = document.getElementById('ccfStatus'), form = document.getElementById('ccfForm'), go = document.getElementById('ccfGo'), btn = document.getElementById('btnCBook');
+  box.style.display = 'block'; form.style.display = 'none'; go.style.display = 'none';
+  st.textContent = '（くらマの予約情報を読んでいます…）'; btn.textContent = '読込中…';
+  revealBox(box);
+  api({ op: 'curamaResOptions', id: it.id }).then(function(r) {
+    curamaBookShow(it);
+    if (CURC !== it) return;
+    st.textContent = '';
+    if (!r.ok) { box.style.display = 'none'; if (r.confirmed) { it.resId = 1; it.resStatus = '予約確定'; curamaBookShow(it); renderList(); curamaBooking(it); return; } alert(r.error || '読めませんでした'); return; }
+    document.getElementById('ccfInfo').innerHTML = '<b>' + esc(r.name) + 'さん</b>　' + esc(r.city || '') + '　' + (r.total ? Number(r.total).toLocaleString('ja-JP') + '円' : '') + (r.fee ? '（手数料 ' + Number(r.fee).toLocaleString('ja-JP') + '円）' : '') + (r.items && r.items.length ? '<br>' + esc(r.items.join('、')) : '');
+    var dates = document.getElementById('ccfDates'); dates.innerHTML = '';
+    var dateIn = document.getElementById('ccfDate'), timeSel = document.getElementById('ccfTime');
+    timeSel.innerHTML = (r.times || []).map(function(t) { return '<option value="' + t.id + '">' + esc(t.name) + '</option>'; }).join('');
+    function pick(w) { dateIn.value = w.date || ''; if (w.time) { for (var i = 0; i < timeSel.options.length; i++) if (timeSel.options[i].textContent === w.time) { timeSel.selectedIndex = i; break; } } }
+    (r.worktimes || []).forEach(function(w, i) {
+      var lab = document.createElement('label'); lab.style.cssText = 'display:flex;align-items:center;gap:6px;font-size:14px;padding:6px 8px;border:1px solid #CBD5E0;border-radius:8px;background:#fff';
+      var rd = document.createElement('input'); rd.type = 'radio'; rd.name = 'ccfW'; rd.checked = i === 0; rd.onchange = function() { pick(w); };
+      lab.appendChild(rd); lab.appendChild(document.createTextNode('第' + w.n + '希望　' + w.label)); dates.appendChild(lab);
+    });
+    if (r.worktimes && r.worktimes.length) pick(r.worktimes[0]);
+    var hs = document.getElementById('ccfHours'); hs.innerHTML = [1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6].map(function(h) { return '<option value="' + h + '"' + (h === r.hours ? ' selected' : '') + '>' + h + '時間</option>'; }).join('');
+    document.getElementById('ccfNote').textContent = '希望日と違う日にするときは「訪問日」を直してください（お客様と合意済みの日時だけ）。所要時間はくらマのカレンダーを塞ぐ長さです';
+    form.style.display = 'block'; go.style.display = '';
+    go.onclick = function() {
+      var date = dateIn.value, tzId = timeSel.value, tname = timeSel.options[timeSel.selectedIndex] ? timeSel.options[timeSel.selectedIndex].textContent : '', hours = hs.value;
+      if (!date) { alert('訪問日を選んでください'); return; }
+      if (!tzId) { alert('開始時刻を選んでください'); return; }
+      if (!confirm('くらマで予約を確定します。お客様に通知が届き、手数料が確定します。取り消しはくらマの画面からのキャンセル扱いになります。\n\n' + r.name + 'さん\n' + date.replace(/-/g, '/') + ' ' + tname + '〜（' + hours + '時間）\n' + (r.total ? Number(r.total).toLocaleString('ja-JP') + '円' : '') + '\n\nよろしいですか？')) return;
+      go.textContent = '確定中…'; go.style.pointerEvents = 'none';
+      api({ op: 'curamaConfirm', id: it.id, date: date, tzId: tzId, hours: hours, calendarId: (r.calendars && r.calendars[0]) ? r.calendars[0].id : '' }).then(function(c) {
+        go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = '';
+        if (!c.ok) { alert(c.error || '確定できませんでした'); if (c.uncertain) box.style.display = 'none'; return; }
+        toast('くらマで予約を確定しました（' + (c.visitLabel || '') + '）');
+        it.resId = 1; it.resStatus = '予約確定'; it.resLine = '確定 ' + (c.visitLabel || '') + (r.total ? '／' + Number(r.total).toLocaleString('ja-JP') + '円' : '') + (r.city ? '／' + r.city : '');
+        box.style.display = 'none'; curamaBookShow(it); renderList(); loadCurama(true);
+        document.getElementById('tSub').textContent = 'くらしのマーケット・' + (it.service || '') + '・予約確定・' + it.resLine;
+        curamaBooking(it);
+      }).catch(function(e) { go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = ''; alert('通信エラーで、確定できたか分かりません。くらマの予約詳細ページで確認してください（' + ((e && e.message) || e) + '）'); });
+    };
+  }).catch(function(e) { curamaBookShow(it); st.textContent = ''; box.style.display = 'none'; alert('通信エラー: ' + ((e && e.message) || e)); });
 }
 function renderStaffChipsIn(boxId, sel) {
   var box = document.getElementById(boxId); box.innerHTML = '';
@@ -1559,7 +1616,7 @@ function renderStaffChipsIn(boxId, sel) {
 }
 function staffSelectedIn(boxId) { return Array.prototype.map.call(document.querySelectorAll('#' + boxId + ' .schip.on'), function(c) { return c.textContent; }); }
 var CBOOK_REQ_ID = null;
-document.getElementById('btnCBook').onclick = function() { if (CURC) curamaBooking(CURC); };
+document.getElementById('btnCBook').onclick = function() { if (!CURC) return; if (CURC.resId === 0) curamaConfirmUI(CURC); else curamaBooking(CURC); };
 document.getElementById('cbkClose').onclick = function() { document.getElementById('cbookbox').style.display = 'none'; };
 function curamaBooking(it) {
   var box = document.getElementById('cbookbox'), st = document.getElementById('cbkStatus'), form = document.getElementById('cbkForm'), btn = document.getElementById('btnCBook');
@@ -1569,7 +1626,7 @@ function curamaBooking(it) {
   api({ op: 'curamaBooking', id: it.id }).then(function(r) {
     curamaBookShow(it);
     if (CURC !== it) return;
-    if (!r.ok) { st.textContent = ''; box.style.display = 'none'; alert(r.error || '読めませんでした'); return; }
+    if (!r.ok) { st.textContent = ''; box.style.display = 'none'; if (r.notConfirmed) { it.resId = 0; curamaBookShow(it); curamaConfirmUI(it); return; } alert(r.error || '読めませんでした'); return; }
     var d = r.draft || {};
     document.getElementById('cbkName').value = d.name || '';
     document.getElementById('cbkPhone').value = d.phone || '';
