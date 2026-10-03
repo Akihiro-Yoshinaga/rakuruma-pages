@@ -1621,7 +1621,7 @@ document.getElementById('cbkClose').onclick = function() { document.getElementBy
 function curamaBooking(it) {
   var box = document.getElementById('cbookbox'), st = document.getElementById('cbkStatus'), form = document.getElementById('cbkForm'), btn = document.getElementById('btnCBook');
   box.style.display = 'block'; form.style.display = 'none'; document.getElementById('cbkRegister').style.display = 'none'; document.getElementById('cbkAgain').style.display = 'none'; document.getElementById('cbkResult').style.display = 'none';
-  st.textContent = '（くらマの予約情報とやりとりを読んでいます… 5〜10秒）'; btn.textContent = '読込中…';
+  st.style.color = '#718096'; st.textContent = '（くらマの予約情報とやりとりを読んでいます… 5〜10秒）'; btn.textContent = '読込中…';
   revealBox(box);
   api({ op: 'curamaBooking', id: it.id }).then(function(r) {
     curamaBookShow(it);
@@ -1647,7 +1647,7 @@ function curamaBooking(it) {
     renderStaffChipsIn('cbkStaff', ['吉永']);
     CBOOK_REQ_ID = null;
     form.style.display = 'block';
-    if (r.booked) { st.textContent = '（' + r.booked.at + ' に ' + (r.booked.by || '') + ' が登録済み' + (r.booked.visit ? '：' + r.booked.visit : '') + '）'; document.getElementById('cbkAgain').style.display = ''; }
+    if (r.booked) { st.textContent = r.booked.external ? '（すでにカレンダーに予定があります：' + (r.booked.title || '') + '　' + (r.booked.visit || '') + '）' : '（' + r.booked.at + ' に ' + (r.booked.by || '') + ' が登録済み' + (r.booked.visit ? '：' + r.booked.visit : '') + '）'; st.style.color = '#C53030'; document.getElementById('cbkAgain').style.display = ''; it.booked = r.booked; curamaBookShow(it); renderList(); }
     else document.getElementById('cbkRegister').style.display = '';
   }).catch(function(e) { curamaBookShow(it); st.textContent = ''; box.style.display = 'none'; alert('通信エラー: ' + ((e && e.message) || e)); });
 }
