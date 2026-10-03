@@ -166,7 +166,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -207,6 +207,26 @@
       <div id="bkResult" style="display:none;margin-top:8px;padding:8px 10px;background:#F0FFF4;border:1px solid #38A169;border-radius:8px;font-size:13px;line-height:1.5"></div>
     </div>
     <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="bookRegister" style="display:none">この内容で予約登録する</span><span class="abtn" id="bookOpen" style="display:none">登録ページで直す</span><span class="abtn" id="bookClose">閉じる</span></div>
+  </div>
+  <div id="cbookbox" class="linkbox" style="display:none;background:#EEF7FF;border-color:#2B6CB0">
+    <b>くらマ予約の登録</b> <span id="cbkStatus" style="color:#718096"></span>
+    <div style="font-size:12px;color:#718096;margin-top:2px">くらマの予約情報（名前・電話・住所・日時・料金・支払い）と、やりとりからAIが抜き出した車種・部品です。直してから登録すると、予約一覧・カレンダー・顧客管理に入り、Chatworkに通知されます</div>
+    <div id="cbkForm" style="display:none;margin-top:8px">
+      <div class="bf"><span>お客様名</span><input id="cbkName"></div>
+      <div class="bf"><span>電話</span><input id="cbkPhone" inputmode="tel"></div>
+      <div class="bf"><span>住所</span><input id="cbkAddr"></div>
+      <div class="bf"><span>訪問日時</span><input id="cbkDate" type="datetime-local"></div>
+      <div class="bf"><span>車種</span><input id="cbkCar" placeholder="例：トヨタ プリウス"></div>
+      <div class="bf"><span>部品</span><input id="cbkParts" placeholder="持ち込み機器（メーカー丨型番）"></div>
+      <div class="bf"><span>作業内容</span><input id="cbkMenu" placeholder="例：カーナビ取付"></div>
+      <div class="bf"><span>料金</span><input id="cbkPrice" inputmode="numeric" placeholder="円（くらマの合計）"></div>
+      <div class="bf"><span>支払い</span><input id="cbkPay" placeholder="例：オンラインカード決済"></div>
+      <div class="bf"><span>備考</span><textarea id="cbkNote" rows="4"></textarea></div>
+      <div class="bf"><span>担当</span><div id="cbkStaff" style="flex:1;display:flex;gap:6px;flex-wrap:wrap"></div></div>
+      <div id="cbkSummary" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
+      <div id="cbkResult" style="display:none;margin-top:8px;padding:8px 10px;background:#F0FFF4;border:1px solid #38A169;border-radius:8px;font-size:13px;line-height:1.5"></div>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="cbkRegister" style="display:none">この内容で予約登録する</span><span class="abtn" id="cbkAgain" style="display:none;background:#FFF7E6;border-color:#DD6B20">登録済みでも登録する</span><span class="abtn" id="cbkClose">閉じる</span></div>
   </div>
   <div id="memobox" class="linkbox" style="display:none;background:#F3FBF4;border-color:#38A169">
     <b>メモに残す</b> <span id="memoBasis" style="color:#718096"></span>
@@ -1433,6 +1453,7 @@ function renderCurama() {
     tags += '<span class="tag t-curama">' + esc(it.service || 'くらマ') + '</span>';
     if (it.cancelled) tags += '<span class="tag t-unopened">' + esc(it.resStatus || 'キャンセル') + '</span>'; else if (it.resStatus) tags += '<span class="tag t-done">' + esc(it.resStatus) + '</span>';
     if (it.resLine) tags += '<span class="tag t-sched">' + esc(it.resLine) + '</span>';
+    if (it.booked) tags += '<span class="tag t-done">予約登録済み</span>'; else if (it.resId === 1 && !it.cancelled) tags += '<span class="tag t-yellow">予約登録まだ</span>';
     if (it.unopened) tags += '<span class="tag t-unopened">くらマで未開封</span>';
     var badge = it.needsReply ? '<span class="badge" title="返信していない">!</span>' : '';
     return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (CURC && CURC.id === it.id ? ' sel' : '') + '" data-ci="' + i + '">'
@@ -1452,9 +1473,10 @@ function openCurama(it, refresh) {
     document.body.classList.remove('nocur');
     document.getElementById('list').style.display = 'none';
     document.getElementById('thread').style.display = 'block';
-    ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
+    ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
     document.querySelector('.compose').style.display = '';
     document.getElementById('tName').textContent = it.name;
+    curamaBookShow(it);
     document.getElementById('tSub').textContent = 'くらしのマーケット・' + (it.service || '') + (it.resStatus ? '・' + it.resStatus : '') + (it.resLine ? '・' + it.resLine : '');
     document.getElementById('tRefresh').style.display = 'none';
     document.getElementById('note').textContent = (it.level === '赤' && it.point ? '要判断：' + it.point + (it.deep ? '（Macの深掘りチャットあり）' : '') + '　' : '') + '「くらマに送信」でくらマに届きます（誰かが先に返信していたら止まります）';
@@ -1521,6 +1543,83 @@ document.getElementById('btnCopyOpen').onclick = function(e) {
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function() { var ta = document.getElementById('text'); ta.select(); try { document.execCommand('copy'); } catch (e) {} done(); });
   else { var ta = document.getElementById('text'); ta.select(); try { document.execCommand('copy'); } catch (e) {} done(); }
 };
+// くらマ予約 → 予約登録（2026-10-03）。確定済みの件だけ。くらマの予約情報＋AIの抜き出しを入力済みにし、直してから予約管理GASへ登録（工場トークの「予約登録」と同じ入口・経路は「くらしのマーケット」）
+function curamaBookShow(it) {
+  var b = document.getElementById('btnCBook');
+  if (!it || it.official || it.resId !== 1 || it.cancelled) { b.style.display = 'none'; return; }
+  b.style.display = ''; b.textContent = it.booked ? '予約登録済み' : '予約登録';
+}
+function renderStaffChipsIn(boxId, sel) {
+  var box = document.getElementById(boxId); box.innerHTML = '';
+  BOOK_STAFF.forEach(function(n) {
+    var c = document.createElement('span'); c.className = 'schip' + (sel.indexOf(n) >= 0 ? ' on' : ''); c.textContent = n;
+    c.onclick = function() { var on = c.classList.contains('on'); if (on && box.querySelectorAll('.schip.on').length === 1) return; c.classList.toggle('on'); };
+    box.appendChild(c);
+  });
+}
+function staffSelectedIn(boxId) { return Array.prototype.map.call(document.querySelectorAll('#' + boxId + ' .schip.on'), function(c) { return c.textContent; }); }
+var CBOOK_REQ_ID = null;
+document.getElementById('btnCBook').onclick = function() { if (CURC) curamaBooking(CURC); };
+document.getElementById('cbkClose').onclick = function() { document.getElementById('cbookbox').style.display = 'none'; };
+function curamaBooking(it) {
+  var box = document.getElementById('cbookbox'), st = document.getElementById('cbkStatus'), form = document.getElementById('cbkForm'), btn = document.getElementById('btnCBook');
+  box.style.display = 'block'; form.style.display = 'none'; document.getElementById('cbkRegister').style.display = 'none'; document.getElementById('cbkAgain').style.display = 'none'; document.getElementById('cbkResult').style.display = 'none';
+  st.textContent = '（くらマの予約情報とやりとりを読んでいます… 5〜10秒）'; btn.textContent = '読込中…';
+  revealBox(box);
+  api({ op: 'curamaBooking', id: it.id }).then(function(r) {
+    curamaBookShow(it);
+    if (CURC !== it) return;
+    if (!r.ok) { st.textContent = ''; box.style.display = 'none'; alert(r.error || '読めませんでした'); return; }
+    var d = r.draft || {};
+    document.getElementById('cbkName').value = d.name || '';
+    document.getElementById('cbkPhone').value = d.phone || '';
+    document.getElementById('cbkAddr').value = d.address || '';
+    document.getElementById('cbkDate').value = d.visitDate || '';
+    document.getElementById('cbkCar').value = d.car || '';
+    document.getElementById('cbkParts').value = d.parts || '';
+    document.getElementById('cbkMenu').value = d.menu || '';
+    document.getElementById('cbkPrice').value = d.price ? String(d.price) : '';
+    document.getElementById('cbkPay').value = d.payment || '';
+    document.getElementById('cbkNote').value = d.note || '';
+    var notes = [];
+    if (r.summary) notes.push('要約：' + r.summary);
+    if (!d.car) notes.push('※車種がやりとりに無いので入れてください');
+    if (!r.timeKnown) notes.push('※くらマの時間帯から時刻を特定できませんでした。訪問日時の時刻を確認してください');
+    document.getElementById('cbkSummary').textContent = notes.join('　');
+    st.textContent = '';
+    renderStaffChipsIn('cbkStaff', ['吉永']);
+    CBOOK_REQ_ID = null;
+    form.style.display = 'block';
+    if (r.booked) { st.textContent = '（' + r.booked.at + ' に ' + (r.booked.by || '') + ' が登録済み' + (r.booked.visit ? '：' + r.booked.visit : '') + '）'; document.getElementById('cbkAgain').style.display = ''; }
+    else document.getElementById('cbkRegister').style.display = '';
+  }).catch(function(e) { curamaBookShow(it); st.textContent = ''; box.style.display = 'none'; alert('通信エラー: ' + ((e && e.message) || e)); });
+}
+function curamaBookingRegister(again) {
+  var it = CURC; if (!it) return;
+  var g = function(id) { return document.getElementById(id).value.trim(); };
+  var d = { name: g('cbkName'), phone: g('cbkPhone'), address: g('cbkAddr'), visitDate: g('cbkDate'), car: g('cbkCar'), parts: g('cbkParts'), menu: g('cbkMenu'), price: g('cbkPrice'), payment: g('cbkPay'), note: g('cbkNote'), staff: staffSelectedIn('cbkStaff') };
+  if (!d.name) { alert('お客様名を入れてください'); return; }
+  if (!d.visitDate) { alert('訪問日時を入れてください'); return; }
+  if (!d.car) { alert('車種を入れてください'); return; }
+  if (!d.menu) { alert('作業内容を入れてください'); return; }
+  var when = d.visitDate.replace('T', ' ');
+  if (!confirm((again ? '【登録済みの件をもう一度登録します】\n' : '') + 'この内容で予約登録します。予約一覧・カレンダー・顧客管理に入り、Chatwork通知も行われます。\n\n' + d.name + '\n' + when + '\n' + d.car + '／' + d.menu + (d.price ? '\n料金：' + d.price + '円' : '') + '\n担当：' + d.staff.join('・'))) return;
+  if (!CBOOK_REQ_ID) { try { CBOOK_REQ_ID = crypto.randomUUID(); } catch (e) { CBOOK_REQ_ID = 'cb' + Date.now() + Math.random().toString(16).slice(2); } }
+  var btn = document.getElementById(again ? 'cbkAgain' : 'cbkRegister'); var label = btn.textContent; btn.textContent = '登録中…'; btn.style.pointerEvents = 'none';
+  api({ op: 'curamaBookingRegister', id: it.id, data: d, requestId: CBOOK_REQ_ID, again: again ? 1 : 0 }).then(function(r) {
+    btn.textContent = label; btn.style.pointerEvents = '';
+    if (!r.ok) { if (r.alreadyBooked) { document.getElementById('cbkAgain').style.display = ''; document.getElementById('cbkRegister').style.display = 'none'; } alert(r.error || '登録できませんでした'); return; }
+    CBOOK_REQ_ID = null;
+    var res = document.getElementById('cbkResult');
+    res.innerHTML = '<b>予約登録しました</b>' + (r.duplicate ? '（同じ内容が直前に登録済みだったので二重登録はしていません）' : '') + '<br>' + esc(d.name) + '　' + esc(when) + '　' + esc(d.car) + '／' + esc(d.menu) + (r.reportUrl ? '<br><a href="' + esc(r.reportUrl) + '" target="_blank">作業報告URL</a>' : '');
+    res.style.display = 'block';
+    document.getElementById('cbkRegister').style.display = 'none'; document.getElementById('cbkAgain').style.display = 'none';
+    toast('予約登録しました');
+    it.booked = { at: '今', by: '', visit: when, reportUrl: r.reportUrl || '' }; curamaBookShow(it); renderList();
+  }).catch(function(e) { btn.textContent = label; btn.style.pointerEvents = ''; alert('通信エラー: ' + ((e && e.message) || e) + '\n登録されたかは予約一覧かカレンダーで確認してください。同じ内容でもう一度押しても二重登録にはなりません'); });
+}
+document.getElementById('cbkRegister').onclick = function() { curamaBookingRegister(false); };
+document.getElementById('cbkAgain').onclick = function() { curamaBookingRegister(true); };
 document.getElementById('btnCDone').onclick = function() {
   var it = CURC; if (!it) return;
   var undo = !it.needsReply;
