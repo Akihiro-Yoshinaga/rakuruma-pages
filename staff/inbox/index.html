@@ -1410,7 +1410,7 @@ function curamaBadge() {
 var CURAMA_RETRY = 0;
 // Chatworkの通知などから ?curama=<スレッドID> で来たら、くらマのタブでその件を開く（2026-10-02）
 var CURAMA_OPEN = (window.location.search.match(/[?&]curama=([0-9a-f-]{36})/) || [])[1] || '';
-if (CURAMA_OPEN) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} }
+if (CURAMA_OPEN || /[?&]_v=\d+/.test(window.location.search)) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} } // _v は「新しい版の自動読み直し」が付ける目印
 function curamaOpenPending() {
   if (!CURAMA_OPEN || !CITEMS) return;
   var it = CITEMS.filter(function(x) { return x.id === CURAMA_OPEN; })[0]; if (!it) return;
@@ -1711,6 +1711,57 @@ function onBackToPage() {
 document.addEventListener('visibilitychange', function() { if (document.visibilityState === 'visible') onBackToPage(); });
 window.addEventListener('pageshow', function(e) { if (e.persisted) onBackToPage(); });
 setTimeout(connectEvents, 1500);
+// 新しい版の自動読み直し（2026-10-04）。タブを開きっぱなしにすると古い版のまま動き続け、直したはずの不具合が出る（10/3 追いメッセージが送れなかった）。
+// 配信中のページの中身（このスクリプト）と、いま動いている中身を比べ、違っていたら読み直す。入力中・箱を開いている間は読み直さず、帯で知らせて手が空いたら読み直す。
+// 見るのは：開いて20秒後／タブに戻ったとき／5分おき。読み直しても古いままのとき（配信の反映待ち）は2分は繰り返さない
+(function() {
+  var selfSrc = ''; try { selfSrc = document.currentScript ? document.currentScript.textContent : ''; } catch (e) {}
+  if (!selfSrc) return;
+  function hash(x) { var h = 5381; for (var i = 0; i < x.length; i++) h = ((h << 5) + h + x.charCodeAt(i)) | 0; return h; }
+  var MY = hash(selfSrc), lastCheck = 0, stale = false, bar = null;
+  function busy() {
+    var t = document.getElementById('text'), it = document.getElementById('intent');
+    if ((t && t.value.trim()) || (it && it.value.trim())) return true;
+    var boxes = ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox', 'cconfbox'];
+    for (var i = 0; i < boxes.length; i++) { var e = document.getElementById(boxes[i]); if (e && e.style.display && e.style.display !== 'none') return true; }
+    var a = document.activeElement; if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && String(a.value || '').trim()) return true;
+    return false;
+  }
+  function reloadNow(manual) {
+    try { var last = +sessionStorage.getItem('inboxVerReload') || 0; if (!manual && Date.now() - last < 120000) { showBar(true); return; } sessionStorage.setItem('inboxVerReload', String(Date.now())); } catch (e) {}
+    var q = (typeof CURC !== 'undefined' && CURC && CURC.id) ? '?curama=' + CURC.id + '&' : '?'; // くらマの件を開いていたら、読み直したあともその件を開く
+    window.location.replace(window.location.pathname + q + '_v=' + Date.now());
+  }
+  function showBar(waitDeploy) {
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:9999;background:#DD6B20;color:#fff;font-size:13px;font-weight:700;padding:8px 12px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;box-shadow:0 2px 6px rgba(0,0,0,.25)';
+      var msg = document.createElement('span'); msg.id = 'verMsg';
+      var b = document.createElement('span'); b.textContent = '今すぐ読み直す'; b.style.cssText = 'background:#fff;color:#C05621;border-radius:6px;padding:4px 10px;cursor:pointer';
+      b.onclick = function() { if (busy() && !confirm('入力中の文は消えます。読み直しますか？（先にコピーしておくと安全です）')) return; reloadNow(true); };
+      bar.appendChild(msg); bar.appendChild(b); document.body.appendChild(bar);
+    }
+    document.getElementById('verMsg').textContent = waitDeploy ? '受信箱の新しい版があります（配信の反映待ち）。数分後に読み直してください' : '受信箱の新しい版があります。入力が終わると自動で読み直します（古い版のまま送信すると、直した不具合が出ることがあります）';
+  }
+  function maybe() { if (!stale) return; if (busy()) showBar(false); else reloadNow(false); }
+  function check(force) {
+    if (stale) { maybe(); return; }
+    if (!force && Date.now() - lastCheck < 60000) return;
+    lastCheck = Date.now();
+    fetch(window.location.pathname + '?_c=' + Date.now(), { cache: 'no-store' }).then(function(r) { return r.ok ? r.text() : ''; }).then(function(t) {
+      if (!t) return;
+      var m = t.match(/<script>([\s\S]*?)<\/script>\s*<\/body>/);
+      if (!m) return;
+      if (hash(m[1]) !== MY) { stale = true; maybe(); }
+    }).catch(function() {});
+  }
+  setTimeout(function() { check(true); }, 20000);
+  setInterval(function() { if (document.visibilityState === 'visible') check(false); }, 300000);
+  setInterval(function() { if (stale) maybe(); }, 10000);
+  document.addEventListener('visibilitychange', function() { if (document.visibilityState === 'visible') check(false); });
+  window.addEventListener('focus', function() { check(false); });
+  window.__inboxVer = { check: function() { lastCheck = 0; check(true); }, state: function() { return { my: MY, stale: stale, busy: busy() }; } };
+})();
 </script>
 </body>
 </html>
