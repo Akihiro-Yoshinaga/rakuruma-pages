@@ -84,6 +84,8 @@
   .bub { max-width:calc(100% - 36px); padding:16px 14px; border-radius:18px; font-size:16px; line-height:1.35; white-space:pre-wrap; word-break:break-word; }
   .mrow.in .bub { max-width:calc(100% - 96px); }
   .bub.in { background:#F1F3F5; align-self:flex-start; }
+  .bub.stk { background:none; padding:2px 0; }
+  .bub.stk img { width:130px; height:130px; object-fit:contain; display:block; }
   .bub.out { background:#D6DEEE; color:#1A202C; align-self:flex-end; }
   .meta { font-size:11px; color:var(--mute); margin-top:4px; white-space:normal; }
   .bub.out .meta { color:#4A5A7A; }
@@ -326,6 +328,10 @@ var ITEMS = [], OTHERS = [], TAB = 'all', CUR = null, TEMPLATES = null; // 2026-
 
 // 読み取り系は25秒で打ち切って計3回まで（GAS側でたまに30〜40秒止まることがある。送信系は基本やり直さない）
 var API_RETRY_OPS = { list:1, listBiz:1, thread:1, templates:1, scheduleList:1, search:1, sendStatus:1 };
+// ---- スタンプ：受信ログの本文は「パッケージ番号/スタンプ番号」。絵はLINEのスタンプ配信先から出す（読めなければ「（スタンプ）」に戻す・2026-10-06）
+function stickerId(t) { var m = String(t || '').match(/^\d{1,12}\/(\d{1,12})$/); return m ? m[1] : ''; }
+// 一覧の最後の1通は種類が分からないので、日付の書き方（10/6 など）と取り違えないようスタンプ番号が3桁以上のときだけ読み替える
+function stickerLabel(t) { return stickerId(t).length >= 3 ? '（スタンプ）' : t; }
 function api(body) {
   body.action = 'inbox'; body.token = TOKEN;
   var payload = JSON.stringify(body);
@@ -721,14 +727,15 @@ function renderMsgs(it, msgs, fromCache, keepPos) {
       if (snd) { av = snd.charAt(0); html += '<div class="msnd">' + esc(snd) + '</div>'; } // グループは毎回名前を出す（丸の1文字だけだと誰か分かりにくい・2026-10-02 吉永さん指摘）
       lastSnd = isIn ? snd : '';
       var body = m.text || ('（' + m.kind + '）');
-      var inner;
+      var inner, isStk = false;
       if (m.img) inner = '<a href="' + esc(m.img.view || m.img.full) + '" target="_blank" rel="noopener"><img src="' + esc(m.img.thumb) + '" alt="画像" style="max-width:100%;border-radius:10px;display:block" onerror="if(!this.dataset.alt){this.dataset.alt=1;this.src=\'' + esc(m.img.thumb2 || '') + '\';}"></a>' + (m.file && m.file.name && !/^line_/.test(m.file.name) ? '<div class="meta">📎 ' + esc(m.file.name) + '</div>' : '');
       else if (m.file) inner = '📎 <a href="' + esc(m.file.view) + '" target="_blank" rel="noopener">' + esc(m.file.name) + '</a>';
       else if (m.kind === '画像' || m.kind === 'ファイル') inner = '（' + (m.kind === 'ファイル' ? '📎 ' + esc(m.text || 'ファイル') + '：' : '画像：') + 'まだ取り込めていません。数分後に更新してください）';
+      else if (m.kind === 'スタンプ' && stickerId(m.text)) { isStk = true; inner = '<img src="https://stickershop.line-scdn.net/stickershop/v1/sticker/' + stickerId(m.text) + '/android/sticker.png" alt="スタンプ" loading="lazy" referrerpolicy="no-referrer" onerror="var b=this.parentNode;b.className=b.className.replace(\' stk\',\'\');b.textContent=\'（スタンプ）\';">'; }
       else inner = linkify(body);
       var mt = '<div class="mt">' + esc(String(m.at || '').slice(11, 16)) + (isIn ? '' : '<br>' + esc(String(m.kind || '').replace(/（.*）$/, '').replace(/^返信$/, '返信'))) + '</div>';
-      if (isIn) html += '<div class="mrow in"><div class="mav">' + esc(av) + '</div><div class="bub in">' + inner + '</div>' + mt + '</div>';
-      else html += '<div class="mrow out">' + mt + '<div class="bub out">' + inner + '</div></div>';
+      if (isIn) html += '<div class="mrow in"><div class="mav">' + esc(av) + '</div><div class="bub in' + (isStk ? ' stk' : '') + '">' + inner + '</div>' + mt + '</div>';
+      else html += '<div class="mrow out">' + mt + '<div class="bub out' + (isStk ? ' stk' : '') + '">' + inner + '</div></div>';
     });
     var pend = (CUR === it && graceTimer) ? document.getElementById('pending') : null;
     document.getElementById('tRefresh').style.display = fromCache ? 'inline-block' : 'none';
@@ -858,7 +865,7 @@ document.getElementById('btnDraft').onclick = function() {
   if (!CUR) return;
   var intent = document.getElementById('intent').value.trim();
   var btn = this; btn.disabled = true; btn.textContent = '作成中…';
-  var recent = (threadCacheGet(CUR.uid) || []).slice(-12).map(function(m) { return { dir: m.dir, kind: m.kind, text: m.text || '', at: m.at, sender: m.sender || '', senderUid: m.senderUid || '' }; });
+  var recent = (threadCacheGet(CUR.uid) || []).slice(-12).map(function(m) { return { dir: m.dir, kind: m.kind, text: (m.kind === 'スタンプ' ? '（スタンプ）' : (m.text || '')), at: m.at, sender: m.sender || '', senderUid: m.senderUid || '' }; });
   var target = CUR, tries = 0;
   function run() {
     tries++;
@@ -1472,7 +1479,7 @@ function renderCurama() {
     return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (CURC && CURC.id === it.id ? ' sel' : '') + '" data-ci="' + i + '">'
       + '<div class="av" style="' + (it.needsReply ? 'background:#DD6B20' : '') + '">' + esc(String(it.name || '？').charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(it.name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
       + (it.point ? '<div class="m" style="color:' + (it.level === '赤' ? '#C53030' : '#4A5568') + ';font-weight:700">' + (it.level === '赤' ? '判断：' : '') + esc(it.point) + '</div>' : '')
-      + '<div class="m">' + (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText) + '</div>' + tags + badge + '</div></div></div>';
+      + '<div class="m">' + (it.lastDir === '送信' ? '↩ ' : '') + esc(stickerLabel(it.lastText)) + '</div>' + tags + badge + '</div></div></div>';
   }).join('');
   Array.prototype.forEach.call(rows.querySelectorAll('.row[data-ci]'), function(el) { el.onclick = function() { openCurama(CITEMS[parseInt(el.getAttribute('data-ci'), 10)]); }; });
 }
