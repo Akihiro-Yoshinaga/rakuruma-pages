@@ -985,9 +985,9 @@ document.getElementById('photo').addEventListener('change', function() {
       img.src = url;
     });
   }
-  var idx = 0, okCount = 0, fails = [];
+  var idx = 0, okCount = 0, fails = [], unsure = [];
   function next() {
-    if (idx >= files.length) { removePending(); if (fails.length) alert('送れなかった写真があります: ' + fails.join(', ')); else toast(files.length > 1 ? files.length + '枚送りました（記録済み）' : '写真を送りました（記録済み）'); if (CUR === target) openThread(CUR); return; }
+    if (idx >= files.length) { removePending(); if (fails.length || unsure.length) alert((fails.length ? '送れなかった写真があります: ' + fails.join(', ') + '\n' : '') + (unsure.length ? '届いたか確認できなかった写真があります: ' + unsure.join(', ') + '\n送り直す前に、相手のトークを確認してください' : '')); else toast(files.length > 1 ? files.length + '枚送りました（記録済み）' : '写真を送りました（記録済み）'); if (CUR === target) openThread(CUR); return; }
     var f = files[idx++];
     shrink(f).then(function(dataUrl) {
       removePending();
@@ -995,7 +995,7 @@ document.getElementById('photo').addEventListener('change', function() {
       var d = document.getElementById('pending'); if (d && files.length > 1) { var m = d.querySelector('.meta'); if (m) m.textContent = '送信中…（' + idx + '/' + files.length + '）'; }
       var imgSendId = (function() { try { return crypto.randomUUID(); } catch (e) { return 'i' + Date.now() + Math.random().toString(16).slice(2); } })();
       return api({ op:'sendImage', uid: target.uid, src: target.src, dataUrl: dataUrl, sendId: imgSendId }).then(function(r) {
-        if (r && r.ok) okCount++; else if (r && (r.ok === undefined || r.uncertain)) okCount++; else fails.push(f.name + '（' + ((r && r.error) || '不明') + '）');
+        if (r && r.ok) okCount++; else if (!r || r.ok === undefined || r.uncertain) unsure.push(f.name); else fails.push(f.name + '（' + ((r && r.error) || '不明') + '）');
       });
     }).catch(function(e) { fails.push(f.name + '（' + ((e && e.message) || e) + '）'); }).then(next);
   }
