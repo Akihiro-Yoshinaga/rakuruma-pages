@@ -144,11 +144,11 @@
 .plan-perk b { font-weight: 800; color: #0d2748; margin-right: 2px; }
 /* 料金プランカード下の紺三角（行き先のない装飾）を無効化 */
 .plan .plan_container .plan_middle .plan_box::after { display: none !important; }
-/* 料金プランカード: SM/LXを横並びに */
+/* 料金プランカード: セダン・コンパクト／SUV・ミニバンを横並びに */
 .plan-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-width: 300px; margin: 0 auto; }
 .plan-price { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .plan-price__sz {
-    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+    font-family: inherit; font-size: 12px; font-weight: 700;
     color: #b08d4f; letter-spacing: 0.08em;
 }
 .plan-price b { font-size: 17px; font-weight: 800; color: #0d2748; }
@@ -1791,7 +1791,7 @@ a[href^="https://lin.ee"] {
             <h2 class="sec-title">サービス内容について</h2>
             <ul class="service_list">
                 <li class="flexbox bk_lb">
-                    <div class="smallhead flexbox colorfont_b fontll bold">洗車<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">30〜40分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 8,800円（SUV・ミニバン）</span></div>
+                    <div class="smallhead flexbox colorfont_b fontll bold">洗車<br><span><img src="/assets/images/stopwatch.svg" loading="lazy" decoding="async">30〜40分</span><br><span class="fontm" style="color: #666; font-weight: normal;">通常料金: 7,700円（セダン・コンパクト）／8,800円（SUV・ミニバン）</span></div>
                     <div class="image_frame">
                         <div class="image_pic" style="background-image: url(/assets/images/service_img_5.webp);"></div>
                         <p class="colorfont_w fontm bold">洗車</p>
@@ -2688,8 +2688,8 @@ a[href^="https://lin.ee"] {
                             <div class="plan_box plan_box--regular bk_w pcard">
                                 <p class="pcard__name">月2回プラン<span class="pcard__cycle">月額</span></p>
                                 <div class="plan-prices">
-                                    <div class="plan-price"><span class="plan-price__sz">SM</span><b>15,000円</b><small>（7,500円/1回）</small></div>
-                                    <div class="plan-price"><span class="plan-price__sz">LX</span><b>16,000円</b><small>（8,000円/1回）</small></div>
+                                    <div class="plan-price"><span class="plan-price__sz">セダン・コンパクト</span><b>15,000円</b><small>（7,500円/1回）</small></div>
+                                    <div class="plan-price"><span class="plan-price__sz">SUV・ミニバン</span><b>16,000円</b><small>（8,000円/1回）</small></div>
                                 </div>
                                 <p class="pcard__for">いつもきれいを保ちたい方に</p>
                             </div>
@@ -2697,16 +2697,16 @@ a[href^="https://lin.ee"] {
                                 <span class="pcard__badge">おすすめ</span>
                                 <p class="pcard__name">月１回プラン<span class="pcard__cycle">月額</span></p>
                                 <div class="plan-prices">
-                                    <div class="plan-price"><span class="plan-price__sz">SM</span><b>7,900円</b></div>
-                                    <div class="plan-price"><span class="plan-price__sz">LX</span><b>8,900円</b></div>
+                                    <div class="plan-price"><span class="plan-price__sz">セダン・コンパクト</span><b>7,900円</b></div>
+                                    <div class="plan-price"><span class="plan-price__sz">SUV・ミニバン</span><b>8,900円</b></div>
                                 </div>
                                 <p class="pcard__for">迷ったらこちら。標準のペース</p>
                             </div>
                             <div class="plan_box plan_box--regular bk_w pcard">
                                 <p class="pcard__name">２ヶ月に１回プラン<span class="pcard__cycle">2ヶ月に1回決済</span></p>
                                 <div class="plan-prices">
-                                    <div class="plan-price"><span class="plan-price__sz">SM</span><b>8,900円</b></div>
-                                    <div class="plan-price"><span class="plan-price__sz">LX</span><b>9,900円</b></div>
+                                    <div class="plan-price"><span class="plan-price__sz">セダン・コンパクト</span><b>8,900円</b></div>
+                                    <div class="plan-price"><span class="plan-price__sz">SUV・ミニバン</span><b>9,900円</b></div>
                                 </div>
                                 <p class="pcard__for">気軽に続けたい方に</p>
                             </div>
@@ -2718,13 +2718,13 @@ a[href^="https://lin.ee"] {
                         <p class="discription fonts">サイズをお選びいただき、その都度ご予約。<br>必要なときだけ、プロの洗車を。</p>
                         <div class="plan_middle flexbox">
                             <div class="plan_box plan_box--single bk_w">
-                                <p class="plan_box__size montserrat colorfont_b" style="font-size:48px; font-weight:900; line-height:1; margin-bottom:8px;">SM</p>
-                                <p class="fontss" style="color:#767676; margin-bottom:8px;">軽・小型車〜中型SUV・中型セダン</p>
+                                <p class="plan_box__size colorfont_b" style="font-size:22px; font-weight:900; line-height:1.2; margin-bottom:8px;">セダン・コンパクト</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:8px;">軽・コンパクト・セダン・小型SUV（全長4.5m未満）</p>
                                 <p class="fontll bold">7,700円<span class="fontss">（税込）</span></p>
                             </div>
                             <div class="plan_box plan_box--single bk_w">
-                                <p class="plan_box__size montserrat colorfont_b" style="font-size:48px; font-weight:900; line-height:1; margin-bottom:8px;">LX</p>
-                                <p class="fontss" style="color:#767676; margin-bottom:8px;">大型SUV・大型セダン・ミニバン</p>
+                                <p class="plan_box__size colorfont_b" style="font-size:22px; font-weight:900; line-height:1.2; margin-bottom:8px;">SUV・ミニバン</p>
+                                <p class="fontss" style="color:#767676; margin-bottom:8px;">SUV（全長4.5m以上）・ミニバン・全長4.8m以上のセダン</p>
                                 <p class="fontll bold">8,800円<span class="fontss">（税込）</span></p>
                             </div>
                         </div>
