@@ -1170,7 +1170,7 @@ document.getElementById('chgManual').onclick = function() {
   var c = CUR.customer; var sei = String(c.name || '').trim().split(/[\s\u3000]+/)[0];
   var d = new Date(Date.now() + 86400000); var pad = function(n) { return (n < 10 ? '0' : '') + n; };
   var st = d.getFullYear() + '/' + pad(d.getMonth() + 1) + '/' + pad(d.getDate()) + ' 10:00';
-  CHG = { action: 'create', title: sei + 'さん 予定' + (c.car ? ' ' + c.car : ''), newStart: st, newEnd: st.slice(0, 11) + '11:00', calendarId: 'akihiro.55590@gmail.com', calendarName: '施工共有', location: c.address || '', reason: '手動で作成' };
+  CHG = { action: 'create', title: (String(c.name || '').trim() || sei) + 'さん 予定' + (c.car ? ' ' + c.car : ''), newStart: st, newEnd: st.slice(0, 11) + '11:00', calendarId: 'akihiro.55590@gmail.com', calendarName: '施工共有', location: c.address || '', reason: '手動で作成' };
   var box = document.getElementById('changebox'), body = document.getElementById('chgBody');
   box.style.display = 'block'; document.getElementById('chgStatus').textContent = ''; revealBox(box);
   body.innerHTML = '<div><b>新しい予定を作成</b> <span style="color:#718096">[施工共有]</span></div><div style="margin-top:4px;font-size:12px;color:#718096">予定名と日時を入れて「この内容で予定を作る」。場所は顧客リストの住所（' + esc(c.address || '未登録') + '）</div>';
