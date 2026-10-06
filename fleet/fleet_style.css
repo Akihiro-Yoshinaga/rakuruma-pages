@@ -758,3 +758,42 @@ footer {
   .hero-stats--4 .hstat .n small { font-size: 11px; }
   .hero-stats--4 .hstat .l { display: block; font-size: 10.5px; margin-top: 2px; white-space: nowrap; }
 }
+
+/* ---------- FV 分割型・白背景（2026-10-06 競合比較後） ---------- */
+.hero--split { background: #fff; color: var(--color-text-primary); text-align: left; padding: 48px 24px 36px; }
+.hero--split::before { display: none; }
+.hero-split { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; }
+.hero--split .hero-label { color: var(--color-primary-blue); opacity: 1; letter-spacing: .06em; font-size: 13px; margin-bottom: 14px; }
+.hero--split .hero-label::after { margin: 10px 0 0; }
+.hero--split .hero-title { color: var(--color-text-primary); font-size: clamp(28px, 3.2vw, 36px); line-height: 1.38; white-space: nowrap; }
+@media (max-width: 900px) { .hero--split .hero-title { white-space: normal; } }
+.hero--split .hero-subtitle { color: var(--color-text-secondary); opacity: 1; font-size: 16px; margin-top: 14px; }
+.hero--split .hero-cta { justify-content: flex-start; margin-top: 24px; }
+.hero--split .btn-primary { background: var(--color-primary-blue); color: #fff; }
+.hero--split .hero-cta-note { color: var(--color-text-secondary); opacity: 1; }
+.hero-clients { margin-top: 18px; font-size: 13px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hero-clients span { display: inline-block; font-size: 11px; font-weight: 700; color: var(--color-primary-blue); background: #eef2f9; border-radius: 4px; padding: 3px 8px; }
+.hero-photo { margin: 0; position: relative; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-medium); aspect-ratio: 4/5; max-height: 460px; }
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+.hero-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 16px 12px; background: linear-gradient(0deg, rgba(7,27,53,.88), rgba(7,27,53,0)); color: #fff; font-size: 12px; line-height: 1.5; }
+.hero-photo figcaption b { display: block; font-size: 15px; margin-bottom: 2px; }
+.hero-photo figcaption small { display: block; font-size: 11px; opacity: .85; margin-top: 4px; }
+.hero--split .hero-stats--4 { max-width: 1120px; margin: 28px auto 0; border-top: 1px solid #e6eaf0; padding-top: 18px; gap: 0; }
+.hero--split .hstat { text-align: center; color: var(--color-text-primary); }
+.hero--split .hstat + .hstat { border-left: 1px solid #e6eaf0; }
+.hero--split .hstat .n { color: var(--color-primary-blue); }
+.hero--split .hstat .l { color: var(--color-text-secondary); opacity: 1; }
+.hero--split .hero-note { max-width: 1120px; margin: 10px auto 0; color: var(--color-text-muted); opacity: 1; }
+@media (max-width: 900px) {
+  .hero-split { grid-template-columns: 1fr; gap: 22px; }
+  .hero-photo { aspect-ratio: 16/10; max-height: 300px; }
+  .hero-photo img { object-position: center 25%; }
+}
+@media (max-width: 767px) {
+  .hero--split { padding: 28px 18px 28px; }
+  .hero--split .hero-label { font-size: 12px; letter-spacing: .02em; }
+  .hero--split .hero-cta .btn-primary, .hero--split .hero-cta .btn-line { width: 100%; }
+  .hero--split .hero-stats--4 .hstat + .hstat { border-left: none; }
+  .hero--split .hero-stats--4 .hstat:nth-child(2n) { border-left: 1px solid #e6eaf0; }
+  .hero--split .hero-stats--4 .hstat:nth-child(n+3) { border-top: 1px solid #e6eaf0; }
+}
