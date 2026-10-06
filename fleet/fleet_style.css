@@ -727,3 +727,34 @@ footer {
 .ol-body li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px; border-radius: 2px; background: var(--color-primary-blue); }
 .ol-foot { font-size: 13px; color: var(--color-text-secondary); margin: 10px 0 0; line-height: 1.7; }
 @media (max-width: 900px) { .ol-grid { grid-template-columns: 1fr; } .ol-facts ul { grid-template-columns: 1fr; } .ol-media img { max-width: 220px; } }
+
+/* ---------- FV：根拠4つ・向き不向き（2026-10-06） ---------- */
+.hero-stats--4 { grid-template-columns: repeat(4, 1fr); max-width: 760px; gap: 8px; }
+.hero-stats--4 .hstat { padding: 6px 10px; }
+.hero-stats--4 .hstat .n { font-size: 20px; }
+.hero-stats--4 .hstat .l { font-size: 11px; line-height: 1.4; }
+@media (max-width: 767px) {
+  .hero-stats--4 { grid-template-columns: repeat(2, 1fr); max-width: 420px; gap: 10px 6px; }
+  .hero-stats--4 .hstat + .hstat { border-left: none; }
+  .hero-stats--4 .hstat:nth-child(2n) { border-left: 1px solid rgba(255,255,255,.32); }
+  .hero-stats--4 .hstat .n { font-size: 18px; }
+}
+.fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+.fit { background: #fff; border: 1px solid var(--color-border-light); border-radius: 6px; padding: 18px 20px; box-shadow: var(--shadow-light); }
+.fit--yes { border-top: 4px solid var(--color-primary-blue); }
+.fit--no { border-top: 4px solid #c3cad5; }
+.fit-label { font-size: 13px; font-weight: 700; margin: 0 0 10px; color: var(--color-primary-blue); }
+.fit--no .fit-label { color: var(--color-text-secondary); }
+.fit ul { margin: 0; padding: 0; list-style: none; }
+.fit li { position: relative; padding-left: 20px; font-size: 14px; line-height: 1.7; color: var(--color-text-primary); }
+.fit li + li { margin-top: 6px; }
+.fit--yes li::before { content: "○"; position: absolute; left: 0; top: 0; color: var(--color-primary-blue); font-weight: 700; }
+.fit--no li::before { content: "×"; position: absolute; left: 1px; top: 0; color: #9aa3b2; font-weight: 700; }
+@media (max-width: 767px) { .fit-grid { grid-template-columns: 1fr; } }
+
+@media (max-width: 767px) {
+  .hero-stats--4 .hstat { display: block; text-align: center; padding: 8px 4px; }
+  .hero-stats--4 .hstat .n { display: block; font-size: 17px; white-space: nowrap; }
+  .hero-stats--4 .hstat .n small { font-size: 11px; }
+  .hero-stats--4 .hstat .l { display: block; font-size: 10.5px; margin-top: 2px; white-space: nowrap; }
+}
