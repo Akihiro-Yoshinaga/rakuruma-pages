@@ -2641,7 +2641,7 @@
     <h1>鍵を渡すだけで、<br>車検が終わる。</h1>
     <p class="hero-sub">
       国家1級整備士がご自宅まで引き取りに伺い、車検を終えてお届け。<br>
-      車検総額 <span id="heroTotal">¥92,640</span>〜（点検・消耗品・法定費用ぜんぶ込み）
+      <span id="heroPrice" hidden>車検総額 <span id="heroTotal"></span>〜（点検・検査代行・法定費用込み）<br>＋整備費用は事前にお見積もり</span>
     </p>
     <div class="hero-cta">
       <a href="/p/line-shaken/" class="btn-line">LINEで車検証を送って概算見積もり</a>
@@ -3043,14 +3043,14 @@
   (function () {
     var API = 'https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=shakenQuickPrices';
 
-    // 既定値（2026-08-16時点のシート値のスナップショット）
+    // 既定値（2026-10-06時点のシート値のスナップショット。ブレーキオイル交換は基本に含めない＝整備費用として別見積もり）
     var WORK = {
-      domestic: [['法定24ヶ月点検', 14300], ['ヘッドライト光軸調整', 4400], ['ブレーキオイル交換', 14300], ['検査代行手続料', 33000]],
-      import:   [['法定24ヶ月点検', 20900], ['ヘッドライト光軸調整', 4400], ['ブレーキオイル交換', 14300], ['検査代行手続料', 36300]]
+      domestic: [['法定24ヶ月点検', 14300], ['ヘッドライト光軸調整', 4400], ['検査代行手続料', 33000]],
+      import:   [['法定24ヶ月点検', 20900], ['ヘッドライト光軸調整', 4400], ['検査代行手続料', 36300]]
     };
     var LEGAL = {
-      kei: [17540, 6600, 2500], c10: [17650, 16400, 2600], c15: [17650, 24600, 2600],
-      c20: [17650, 32800, 2600], c25: [17650, 41000, 2600]
+      kei: [18660, 6600, 2500], c10: [18560, 16400, 2600], c15: [18560, 24600, 2600],
+      c20: [18560, 32800, 2600], c25: [18560, 41000, 2600]
     };
     var CLS_LABEL = { kei: '軽自動車', c10: 'コンパクト', c15: 'セダン・小型SUV', c20: 'ミニバン・SUV', c25: '大型ミニバン・SUV' };
     var EXAMPLES = {
@@ -3116,13 +3116,14 @@
       };
     });
 
+    // ヒーローの総額は料金データを読めたときだけ出す（予備の数字は出さない。2026-10-06）
     function updateHero() {
       var el = document.getElementById('heroTotal');
-      if (el && matrix.domestic.kei) el.textContent = yen(matrix.domestic.kei.total);
+      var wrap = document.getElementById('heroPrice');
+      if (el && wrap && matrix.domestic.kei) { el.textContent = yen(matrix.domestic.kei.total); wrap.hidden = false; }
     }
 
     render();
-    updateHero();
 
     fetch(API).then(function (r) { return r.json(); }).then(function (d) {
       if (d && d.ok && d.matrix && d.matrix.domestic) {
