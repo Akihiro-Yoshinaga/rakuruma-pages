@@ -2641,7 +2641,7 @@
     <h1>鍵を渡すだけで、<br>車検が終わる。</h1>
     <p class="hero-sub">
       国家1級整備士がご自宅まで引き取りに伺い、車検を終えてお届け。<br>
-      <span id="heroPrice" hidden>車検総額 <span id="heroTotal"></span>〜（点検・検査代行・法定費用込み）<br>＋整備費用は事前にお見積もり</span>
+      <span id="heroPrice">車検総額 <span id="heroTotal">¥79,460</span>〜（点検・検査代行・法定費用込み）<br>＋整備費用は事前にお見積もり</span>
     </p>
     <div class="hero-cta">
       <a href="/p/line-shaken/" class="btn-line">LINEで車検証を送って概算見積もり</a>
@@ -3116,14 +3116,15 @@
       };
     });
 
-    // ヒーローの総額は料金データを読めたときだけ出す（予備の数字は出さない。2026-10-06）
+    // ヒーローの総額：まずページに書いた値（2026-10-06のシート値）をすぐ出し、料金データを読めたら上書きする
+    // （読み込みに3〜4秒かかり、その間に金額が空くため。ページの値は月初の週次でシートと照合する）
     function updateHero() {
       var el = document.getElementById('heroTotal');
-      var wrap = document.getElementById('heroPrice');
-      if (el && wrap && matrix.domestic.kei) { el.textContent = yen(matrix.domestic.kei.total); wrap.hidden = false; }
+      if (el && matrix.domestic.kei) el.textContent = yen(matrix.domestic.kei.total);
     }
 
     render();
+    updateHero();
 
     fetch(API).then(function (r) { return r.json(); }).then(function (d) {
       if (d && d.ok && d.matrix && d.matrix.domestic) {

@@ -2425,7 +2425,7 @@
       </figure>
       <div>
         <p class="shaken-price">
-          <span id="topShakenPrice" hidden><strong>車検総額 <span id="topShakenTotal"></span>〜</strong>（軽自動車の場合。点検・検査代行・法定費用込み）<br></span>
+          <span id="topShakenPrice"><strong>車検総額 <span id="topShakenTotal">79,460円</span>〜</strong>（軽自動車の場合。点検・検査代行・法定費用込み）<br></span>
           交換が必要な部品があれば、整備費用を事前にお見積もりします。車検証の写真をLINEで送ると、お車ごとの総額をお返しします。
         </p>
         <ul class="benefit-list">
@@ -2974,14 +2974,14 @@
   })();
 </script>
 <script>
-  // 車検総額（軽）を料金データから出す。/shaken/ と同じ shakenQuickPrices。読めないときは金額の行を出さない（2026-10-06）
+  // 車検総額（軽）：ページに書いた値（2026-10-06のシート値）をすぐ出し、/shaken/ と同じ shakenQuickPrices を読めたら上書きする
   (function () {
     fetch('https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=shakenQuickPrices')
       .then(function (r) { return r.json(); })
       .then(function (d) {
         var k = d && d.ok && d.matrix && d.matrix.domestic && d.matrix.domestic.kei;
-        var el = document.getElementById('topShakenTotal'), wrap = document.getElementById('topShakenPrice');
-        if (k && k.total && el && wrap) { el.textContent = Number(k.total).toLocaleString('ja-JP') + '円'; wrap.hidden = false; }
+        var el = document.getElementById('topShakenTotal');
+        if (k && k.total && el) el.textContent = Number(k.total).toLocaleString('ja-JP') + '円';
       }).catch(function () {});
   })();
 </script>
