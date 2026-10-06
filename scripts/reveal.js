@@ -24,8 +24,12 @@
         '[data-reveal]'
     ];
 
+    // 現れ終わりの transform:translateY(0) は :not(:hover) に限定する。
+    // クラスを外すまでの間（下の setTimeout）にマウスが乗ると、各ページの :hover の持ち上げ
+    // （.intro-card:hover 等・同じ詳細度）がこの rule に負けて「浮かない」ことがあった（2026-10-06 実測）
     var css = '.rv-fade{opacity:0;transform:translateY(14px);transition:opacity .7s ease-out,transform .7s ease-out}' +
-        '.rv-fade.is-in{opacity:1;transform:translateY(0)}';
+        '.rv-fade.is-in{opacity:1}' +
+        '.rv-fade.is-in:not(:hover){transform:translateY(0)}';
     var st = document.createElement('style');
     st.textContent = css;
     document.head.appendChild(st);
@@ -50,10 +54,18 @@
                     // 現れ終わったらクラスを外す。.rv-fade.is-in の transform:translateY(0) が
                     // 各ページの :hover の持ち上げ（同じ詳細度・後読み）を打ち消し、
                     // 「画面の下にあったカードだけホバーで浮かない」原因になっていた（2026-09-23）
-                    setTimeout(function () {
+                    // transform の transition が終わった時点で外す（最長でも 1200ms 後）。
+                    var done = false;
+                    var finish = function () {
+                        if (done) return;
+                        done = true;
+                        el.removeEventListener('transitionend', onEnd);
                         el.classList.remove('rv-fade', 'is-in');
                         el.style.transitionDelay = '';
-                    }, 1200);
+                    };
+                    var onEnd = function (ev) { if (ev.target === el && ev.propertyName === 'transform') finish(); };
+                    el.addEventListener('transitionend', onEnd);
+                    setTimeout(finish, 1200);
                 }
             });
         }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });

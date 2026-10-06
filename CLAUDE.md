@@ -33,3 +33,5 @@
 - 持ち上げ・影の変化は必ず `@media (hover: hover) { ... }` の中に書く（タッチ端末でタップ後に浮いたまま残るのを防ぐ）。色・背景だけの変化は外でもよい。
 - 実績カードは `.work-card.is-link:hover` にだけ書く（リンクなしの `.work-card` は動かさない）。
 - `scripts/reveal.js` は現れ終わったら `.rv-fade`/`.is-in` を外す実装になっている。外さないと `.rv-fade.is-in{transform:translateY(0)}` が同じ詳細度・後読みで `:hover` の持ち上げを打ち消し、「画面の下にあったカードだけ浮かない」不揃いが再発する。
+- 2026-10-06追記：外すまでの約1.2秒の間も同じ打ち消しが起きていた（スクロール直後にカードへマウスを乗せると浮かない）。現れ終わりの transform は `.rv-fade.is-in:not(:hover)` に限定し、transitionend で早めにクラスを外すようにした。ホバーの効き具合を調べるときは CSS を読むだけでなく、実ブラウザでスクロール直後にマウスを乗せて computed transform を測る。
+- 共通CSS `rakuruma-style.css` の `a:hover{opacity:.65}` は料金表ページ・洗車LPの全リンクに効く。持ち上げるカード型リンクをこの2ページに足すときは `opacity:1` を :hover に書く（薄くなりながら浮くのを防ぐ）。
