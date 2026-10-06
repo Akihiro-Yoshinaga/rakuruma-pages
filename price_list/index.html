@@ -155,12 +155,53 @@ body.rk-menu-open .rk-menu-panel {
     <a href="#terms" onclick="rkToggleMenu()">利用規約</a>
     <div class="rk-menu-divider">その他のサービス</div>
     <a href="/mobile-car-wash/">出張洗車</a>
+    <a href="/shaken/">出張車検</a>
     <a href="/maintenance/">出張整備・パーツ取付</a>
     <a href="/coating/">出張コーティング</a>
     <a href="/blog/">作業実績ブログ</a>
     <a href="/p/line-price/" class="rk-menu-line-btn" target="_blank" rel="noopener noreferrer">💬 LINEで相談</a>
 </nav>
 <script>function rkToggleMenu() { document.body.classList.toggle('rk-menu-open'); }</script>
+
+<!-- 料金の入口（2026-10-06）：メニューの「料金」から来た人を洗車・車検・取付整備それぞれの料金へ案内する。金額は各LPの表示と揃える（月初の週次で照合） -->
+<style>
+.price-entry { padding: 40px 16px 8px; max-width: 1000px; margin: 0 auto; }
+.price-entry h2 { font-size: 26px; font-weight: 700; color: #003B8B; text-align: center; margin-bottom: 8px; }
+.price-entry > p { text-align: center; font-size: 14px; color: #555; margin-bottom: 20px; }
+.price-entry ul { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 0; margin: 0; }
+.price-entry a { display: block; height: 100%; background: #fff; border: 1.5px solid #cfdcf0; border-radius: 16px; padding: 18px 16px; color: #222; text-align: left; text-decoration: none; transition: border-color .2s, box-shadow .2s, transform .2s; }
+.price-entry .pe-name { font-size: 17px; font-weight: 700; color: #003B8B; margin-bottom: 6px; }
+.price-entry .pe-price { font-size: 15px; line-height: 1.6; }
+.price-entry .pe-price strong { font-size: 20px; }
+.price-entry .pe-note { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.5; }
+.price-entry .pe-more { display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 700; color: #003B8B; }
+@media (hover: hover) { .price-entry a:hover { transform: translateY(-3px); border-color: #003B8B; box-shadow: 0 6px 16px rgba(0,59,139,.12); } }
+@media (max-width: 767px) { .price-entry { padding-top: 28px; } .price-entry h2 { font-size: 22px; } .price-entry ul { grid-template-columns: 1fr; gap: 10px; } .price-entry a { padding: 14px 16px; } }
+</style>
+<section class="price-entry" id="entry">
+<h2 class="bold">ラクルマの料金</h2>
+<p>税込・出張費込みです。知りたいサービスをお選びください。</p>
+<ul>
+<li><a href="/mobile-car-wash/#plan">
+<div class="pe-name">出張洗車</div>
+<div class="pe-price">1回 <strong>7,700円</strong>〜</div>
+<div class="pe-note">定期プランは月1回 7,900円〜（室内清掃つき）。初回お試し 6,000円。このページの下に定期プランの詳細があります</div>
+<span class="pe-more">単発の料金を見る →</span>
+</a></li>
+<li><a href="/shaken/#price">
+<div class="pe-name">出張車検</div>
+<div class="pe-price">総額 <strong>79,460円</strong>〜</div>
+<div class="pe-note">軽自動車の場合。点検・検査代行・法定費用込み。整備が必要なときは事前にお見積もり</div>
+<span class="pe-more">車種別の料金を見る →</span>
+</a></li>
+<li><a href="/maintenance/#price">
+<div class="pe-name">パーツ取付・整備</div>
+<div class="pe-price">ドラレコ取付 <strong>8,000円</strong>〜</div>
+<div class="pe-note">前後2カメラ 15,000円、デジタルインナーミラー 17,000円、テレビキャンセラー 10,000円 など</div>
+<span class="pe-more">作業別の料金表を見る →</span>
+</a></li>
+</ul>
+</section>
 
 <section class="page_head">
 <h2 class="bold">定期利用プラン料金</h2>
