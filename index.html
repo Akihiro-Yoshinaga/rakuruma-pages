@@ -1049,6 +1049,9 @@
       color: var(--color-primary-blue);
     }
 
+    .plan-trial--coating { margin-top: 8px; border-color: #cfdcf0; }
+    @media (hover: hover) { .plan-trial--coating:hover { background: #f5f8fd; } }
+
     .plan-trial-sub {
       font-size: 12px;
       font-weight: 600;
@@ -2403,6 +2406,12 @@
             <span class="plan-trial-lead">洗車がはじめての方 →</span>
             <span class="plan-trial-main">体験 <strong>6,000</strong>円</span>
             <span class="plan-trial-sub">（税込・出張費0円）</span>
+          </a>
+          <!-- コーティングの入口（2026-10-06）：パンフを見た人の「コーティングもできる？いくら？」に洗車の段で答える。金額は /coating/#plan と揃える -->
+          <a class="plan-trial plan-trial--coating" href="/coating/">
+            <span class="plan-trial-lead">ガラスコーティングも出張で →</span>
+            <span class="plan-trial-main"><strong>48,000</strong>円〜</span>
+            <span class="plan-trial-sub">（軽・小型車。剤代込み・出張費0円）</span>
           </a>
         </div>
         <div class="service-foot">
