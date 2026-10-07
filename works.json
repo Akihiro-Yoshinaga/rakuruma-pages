@@ -1,5 +1,41 @@
 [
   {
+    "id": "255db053-983b-4bdf-906a-18059c3c157f",
+    "date": "2026.10.07",
+    "maker": "",
+    "car": "",
+    "note": "カーナビ取り外し、カーナビ取り付け（ZDR-250D＋HDROP-14）",
+    "staff": "高橋",
+    "photo": "https://drive.google.com/thumbnail?id=12QyveeWnA4FLAbGnWD4c20cXlTu1WgrV&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=255db053-983b-4bdf-906a-18059c3c157f",
+    "review": "整備",
+    "rating": "0"
+  },
+  {
+    "id": "be188c66-1f02-4879-aeed-b50a4c8f124c",
+    "date": "2026.10.07",
+    "maker": "",
+    "car": "",
+    "note": "定期洗車を実施しました。",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=1ZxIWf48G6RUO6WzGrPFiqVJNiZcmu6yk&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=be188c66-1f02-4879-aeed-b50a4c8f124c",
+    "review": "洗車",
+    "rating": "0"
+  },
+  {
+    "id": "61298892-87be-4405-a381-9b1d4636a944",
+    "date": "2026.10.07",
+    "maker": "",
+    "car": "",
+    "note": "定期洗車を実施しました。",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=12xjvhB76V9O7cOeXOm7ZNmBvzvMlMlaJ&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=61298892-87be-4405-a381-9b1d4636a944",
+    "review": "洗車",
+    "rating": "0"
+  },
+  {
     "id": "92e082a7-a301-4ba4-93d8-652e750b0acd",
     "date": "2026.10.05",
     "maker": "",
