@@ -160,6 +160,35 @@
     .row.sel { background:#EEF2F8; }
     .row:hover { background:#F4F6FA; }
   }
+  /* ---- 口コミ返信の状況（くらマのタブ →「口コミ返信の状況」／Chatworkの報告から ?reviews=1・2026-10-08） ---- */
+  #reviews { display:none; position:fixed; inset:0; z-index:40; background:var(--bg); overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  #reviews .hdr { position:sticky; top:0; z-index:2; }
+  .rv-open { display:block; padding:12px 16px; font-size:14px; font-weight:700; color:var(--navy); background:#fff; border-bottom:1px solid var(--line); cursor:pointer; }
+  .rv-open .rv-arr { float:right; color:#9AA1AC; font-weight:400; }
+  .rv-meta { padding:10px 16px; font-size:12px; color:var(--sub); line-height:1.6; }
+  .rv-sec { padding:14px 16px 6px; font-size:14px; font-weight:800; color:var(--navy); }
+  .rv-card { background:#fff; border:1px solid var(--line); border-radius:10px; margin:0 12px 12px; padding:14px; }
+  .rv-card.need { border-color:#DD6B20; border-width:2px; }
+  .rv-head { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .rv-star { font-size:16px; color:#C3A054; letter-spacing:1px; white-space:nowrap; }
+  .rv-star.low { color:#C53030; }
+  .rv-svc { font-size:14px; font-weight:700; }
+  .rv-when { font-size:12px; color:#718096; margin-top:2px; }
+  .rv-text { font-size:14px; line-height:1.7; margin-top:10px; white-space:pre-wrap; word-break:break-word; }
+  .rv-text.clip { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .rv-more { font-size:12px; color:#2B5FA6; font-weight:700; margin-top:4px; cursor:pointer; }
+  .rv-lbl { font-size:12px; font-weight:800; color:var(--sub); margin:14px 0 6px; }
+  .rv-state { display:inline-block; font-size:12px; font-weight:800; color:#fff; background:#DD6B20; border-radius:6px; padding:4px 9px; margin-top:10px; line-height:1.5; }
+  .rv-state.ok { background:#2F855A; }
+  .rv-box { background:#F7FAFC; border-radius:8px; padding:10px 12px; font-size:14px; line-height:1.7; white-space:pre-wrap; word-break:break-word; }
+  .rv-cand { border-left:4px solid var(--navy); background:#F7FAFC; border-radius:0 8px 8px 0; padding:8px 10px; margin-bottom:6px; font-size:13px; line-height:1.6; }
+  .rv-cand b { font-size:15px; }
+  .rv-cand .why { display:inline-block; background:var(--navy); color:#fff; font-size:11px; font-weight:700; border-radius:4px; padding:1px 6px; margin-left:4px; }
+  .rv-note { font-size:12px; color:var(--sub); line-height:1.6; }
+  .rv-btns { display:flex; gap:8px; margin-top:12px; }
+  .rv-btns a, .rv-btns button { flex:1; text-align:center; font:inherit; font-size:13px; font-weight:800; border-radius:8px; padding:11px 8px; border:1px solid var(--navy); background:#fff; color:var(--navy); text-decoration:none; cursor:pointer; }
+  .rv-btns .pri { background:var(--navy); color:#fff; }
+  .rv-guess1 { font-size:12px; color:var(--sub); margin-top:6px; }
 </style>
 </head>
 <body class="nocur">
@@ -285,6 +314,12 @@
 <div id="grace" style="display:none;position:fixed;left:12px;right:12px;bottom:150px;background:#1A202C;color:#fff;border-radius:14px;padding:12px 14px;z-index:10;box-shadow:0 6px 20px rgba(0,0,0,.25);display:none;align-items:center;gap:10px">
   <div style="flex:1;font-size:14px;font-weight:700"><span id="graceLabel">送信します</span> <span id="graceSec" style="color:#D9BC7A"></span></div>
   <button id="graceCancel" style="background:#E53E3E;color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:800">取り消す</button>
+</div>
+
+<!-- 口コミ返信の状況（2026-10-08）。見えるのはくらマのタブと同じ人だけ -->
+<div id="reviews">
+  <div class="hdr"><div class="back" id="rvBack">‹</div><div class="nm">口コミ返信の状況</div><a class="lnk" id="rvReload" href="#">更新</a></div>
+  <div id="rvBody"><div class="empty">読み込み中…</div></div>
 </div>
 
 <script src="/staff/ticket.js"></script>
@@ -1559,6 +1594,86 @@ function curamaBadge() {
   var n = (CITEMS || []).filter(function(x) { return x.needsReply; }).length;
   t.innerHTML = 'くらマ' + (n ? '<span class="tabbadge">' + n + '</span>' : '');
 }
+// ===== 口コミ返信の状況（2026-10-08 吉永さん依頼）=====
+// くらマの口コミの「未返信・返信文案・返信した履歴」と、どのお客様かの推定を出す。読むだけ（返信は従来どおり Chatwork の「OK n」／18:10 の自動投稿）
+// データは VPS の review-status.js が作る控え（op=curamaReviews）。Chatworkの報告からは ?reviews=1 で直接開く
+var RV = null, RV_OPEN = /[?&]reviews=1/.test(window.location.search);
+if (RV_OPEN) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} }
+try { var rv0 = JSON.parse(localStorage.getItem('rakuruma_inbox_reviews') || 'null'); if (rv0 && rv0.unreplied) RV = rv0; } catch (e) {}
+function rvStars(n) { n = Number(n) || 0; return '<span class="rv-star' + (n <= 4 ? ' low' : '') + '">' + '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n) + '</span>'; }
+function rvWhen(s) { if (!s) return ''; var m = String(s).match(/(\d{4})-(\d\d)-(\d\d)T(\d\d:\d\d)/); return m ? (parseInt(m[2], 10) + '/' + parseInt(m[3], 10) + ' ' + m[4]) : ''; }
+function rvJst(iso) { if (!iso) return ''; var d = new Date(iso); if (isNaN(d)) return ''; return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+function rvDay(d) { var m = String(d || '').match(/\d{4}-(\d\d)-(\d\d)/); return m ? parseInt(m[1], 10) + '/' + parseInt(m[2], 10) : ''; }
+function rvCands(g, full) {
+  if (!g) return '';
+  var list = (g.candidates || []).slice(0, full ? 5 : 1);
+  var html = list.map(function(c) {
+    return '<div class="rv-cand"><b>' + esc(c.customer || '（名前なし）') + 'さん</b>' + (c.why || []).map(function(w) { return '<span class="why">' + esc(w) + '</span>'; }).join('')
+      + '<br>' + esc(rvDay(c.date)) + ' ' + esc(c.work || '') + (c.partner ? '<br><span style="color:#718096">担当：' + esc(c.partner) + '</span>' : '') + '</div>';
+  }).join('');
+  return html + '<div class="rv-note">' + esc(g.note || '') + '</div>';
+}
+function renderReviews() {
+  var el = document.getElementById('rvBody'); if (!el) return;
+  if (!RV) { el.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
+  var un = RV.unreplied || [], done = RV.replied || [];
+  var html = '<div class="rv-meta">口コミの読み取り ' + esc(rvJst(RV.scannedAt)) + '／文案 ' + esc(rvJst(RV.draftedAt) || 'なし') + (RV.appliedAt ? '／今日の投稿処理 ' + esc(rvJst(RV.appliedAt)) : '／今日の投稿処理は18:10') + '</div>';
+  html += '<div class="rv-sec">まだ返信していない口コミ（' + un.length + '件）</div>';
+  if (!un.length) html += '<div class="rv-card"><div class="rv-note">未返信はありません。</div></div>';
+  html += un.map(function(r, i) {
+    return '<div class="rv-card need"><div class="rv-head">' + rvStars(r.rating) + '<span class="rv-svc">' + esc(r.service) + '</span></div>'
+      + '<div class="rv-when">' + (r.postedAt ? '投稿 ' + esc(rvWhen(r.postedAt)) : esc(r.month)) + '・' + esc(r.name) + '</div>'
+      + '<div class="rv-text">' + esc(r.text) + '</div>'
+      + '<div class="rv-state">' + esc(r.state || '') + '</div>'
+      + (r.draft ? '<div class="rv-lbl">今日の返信文案' + (r.draftNo ? '（' + esc(r.draftNo) + '番）' : '') + '</div><div class="rv-box">' + esc(r.draft) + '</div>' : '')
+      + '<div class="rv-lbl">このお客様かもしれません（推定）</div>' + rvCands(r.guess, true)
+      + '<div class="rv-btns">' + (r.draft ? '<button data-rvcopy="' + i + '">文案をコピー</button>' : '') + '<a class="pri" href="https://curama.jp/shop/reviews/" target="_blank" rel="noopener">くらマで開く</a></div></div>';
+  }).join('');
+  html += '<div class="rv-sec">返信した口コミ（直近' + done.length + '件）</div>';
+  html += done.map(function(r, i) {
+    var g = r.guess || {}, c = (g.candidates || [])[0];
+    var one = g.sure && c ? esc(c.customer) + 'さん（' + esc(rvDay(c.date)) + ' ' + esc(c.work) + '）' : esc(g.note || '');
+    return '<div class="rv-card"><div class="rv-head">' + rvStars(r.rating) + '<span class="rv-svc">' + esc(r.service) + '</span></div>'
+      + '<div class="rv-when">' + (r.postedAt ? '投稿 ' + esc(rvWhen(r.postedAt)) : esc(r.month)) + (r.repliedAt ? '／返信 ' + esc(rvJst(r.repliedAt)) + '（自動投稿）' : '') + '</div>'
+      + '<div class="rv-guess1">推定：' + one + '</div>'
+      + '<div class="rv-text clip" id="rvt' + i + '">' + esc(r.text) + '</div><div class="rv-more" data-rvmore="' + i + '">返信と候補を見る</div>'
+      + '<div id="rvd' + i + '" style="display:none"><div class="rv-lbl">返信</div><div class="rv-box">' + esc(r.reply) + '</div>'
+      + (g.sure || !(g.candidates || []).length ? '' : '<div class="rv-lbl">候補（推定）</div>' + rvCands(g, true)) + '</div></div>';
+  }).join('');
+  html += '<div class="rv-meta">' + esc(RV.note || '') + '</div>';
+  el.innerHTML = html;
+  Array.prototype.forEach.call(el.querySelectorAll('[data-rvmore]'), function(b) { b.onclick = function() {
+    var i = b.getAttribute('data-rvmore'), d = document.getElementById('rvd' + i), t = document.getElementById('rvt' + i), open = d.style.display === 'none';
+    d.style.display = open ? '' : 'none'; t.classList.toggle('clip', !open); b.textContent = open ? '閉じる' : '返信と候補を見る';
+  }; });
+  Array.prototype.forEach.call(el.querySelectorAll('[data-rvcopy]'), function(b) { b.onclick = function() {
+    var txt = (RV.unreplied[parseInt(b.getAttribute('data-rvcopy'), 10)] || {}).draft || '';
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function() { toast('文案をコピーしました'); }, function() { toast('コピーできませんでした'); }); else toast('コピーできませんでした');
+  }; });
+}
+function loadReviews(manual) {
+  api({ op: 'curamaReviews' }).then(function(r) {
+    if (r && r.ok && r.data) { RV = r.data; try { localStorage.setItem('rakuruma_inbox_reviews', JSON.stringify(RV)); } catch (e) {} renderReviews(); if (manual) toast('更新しました'); return; }
+    // 中継がまだこの入場券を確認していない間は「不明なop」になる → 数秒後に取り直す（くらマのタブと同じ）
+    if (r && !r.forbidden && /不明/.test(String(r.error || '')) && (loadReviews.n = (loadReviews.n || 0) + 1) <= 4) { setTimeout(function() { loadReviews(manual); }, 4000); return; }
+    if (!RV) document.getElementById('rvBody').innerHTML = '<div class="empty">' + esc((r && r.error) || '読み込めませんでした') + '</div>'; else if (manual) toast('更新できませんでした');
+  }).catch(function() { if (!RV) document.getElementById('rvBody').innerHTML = '<div class="empty">通信エラー。右上の「更新」を押してください</div>'; else if (manual) toast('更新できませんでした'); });
+}
+function openReviews() { document.getElementById('reviews').style.display = 'block'; renderReviews(); loadReviews(false); }
+function closeReviews() { document.getElementById('reviews').style.display = 'none'; }
+document.getElementById('rvBack').onclick = closeReviews;
+document.getElementById('rvReload').onclick = function(e) { e.preventDefault(); loadReviews(true); };
+// くらマのタブの先頭に入口を出す
+var renderCuramaBase_ = renderCurama;
+renderCurama = function() {
+  renderCuramaBase_.apply(this, arguments);
+  var rows = document.getElementById('rows'); if (!rows || rows.querySelector('.rv-open')) return;
+  var n = RV ? (RV.unreplied || []).length : 0;
+  var d = document.createElement('div'); d.className = 'rv-open'; d.innerHTML = '⭐ 口コミ返信の状況' + (n ? '<span class="tabbadge">' + n + '</span>' : '') + '<span class="rv-arr">›</span>'; d.onclick = openReviews;
+  rows.insertBefore(d, rows.firstChild);
+};
+if (RV_OPEN) openReviews();
+
 var CURAMA_RETRY = 0;
 // Chatworkの通知などから ?curama=<スレッドID> で来たら、くらマのタブでその件を開く（2026-10-02）
 var CURAMA_OPEN = (window.location.search.match(/[?&]curama=([0-9a-f-]{36})/) || [])[1] || '';
