@@ -163,6 +163,8 @@
   /* ---- 口コミ返信の状況（くらマのタブ →「口コミ返信の状況」／Chatworkの報告から ?reviews=1・2026-10-08） ---- */
   #reviews { display:none; position:fixed; inset:0; z-index:40; background:var(--bg); overflow-y:auto; -webkit-overflow-scrolling:touch; }
   #reviews .hdr { position:sticky; top:0; z-index:2; }
+  /* PC幅では .hdr .back を隠している（会話が横並びのため）が、口コミの画面は全面なので戻るボタンが要る（2026-10-10 戻れない不具合） */
+  #reviews .hdr .back { display:flex !important; }
   .rv-open { display:block; padding:12px 16px; font-size:14px; font-weight:700; color:var(--navy); background:#fff; border-bottom:1px solid var(--line); cursor:pointer; }
   .rv-open .rv-arr { float:right; color:#9AA1AC; font-weight:400; }
   .rv-meta { padding:10px 16px; font-size:12px; color:var(--sub); line-height:1.6; }
