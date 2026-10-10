@@ -116,7 +116,7 @@
   .abtn.ok { border-color:#38A169; color:#38A169; }
   .note { font-size:12px; color:#C05621; font-weight:700; padding:6px 12px 0; }
   #toBottom { position:fixed; right:14px; bottom:170px; z-index:8; display:none; align-items:center; gap:4px; background:var(--navy); color:#fff; font-size:13px; font-weight:700; padding:9px 14px; border-radius:20px; box-shadow:0 3px 10px rgba(0,0,0,.25); cursor:pointer; }
-  .toast { position:fixed; left:50%; bottom:130px; transform:translateX(-50%); background:#1A202C; color:#fff; font-size:13px; padding:8px 14px; border-radius:10px; display:none; z-index:9; }
+  .toast { position:fixed; left:50%; bottom:130px; transform:translateX(-50%); background:#1A202C; color:#fff; font-size:13px; padding:8px 14px; border-radius:10px; display:none; z-index:9000; }
   .linkbox { background:#FFF8E7; border:1px solid #E8A33D; margin:8px 12px; border-radius:10px; padding:10px 12px; font-size:13px; }
   .linkbox input { width:100%; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; margin-top:6px; }
   .hit { padding:6px 0; border-bottom:1px solid #F0E6CC; display:flex; justify-content:space-between; align-items:center; gap:8px; }
@@ -1746,7 +1746,7 @@ function renderReviews() {
     if (act === 'ok' && !confirm('この文面で、今日18:10にくらマへ返信を投稿します。よろしいですか？\n\n' + text)) return;
     if (act === 'ng' && !confirm('この口コミには今日は返信しません。よろしいですか？（明日の朝また文案が出ます）')) return;
     Array.prototype.forEach.call(el.querySelectorAll('[data-rvdo]'), function(x) { x.disabled = true; });
-    api({ op: 'curamaReviewDecide', no: String(r.draftNo), action: act, text: text }).then(function(res) {
+    api({ op: 'curamaReviewDecide', no: String(r.draftNo), decide: act, text: text }).then(function(res) {
       if (res && res.ok && res.data) { RV = res.data; try { localStorage.setItem('rakuruma_inbox_reviews', JSON.stringify(RV)); } catch (e) {} renderReviews(); toast(act === 'ok' ? '18:10に投稿します' : act === 'ng' ? '今日は返信しません' : '取り消しました'); return; }
       toast((res && res.error) || 'うまくいきませんでした'); renderReviews();
     }).catch(function() { toast('通信エラー。もう一度押してください'); renderReviews(); });
