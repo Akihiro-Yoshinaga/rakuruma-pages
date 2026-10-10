@@ -188,6 +188,9 @@
   .rv-btns { display:flex; gap:8px; margin-top:12px; }
   .rv-btns a, .rv-btns button { flex:1; text-align:center; font:inherit; font-size:13px; font-weight:800; border-radius:8px; padding:11px 8px; border:1px solid var(--navy); background:#fff; color:var(--navy); text-decoration:none; cursor:pointer; }
   .rv-btns .pri { background:var(--navy); color:#fff; }
+  .rv-btns button:disabled { opacity:.5; }
+  .rv-edit { display:block; width:100%; box-sizing:border-box; font:inherit; font-size:15px; line-height:1.7; border:1px solid #CBD5E0; border-radius:8px; padding:10px 12px; background:#fff; resize:vertical; min-height:150px; }
+  .rv-cnt { font-size:11px; color:#718096; text-align:right; margin-top:3px; }
   .rv-guess1 { font-size:12px; color:var(--sub); margin-top:6px; }
 </style>
 </head>
@@ -1664,7 +1667,7 @@ function curamaBadge() {
   t.innerHTML = 'くらマ' + (n ? '<span class="tabbadge">' + n + '</span>' : '');
 }
 // ===== 口コミ返信の状況（2026-10-08 吉永さん依頼）=====
-// くらマの口コミの「未返信・返信文案・返信した履歴」と、どのお客様かの推定を出す。読むだけ（返信は従来どおり Chatwork の「OK n」／18:10 の自動投稿）
+// くらマの口コミの「未返信・返信文案・返信した履歴」と、どのお客様かの推定を出す。2026-10-10から、文面を直して返信を決められる（投稿は18:10にVPSがまとめて行う。★5は押さなくても自動）
 // データは VPS の review-status.js が作る控え（op=curamaReviews）。Chatworkの報告からは ?reviews=1 で直接開く
 var RV = null, RV_OPEN = /[?&]reviews=1/.test(window.location.search);
 if (RV_OPEN) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} }
@@ -1682,6 +1685,18 @@ function rvCands(g, full) {
   }).join('');
   return html + '<div class="rv-note">' + esc(g.note || '') + '</div>';
 }
+// 受信箱から返信を決める（2026-10-10）。押しても投稿は18:10にまとめて行う（VPSの review-reply-apply.js）。★5は押さなくても自動で投稿される
+function rvStateOk(r) { var d = r.decision; if (d) return d.action === 'ok'; return !!r.canDecide && Number(r.rating) >= 5; }
+function rvDraftHtml(r, i) {
+  if (!r.draft) return '';
+  var lbl = '<div class="rv-lbl">今日の返信文案' + (r.draftNo ? '（' + esc(r.draftNo) + '番）' : '') + '</div>';
+  if (!r.canDecide) return lbl + '<div class="rv-box">' + esc(r.draft) + '</div>';
+  var d = r.decision, low = Number(r.rating) <= 4, at = ' data-rvi="' + i + '"';
+  var btns = d ? '<button' + at + ' data-rvdo="clear">決定を取り消す</button>' + (d.action === 'ok' ? '<button class="pri"' + at + ' data-rvdo="ok">直した文面で決定し直す</button>' : '')
+    : (low ? '' : '<button' + at + ' data-rvdo="ng">今日は返信しない</button>') + '<button class="pri"' + at + ' data-rvdo="ok">' + (low ? 'この文面で返信する' : '直した文面で返信する') + '</button>';
+  return lbl + '<textarea class="rv-edit" id="rvta' + i + '">' + esc(r.draft) + '</textarea><div class="rv-cnt" id="rvc' + i + '">' + String(r.draft).trim().length + '字</div>'
+    + '<div class="rv-btns">' + btns + '</div>';
+}
 function renderReviews() {
   var el = document.getElementById('rvBody'); if (!el) return;
   if (!RV) { el.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
@@ -1693,10 +1708,10 @@ function renderReviews() {
     return '<div class="rv-card need"><div class="rv-head">' + rvStars(r.rating) + '<span class="rv-svc">' + esc(r.service) + '</span></div>'
       + '<div class="rv-when">' + (r.postedAt ? '投稿 ' + esc(rvWhen(r.postedAt)) : esc(r.month)) + '・' + esc(r.name) + '</div>'
       + '<div class="rv-text">' + esc(r.text) + '</div>'
-      + '<div class="rv-state">' + esc(r.state || '') + '</div>'
-      + (r.draft ? '<div class="rv-lbl">今日の返信文案' + (r.draftNo ? '（' + esc(r.draftNo) + '番）' : '') + '</div><div class="rv-box">' + esc(r.draft) + '</div>' : '')
+      + '<div class="rv-state' + (rvStateOk(r) ? ' ok' : '') + '">' + esc(r.state || '') + '</div>'
+      + rvDraftHtml(r, i)
       + '<div class="rv-lbl">このお客様かもしれません（推定）</div>' + rvCands(r.guess, true)
-      + '<div class="rv-btns">' + (r.draft ? '<button data-rvcopy="' + i + '">文案をコピー</button>' : '') + '<a class="pri" href="https://curama.jp/shop/reviews/" target="_blank" rel="noopener">くらマで開く</a></div></div>';
+      + '<div class="rv-btns">' + (r.draft ? '<button data-rvcopy="' + i + '">文案をコピー</button>' : '') + '<a href="https://curama.jp/shop/reviews/" target="_blank" rel="noopener">くらマで開く</a></div></div>';
   }).join('');
   html += '<div class="rv-sec">返信した口コミ（直近' + done.length + '件）</div>';
   html += done.map(function(r, i) {
@@ -1715,8 +1730,23 @@ function renderReviews() {
     var i = b.getAttribute('data-rvmore'), d = document.getElementById('rvd' + i), t = document.getElementById('rvt' + i), open = d.style.display === 'none';
     d.style.display = open ? '' : 'none'; t.classList.toggle('clip', !open); b.textContent = open ? '閉じる' : '返信と候補を見る';
   }; });
+  Array.prototype.forEach.call(el.querySelectorAll('.rv-edit'), function(ta) { ta.oninput = function() {
+    var c = document.getElementById('rvc' + ta.id.slice(4)); if (c) c.textContent = ta.value.trim().length + '字';
+  }; });
+  Array.prototype.forEach.call(el.querySelectorAll('[data-rvdo]'), function(b) { b.onclick = function() {
+    var i = parseInt(b.getAttribute('data-rvi'), 10), act = b.getAttribute('data-rvdo'), r = RV.unreplied[i]; if (!r) return;
+    var ta = document.getElementById('rvta' + i), text = ta ? ta.value.trim() : '';
+    if (act === 'ok' && !confirm('この文面で、今日18:10にくらマへ返信を投稿します。よろしいですか？\n\n' + text)) return;
+    if (act === 'ng' && !confirm('この口コミには今日は返信しません。よろしいですか？（明日の朝また文案が出ます）')) return;
+    Array.prototype.forEach.call(el.querySelectorAll('[data-rvdo]'), function(x) { x.disabled = true; });
+    api({ op: 'curamaReviewDecide', no: String(r.draftNo), action: act, text: text }).then(function(res) {
+      if (res && res.ok && res.data) { RV = res.data; try { localStorage.setItem('rakuruma_inbox_reviews', JSON.stringify(RV)); } catch (e) {} renderReviews(); toast(act === 'ok' ? '18:10に投稿します' : act === 'ng' ? '今日は返信しません' : '取り消しました'); return; }
+      toast((res && res.error) || 'うまくいきませんでした'); renderReviews();
+    }).catch(function() { toast('通信エラー。もう一度押してください'); renderReviews(); });
+  }; });
   Array.prototype.forEach.call(el.querySelectorAll('[data-rvcopy]'), function(b) { b.onclick = function() {
-    var txt = (RV.unreplied[parseInt(b.getAttribute('data-rvcopy'), 10)] || {}).draft || '';
+    var ci = b.getAttribute('data-rvcopy'), ta = document.getElementById('rvta' + ci);
+    var txt = ta ? ta.value : ((RV.unreplied[parseInt(ci, 10)] || {}).draft || '');
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function() { toast('文案をコピーしました'); }, function() { toast('コピーできませんでした'); }); else toast('コピーできませんでした');
   }; });
 }
