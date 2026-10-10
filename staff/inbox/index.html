@@ -312,6 +312,11 @@
     <div class="tpl" id="tpl"></div>
     <div class="box" style="margin-bottom:8px"><input id="intent" placeholder="どう返したい？（例：来週の午前で調整したい・やんわり）" style="flex:1;border:1.5px solid #C3A054;border-radius:14px;padding:9px 12px;font-size:15px;font-family:inherit"><button class="send" id="btnDraft" style="background:#C3A054">AI生成</button></div>
     <div id="cwarn"></div>
+    <div id="cdeepbox" style="display:none;margin:8px 12px;padding:10px 12px;background:#FFFBEA;border:1px solid #D69E2E;border-radius:10px;font-size:14px;line-height:1.55">
+      <div style="font-weight:700;color:#975A16">🔎 深掘りの結論 <span id="cdeepAt" style="font-weight:400;color:#718096;font-size:12px"></span></div>
+      <div id="cdeepText" style="white-space:pre-wrap;margin-top:4px"></div>
+      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="cdeepUse" style="display:none">返信案を入力欄に入れる</span><a class="abtn" id="cdeepChat" href="#" style="display:none">深掘りチャットを開く</a></div>
+    </div>
     <div class="box"><label class="send" id="photoLabel" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:10px 12px;cursor:pointer">📷<input type="file" id="photo" multiple accept="image/*" style="display:none"></label><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button><button class="send" id="btnCSend" style="background:#DD6B20">くらマに<br>送信</button></div>
     <div id="cCopyRow" style="text-align:right;margin-top:4px"><a href="#" id="btnCopyOpen" style="font-size:12px;color:#718096">コピーしてくらマのアプリで開く</a></div>
   </div>
@@ -1662,7 +1667,7 @@ setInterval(function() { if (document.visibilityState === 'visible') pollThread(
 // 送信はしない：AI下書き→「コピーしてくらマを開く」でくらマのアプリに貼って送る。見えるのは許可された人だけ（試験中は吉永さん）
 var CITEMS = null, CSTATUS = null, CURC = null, CURAMA_ON = false, CURAMA_LOADING = false;
 try { var cc0 = JSON.parse(localStorage.getItem('rakuruma_inbox_curama') || 'null'); if (cc0 && cc0.items) { CITEMS = cc0.items; CSTATUS = cc0.status; CURAMA_ON = true; document.getElementById('tabCurama').style.display = ''; } } catch (e) {}
-function setCMode(on) { document.body.classList.toggle('cmode', !!on); if (!on) { CURC = null; document.getElementById('cwarn').style.display = 'none'; document.getElementById('text').placeholder = '返信を入力（送信すると記録に残ります）'; } }
+function setCMode(on) { document.body.classList.toggle('cmode', !!on); if (!on) { CURC = null; document.getElementById('cwarn').style.display = 'none'; document.getElementById('cdeepbox').style.display = 'none'; document.getElementById('text').placeholder = '返信を入力（送信すると記録に残ります）'; } }
 function curamaBadge() {
   var t = document.getElementById('tabCurama'); if (!t || !CURAMA_ON) return;
   var n = (CITEMS || []).filter(function(x) { return x.needsReply; }).length;
@@ -1812,12 +1817,11 @@ function curamaStatusHtml() {
   var bad = !!st.error || age >= 6;
   var html = '<div class="cstat' + (bad ? ' bad' : '') + '">' + (bad ? '⚠ ' : '') + 'くらマ最終取得 ' + hm + '（' + (age <= 0 ? 'たった今' : age + '分前') + '）'
     + (st.error ? '<br>' + esc(st.error) : '') + (bad ? '<br>更新が止まっています。くらマのアプリで直接確認してください' : '') + '</div>';
-  // Macの見張り役（深掘りチャットを立ち上げる係）の最終確認。8〜21時に10分以上来ていなければ赤（2026-10-02）
+  // 深掘りの自動実行（15分おき）の最終確認。8〜21時に40分以上来ていなければ赤（2026-10-10 見張り役のチャットを廃止し、深掘りタスク自身が確認する形に）
   if (st.watchAt) {
     var wAge = Math.round((Date.now() - st.watchAt) / 60000), hNow = new Date().getHours();
-    var wBad = hNow >= 8 && hNow < 21 && wAge >= 10;
-    html += '<div class="cstat' + (wBad ? ' bad' : '') + '">' + (wBad ? '⚠ Macの見張りが止まっています（最終確認 ' : '見張り：最終確認 ') + new Date(st.watchAt).toTimeString().slice(0, 5) + '・' + (wAge <= 0 ? 'たった今' : wAge + '分前') + (wBad ? '）' : '')
-      + (st.watchLink && IS_MAC ? '　<a href="' + esc(st.watchLink) + '" style="font-weight:700">見張り役のチャットを開く</a>' : '') + (wBad ? '<br>' + (IS_MAC ? '開いて' : 'Macで見張り役のチャットを開いて') + '「見張り再開」と送ってください' : '') + '</div>';
+    var wBad = hNow >= 8 && hNow < 21 && wAge >= 40;
+    html += '<div class="cstat' + (wBad ? ' bad' : '') + '">' + (wBad ? '⚠ 深掘りの自動実行が止まっています（最終確認 ' : '深掘り：最終確認 ') + new Date(st.watchAt).toTimeString().slice(0, 5) + '・' + (wAge <= 0 ? 'たった今' : wAge + '分前') + (wBad ? '）<br>MacのClaudeアプリが開いているか確認してください。開けば自動で再開します' : '') + '</div>';
   }
   return html;
 }
@@ -1830,7 +1834,7 @@ function renderCurama() {
   rows.innerHTML = curamaStatusHtml() + CITEMS.map(function(it, i) {
     var tags = '';
     if (it.level === '赤') tags += '<span class="tag t-red">要判断</span>'; else if (it.level === '黄') tags += '<span class="tag t-yellow">日程・確認</span>'; else if (it.level === '緑') tags += '<span class="tag t-green">定型</span>';
-    if (it.deep === 'claimed') tags += '<span class="tag t-deep">Macで調査中</span>'; else if (it.deep === 'pending') tags += '<span class="tag t-deep">Macの調査待ち</span>'; else if (it.deep === 'sent') tags += '<span class="tag t-deep">Macから送信済み</span>';
+    if (it.deepResult && it.deepResult.current) tags += '<span class="tag t-deep">🔎 調べ終わり</span>'; else if (it.deep === 'claimed' || it.deep === 'started') tags += '<span class="tag t-deep">Macで調査中</span>'; else if (it.deep === 'pending') tags += '<span class="tag t-deep">Macの調査待ち</span>'; else if (it.deep === 'sent') tags += '<span class="tag t-deep">Macから送信済み</span>';
     tags += '<span class="tag t-curama">' + esc(it.service || 'くらマ') + '</span>';
     if (it.cancelled) tags += '<span class="tag t-unopened">' + esc(it.resStatus || 'キャンセル') + '</span>'; else if (it.resStatus) tags += '<span class="tag t-done">' + esc(it.resStatus) + '</span>';
     if (it.resLine) tags += '<span class="tag t-sched">' + esc(it.resLine) + '</span>';
@@ -1865,17 +1869,31 @@ function openCurama(it, refresh) {
     document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
     var dl = document.getElementById('btnCDeep'); if (it.deepLink && IS_MAC) { dl.href = it.deepLink; dl.style.display = 'inline-block'; dl.title = it.deepTitle || ''; } else dl.style.display = 'none';
     document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
+    curamaDeepBox(it);
     Array.prototype.forEach.call(document.querySelectorAll('.row[data-ci]'), function(el) { el.classList.toggle('sel', CITEMS[parseInt(el.getAttribute('data-ci'), 10)] === it); });
   }
   api({ op: 'curamaThread', id: it.id }).then(function(r) {
     if (CURC !== it) return;
     if (!r.ok) { document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error || '読めませんでした') + '</div>'; return; }
     it.openUrl = r.openUrl;
+    curamaDeepBox(r.thread && r.thread.deepResult ? r.thread : it);
     var msgs = (r.messages || []).map(function(m) { return { dir: m.dir, at: m.at, text: m.text, kind: m.kind }; });
     var fake = { uid: '', displayName: it.name };
     renderMsgs(fake, msgs, false, !!refresh);
     if (r.partial) { var n = document.createElement('div'); n.className = 'sys'; n.style.cssText = 'background:#FDE8E8;color:#B42318'; n.textContent = 'くらマでまだ開いていないため、最新の1通だけ表示しています（開くと既読になるので、こちらからは開きません）'; document.getElementById('msgs').appendChild(n); }
   }).catch(function(e) { if (CURC === it) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc((e && e.message) || '通信エラー') + '</div>'; });
+}
+// 深掘りの結論と返信案を、その件の上に出す（2026-10-10）。Chatwork→受信箱→Macのチャットと3段たどらなくて済むように
+function curamaDeepBox(it) {
+  var box = document.getElementById('cdeepbox'); var d = it && it.deepResult;
+  if (!d || !d.current) { box.style.display = 'none'; return; }
+  document.getElementById('cdeepAt').textContent = (d.title ? d.title + '　' : '') + (d.at || '');
+  document.getElementById('cdeepText').textContent = d.conclusion || '';
+  var use = document.getElementById('cdeepUse');
+  if (d.reply) { use.style.display = ''; use.onclick = function() { var ta = document.getElementById('text'); if (ta.value.trim() && !confirm('入力欄の文を返信案で置き換えます。よろしいですか？')) return; ta.value = d.reply; autosize(); ta.focus(); toast('返信案を入れました。直してから送信してください'); }; }
+  else use.style.display = 'none';
+  var ch = document.getElementById('cdeepChat'); if (it.deepLink && IS_MAC) { ch.href = it.deepLink; ch.style.display = ''; } else ch.style.display = 'none';
+  box.style.display = 'block';
 }
 function curamaDraft(btn) {
   var it = CURC; if (!it) return;
