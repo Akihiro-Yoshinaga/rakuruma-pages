@@ -767,6 +767,8 @@ footer {
 .hero--split .hero-label::after { margin: 10px 0 0; }
 .hero--split .hero-title { color: var(--color-text-primary); font-size: clamp(28px, 3.2vw, 36px); line-height: 1.38; white-space: nowrap; }
 @media (max-width: 900px) { .hero--split .hero-title { white-space: normal; } }
+/* スマホ：見出し1行目（14字）が1行に収まる大きさにする。28pxだと「は、」「に、」だけ次行に落ちて5行になる（2026-10-10） */
+@media (max-width: 560px) { .hero--split .hero-title { font-size: clamp(19px, 6.2vw, 26px); letter-spacing: 0; } }
 .hero--split .hero-subtitle { color: var(--color-text-secondary); opacity: 1; font-size: 16px; margin-top: 14px; }
 .hero--split .hero-cta { justify-content: flex-start; margin-top: 24px; }
 .hero--split .btn-primary { background: var(--color-primary-blue); color: #fff; }
