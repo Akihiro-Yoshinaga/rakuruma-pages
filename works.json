@@ -1,5 +1,41 @@
 [
   {
+    "id": "8aedb063-a888-4624-8c27-d5597c4fba67",
+    "date": "2026.10.09",
+    "maker": "",
+    "car": "",
+    "note": "定期洗車を実施しました。",
+    "staff": "吉永",
+    "photo": "https://drive.google.com/thumbnail?id=1VqoFlySi22HwHi0Lfkj_Zd_n2DncWraY&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=8aedb063-a888-4624-8c27-d5597c4fba67",
+    "review": "洗車",
+    "rating": "0"
+  },
+  {
+    "id": "e0792cfb-a50c-4e2d-8b03-a76f5437ec4d",
+    "date": "2026.10.08",
+    "maker": "",
+    "car": "",
+    "note": "デジタルインナーミラー取り付け（アルパイン｜DVR-DM1000B-IC）、デジタルインナーミラー取り外し",
+    "staff": "高橋",
+    "photo": "https://drive.google.com/thumbnail?id=1GTUX3oNM0Z9ElISa0NGT9lqTQZHO_kYB&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=e0792cfb-a50c-4e2d-8b03-a76f5437ec4d",
+    "review": "整備",
+    "rating": "0"
+  },
+  {
+    "id": "e659d339-1441-4ba8-ae06-87613b09fc34",
+    "date": "2026.10.08",
+    "maker": "",
+    "car": "",
+    "note": "ドライブレコーダーの出張取り付け（70mai丨A410）",
+    "staff": "高橋",
+    "photo": "https://drive.google.com/thumbnail?id=1qob8Ges3lsoFCYUGNIYubW_eXQKMig8P&sz=w800",
+    "url": "https://script.google.com/macros/s/AKfycbyAqquwyC0b-2MeriwzDH1b5W4x9ol7CjmDWssq_F1ijo-8HR9C81OSqM_Mtcjsd_Gw/exec?action=view&id=e659d339-1441-4ba8-ae06-87613b09fc34",
+    "review": "整備",
+    "rating": "0"
+  },
+  {
     "id": "255db053-983b-4bdf-906a-18059c3c157f",
     "date": "2026.10.07",
     "maker": "",
