@@ -1156,7 +1156,7 @@
       this.setSelectionRange(pos - removed, pos - removed);
     });
 
-    fetchWithRetry(3, 8000);
+    fetchWithRetry(3, 15000);
   });
 
   // ============================================================
@@ -1261,9 +1261,10 @@
           // 1秒待ってリトライ
           setTimeout(() => fetchWithRetry(maxRetries, timeoutMs, attempt + 1), 1000);
         } else {
-          // 全リトライ失敗 → フォールバック
+          // 全リトライ失敗 → フォールバック（手入力欄を出しつつ、裏で取り直す）
           showForm();
           showFallback();
+          refetchInBackground(1);
         }
       });
   }
@@ -1289,6 +1290,30 @@
     document.getElementById('fallback-notice').style.display = 'block';
     document.getElementById('slot-ui').style.display = 'none';
     document.getElementById('fallback-ui').style.display = 'block';
+  }
+
+  // 手入力欄に切り替えた後も空き状況を取り直し、取れたら枠ボタンに戻す（最大6回）。
+  // お客様がすでに日時を手入力していたら、入力を消さないよう戻さない。
+  function refetchInBackground(attempt) {
+    if (attempt > 6) return;
+    setTimeout(() => {
+      if (!isFallbackMode) return;
+      fetchOnce(20000)
+        .then(data => {
+          if (data.error) throw new Error(data.error);
+          if (document.getElementById('slot1-manual').value || document.getElementById('slot2-manual').value) return;
+          const days = buildDisplayDays(data);
+          if (!days.some(d => !d.closed)) return;
+          availabilityData = days;
+          isFallbackMode = false;
+          document.getElementById('fallback-notice').style.display = 'none';
+          document.getElementById('fallback-ui').style.display = 'none';
+          document.getElementById('slot-ui').style.display = '';
+          document.getElementById('slot-availability-note').style.display = 'block';
+          renderSlotUI();
+        })
+        .catch(() => refetchInBackground(attempt + 1));
+    }, 3000);
   }
 
   // ============================================================
@@ -1503,6 +1528,8 @@
       slot2:           isFallbackMode
                          ? document.getElementById('slot2-manual').value
                          : document.getElementById('slot2-value').value,
+      // 空き状況が取れず手入力で受け付けた依頼の印（通知に「空き未確認」と出す）
+      slot_mode:       isFallbackMode ? 'manual' : '',
       // 出張洗車オプション（選択時のみ）
       first_time:      document.getElementById('first_time')?.checked ? 'はい' : '',
       indoor_cleaning: document.getElementById('indoor_cleaning')?.checked ? '希望する' : '',
