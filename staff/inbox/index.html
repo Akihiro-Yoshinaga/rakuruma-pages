@@ -143,6 +143,11 @@
     body.nocur .emptyPane { display:flex; flex:1; align-items:center; justify-content:center; color:var(--mute); font-size:15px; background:var(--bg); flex-direction:column; gap:6px; }
     .hdr .back { display:none; }
     .msgs { flex:1; overflow-y:auto; padding-bottom:20px; min-height:0; }
+    /* 予定の変更・予約登録などの箱が大きいと、やりとりが1通しか見えなくなっていた（2026-10-12 西本さんの件）。
+       PCでは箱を画面の1/3までにして中でスクロールさせ、やりとりの欄を最低限確保する */
+    .linkbox { max-height:34vh; overflow-y:auto; flex:0 0 auto; }
+    #cdeepbox { max-height:24vh; overflow-y:auto; }
+    .msgs { min-height:180px; }
     body.gracing .msgs { padding-bottom:120px; }
     .compose { position:static; padding:10px 16px 14px; border-top:1px solid var(--line); }
     .bub { max-width:42%; font-size:14px; padding:9px 14px; border-radius:16px; line-height:1.4; }
