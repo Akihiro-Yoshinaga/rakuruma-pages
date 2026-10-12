@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>LINE受信箱 | ラクルマ</title>
 <!-- ホーム画面に追加すると単独のアプリ画面として開く（タブが増えない・2026-09-24 吉永さん要望） -->
 <link rel="manifest" href="manifest.json">
@@ -102,12 +102,17 @@
   body.gracing .msgs { padding-bottom:340px; }
   .bub.out.pending .meta { color:#182F66; font-weight:700; }
   .sys { align-self:center; font-size:11px; color:#718096; background:#E2E8F0; padding:3px 10px; border-radius:10px; }
-  .compose { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line); padding:8px 10px 12px; z-index:6; }
+  /* スマホ：入力欄の下にホームバー分の余白（2026-10-12 下へスクロールするとiPhoneのアプリ切り替えが出ていた）。入力欄は画面の半分まで伸びる */
+  .compose { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line); padding:8px 10px calc(22px + env(safe-area-inset-bottom)); z-index:6; }
   .msgs { padding-bottom:210px; }
   .tpl { display:flex; gap:6px; overflow-x:auto; margin-bottom:8px; -webkit-overflow-scrolling:touch; }
   .tpl div { font-size:12px; font-weight:700; color:var(--navy); border:1.5px solid var(--navy); border-radius:14px; padding:5px 10px; white-space:nowrap; cursor:pointer; }
   .box { display:flex; gap:8px; align-items:flex-end; }
-  textarea { flex:1; border:1.5px solid #CBD5E0; border-radius:14px; padding:10px 12px; font-size:16px; font-family:inherit; resize:none; min-height:44px; max-height:140px; }
+  /* スマホ：入力欄を1行まるごと使い、📷と送信は下の行へ（2026-10-12 幅が6割しかなく、AI生成の文を読むのに縦スクロールが多かった） */
+  .compose .box { flex-wrap:wrap; }
+  .compose .box textarea { flex:1 1 100%; order:-1; }
+  #btnSend, #btnCSend { margin-left:auto; }
+  textarea { flex:1; border:1.5px solid #CBD5E0; border-radius:14px; padding:10px 12px; font-size:16px; font-family:inherit; resize:none; min-height:44px; max-height:50vh; }
   .send { background:var(--navy); color:#fff; font-weight:800; border:0; border-radius:14px; padding:12px 16px; font-size:15px; cursor:pointer; }
   .send:disabled { opacity:.5; }
   .actions { display:flex; gap:6px; padding:8px 12px; background:#fff; border-bottom:1px solid var(--line); flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; }
@@ -156,7 +161,10 @@
     .mrow { gap:10px; }
     .mt { font-size:12px; }
     .msgs { padding:16px 20px 20px; gap:20px; }
-    textarea { min-height:92px; }
+    textarea { min-height:92px; max-height:140px; }
+    .compose .box { flex-wrap:nowrap; }
+    .compose .box textarea { flex:1 1 auto; order:0; }
+    #btnSend, #btnCSend { margin-left:0; }
     .row { min-height:99px; }
     .av { width:52px; height:52px; flex:0 0 52px; }
     #grace { left:416px !important; right:16px !important; bottom:170px !important; }
@@ -960,7 +968,12 @@ function renderTpl() {
   });
 }
 
-function autosize() { var ta = document.getElementById('text'); ta.style.height = 'auto'; ta.style.height = Math.min(140, ta.scrollHeight) + 'px'; }
+function autosize() {
+  var ta = document.getElementById('text'); ta.style.height = 'auto';
+  var cap = isDesktop() ? 140 : Math.round(window.innerHeight * 0.5); // スマホは画面の半分まで伸ばし、中でのスクロールを減らす（2026-10-12）
+  ta.style.height = Math.min(cap, ta.scrollHeight) + 'px';
+  if (!isDesktop()) { var c = document.querySelector('.compose'); if (c) document.getElementById('msgs').style.paddingBottom = (c.offsetHeight + 24) + 'px'; }
+}
 document.getElementById('text').addEventListener('input', autosize);
 document.getElementById('text').addEventListener('keydown', function(e) { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); document.getElementById('btnSend').click(); } });
 if (isDesktop()) document.getElementById('text').placeholder = 'Command + Enterで送信 / Enterで改行（送信すると記録に残ります）';
