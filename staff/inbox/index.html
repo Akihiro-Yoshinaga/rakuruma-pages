@@ -326,9 +326,11 @@
     <div class="box" style="margin-bottom:8px"><input id="intent" placeholder="どう返したい？（例：来週の午前で調整したい・やんわり）" style="flex:1;border:1.5px solid #C3A054;border-radius:14px;padding:9px 12px;font-size:15px;font-family:inherit"><button class="send" id="btnDraft" style="background:#C3A054">AI生成</button></div>
     <div id="cwarn"></div>
     <div id="cdeepbox" style="display:none;margin:8px 12px;padding:10px 12px;background:#FFFBEA;border:1px solid #D69E2E;border-radius:10px;font-size:14px;line-height:1.55">
-      <div style="font-weight:700;color:#975A16">🔎 深掘りの結論 <span id="cdeepAt" style="font-weight:400;color:#718096;font-size:12px"></span></div>
+      <div style="font-weight:700;color:#975A16;display:flex;align-items:center;gap:8px"><span style="flex:1">🔎 深掘りの結論 <span id="cdeepAt" style="font-weight:400;color:#718096;font-size:12px"></span></span><span id="cdeepFold" style="font-weight:400;font-size:12px;color:#975A16;cursor:pointer;border:1px solid #D69E2E;border-radius:6px;padding:2px 8px;background:#fff;white-space:nowrap">たたむ</span></div>
+      <div id="cdeepBody">
       <div id="cdeepText" style="white-space:pre-wrap;margin-top:4px"></div>
       <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="cdeepUse" style="display:none">返信案を入力欄に入れる</span><a class="abtn" id="cdeepChat" href="#" style="display:none">深掘りチャットを開く</a></div>
+      </div>
     </div>
     <div class="box"><label class="send" id="photoLabel" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);padding:10px 12px;cursor:pointer">📷<input type="file" id="photo" multiple accept="image/*" style="display:none"></label><textarea id="text" rows="1" placeholder="返信を入力（送信すると記録に残ります）"></textarea><button class="send" id="btnSend">送信</button><button class="send" id="btnCSend" style="background:#DD6B20">くらマに<br>送信</button></div>
     <div id="cCopyRow" style="text-align:right;margin-top:4px"><a href="#" id="btnCopyOpen" style="font-size:12px;color:#718096">コピーしてくらマのアプリで開く</a></div>
@@ -1905,16 +1907,30 @@ function openCurama(it, refresh) {
     if (!r.ok) { document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error || '読めませんでした') + '</div>'; return; }
     it.openUrl = r.openUrl;
     curamaDeepBox(r.thread && r.thread.deepResult ? r.thread : it);
-    var msgs = (r.messages || []).map(function(m) { return { dir: m.dir, at: m.at, text: m.text, kind: m.kind }; });
+    // 写真・PDFの添付も渡す（2026-10-13。VPSが署名付きURLを返しているのに、ここで落としていて「（受信）」の空の吹き出しになっていた）
+    var msgs = (r.messages || []).map(function(m) { return { dir: m.dir, at: m.at, text: m.text, kind: m.kind, img: m.img || null, file: m.file || null }; });
     var fake = { uid: '', displayName: it.name };
     renderMsgs(fake, msgs, false, !!refresh);
     if (r.partial) { var n = document.createElement('div'); n.className = 'sys'; n.style.cssText = 'background:#FDE8E8;color:#B42318'; n.textContent = 'くらマでまだ開いていないため、最新の1通だけ表示しています（開くと既読になるので、こちらからは開きません）'; document.getElementById('msgs').appendChild(n); }
   }).catch(function(e) { if (CURC === it) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc((e && e.message) || '通信エラー') + '</div>'; });
 }
 // 深掘りの結論と返信案を、その件の上に出す（2026-10-10）。Chatwork→受信箱→Macのチャットと3段たどらなくて済むように
+// たたんだ状態は端末に覚える（件ごと・結論が新しくなれば開き直す）（2026-10-13 吉永さん要望）
+function deepFoldKey(it, d) { return 'cdeepFold:' + it.id + ':' + (d.at || ''); }
+function curamaDeepFold(it, folded) {
+  var d = it && it.deepResult; if (!d) return;
+  try { if (folded) localStorage.setItem(deepFoldKey(it, d), '1'); else localStorage.removeItem(deepFoldKey(it, d)); } catch (e) {}
+  document.getElementById('cdeepBody').style.display = folded ? 'none' : '';
+  document.getElementById('cdeepText').style.display = folded ? 'none' : '';
+  document.getElementById('cdeepFold').textContent = folded ? '開く' : 'たたむ';
+  document.getElementById('cdeepbox').style.padding = folded ? '6px 12px' : '10px 12px';
+}
 function curamaDeepBox(it) {
   var box = document.getElementById('cdeepbox'); var d = it && it.deepResult;
   if (!d || !d.current) { box.style.display = 'none'; return; }
+  var folded = false; try { folded = !!localStorage.getItem(deepFoldKey(it, d)); } catch (e) {}
+  document.getElementById('cdeepFold').onclick = function() { curamaDeepFold(it, document.getElementById('cdeepBody').style.display !== 'none'); };
+  curamaDeepFold(it, folded);
   document.getElementById('cdeepAt').textContent = (d.title ? d.title + '　' : '') + (d.at || '');
   document.getElementById('cdeepText').textContent = d.conclusion || '';
   var use = document.getElementById('cdeepUse');
