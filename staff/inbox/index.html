@@ -972,8 +972,18 @@ function autosize() {
   var ta = document.getElementById('text'); ta.style.height = 'auto';
   var cap = isDesktop() ? 140 : Math.round(window.innerHeight * 0.5); // スマホは画面の半分まで伸ばし、中でのスクロールを減らす（2026-10-12）
   ta.style.height = Math.min(cap, ta.scrollHeight) + 'px';
-  if (!isDesktop()) { var c = document.querySelector('.compose'); if (c) document.getElementById('msgs').style.paddingBottom = (c.offsetHeight + 24) + 'px'; }
+  fitMsgsPad();
 }
+// スマホ：入力欄（画面下に固定）の高さぶんだけ、やりとりの下に余白を取る。入力欄が伸び縮みするたび・定型文や注意書きが出るたびに合わせる
+// （2026-10-13 入力欄を大きくしたら、最後の発言が入力欄の裏に隠れて一番下まで見えなくなった）
+function fitMsgsPad() {
+  if (isDesktop()) return;
+  var c = document.querySelector('.compose'); if (!c) return;
+  document.getElementById('msgs').style.paddingBottom = (c.offsetHeight + 24) + 'px';
+}
+if (window.ResizeObserver) { try { new ResizeObserver(function() { fitMsgsPad(); }).observe(document.querySelector('.compose')); } catch (e) {} }
+window.addEventListener('resize', fitMsgsPad);
+setTimeout(fitMsgsPad, 300);
 document.getElementById('text').addEventListener('input', autosize);
 document.getElementById('text').addEventListener('keydown', function(e) { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); document.getElementById('btnSend').click(); } });
 if (isDesktop()) document.getElementById('text').placeholder = 'Command + Enterで送信 / Enterで改行（送信すると記録に残ります）';
