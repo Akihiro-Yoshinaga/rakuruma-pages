@@ -65,8 +65,12 @@
   var sent = false;
   try { if (navigator.sendBeacon) sent = navigator.sendBeacon(ping); } catch (e) {}
   if (!sent) { try { new Image().src = ping + '&t=' + Date.now(); } catch (e) {} }
-  // スマホ（LINEアプリが開ける）はLIFFへ、PC等は従来の友だち追加リンクへ（QRが出る）
-  var DEST = (d === 'ios' || d === 'android' || d === 'owner')
+  // iPhoneはLIFFへ、Android・PC等は従来の友だち追加リンクへ直接（PCはQRが出る）
+  // 2026-10-13：AndroidをLIFFから外した。8/28〜10/13のブログ→LINEで、Androidは6件中0件しか人が分からず
+  // （iPhoneは13件中4件、LIFFを通らない整備LPなどは34件中18件）、ページを4回乗り継ぐ間にLINEアプリが
+  // 自動で開かなくなっている疑い。誰が来たかは journeySummary の「推定（直後の友だち追加）」で追える。
+  // 判定：Androidのブログ→LINEが6件たまった時点で、人が分かった割合を0/6と比べる
+  var DEST = (d === 'ios' || d === 'owner')
     ? LIFF_ENTRY + '?k=' + k + '&src=hp_blog_line&d=' + d + (bid ? '&bid=' + bid : '')
     : LINE_ADD;
   setTimeout(function () { location.replace(DEST); }, 300);
