@@ -1679,14 +1679,21 @@ function pollThread() {
   api({ op:'thread', uid: target.uid, src: target.src }).then(function(r) {
     THREAD_POLLING = false;
     if (CUR !== target || !r.ok || !Array.isArray(r.messages)) return;
+    // 2026-10-16：「新しいメッセージが届きました」が来てもいないのに出ていた。原因は、送信直後などに中継が古い控え（送った分が無い短い一覧）を返すと
+    // 「長さが違う＝変化あり」と見なし、最後がお客様の発言なので新着扱いにしていたこと。本当に増えた発言があるときだけ描き直し・通知する
     var cur = threadCacheGet(target.uid) || [];
-    var a = cur.length ? cur[cur.length - 1] : null, b = r.messages.length ? r.messages[r.messages.length - 1] : null;
-    var changed = cur.length !== r.messages.length || (a && b && (a.at !== b.at || a.text !== b.text)) || (!a !== !b);
-    if (!changed) return;
+    var keyOf = function(m) { return (m.dir || '') + '|' + (m.at || '') + '|' + String(m.text || '').slice(0, 200) + '|' + ((m.img && (m.img.full || m.img.thumb)) || ''); };
+    var curKeys = {}; cur.forEach(function(m) { curKeys[keyOf(m)] = 1; });
+    var srvKeys = {}; r.messages.forEach(function(m) { srvKeys[keyOf(m)] = 1; });
+    var added = r.messages.filter(function(m) { return !curKeys[keyOf(m)]; });
+    var missing = cur.filter(function(m) { return !srvKeys[keyOf(m)]; });
+    if (!added.length) return; // 増えていない（同じ、または中継の控えが古いだけ）→ 何もしない
+    if (missing.length && added.length < missing.length) return; // 手元より古い一覧を返されただけ（送った分がまだ載っていない等）→ 手元を優先
     threadCachePut(target.uid, r.messages);
     var atBottom = isDesktop() ? (function() { var m = document.getElementById('msgs'); return m.scrollHeight - m.scrollTop - m.clientHeight < 80; })() : (window.innerHeight + window.scrollY >= document.body.scrollHeight - 80);
     renderMsgs(target, r.messages, false, !atBottom);
-    if (b && b.dir === '受信') { target.needsReply = true; target.unread = (target.unread || 0) + 1; target.lastAt = b.at; target.lastText = String(b.text || '').slice(0, 80); target.lastDir = b.dir; toast('新しいメッセージが届きました'); }
+    var newIn = added.filter(function(m) { return m.dir === '受信'; });
+    if (newIn.length) { var b = newIn[newIn.length - 1]; target.needsReply = true; target.unread = (target.unread || 0) + newIn.length; target.lastAt = b.at; target.lastText = String(b.text || '').slice(0, 80); target.lastDir = b.dir; toast('新しいメッセージが届きました'); }
     if (!atBottom) toast('新着があります（下にスクロール）');
     maybeProposeChange(target, r.messages);
   }).catch(function() { THREAD_POLLING = false; });
