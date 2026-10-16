@@ -58,6 +58,17 @@
   .hideBtn { position:absolute; top:0; right:0; bottom:0; width:96px; background:#E53E3E; color:#fff; font-size:14px; font-weight:800; display:none; align-items:center; justify-content:center; cursor:pointer; }
   .rowwrap.swiping .hideBtn, .rowwrap.open .hideBtn { display:flex; } /* スワイプ中と開いた行だけ描く（対応済み行は半透明なので常時描くと赤が透ける） */
   .t-hidden { background:#FDE8E8; color:#B42318; font-weight:700; }
+  /* 誰の番か（2026-10-16）：平川さん＝青・吉永さん＝赤のベタ塗り。手で回した件は「↩」付き */
+  .t-own-h { background:#2B6CB0; color:#fff; font-weight:800; } .t-own-y { background:#C53030; color:#fff; font-weight:800; }
+  .ownbar { display:none; gap:6px; padding:8px 16px; background:#fff; border-bottom:1px solid var(--line); align-items:center; }
+  .ownbar span { font-size:13px; font-weight:700; color:#4A5568; border:1.5px solid #CBD5E0; border-radius:16px; padding:5px 14px; cursor:pointer; }
+  .ownbar span.on { background:var(--navy); color:#fff; border-color:var(--navy); }
+  .ownbar .own-cnt { margin-left:auto; border:0; padding:0; font-size:12px; color:#718096; font-weight:500; cursor:default; }
+  #agendabox { margin:8px 12px; padding:10px 12px; background:#EBF4FF; border:1px solid #90CDF4; border-radius:10px; font-size:14px; line-height:1.5; }
+  #agendabox .ag { display:flex; gap:8px; align-items:flex-start; padding:5px 0; border-top:1px solid #BEE3F8; }
+  #agendabox .ag:first-of-type { border-top:0; }
+  #agendabox .ag .st { font-size:11px; font-weight:700; border-radius:4px; padding:1px 6px; white-space:nowrap; background:#fff; color:#2B5FA6; border:1px solid #90CDF4; }
+  #agendabox .ag .st.wait { background:#FFF1DB; color:#B06A00; border-color:#F6C87A; }
   .bf { display:flex; align-items:flex-start; gap:8px; margin-top:6px; }
   .bf > span { flex:0 0 64px; font-size:12px; color:#718096; padding-top:9px; }
   .bf input, .bf textarea { flex:1; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; font-family:inherit; min-width:0; }
@@ -138,7 +149,7 @@
   .durnote { margin:6px 0 2px; padding:8px 10px; border-radius:8px; font-size:13px; line-height:1.5; }
   .durnote.warn { background:#FFF3CD; color:#7A4B00; border:1px solid #F0C36D; font-weight:700; }
   .durnote.ok { background:#F0F4F8; color:#4A5568; }
-  body.cmode .actions > .abtn:not(#btnCDone):not(#btnCDeep):not(#btnCBook), body.cmode #tpl, body.cmode #photoLabel, body.cmode #btnSend, body.cmode #tNext, body.cmode #tSched, body.cmode #tMemo, body.cmode #tCust, body.cmode #confirmBar, body.cmode #schedlist { display:none !important; }
+  body.cmode .actions > .abtn:not(#btnCDone):not(#btnCDeep):not(#btnCBook):not(#btnHand), body.cmode #tpl, body.cmode #photoLabel, body.cmode #btnSend, body.cmode #tNext, body.cmode #tSched, body.cmode #tMemo, body.cmode #tCust, body.cmode #confirmBar, body.cmode #schedlist { display:none !important; }
   #btnCDone, #btnCSend, #cCopyRow, #cwarn { display:none; } body:not(.cmode) #btnCDeep { display:none !important; }
   body.cmode #btnCDone, body.cmode #btnCSend { display:inline-block; } body.cmode #cCopyRow { display:block; }
   #cwarn { font-size:12px; color:#C05621; background:#FFFAF0; border:1px solid #F6AD55; border-radius:8px; padding:6px 10px; margin-bottom:8px; line-height:1.5; }
@@ -221,6 +232,7 @@
   <div class="tabs">
     <div class="on" data-tab="all">お客様</div><div data-tab="biz">工場・取引先</div><div data-tab="curama" id="tabCurama" style="display:none">くらマ</div>
   </div>
+  <div class="ownbar" id="ownbar"><span data-f="me" class="on">自分の番</span><span data-f="all">全部</span><span class="own-cnt" id="ownCnt"></span></div>
   <div class="srch"><input id="search" type="search" placeholder="お客様を検索（名前・車種・本文）" autocomplete="off"><span id="searchClear" style="display:none">×</span></div>
   <div id="rows"><div class="empty">読み込み中…</div></div>
   <div id="homePrep" style="display:none;text-align:center;padding:18px 16px 28px;font-size:13px"><a href="#" id="homePrepBtn" style="color:#4A5568">📲 ホーム画面のアイコンを承認する（4桁）</a></div>
@@ -228,8 +240,8 @@
 
 <div id="thread">
   <div class="hdrwrap">
-  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span></div>
+  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div><div class="sub" id="tOwn" style="display:none;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -327,6 +339,7 @@
     <div style="margin-top:8px"><span class="abtn" id="btnNew">この名前で新規登録</span></div>
   </div>
   <div class="note" id="note"></div>
+  <div id="agendabox" style="display:none"><div style="font-weight:700;color:#2B5FA6;display:flex;align-items:center;gap:8px"><span style="flex:1">📋 いまの用件 <span id="agAt" style="font-weight:400;color:#718096;font-size:12px"></span></span><span id="agRefresh" style="font-weight:400;font-size:12px;color:#2B5FA6;cursor:pointer;border:1px solid #90CDF4;border-radius:6px;padding:2px 8px;background:#fff;white-space:nowrap">更新</span></div><div id="agBody" style="margin-top:4px"></div></div>
   <div class="msgs" id="msgs"></div>
   <div id="toBottom" onclick="scrollBottom(); updateToBottomBtn();">↓ 最新へ</div>
   <div class="compose">
@@ -408,6 +421,68 @@ var ITEMS = [], OTHERS = [], TAB = 'all', CUR = null, TEMPLATES = null; // 2026-
 
 // 読み取り系は25秒で打ち切って計3回まで（GAS側でたまに30〜40秒止まることがある。送信系は基本やり直さない）
 var API_RETRY_OPS = { list:1, listBiz:1, thread:1, templates:1, scheduleList:1, search:1, sendStatus:1 };
+// ---- 誰の番か（2026-10-16）。中継が各件に owner（吉永／平川）を付けて返す。自分が誰かは assignMe で1回聞く
+var ME = '', ME_RETRY = 0, OWN_FILTER = 'me';
+try { ME = localStorage.getItem('rakuruma_inbox_me') || ''; OWN_FILTER = localStorage.getItem('rakuruma_inbox_ownfilter') || 'me'; } catch (e) {}
+function loadMe() {
+  api({ op: 'assignMe' }).then(function(r) {
+    if (r && !r.ok && /不明/.test(String(r.error || ''))) { if (ME_RETRY++ < 4) setTimeout(loadMe, 5000); return; } // 中継がまだtokenを確認していない
+    if (!r || !r.ok) return;
+    ME = r.me || ''; try { localStorage.setItem('rakuruma_inbox_me', ME); } catch (e) {}
+    ownbarUpdate(); if (TAB === 'biz' || TAB === 'curama') renderList();
+  }).catch(function() {});
+}
+function ownOther() { return ME === '吉永' ? '平川' : ME === '平川' ? '吉永' : ''; }
+function ownFilterOn() { return !!ME && OWN_FILTER === 'me' && (TAB === 'biz' || TAB === 'curama'); }
+function ownerTag(it) { if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
+function ownbarUpdate() {
+  var bar = document.getElementById('ownbar'); if (!bar) return;
+  var show = !!ME && (TAB === 'biz' || TAB === 'curama') && !normQ(document.getElementById('search').value);
+  bar.style.display = show ? 'flex' : 'none'; if (!show) return;
+  Array.prototype.forEach.call(bar.querySelectorAll('span[data-f]'), function(el) { el.classList.toggle('on', el.getAttribute('data-f') === OWN_FILTER); });
+  var src = TAB === 'biz' ? (BIZ || []) : (CITEMS || []);
+  var mine = src.filter(function(x) { return x.owner === ME && !x.hidden; }).length, theirs = src.filter(function(x) { return x.owner && x.owner !== ME && !x.hidden; }).length;
+  document.getElementById('ownCnt').textContent = '自分 ' + mine + '件・' + (ownOther() || '相手') + 'さん ' + theirs + '件';
+}
+Array.prototype.forEach.call(document.querySelectorAll('#ownbar span[data-f]'), function(el) { el.onclick = function() { OWN_FILTER = el.getAttribute('data-f'); try { localStorage.setItem('rakuruma_inbox_ownfilter', OWN_FILTER); } catch (e) {} renderList(); }; });
+// 開いている件の見出しと「回す」ボタン
+function ownShow(it, kind) {
+  var line = document.getElementById('tOwn'), btn = document.getElementById('btnHand');
+  if (!it || !it.owner) { line.style.display = 'none'; btn.style.display = 'none'; return; }
+  line.style.display = ''; line.textContent = '👤 ' + it.owner + 'さんの番' + (it.ownerBy ? '（' + it.ownerBy + 'さんが回した' + (it.ownerNote ? '：' + it.ownerNote : '') + '）' : '');
+  if (!ME) { btn.style.display = 'none'; return; }
+  var to = it.owner === ME ? ownOther() : ME; if (!to) { btn.style.display = 'none'; return; }
+  btn.style.display = ''; btn.textContent = it.owner === ME ? to + 'さんに回す' : '自分の番にする';
+  btn.onclick = function() {
+    var note = it.owner === ME ? prompt(to + 'さんへの一言（任意）。Chatworkで知らせます', '') : '';
+    if (note === null) return;
+    btn.textContent = '回しています…';
+    var id = kind === 'curama' ? it.id : it.uid;
+    var sub = kind === 'curama' ? (it.service || '') : (it.partner || '');
+    api({ op: 'assignSet', kind: kind, id: id, to: to, note: note, name: kind === 'curama' ? it.name : ((it.customer && it.customer.name) ? custLabel(it) : bizLabel(it)), sub: sub }).then(function(r) {
+      if (!r || !r.ok) { toast((r && r.error) || '回せませんでした'); ownShow(it, kind); return; }
+      it.owner = r.owner; it.ownerBy = r.ownerBy; it.ownerNote = r.ownerNote || '';
+      ownShow(it, kind); toast(to + 'さんの番にしました'); renderList();
+    }).catch(function() { toast('通信できませんでした'); ownShow(it, kind); });
+  };
+}
+// 工場・取引先トークの「いまの用件」（AIが直近のやりとりから抜く。新しい発言が無ければ前回の結果）
+var AG_FOR = '';
+function loadAgenda(it, force) {
+  var box = document.getElementById('agendabox'); if (!it || it.src !== 'biz' || !it.uid) { box.style.display = 'none'; AG_FOR = ''; return; }
+  AG_FOR = it.uid; if (force) document.getElementById('agAt').textContent = '更新中…';
+  api({ op: 'assignAgenda', uid: it.uid, force: force ? 1 : 0, item: { partner: it.partner || '', displayName: it.displayName || '' } }).then(function(r) {
+    if (AG_FOR !== it.uid) return;
+    if (!r || !r.ok) { if (force) toast((r && r.error) || '用件を出せませんでした'); if (!force) box.style.display = 'none'; else document.getElementById('agAt').textContent = ''; return; }
+    if (!r.items || !r.items.length) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    document.getElementById('agAt').textContent = r.at ? new Date(r.at).toTimeString().slice(0, 5) + '時点' : '';
+    document.getElementById('agBody').innerHTML = r.items.map(function(a) {
+      return '<div class="ag"><span class="st' + (a.status === '返信待ち' ? ' wait' : '') + '">' + esc(a.status) + '</span><span style="flex:1">' + esc(a.item) + (a.why ? ' <span style="color:#718096;font-size:12px">' + esc(a.why) + '</span>' : '') + '</span><span class="tag ' + (a.owner === '吉永' ? 't-own-y' : 't-own-h') + '" style="margin:0">' + esc(a.owner) + 'さん</span></div>';
+    }).join('');
+  }).catch(function() { if (force) toast('通信できませんでした'); });
+}
+document.getElementById('agRefresh').onclick = function() { if (CUR) loadAgenda(CUR, true); };
 // ---- スタンプ：受信ログの本文は「パッケージ番号/スタンプ番号」。絵はLINEのスタンプ配信先から出す（読めなければ「（スタンプ）」に戻す・2026-10-06）
 function stickerId(t) { var m = String(t || '').match(/^\d{1,12}\/(\d{1,12})$/); return m ? m[1] : ''; }
 // 一覧の最後の1通は種類が分からないので、日付の書き方（10/6 など）と取り違えないようスタンプ番号が3桁以上のときだけ読み替える
@@ -558,7 +633,7 @@ function loadBiz(silent, force) {
   api(qb).then(function(r) {
     if (!r.ok || !Array.isArray(r.items)) { fail(r.error || '応答が不正'); return; }
     BIZ = r.items; try { localStorage.setItem('rakuruma_inbox_biz', JSON.stringify({ at: Date.now(), items: BIZ })); } catch(e) {}
-    renderList(); listDone_(force ? '工場・取引先を更新しました（未対応 ' + BIZ.filter(function(x) { return x.needsReply && !x.hidden; }).length + '件）' : '', force);
+    renderList(); bizOpenPending(); listDone_(force ? '工場・取引先を更新しました（未対応 ' + BIZ.filter(function(x) { return x.needsReply && !x.hidden; }).length + '件）' : '', force);
   }).catch(function(e) { fail((e && e.message) || String(e)); });
 }
 
@@ -632,8 +707,10 @@ function renderList() {
     if (q) return itemMatches(it, q);
     if (it.hidden) return false; // 非表示（検索では出す）
     if (TAB === 'need') return it.needsReply;
+    if (ownFilterOn()) return it.owner === ME; // 自分の番だけ（2026-10-16）
     return true;
   });
+  ownbarUpdate();
   var need = ITEMS.filter(function(it){ return it.needsReply; }).length + (BIZ || []).filter(function(it){ return it.needsReply; }).length;
   if (!q && TAB === 'biz' && BIZ === null) { document.getElementById('rows').innerHTML = '<div class="empty">読み込み中…</div>'; return; }
   document.getElementById('cnt').textContent = '未対応 ' + need + '件';
@@ -641,13 +718,13 @@ function renderList() {
   var tabAll = document.querySelector('.tabs [data-tab="all"]'), tabBiz = document.querySelector('.tabs [data-tab="biz"]');
   if (tabAll) tabAll.innerHTML = 'お客様' + (needCust ? '<span class="tabbadge">' + needCust + '</span>' : '');
   if (tabBiz) tabBiz.innerHTML = '工場・取引先' + (needBiz ? '<span class="tabbadge">' + needBiz + '</span>' : '');
-  if (!items.length) { document.getElementById('rows').innerHTML = '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : 'まだ記録がありません')) + '</div>'; return; }
+  if (!items.length) { document.getElementById('rows').innerHTML = '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : ownFilterOn() ? 'あなたの番の件はありません 🎉<br><span style="font-size:12px">他の件は上の「全部」で見られます</span>' : 'まだ記録がありません')) + '</div>'; return; }
   document.getElementById('rows').innerHTML = items.map(function(it, i) {
     var name = (it.customer && it.customer.name) ? custLabel(it) : bizLabel(it);
     var tags = '';
     if (it.customer && it.customer.contact) tags += '<span class="tag t-done">' + esc(custNote(it.customer)) + '</span>';
     if (it.sched && it.sched.length) tags += '<span class="tag t-sched">⏰ ' + esc(String(it.sched[0].at).slice(5).replace(/^0/, '').replace('/0', '/')) + ' 送信予約' + (it.sched.length > 1 ? '×' + it.sched.length : '') + '</span>';
-    if (it.src === 'biz') tags += '<span class="tag t-biz">工場・取引先</span>';
+    if (it.src === 'biz') tags += ownerTag(it) + '<span class="tag t-biz">工場・取引先</span>';
     else if (it.customer) tags += vehicleTags(it.customer); else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
     if (it.hidden) tags += '<span class="tag t-hidden">非表示中（開くと戻ります）</span>';
     if (it.noLine) tags += '<span class="tag t-new">LINE未連携</span>';
@@ -729,7 +806,7 @@ function openThread(it) {
     document.getElementById('btnLink').style.display = 'none';
     document.getElementById('btnMemo').style.display = 'none'; document.getElementById('btnChange').style.display = 'none';
     document.getElementById('memobox').style.display = 'none'; document.getElementById('changebox').style.display = 'none';
-    showMemoLine(''); showSchedLine(null);
+    showMemoLine(''); showSchedLine(null); ownShow(null, 'biz'); document.getElementById('agendabox').style.display = 'none';
     document.getElementById('note').textContent = '';
     document.getElementById('schedlist').innerHTML = '';
     document.getElementById('msgs').innerHTML = '<div class="sys">LINEがまだ紐付いていません。上の候補から本人を選ぶと、やりとりと送信ができるようになります</div>';
@@ -756,6 +833,7 @@ function openThread(it) {
   showMemoLine(it.customer && it.customer.memo);
   showSchedLine(it.sched);
   document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
+  ownShow(it.src === 'biz' ? it : null, 'biz'); document.getElementById('agendabox').style.display = 'none'; AG_FOR = '';
   if (cachedT) scrollBottom(); else window.scrollTo(0, 0);
   loadSched();
   api({ op:'thread', uid: it.uid, src: it.src }).then(function(r) {
@@ -774,6 +852,7 @@ function openThread(it) {
     }
     renderMsgs(it, r.messages || [], false);
     maybeProposeChange(it, r.messages || []);
+    if (it.src === 'biz') loadAgenda(it, false);
   }).catch(function(e) { document.getElementById('tRefresh').style.display = 'none'; if (!cachedT) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc((e && e.message) || '通信エラー') + '</div><div class="sys" style="cursor:pointer;background:var(--navy);color:#fff" onclick="openThread(CUR)">もう一度読み込む</div>'; else toast('最新を取れませんでした（前回の内容を表示中）'); });
   if (!TEMPLATES) api({ op:'templates' }).then(function(r) { TEMPLATES = (r.ok && r.templates) || []; renderTpl(); }); else renderTpl();
 }
@@ -1588,7 +1667,7 @@ window.addEventListener('popstate', function() {
 document.getElementById('tCust').onclick = function(e) { e.preventDefault(); if (CUR && CUR.customer && CUR.customer.row) openStaffPage('?action=customerDetail&row=' + CUR.customer.row); return false; };
 document.getElementById('reload').onclick = function(e) { e.preventDefault(); manualReload(); };
 Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(el) {
-  el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); var sq = document.getElementById('search'); if (sq.value) { sq.value = ''; } /* 検索中にタブを押したら検索を解除して切り替える（2026-09-15 吉永さん指摘「工場を押しても開かない」） */ renderList(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
+  el.onclick = function() { Array.prototype.forEach.call(document.querySelectorAll('.tabs div'), function(x){ x.classList.remove('on'); }); el.classList.add('on'); TAB = el.getAttribute('data-tab'); var sq = document.getElementById('search'); if (sq.value) { sq.value = ''; } /* 検索中にタブを押したら検索を解除して切り替える（2026-09-15 吉永さん指摘「工場を押しても開かない」） */ renderList(); ownbarUpdate(); if (TAB === 'biz' && BIZ === null) loadBiz(false); };
 });
 document.getElementById('search').addEventListener('input', function() { if (this.value.trim() && BIZ === null) loadBiz(false); renderList(); });
 document.getElementById('searchClear').onclick = function() { var i = document.getElementById('search'); i.value = ''; renderList(); i.focus(); };
@@ -1829,6 +1908,9 @@ if (RV_OPEN) openReviews();
 var CURAMA_RETRY = 0;
 // Chatworkの通知などから ?curama=<スレッドID> で来たら、くらマのタブでその件を開く（2026-10-02）
 var CURAMA_OPEN = (window.location.search.match(/[?&]curama=([0-9a-f-]{36})/) || [])[1] || '';
+var BIZ_OPEN = (window.location.search.match(/[?&]biz=([UCR][0-9a-f]{32})/) || [])[1] || '';
+if (BIZ_OPEN) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} var tb0 = document.querySelector('.tabs [data-tab="biz"]'); if (tb0) tb0.click(); }
+function bizOpenPending() { if (!BIZ_OPEN || !BIZ) return; var it = BIZ.filter(function(x) { return x.uid === BIZ_OPEN; })[0]; if (!it) return; BIZ_OPEN = ''; openThread(it); }
 if (CURAMA_OPEN || /[?&]_v=\d+/.test(window.location.search)) { try { history.replaceState(null, '', window.location.pathname); } catch (e) {} } // _v は「新しい版の自動読み直し」が付ける目印
 function curamaOpenPending() {
   if (!CURAMA_OPEN || !CITEMS) return;
@@ -1877,8 +1959,11 @@ function renderCurama() {
   if (!CITEMS) { rows.innerHTML = curamaStatusHtml() + '<div class="empty">読み込み中…</div>'; return; }
   var need = CITEMS.filter(function(x) { return x.needsReply; }).length;
   document.getElementById('cnt').textContent = 'くらマ未対応 ' + need + '件';
-  rows.innerHTML = curamaStatusHtml() + CITEMS.map(function(it, i) {
-    var tags = '';
+  ownbarUpdate();
+  var shown = ownFilterOn() ? CITEMS.filter(function(x) { return x.owner === ME; }) : CITEMS;
+  rows.innerHTML = curamaStatusHtml() + (shown.length ? '' : '<div class="empty">' + (ownFilterOn() ? 'あなたの番の件はありません 🎉<br><span style="font-size:12px">他の件は上の「全部」で見られます</span>' : 'まだ件がありません') + '</div>') + CITEMS.map(function(it, i) {
+    if (shown.indexOf(it) < 0) return '';
+    var tags = ownerTag(it);
     if (it.level === '赤') tags += '<span class="tag t-red">要判断</span>'; else if (it.level === '黄') tags += '<span class="tag t-yellow">日程・確認</span>'; else if (it.level === '緑') tags += '<span class="tag t-green">定型</span>';
     if (it.deepResult && it.deepResult.current) tags += '<span class="tag t-deep">🔎 調べ終わり</span>'; else if (it.deep === 'claimed' || it.deep === 'started') tags += '<span class="tag t-deep">Macで調査中</span>'; else if (it.deep === 'pending') tags += '<span class="tag t-deep">Macの調査待ち</span>'; else if (it.deep === 'sent') tags += '<span class="tag t-deep">Macから送信済み</span>';
     tags += '<span class="tag t-curama">' + esc(it.service || 'くらマ') + '</span>';
@@ -1915,6 +2000,7 @@ function openCurama(it, refresh) {
     document.getElementById('text').placeholder = 'くらマに送る文（AI生成の下書きを直してから送信）';
     document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
     var dl = document.getElementById('btnCDeep'); if (it.deepLink && IS_MAC) { dl.href = it.deepLink; dl.style.display = 'inline-block'; dl.title = it.deepTitle || ''; } else dl.style.display = 'none';
+    ownShow(it, 'curama'); document.getElementById('agendabox').style.display = 'none'; AG_FOR = '';
     document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
     curamaDeepBox(it);
     Array.prototype.forEach.call(document.querySelectorAll('.row[data-ci]'), function(el) { el.classList.toggle('sel', CITEMS[parseInt(el.getAttribute('data-ci'), 10)] === it); });
@@ -2190,6 +2276,7 @@ function onBackToPage() {
 document.addEventListener('visibilitychange', function() { if (document.visibilityState === 'visible') onBackToPage(); });
 window.addEventListener('pageshow', function(e) { if (e.persisted) onBackToPage(); });
 setTimeout(connectEvents, 1500);
+setTimeout(loadMe, 2500);
 // 新しい版の自動読み直し（2026-10-04）。タブを開きっぱなしにすると古い版のまま動き続け、直したはずの不具合が出る（10/3 追いメッセージが送れなかった）。
 // 配信中のページの中身（このスクリプト）と、いま動いている中身を比べ、違っていたら読み直す。入力中・箱を開いている間は読み直さず、帯で知らせて手が空いたら読み直す。
 // 見るのは：開いて20秒後／タブに戻ったとき／5分おき。読み直しても古いままのとき（配信の反映待ち）は2分は繰り返さない
