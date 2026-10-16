@@ -133,6 +133,8 @@
   .t-unopened { background:#FDE8E8; color:#B42318; font-weight:700; }
   .t-red { background:#E53E3E; color:#fff; font-weight:800; } .t-yellow { background:#FEFCBF; color:#975A16; font-weight:700; } .t-green { background:#E6F5EC; color:#1F7A45; }
   .t-deep { background:#EDE9FE; color:#5B21B6; font-weight:700; }
+  #cphist { margin:6px 12px 0; padding:8px 12px; border-radius:10px; background:#E8F1FF; color:#1A3D7C; border:1px solid #9CC0F5; font-size:13px; line-height:1.6; }
+  #cphist b { font-weight:800; }
   .durnote { margin:6px 0 2px; padding:8px 10px; border-radius:8px; font-size:13px; line-height:1.5; }
   .durnote.warn { background:#FFF3CD; color:#7A4B00; border:1px solid #F0C36D; font-weight:700; }
   .durnote.ok { background:#F0F4F8; color:#4A5568; }
@@ -331,6 +333,7 @@
     <div class="tpl" id="tpl"></div>
     <div class="box" style="margin-bottom:8px"><input id="intent" placeholder="どう返したい？（例：来週の午前で調整したい・やんわり）" style="flex:1;border:1.5px solid #C3A054;border-radius:14px;padding:9px 12px;font-size:15px;font-family:inherit"><button class="send" id="btnDraft" style="background:#C3A054">AI生成</button></div>
     <div id="cwarn"></div>
+    <div id="cphist" style="display:none"></div>
     <div id="cdeepbox" style="display:none;margin:8px 12px;padding:10px 12px;background:#FFFBEA;border:1px solid #D69E2E;border-radius:10px;font-size:14px;line-height:1.55">
       <div style="font-weight:700;color:#975A16;display:flex;align-items:center;gap:8px"><span style="flex:1">🔎 深掘りの結論 <span id="cdeepAt" style="font-weight:400;color:#718096;font-size:12px"></span></span><span id="cdeepFold" style="font-weight:400;font-size:12px;color:#975A16;cursor:pointer;border:1px solid #D69E2E;border-radius:6px;padding:2px 8px;background:#fff;white-space:nowrap">たたむ</span></div>
       <div id="cdeepBody">
@@ -1892,6 +1895,7 @@ function renderCurama() {
   Array.prototype.forEach.call(rows.querySelectorAll('.row[data-ci]'), function(el) { el.onclick = function() { openCurama(CITEMS[parseInt(el.getAttribute('data-ci'), 10)]); }; });
 }
 function openCurama(it, refresh) {
+  if (!refresh) showPriceHist(null); // 別の件の帯を残さない
   if (!it) return;
   var same = CURC && CURC.id === it.id;
   CUR = null; CURC = it; setCMode(true); CURC = it;
@@ -1920,6 +1924,7 @@ function openCurama(it, refresh) {
     if (!r.ok) { document.getElementById('msgs').innerHTML = '<div class="sys">' + esc(r.error || '読めませんでした') + '</div>'; return; }
     it.openUrl = r.openUrl;
     curamaDeepBox(r.thread && r.thread.deepResult ? r.thread : it);
+    showPriceHist(r.priceHistory || null);
     // 写真・PDFの添付も渡す（2026-10-13。VPSが署名付きURLを返しているのに、ここで落としていて「（受信）」の空の吹き出しになっていた）
     var msgs = (r.messages || []).map(function(m) { return { dir: m.dir, at: m.at, text: m.text, kind: m.kind, img: m.img || null, file: m.file || null }; });
     var fake = { uid: '', displayName: it.name };
@@ -1952,6 +1957,17 @@ function curamaDeepBox(it) {
   var ch = document.getElementById('cdeepChat'); if (it.deepLink && IS_MAC) { ch.href = it.deepLink; ch.style.display = ''; } else ch.style.display = 'none';
   box.style.display = 'block';
 }
+// 車種ごとの過去の金額（2026-10-16）：似た車種で前回いくらと答えたか・施工したかを出す。最終金額は吉永さんに確認
+function showPriceHist(ph) {
+  var el = document.getElementById('cphist'); if (!el) return;
+  if (!ph) { el.style.display = 'none'; return; }
+  var items = ph.items || [];
+  if (!items.length) { el.innerHTML = '💴 <b>' + esc(ph.work) + 'の過去の金額</b>：' + esc(ph.note || '似た車種の記録はまだありません') + '。金額は吉永さんに確認してください'; el.style.display = 'block'; return; }
+  el.innerHTML = '💴 <b>' + esc(ph.work) + '・似た車種の過去の金額</b>（金額は吉永さんに確認してください）<br>' + items.map(function(x) {
+    return '・' + esc(x.car) + '：<b>' + Number(x.amount).toLocaleString('ja-JP') + '円</b>（' + esc(x.date) + '・' + esc(x.source) + (x.by ? '・' + esc(x.by) : '') + '）';
+  }).join('<br>') + '<br>→ 吉永さんへ「前回 ' + esc(items[0].car) + ' は ' + Number(items[0].amount).toLocaleString('ja-JP') + '円でした。今回も同じでよいですか？」と聞く';
+  el.style.display = 'block';
+}
 function curamaDraft(btn) {
   var it = CURC; if (!it) return;
   var intent = document.getElementById('intent').value.trim();
@@ -1964,6 +1980,7 @@ function curamaDraft(btn) {
     var w = document.getElementById('cwarn');
     var notes = (r.warnings || []).slice(); if (r.partial) notes.push('最新の1通だけを読んで作った下書きです（くらマで未開封のため）');
     if (notes.length) { w.innerHTML = '⚠ ' + notes.map(esc).join('<br>⚠ '); w.style.display = 'block'; } else w.style.display = 'none';
+    showPriceHist(r.priceHistory || null);
     toast('下書きを入れました（' + (r.as || '') + 'の名前）。直してからコピーしてください');
   }).catch(function(e) { btn.disabled = false; btn.textContent = 'AI生成'; alert('通信エラー: ' + ((e && e.message) || e)); });
 }
