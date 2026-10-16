@@ -133,6 +133,9 @@
   .t-unopened { background:#FDE8E8; color:#B42318; font-weight:700; }
   .t-red { background:#E53E3E; color:#fff; font-weight:800; } .t-yellow { background:#FEFCBF; color:#975A16; font-weight:700; } .t-green { background:#E6F5EC; color:#1F7A45; }
   .t-deep { background:#EDE9FE; color:#5B21B6; font-weight:700; }
+  .durnote { margin:6px 0 2px; padding:8px 10px; border-radius:8px; font-size:13px; line-height:1.5; }
+  .durnote.warn { background:#FFF3CD; color:#7A4B00; border:1px solid #F0C36D; font-weight:700; }
+  .durnote.ok { background:#F0F4F8; color:#4A5568; }
   body.cmode .actions > .abtn:not(#btnCDone):not(#btnCDeep):not(#btnCBook), body.cmode #tpl, body.cmode #photoLabel, body.cmode #btnSend, body.cmode #tNext, body.cmode #tSched, body.cmode #tMemo, body.cmode #tCust, body.cmode #confirmBar, body.cmode #schedlist { display:none !important; }
   #btnCDone, #btnCSend, #cCopyRow, #cwarn { display:none; } body:not(.cmode) #btnCDeep { display:none !important; }
   body.cmode #btnCDone, body.cmode #btnCSend { display:inline-block; } body.cmode #cCopyRow { display:block; }
@@ -276,6 +279,7 @@
       <div class="bf"><span>訪問日</span><input id="ccfDate" type="date"></div>
       <div class="bf"><span>開始時刻</span><select id="ccfTime" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"></select></div>
       <div class="bf"><span>所要</span><select id="ccfHours" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"></select></div>
+      <div id="ccfDur" class="durnote" style="display:none"></div>
       <div id="ccfNote" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
     </div>
     <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="ccfGo" style="display:none;background:#DD6B20;border-color:#DD6B20;color:#fff">くらマで予約を確定する</span><span class="abtn" id="ccfClose">閉じる</span></div>
@@ -288,6 +292,8 @@
       <div class="bf"><span>電話</span><input id="cbkPhone" inputmode="tel"></div>
       <div class="bf"><span>住所</span><input id="cbkAddr"></div>
       <div class="bf"><span>訪問日時</span><input id="cbkDate" type="datetime-local"></div>
+      <div class="bf"><span>作業時間</span><select id="cbkDur" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"></select></div>
+      <div id="cbkDurNote" class="durnote" style="display:none"></div>
       <div class="bf"><span>車種</span><input id="cbkCar" placeholder="例：トヨタ プリウス"></div>
       <div class="bf"><span>部品</span><input id="cbkParts" placeholder="持ち込み機器（メーカー丨型番）"></div>
       <div class="bf"><span>作業内容</span><input id="cbkMenu" placeholder="例：カーナビ取付"></div>
@@ -2001,6 +2007,18 @@ function curamaBookShow(it) {
 }
 // 予約確定（2026-10-03）：リクエスト中の件だけ。希望日と開始時刻・所要を選び、確認してからくらマで確定→続けて予約登録の箱を開く
 document.getElementById('ccfClose').onclick = function() { document.getElementById('cconfbox').style.display = 'none'; };
+// 作業時間（2026-10-16）：料金マスターの「所要時間」から自動で入れる。決めきれないときは空欄＋「吉永さんに確認」の帯
+var DUR_MINS = [30, 45, 60, 90, 120, 150, 180, 210, 240, 300, 360, 420, 480];
+function durLabel(m) { m = +m; var h = Math.floor(m / 60), r = m % 60; return (h ? h + '時間' : '') + (r ? r + '分' : ''); }
+function fillDurSelect(sel, mins, asHours) {
+  var list = DUR_MINS.slice(); if (mins && list.indexOf(mins) < 0) { list.push(mins); list.sort(function(a, b) { return a - b; }); }
+  sel.innerHTML = (mins ? '' : '<option value="" selected>選んでください</option>') + list.map(function(m) { return '<option value="' + (asHours ? m / 60 : m) + '"' + (m === mins ? ' selected' : '') + '>' + durLabel(m) + '</option>'; }).join('');
+}
+function showDurNote(el, mins, reason, from) {
+  el.style.display = 'block';
+  if (mins) { el.className = 'durnote ok'; el.textContent = '作業時間は料金マスターから自動で入れました（' + (from || '') + '：' + durLabel(mins) + '）'; }
+  else { el.className = 'durnote warn'; el.textContent = '⚠️ 作業時間が決めきれません。吉永さんに確認してください（' + (reason || '理由不明') + '）'; }
+}
 function curamaConfirmUI(it) {
   var box = document.getElementById('cconfbox'), st = document.getElementById('ccfStatus'), form = document.getElementById('ccfForm'), go = document.getElementById('ccfGo'), btn = document.getElementById('btnCBook');
   box.style.display = 'block'; form.style.display = 'none'; go.style.display = 'none';
@@ -2022,14 +2040,15 @@ function curamaConfirmUI(it) {
       lab.appendChild(rd); lab.appendChild(document.createTextNode('第' + w.n + '希望　' + w.label)); dates.appendChild(lab);
     });
     if (r.worktimes && r.worktimes.length) pick(r.worktimes[0]);
-    var hs = document.getElementById('ccfHours'); hs.innerHTML = [1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6].map(function(h) { return '<option value="' + h + '"' + (h === r.hours ? ' selected' : '') + '>' + h + '時間</option>'; }).join('');
+    var hs = document.getElementById('ccfHours'); var hm = r.hours ? Math.round(r.hours * 60) : null; fillDurSelect(hs, hm, true); showDurNote(document.getElementById('ccfDur'), hm, r.durationNote, r.durationFrom);
     document.getElementById('ccfNote').textContent = '希望日と違う日にするときは「訪問日」を直してください（お客様と合意済みの日時だけ）。所要時間はくらマのカレンダーを塞ぐ長さです';
     form.style.display = 'block'; go.style.display = '';
     go.onclick = function() {
       var date = dateIn.value, tzId = timeSel.value, tname = timeSel.options[timeSel.selectedIndex] ? timeSel.options[timeSel.selectedIndex].textContent : '', hours = hs.value;
       if (!date) { alert('訪問日を選んでください'); return; }
       if (!tzId) { alert('開始時刻を選んでください'); return; }
-      if (!confirm('くらマで予約を確定します。お客様に通知が届き、手数料が確定します。取り消しはくらマの画面からのキャンセル扱いになります。\n\n' + r.name + 'さん\n' + date.replace(/-/g, '/') + ' ' + tname + '〜（' + hours + '時間）\n' + (r.total ? Number(r.total).toLocaleString('ja-JP') + '円' : '') + '\n\nよろしいですか？')) return;
+      if (!hours) { alert('所要（作業時間）を選んでください。決められないときは吉永さんに確認してください'); return; }
+      if (!confirm('くらマで予約を確定します。お客様に通知が届き、手数料が確定します。取り消しはくらマの画面からのキャンセル扱いになります。\n\n' + r.name + 'さん\n' + date.replace(/-/g, '/') + ' ' + tname + '〜（' + durLabel(Math.round(hours * 60)) + '）\n' + (r.total ? Number(r.total).toLocaleString('ja-JP') + '円' : '') + '\n\nよろしいですか？')) return;
       go.textContent = '確定中…'; go.style.pointerEvents = 'none';
       api({ op: 'curamaConfirm', id: it.id, date: date, tzId: tzId, hours: hours, calendarId: (r.calendars && r.calendars[0]) ? r.calendars[0].id : '' }).then(function(c) {
         go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = '';
@@ -2076,6 +2095,7 @@ function curamaBooking(it) {
     document.getElementById('cbkPrice').value = d.price ? String(d.price) : '';
     document.getElementById('cbkPay').value = d.payment || '';
     document.getElementById('cbkNote').value = d.note || '';
+    var du = r.duration || {}; fillDurSelect(document.getElementById('cbkDur'), du.minutes || null, false); showDurNote(document.getElementById('cbkDurNote'), du.minutes || null, du.reason, du.from);
     var notes = [];
     if (r.summary) notes.push('要約：' + r.summary);
     if (!d.car) notes.push('※車種がやりとりに無いので入れてください');
@@ -2093,15 +2113,16 @@ function curamaBooking(it) {
 function curamaBookingRegister(again) {
   var it = CURC; if (!it) return;
   var g = function(id) { return document.getElementById(id).value.trim(); };
-  var d = { name: g('cbkName'), phone: g('cbkPhone'), address: g('cbkAddr'), visitDate: g('cbkDate'), car: g('cbkCar'), parts: g('cbkParts'), menu: g('cbkMenu'), price: g('cbkPrice'), payment: g('cbkPay'), note: g('cbkNote'), staff: staffSelectedIn('cbkStaff') };
+  var d = { name: g('cbkName'), phone: g('cbkPhone'), address: g('cbkAddr'), visitDate: g('cbkDate'), car: g('cbkCar'), parts: g('cbkParts'), menu: g('cbkMenu'), price: g('cbkPrice'), payment: g('cbkPay'), note: g('cbkNote'), staff: staffSelectedIn('cbkStaff'), durationMin: g('cbkDur') };
   Object.assign(d, washFieldsValue('cbkStaff'));
   if (!d.name) { alert('お客様名を入れてください'); return; }
   if (!d.visitDate) { alert('訪問日時を入れてください'); return; }
   if (!d.car) { alert('車種を入れてください'); return; }
   if (!d.menu) { alert('作業内容を入れてください'); return; }
+  if (!d.durationMin) { alert('作業時間を選んでください。決められないときは吉永さんに確認してください'); return; }
   if (!washFieldsWarn('cbkStaff', d.staff)) return;
   var when = d.visitDate.replace('T', ' ');
-  if (!confirm((again ? '【登録済みの件をもう一度登録します】\n' : '') + 'この内容で予約登録します。予約一覧・カレンダー・顧客管理に入り、Chatwork通知も行われます。\n\n' + d.name + '\n' + when + '\n' + d.car + '／' + d.menu + (d.price ? '\n料金：' + d.price + '円' : '') + '\n担当：' + d.staff.join('・') + washSummaryText('cbkStaff'))) return;
+  if (!confirm((again ? '【登録済みの件をもう一度登録します】\n' : '') + 'この内容で予約登録します。予約一覧・カレンダー・顧客管理に入り、Chatwork通知も行われます。\n\n' + d.name + '\n' + when + '〜（' + durLabel(d.durationMin) + '）\n' + d.car + '／' + d.menu + (d.price ? '\n料金：' + d.price + '円' : '') + '\n担当：' + d.staff.join('・') + washSummaryText('cbkStaff'))) return;
   if (!CBOOK_REQ_ID) { try { CBOOK_REQ_ID = crypto.randomUUID(); } catch (e) { CBOOK_REQ_ID = 'cb' + Date.now() + Math.random().toString(16).slice(2); } }
   var btn = document.getElementById(again ? 'cbkAgain' : 'cbkRegister'); var label = btn.textContent; btn.textContent = '登録中…'; btn.style.pointerEvents = 'none';
   api({ op: 'curamaBookingRegister', id: it.id, data: d, requestId: CBOOK_REQ_ID, again: again ? 1 : 0 }).then(function(r) {
