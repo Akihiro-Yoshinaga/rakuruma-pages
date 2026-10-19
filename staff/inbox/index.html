@@ -66,17 +66,20 @@
   .ownbar .own-cnt { margin-left:auto; border:0; padding:0; font-size:12px; color:#718096; font-weight:500; cursor:default; }
   /* いまの用件（2026-10-19 詰めた）：1件1行（長い用件は…で切り、タップで全文）。補足は灰色で後ろに・担当は右端。7件目からは「他N件」で畳む */
   #agendabox { margin:6px 12px; padding:5px 10px 4px; background:#EBF4FF; border:1px solid #90CDF4; border-radius:10px; font-size:13.5px; line-height:1.4; }
-  #agendabox .agh { display:flex; align-items:center; gap:8px; font-weight:700; color:#2B5FA6; font-size:13px; min-height:24px; }
-  #agendabox .agh #agAt { flex:1; font-weight:400; color:#718096; font-size:11.5px; }
+  #agendabox .agh { display:flex; align-items:center; gap:6px; font-weight:700; color:#2B5FA6; font-size:13px; min-height:24px; cursor:pointer; -webkit-user-select:none; user-select:none; }
+  #agendabox .agh .agc { font-size:11px; width:10px; text-align:center; }
+  #agendabox .agh #agCnt { display:flex; gap:4px; }
+  #agendabox .agh #agAt { flex:1; min-width:0; font-weight:400; color:#718096; font-size:11.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #agendabox.shut #agBody { display:none; }
   #agRefresh { font-weight:400; font-size:12px; color:#2B5FA6; cursor:pointer; border:1px solid #90CDF4; border-radius:6px; padding:0 8px; line-height:20px; background:#fff; white-space:nowrap; }
   #agendabox .ag { display:flex; gap:6px; align-items:center; min-height:28px; padding:2px 0; border-top:1px solid #BEE3F8; cursor:pointer; }
   #agendabox .ag:first-child { border-top:0; }
   #agendabox .ag .tx { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   #agendabox .ag.open .tx { white-space:normal; }
   #agendabox .ag .why { color:#718096; font-size:11.5px; margin-left:4px; }
-  #agendabox .ag .st, #agendabox .ag .ow { font-size:10.5px; font-weight:700; border-radius:4px; padding:0 5px; line-height:18px; white-space:nowrap; flex:0 0 auto; }
-  #agendabox .ag .st { background:#fff; color:#2B5FA6; border:1px solid #90CDF4; }
-  #agendabox .ag .st.wait { background:#FFF1DB; color:#B06A00; border-color:#F6C87A; }
+  #agendabox .st, #agendabox .ag .ow { font-size:10.5px; font-weight:700; border-radius:4px; padding:0 5px; line-height:18px; white-space:nowrap; flex:0 0 auto; }
+  #agendabox .st { background:#fff; color:#2B5FA6; border:1px solid #90CDF4; }
+  #agendabox .st.wait { background:#FFF1DB; color:#B06A00; border-color:#F6C87A; }
   #agendabox .agmore { border-top:1px solid #BEE3F8; padding:4px 0 1px; font-size:12px; color:#2B5FA6; text-align:center; cursor:pointer; }
   .bf { display:flex; align-items:flex-start; gap:8px; margin-top:6px; }
   .bf > span { flex:0 0 64px; font-size:12px; color:#718096; padding-top:9px; }
@@ -354,7 +357,7 @@
     <div style="margin-top:8px"><span class="abtn" id="btnNew">この名前で新規登録</span></div>
   </div>
   <div class="note" id="note"></div>
-  <div id="agendabox" style="display:none"><div class="agh"><span>📋 いまの用件</span><span id="agAt"></span><span id="agRefresh">更新</span></div><div id="agBody"></div></div>
+  <div id="agendabox" style="display:none"><div class="agh" id="agHead" title="タップで開く・閉じる"><span class="agc" id="agCaret">▾</span><span>いまの用件</span><span id="agCnt"></span><span id="agAt"></span><span id="agRefresh">更新</span></div><div id="agBody"></div></div>
   <div class="msgs" id="msgs"></div>
   <div id="toBottom" onclick="scrollBottom(); updateToBottomBtn();">↓ 最新へ</div>
   <div class="compose">
@@ -499,12 +502,22 @@ function renderAgenda(items, at, busy) {
   if (!items || !items.length) { box.style.display = 'none'; return; }
   box.style.display = '';
   document.getElementById('agAt').textContent = agAtText(at, busy);
+  var n = {}; items.forEach(function(a) { n[a.status] = (n[a.status] || 0) + 1; });
+  document.getElementById('agCnt').innerHTML = ['返信待ち', '進行中'].filter(function(k) { return n[k]; }).map(function(k) { return '<span class="st' + (k === '返信待ち' ? ' wait' : '') + '">' + k + n[k] + '</span>'; }).join('');
+  agShut(agIsShut());
   var row = function(a, i) {
     return '<div class="ag"' + (i >= AG_MAX ? ' data-more="1" style="display:none"' : '') + ' title="' + esc(a.item + (a.why ? '（' + a.why + '）' : '')) + '"><span class="st' + (a.status === '返信待ち' ? ' wait' : '') + '">' + esc(a.status) + '</span><span class="tx">' + esc(a.item) + (a.why ? '<span class="why">' + esc(a.why) + '</span>' : '') + '</span><span class="ow ' + (a.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + esc(a.owner) + 'さん</span></div>';
   };
   var rest = items.length - AG_MAX;
   document.getElementById('agBody').innerHTML = items.map(row).join('') + (rest > 0 ? '<div class="agmore">他' + rest + '件 ▾</div>' : '');
 }
+// 見出しをタップで開閉（2026-10-19）。開閉は端末ごとに覚える
+function agIsShut() { try { return localStorage.getItem('rakuruma_inbox_agenda_shut') === '1'; } catch (e) { return false; } }
+function agShut(on) { document.getElementById('agendabox').classList.toggle('shut', !!on); document.getElementById('agCaret').textContent = on ? '▸' : '▾'; }
+document.getElementById('agHead').onclick = function(e) {
+  if (e.target.id === 'agRefresh') return;
+  var on = !agIsShut(); try { localStorage.setItem('rakuruma_inbox_agenda_shut', on ? '1' : '0'); } catch (x) {} agShut(on);
+};
 document.getElementById('agBody').onclick = function(e) {
   var more = e.target.closest('.agmore');
   if (more) { Array.prototype.forEach.call(this.querySelectorAll('.ag[data-more]'), function(el) { el.style.display = ''; }); more.remove(); return; }
@@ -524,7 +537,7 @@ function loadAgenda(it, force) {
     renderAgenda(r.items || [], now, false);
   }).catch(function() { if (AG_FOR !== it.uid) return; if (force) toast('通信できませんでした'); if (prev) document.getElementById('agAt').textContent = agAtText(prev.at, false); });
 }
-document.getElementById('agRefresh').onclick = function() { if (CUR) loadAgenda(CUR, true); };
+document.getElementById('agRefresh').onclick = function(e) { e.stopPropagation(); if (CUR) loadAgenda(CUR, true); };
 // ---- スタンプ：受信ログの本文は「パッケージ番号/スタンプ番号」。絵はLINEのスタンプ配信先から出す（読めなければ「（スタンプ）」に戻す・2026-10-06）
 function stickerId(t) { var m = String(t || '').match(/^\d{1,12}\/(\d{1,12})$/); return m ? m[1] : ''; }
 // 一覧の最後の1通は種類が分からないので、日付の書き方（10/6 など）と取り違えないようスタンプ番号が3桁以上のときだけ読み替える
