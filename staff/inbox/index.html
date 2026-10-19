@@ -2195,7 +2195,7 @@ function curamaConfirmUI(it) {
     // 開始時刻：くらマの画面と同じ30分刻み（7:00〜21:30）
     var times = []; for (var h = 7; h <= 21; h++) { times.push((h < 10 ? '0' : '') + h + ':00'); times.push((h < 10 ? '0' : '') + h + ':30'); }
     timeSel.innerHTML = times.map(function(t) { return '<option value="' + t + '"' + (t === '10:00' ? ' selected' : '') + '>' + t + '</option>'; }).join('');
-    function pick(w) { dateIn.value = w.date || ''; if (w.time) { var tt = w.time.length === 4 ? '0' + w.time : w.time; for (var i = 0; i < timeSel.options.length; i++) if (timeSel.options[i].value === tt) { timeSel.selectedIndex = i; break; } } }
+    function pick(w) { dateIn.value = w.date || ''; if (typeof renderNote === 'function') renderNote(); if (w.time) { var tt = w.time.length === 4 ? '0' + w.time : w.time; for (var i = 0; i < timeSel.options.length; i++) if (timeSel.options[i].value === tt) { timeSel.selectedIndex = i; break; } } }
     (r.worktimes || []).forEach(function(w, i) {
       var lab = document.createElement('label'); lab.style.cssText = 'display:flex;align-items:center;gap:6px;font-size:14px;padding:6px 8px;border:1px solid #CBD5E0;border-radius:8px;background:#fff';
       var rd = document.createElement('input'); rd.type = 'radio'; rd.name = 'ccfW'; rd.checked = i === 0; rd.onchange = function() { pick(w); };
@@ -2203,7 +2203,13 @@ function curamaConfirmUI(it) {
     });
     if (r.worktimes && r.worktimes.length) pick(r.worktimes[0]);
     var hs = document.getElementById('ccfHours'); var hm = r.hours ? Math.round(r.hours * 60) : null; fillDurSelect(hs, hm, true); showDurNote(document.getElementById('ccfDur'), hm, r.durationNote, r.durationFrom);
-    document.getElementById('ccfNote').textContent = '希望日と違う日時にするときは「訪問日」「開始時刻」を直してください（お客様と合意済みの日時だけ）。所要時間はくらマのカレンダーを塞ぐ長さです（くらマの画面は最短1時間・30分刻みなので、45分は1時間に切り上げます）。確定には1〜3分かかります';
+    // くらマのカレンダー1のその日の予定（重なると くらマが確定を拒否する・2026-10-19 秋山さんで判明）
+    function busyNote() {
+      var b = r.busy && r.busy[dateIn.value];
+      return (b ? '<div style="margin-top:4px;color:#2D3748"><b>' + esc(dateIn.value.replace(/-/g, '/')) + ' のくらマ カレンダー1</b>：' + (b.length ? esc(b.join('／')) : '予定なし') + '<br><span style="color:#C53030">重なる時間では確定できません</span></div>' : '');
+    }
+    function renderNote() { document.getElementById('ccfNote').innerHTML = '希望日と違う日時にするときは「訪問日」「開始時刻」を直してください（お客様と合意済みの日時だけ）。所要時間はくらマのカレンダーを塞ぐ長さです（くらマの画面は最短1時間・30分刻みなので、45分は1時間に切り上げます）。確定には1〜3分かかります' + busyNote(); }
+    renderNote(); dateIn.onchange = renderNote;
     form.style.display = 'block'; go.style.display = '';
     go.onclick = function() {
       var date = dateIn.value, time = timeSel.value, hours = hs.value;
@@ -2215,7 +2221,9 @@ function curamaConfirmUI(it) {
       go.textContent = '確定中…'; go.style.pointerEvents = 'none';
       var started = Date.now();
       api({ op: 'curamaConfirm', id: it.id, date: date, time: time, hours: hours }).then(function(c) {
-        if (!c.ok) { go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = ''; if (c.confirmed) { onConfirmed({ visitLabel: '' }, r); return; } if (c.forbidden) { alert(c.error); return; } showFallback(c.error || '確定できませんでした'); return; }
+        if (!c.ok) { go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = ''; if (c.confirmed) { onConfirmed({ visitLabel: '' }, r); return; } if (c.forbidden) { alert(c.error); return; }
+          if (c.overlap) { if (c.busy) { r.busy = r.busy || {}; r.busy[date] = c.busy; renderNote(); } alert(c.error); return; } // 重なり：フォームは残して時間を直してもらう（予約詳細ページでも同じく拒否される）
+          showFallback(c.error || '確定できませんでした'); return; }
         if (c.pending) { waitJob(r, started); return; }
         if (c.result && c.result.confirmed) { onConfirmed(c.result, r); return; }
         showFallback((c.result && c.result.error) || '確定できませんでした');
