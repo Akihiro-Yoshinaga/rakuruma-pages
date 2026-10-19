@@ -116,6 +116,10 @@
   /* スマホ：入力欄の下にホームバー分の余白（2026-10-12 下へスクロールするとiPhoneのアプリ切り替えが出ていた）。入力欄は画面の半分まで伸びる */
   .compose { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line); padding:8px 10px calc(22px + env(safe-area-inset-bottom)); z-index:6; }
   .msgs { padding-bottom:210px; }
+  /* 深掘りの結論の箱は固定表示の入力欄の中にあり、結論が長いと画面の上に突き抜けて「たたむ」に届かなかった（2026-10-19 平川さん報告）。
+     スマホでも高さを画面の4割までにして中でスクロールさせ、見出し（たたむ）は箱の上に固定する */
+  #cdeepbox { max-height:40vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  #cdeepbox > div:first-child { position:sticky; top:-10px; margin:-10px -12px 0; padding:10px 12px 6px; background:#FFFBEA; z-index:1; }
   .tpl { display:flex; gap:6px; overflow-x:auto; margin-bottom:8px; -webkit-overflow-scrolling:touch; }
   .tpl div { font-size:12px; font-weight:700; color:var(--navy); border:1.5px solid var(--navy); border-radius:14px; padding:5px 10px; white-space:nowrap; cursor:pointer; }
   .box { display:flex; gap:8px; align-items:flex-end; }
@@ -286,7 +290,8 @@
   </div>
   <div id="cconfbox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
     <b>くらマで予約を確定する</b> <span id="ccfStatus" style="color:#718096"></span>
-    <div style="font-size:12px;color:#718096;margin-top:2px">くらマの予約詳細ページの「訪問日時を選択する→予約を確定する」と同じ操作です。確定するとお客様に通知が届き、くらマの手数料が確定します。確定後に住所・電話番号が開示され、そのまま予約登録に進めます</div>
+    <div id="ccfGuide" style="font-size:13px;color:#2D3748;margin-top:4px;line-height:1.6"></div>
+    <div style="font-size:12px;color:#718096;margin-top:2px">確定するとお客様に通知が届き、くらマの手数料が確定します。確定後に住所・電話番号が開示され、この画面の「予約登録」に進めます</div>
     <div id="ccfForm" style="display:none;margin-top:8px">
       <div id="ccfInfo" style="font-size:13px;color:#2D3748;line-height:1.5"></div>
       <div class="bf"><span>希望日</span><div id="ccfDates" style="flex:1;display:flex;flex-direction:column;gap:6px"></div></div>
@@ -296,7 +301,7 @@
       <div id="ccfDur" class="durnote" style="display:none"></div>
       <div id="ccfNote" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
     </div>
-    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="ccfGo" style="display:none;background:#DD6B20;border-color:#DD6B20;color:#fff">くらマで予約を確定する</span><span class="abtn" id="ccfClose">閉じる</span></div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><a class="abtn ok" id="ccfOpen" href="#" target="_blank" rel="noopener" style="background:#DD6B20;border-color:#DD6B20;color:#fff">くらマの予約詳細を開く</a><span class="abtn" id="ccfRefresh">確定したので更新</span><span class="abtn ok" id="ccfGo" style="display:none;background:#DD6B20;border-color:#DD6B20;color:#fff">くらマで予約を確定する</span><span class="abtn" id="ccfClose">閉じる</span></div>
   </div>
   <div id="cbookbox" class="linkbox" style="display:none;background:#EEF7FF;border-color:#2B6CB0">
     <b>くらマ予約の登録</b> <span id="cbkStatus" style="color:#718096"></span>
@@ -2123,47 +2128,27 @@ function showDurNote(el, mins, reason, from) {
   else { el.className = 'durnote warn'; el.textContent = '⚠️ 作業時間が決めきれません。吉永さんに確認してください（' + (reason || '理由不明') + '）'; }
 }
 function curamaConfirmUI(it) {
-  var box = document.getElementById('cconfbox'), st = document.getElementById('ccfStatus'), form = document.getElementById('ccfForm'), go = document.getElementById('ccfGo'), btn = document.getElementById('btnCBook');
-  box.style.display = 'block'; form.style.display = 'none'; go.style.display = 'none';
-  st.textContent = '（くらマの予約情報を読んでいます…）'; btn.textContent = '読込中…';
+  // 2026-10-19 平川さん報告「予約できません」。受信箱からくらマのAPIを直接叩く確定は、くらマ側が画面遷移を経ない投稿を拒否して常に403（ログを全期間さかのぼって成功0件）。
+  // 確定はくらマの予約詳細ページで行ってもらい、ここでは案内とリンクだけ出す。確定後に「確定したので更新」で一覧を読み直すと「予約登録」に変わる。
+  // 旧コード（curamaResOptions→curamaConfirm）はVPS側に残してあるが、画面からは呼ばない。画面操作（Playwright）で確定する版は別作業。
+  var box = document.getElementById('cconfbox'), st = document.getElementById('ccfStatus'), form = document.getElementById('ccfForm'), go = document.getElementById('ccfGo');
+  box.style.display = 'block'; form.style.display = 'none'; go.style.display = 'none'; st.textContent = '';
+  var url = it.resCode ? 'https://curama.jp/shop/reservations/detail/' + encodeURIComponent(it.resCode) + '/' : 'https://curama.jp/shop/reservations/';
+  document.getElementById('ccfGuide').innerHTML = '確定はくらマの予約詳細ページで行います（この画面からの確定はくらマに受け付けてもらえません）。<br>'
+    + '1. 下の「くらマの予約詳細を開く」→「訪問日時を選択する」→ 日時を選んで「予約を確定する」<br>'
+    + '2. 戻ってきて「確定したので更新」を押すと、このボタンが「予約登録」に変わります'
+    + (it.resCode ? '<br><span style="color:#718096;font-size:12px">予約コード：' + esc(it.resCode) + '</span>' : '');
+  var a = document.getElementById('ccfOpen'); a.href = url;
+  document.getElementById('ccfRefresh').onclick = function() {
+    var b = document.getElementById('ccfRefresh'); b.textContent = '確認中…'; b.style.pointerEvents = 'none';
+    api({ op: 'curamaResOptions', id: it.id }).then(function(r) {
+      b.textContent = '確定したので更新'; b.style.pointerEvents = '';
+      if (r && r.confirmed) { it.resId = 1; it.resStatus = '予約確定'; box.style.display = 'none'; curamaBookShow(it); renderList(); loadCurama(true); toast('くらマで確定済みです。続けて予約登録できます'); curamaBooking(it); return; }
+      if (r && r.ok) { toast('くらマ側はまだ「予約リクエスト」のままです'); return; }
+      toast((r && r.error) || '確認できませんでした'); loadCurama(true);
+    }).catch(function() { b.textContent = '確定したので更新'; b.style.pointerEvents = ''; toast('通信エラー'); });
+  };
   revealBox(box);
-  api({ op: 'curamaResOptions', id: it.id }).then(function(r) {
-    curamaBookShow(it);
-    if (CURC !== it) return;
-    st.textContent = '';
-    if (!r.ok) { box.style.display = 'none'; if (r.confirmed) { it.resId = 1; it.resStatus = '予約確定'; curamaBookShow(it); renderList(); curamaBooking(it); return; } alert(r.error || '読めませんでした'); return; }
-    document.getElementById('ccfInfo').innerHTML = '<b>' + esc(r.name) + 'さん</b>　' + esc(r.city || '') + '　' + (r.total ? Number(r.total).toLocaleString('ja-JP') + '円' : '') + (r.fee ? '（手数料 ' + Number(r.fee).toLocaleString('ja-JP') + '円）' : '') + (r.items && r.items.length ? '<br>' + esc(r.items.join('、')) : '');
-    var dates = document.getElementById('ccfDates'); dates.innerHTML = '';
-    var dateIn = document.getElementById('ccfDate'), timeSel = document.getElementById('ccfTime');
-    timeSel.innerHTML = (r.times || []).map(function(t) { return '<option value="' + t.id + '">' + esc(t.name) + '</option>'; }).join('');
-    function pick(w) { dateIn.value = w.date || ''; if (w.time) { for (var i = 0; i < timeSel.options.length; i++) if (timeSel.options[i].textContent === w.time) { timeSel.selectedIndex = i; break; } } }
-    (r.worktimes || []).forEach(function(w, i) {
-      var lab = document.createElement('label'); lab.style.cssText = 'display:flex;align-items:center;gap:6px;font-size:14px;padding:6px 8px;border:1px solid #CBD5E0;border-radius:8px;background:#fff';
-      var rd = document.createElement('input'); rd.type = 'radio'; rd.name = 'ccfW'; rd.checked = i === 0; rd.onchange = function() { pick(w); };
-      lab.appendChild(rd); lab.appendChild(document.createTextNode('第' + w.n + '希望　' + w.label)); dates.appendChild(lab);
-    });
-    if (r.worktimes && r.worktimes.length) pick(r.worktimes[0]);
-    var hs = document.getElementById('ccfHours'); var hm = r.hours ? Math.round(r.hours * 60) : null; fillDurSelect(hs, hm, true); showDurNote(document.getElementById('ccfDur'), hm, r.durationNote, r.durationFrom);
-    document.getElementById('ccfNote').textContent = '希望日と違う日にするときは「訪問日」を直してください（お客様と合意済みの日時だけ）。所要時間はくらマのカレンダーを塞ぐ長さです';
-    form.style.display = 'block'; go.style.display = '';
-    go.onclick = function() {
-      var date = dateIn.value, tzId = timeSel.value, tname = timeSel.options[timeSel.selectedIndex] ? timeSel.options[timeSel.selectedIndex].textContent : '', hours = hs.value;
-      if (!date) { alert('訪問日を選んでください'); return; }
-      if (!tzId) { alert('開始時刻を選んでください'); return; }
-      if (!hours) { alert('所要（作業時間）を選んでください。決められないときは吉永さんに確認してください'); return; }
-      if (!confirm('くらマで予約を確定します。お客様に通知が届き、手数料が確定します。取り消しはくらマの画面からのキャンセル扱いになります。\n\n' + r.name + 'さん\n' + date.replace(/-/g, '/') + ' ' + tname + '〜（' + durLabel(Math.round(hours * 60)) + '）\n' + (r.total ? Number(r.total).toLocaleString('ja-JP') + '円' : '') + '\n\nよろしいですか？')) return;
-      go.textContent = '確定中…'; go.style.pointerEvents = 'none';
-      api({ op: 'curamaConfirm', id: it.id, date: date, tzId: tzId, hours: hours, calendarId: (r.calendars && r.calendars[0]) ? r.calendars[0].id : '' }).then(function(c) {
-        go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = '';
-        if (!c.ok) { alert(c.error || '確定できませんでした'); if (c.uncertain) box.style.display = 'none'; return; }
-        toast('くらマで予約を確定しました（' + (c.visitLabel || '') + '）');
-        it.resId = 1; it.resStatus = '予約確定'; it.resLine = '確定 ' + (c.visitLabel || '') + (r.total ? '／' + Number(r.total).toLocaleString('ja-JP') + '円' : '') + (r.city ? '／' + r.city : '');
-        box.style.display = 'none'; curamaBookShow(it); renderList(); loadCurama(true);
-        document.getElementById('tSub').textContent = 'くらしのマーケット・' + (it.service || '') + '・予約確定・' + it.resLine;
-        curamaBooking(it);
-      }).catch(function(e) { go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = ''; alert('通信エラーで、確定できたか分かりません。くらマの予約詳細ページで確認してください（' + ((e && e.message) || e) + '）'); });
-    };
-  }).catch(function(e) { curamaBookShow(it); st.textContent = ''; box.style.display = 'none'; alert('通信エラー: ' + ((e && e.message) || e)); });
 }
 function renderStaffChipsIn(boxId, sel) {
   var box = document.getElementById(boxId); box.innerHTML = '';
