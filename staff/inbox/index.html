@@ -64,11 +64,20 @@
   .ownbar span { font-size:13px; font-weight:700; color:#4A5568; border:1.5px solid #CBD5E0; border-radius:16px; padding:5px 14px; cursor:pointer; }
   .ownbar span.on { background:var(--navy); color:#fff; border-color:var(--navy); }
   .ownbar .own-cnt { margin-left:auto; border:0; padding:0; font-size:12px; color:#718096; font-weight:500; cursor:default; }
-  #agendabox { margin:8px 12px; padding:10px 12px; background:#EBF4FF; border:1px solid #90CDF4; border-radius:10px; font-size:14px; line-height:1.5; }
-  #agendabox .ag { display:flex; gap:8px; align-items:flex-start; padding:5px 0; border-top:1px solid #BEE3F8; }
-  #agendabox .ag:first-of-type { border-top:0; }
-  #agendabox .ag .st { font-size:11px; font-weight:700; border-radius:4px; padding:1px 6px; white-space:nowrap; background:#fff; color:#2B5FA6; border:1px solid #90CDF4; }
+  /* いまの用件（2026-10-19 詰めた）：1件1行（長い用件は…で切り、タップで全文）。補足は灰色で後ろに・担当は右端。7件目からは「他N件」で畳む */
+  #agendabox { margin:6px 12px; padding:5px 10px 4px; background:#EBF4FF; border:1px solid #90CDF4; border-radius:10px; font-size:13.5px; line-height:1.4; }
+  #agendabox .agh { display:flex; align-items:center; gap:8px; font-weight:700; color:#2B5FA6; font-size:13px; min-height:24px; }
+  #agendabox .agh #agAt { flex:1; font-weight:400; color:#718096; font-size:11.5px; }
+  #agRefresh { font-weight:400; font-size:12px; color:#2B5FA6; cursor:pointer; border:1px solid #90CDF4; border-radius:6px; padding:0 8px; line-height:20px; background:#fff; white-space:nowrap; }
+  #agendabox .ag { display:flex; gap:6px; align-items:center; min-height:28px; padding:2px 0; border-top:1px solid #BEE3F8; cursor:pointer; }
+  #agendabox .ag:first-child { border-top:0; }
+  #agendabox .ag .tx { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #agendabox .ag.open .tx { white-space:normal; }
+  #agendabox .ag .why { color:#718096; font-size:11.5px; margin-left:4px; }
+  #agendabox .ag .st, #agendabox .ag .ow { font-size:10.5px; font-weight:700; border-radius:4px; padding:0 5px; line-height:18px; white-space:nowrap; flex:0 0 auto; }
+  #agendabox .ag .st { background:#fff; color:#2B5FA6; border:1px solid #90CDF4; }
   #agendabox .ag .st.wait { background:#FFF1DB; color:#B06A00; border-color:#F6C87A; }
+  #agendabox .agmore { border-top:1px solid #BEE3F8; padding:4px 0 1px; font-size:12px; color:#2B5FA6; text-align:center; cursor:pointer; }
   .bf { display:flex; align-items:flex-start; gap:8px; margin-top:6px; }
   .bf > span { flex:0 0 64px; font-size:12px; color:#718096; padding-top:9px; }
   .bf input, .bf textarea { flex:1; font-size:15px; padding:8px; border:1px solid #CBD5E0; border-radius:8px; font-family:inherit; min-width:0; }
@@ -172,6 +181,7 @@
        PCでは箱を画面の1/3までにして中でスクロールさせ、やりとりの欄を最低限確保する */
     .linkbox { max-height:34vh; overflow-y:auto; flex:0 0 auto; }
     #cdeepbox { max-height:24vh; overflow-y:auto; }
+    #agendabox { margin:8px 20px 0; max-width:720px; flex:0 0 auto; }
     .msgs { min-height:180px; }
     body.gracing .msgs { padding-bottom:120px; }
     .compose { position:static; padding:10px 16px 14px; border-top:1px solid var(--line); }
@@ -344,7 +354,7 @@
     <div style="margin-top:8px"><span class="abtn" id="btnNew">この名前で新規登録</span></div>
   </div>
   <div class="note" id="note"></div>
-  <div id="agendabox" style="display:none"><div style="font-weight:700;color:#2B5FA6;display:flex;align-items:center;gap:8px"><span style="flex:1">📋 いまの用件 <span id="agAt" style="font-weight:400;color:#718096;font-size:12px"></span></span><span id="agRefresh" style="font-weight:400;font-size:12px;color:#2B5FA6;cursor:pointer;border:1px solid #90CDF4;border-radius:6px;padding:2px 8px;background:#fff;white-space:nowrap">更新</span></div><div id="agBody" style="margin-top:4px"></div></div>
+  <div id="agendabox" style="display:none"><div class="agh"><span>📋 いまの用件</span><span id="agAt"></span><span id="agRefresh">更新</span></div><div id="agBody"></div></div>
   <div class="msgs" id="msgs"></div>
   <div id="toBottom" onclick="scrollBottom(); updateToBottomBtn();">↓ 最新へ</div>
   <div class="compose">
@@ -472,20 +482,47 @@ function ownShow(it, kind) {
   };
 }
 // 工場・取引先トークの「いまの用件」（AIが直近のやりとりから抜く。新しい発言が無ければ前回の結果）
-var AG_FOR = '';
+// 2026-10-19：開いたときは端末に残した前回の結果を即表示→裏で作り直す。新着を受けたとき（pollThread）・送信後（openThread）も裏で作り直す。
+// 中継は新しい発言が無ければAIを呼ばず前回の結果を返すので、何度呼んでも重くない。「◯時点」は最後に確かめた時刻
+var AG_FOR = '', AG_MAX = 6;
+function agCacheGet(uid) { try { return JSON.parse(localStorage.getItem('rakuruma_inbox_agenda') || '{}')[uid] || null; } catch (e) { return null; } }
+function agCachePut(uid, items, at) {
+  try {
+    var c = JSON.parse(localStorage.getItem('rakuruma_inbox_agenda') || '{}'); c[uid] = { items: items, at: at };
+    Object.keys(c).sort(function(a, b) { return c[b].at - c[a].at; }).slice(30).forEach(function(k) { delete c[k]; });
+    localStorage.setItem('rakuruma_inbox_agenda', JSON.stringify(c));
+  } catch (e) {}
+}
+function agAtText(at, busy) { return (at ? new Date(at).toTimeString().slice(0, 5) + '時点' : '') + (busy ? (at ? '・' : '') + '更新中…' : ''); }
+function renderAgenda(items, at, busy) {
+  var box = document.getElementById('agendabox');
+  if (!items || !items.length) { box.style.display = 'none'; return; }
+  box.style.display = '';
+  document.getElementById('agAt').textContent = agAtText(at, busy);
+  var row = function(a, i) {
+    return '<div class="ag"' + (i >= AG_MAX ? ' data-more="1" style="display:none"' : '') + ' title="' + esc(a.item + (a.why ? '（' + a.why + '）' : '')) + '"><span class="st' + (a.status === '返信待ち' ? ' wait' : '') + '">' + esc(a.status) + '</span><span class="tx">' + esc(a.item) + (a.why ? '<span class="why">' + esc(a.why) + '</span>' : '') + '</span><span class="ow ' + (a.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + esc(a.owner) + 'さん</span></div>';
+  };
+  var rest = items.length - AG_MAX;
+  document.getElementById('agBody').innerHTML = items.map(row).join('') + (rest > 0 ? '<div class="agmore">他' + rest + '件 ▾</div>' : '');
+}
+document.getElementById('agBody').onclick = function(e) {
+  var more = e.target.closest('.agmore');
+  if (more) { Array.prototype.forEach.call(this.querySelectorAll('.ag[data-more]'), function(el) { el.style.display = ''; }); more.remove(); return; }
+  var ag = e.target.closest('.ag'); if (ag) ag.classList.toggle('open'); // 長い用件はタップで全文
+};
 function loadAgenda(it, force) {
   var box = document.getElementById('agendabox'); if (!it || it.src !== 'biz' || !it.uid) { box.style.display = 'none'; AG_FOR = ''; return; }
-  AG_FOR = it.uid; if (force) document.getElementById('agAt').textContent = '更新中…';
+  AG_FOR = it.uid;
+  var prev = agCacheGet(it.uid);
+  if (prev) renderAgenda(prev.items, prev.at, true); // 前回の結果を出したまま裏で作り直す（消してから出し直さない）
+  else if (force) document.getElementById('agAt').textContent = '更新中…';
   api({ op: 'assignAgenda', uid: it.uid, force: force ? 1 : 0, item: { partner: it.partner || '', displayName: it.displayName || '' } }).then(function(r) {
     if (AG_FOR !== it.uid) return;
-    if (!r || !r.ok) { if (force) toast((r && r.error) || '用件を出せませんでした'); if (!force) box.style.display = 'none'; else document.getElementById('agAt').textContent = ''; return; }
-    if (!r.items || !r.items.length) { box.style.display = 'none'; return; }
-    box.style.display = '';
-    document.getElementById('agAt').textContent = r.at ? new Date(r.at).toTimeString().slice(0, 5) + '時点' : '';
-    document.getElementById('agBody').innerHTML = r.items.map(function(a) {
-      return '<div class="ag"><span class="st' + (a.status === '返信待ち' ? ' wait' : '') + '">' + esc(a.status) + '</span><span style="flex:1">' + esc(a.item) + (a.why ? ' <span style="color:#718096;font-size:12px">' + esc(a.why) + '</span>' : '') + '</span><span class="tag ' + (a.owner === '吉永' ? 't-own-y' : 't-own-h') + '" style="margin:0">' + esc(a.owner) + 'さん</span></div>';
-    }).join('');
-  }).catch(function() { if (force) toast('通信できませんでした'); });
+    if (!r || !r.ok) { if (force) toast((r && r.error) || '用件を出せませんでした'); if (prev) document.getElementById('agAt').textContent = agAtText(prev.at, false); else if (!force) box.style.display = 'none'; else document.getElementById('agAt').textContent = ''; return; }
+    var now = Date.now();
+    agCachePut(it.uid, r.items || [], now);
+    renderAgenda(r.items || [], now, false);
+  }).catch(function() { if (AG_FOR !== it.uid) return; if (force) toast('通信できませんでした'); if (prev) document.getElementById('agAt').textContent = agAtText(prev.at, false); });
 }
 document.getElementById('agRefresh').onclick = function() { if (CUR) loadAgenda(CUR, true); };
 // ---- スタンプ：受信ログの本文は「パッケージ番号/スタンプ番号」。絵はLINEのスタンプ配信先から出す（読めなければ「（スタンプ）」に戻す・2026-10-06）
@@ -811,7 +848,7 @@ function openThread(it) {
     document.getElementById('btnLink').style.display = 'none';
     document.getElementById('btnMemo').style.display = 'none'; document.getElementById('btnChange').style.display = 'none';
     document.getElementById('memobox').style.display = 'none'; document.getElementById('changebox').style.display = 'none';
-    showMemoLine(''); showSchedLine(null); ownShow(null, 'biz'); document.getElementById('agendabox').style.display = 'none';
+    showMemoLine(''); showSchedLine(null); ownShow(null, 'biz'); document.getElementById('agendabox').style.display = 'none'; AG_FOR = '';
     document.getElementById('note').textContent = '';
     document.getElementById('schedlist').innerHTML = '';
     document.getElementById('msgs').innerHTML = '<div class="sys">LINEがまだ紐付いていません。上の候補から本人を選ぶと、やりとりと送信ができるようになります</div>';
@@ -838,7 +875,9 @@ function openThread(it) {
   showMemoLine(it.customer && it.customer.memo);
   showSchedLine(it.sched);
   document.getElementById('note').textContent = it.src === 'biz' ? '' : 'LINEアプリから手で返した分はここに出ません。返信はこの画面から。';
-  ownShow(it.src === 'biz' ? it : null, 'biz'); document.getElementById('agendabox').style.display = 'none'; AG_FOR = '';
+  ownShow(it.src === 'biz' ? it : null, 'biz');
+  var agPrev = it.src === 'biz' && agCacheGet(it.uid); AG_FOR = agPrev ? it.uid : ''; // 前回の用件を即表示（最新はやりとりを読んだあと loadAgenda で）
+  if (agPrev) renderAgenda(agPrev.items, agPrev.at, false); else document.getElementById('agendabox').style.display = 'none';
   if (cachedT) scrollBottom(); else window.scrollTo(0, 0);
   loadSched();
   api({ op:'thread', uid: it.uid, src: it.src }).then(function(r) {
@@ -1789,6 +1828,7 @@ function pollThread() {
     if (newIn.length) { var b = newIn[newIn.length - 1]; target.needsReply = true; target.unread = (target.unread || 0) + newIn.length; target.lastAt = b.at; target.lastText = String(b.text || '').slice(0, 80); target.lastDir = b.dir; toast('新しいメッセージが届きました'); }
     if (!atBottom) toast('新着があります（下にスクロール）');
     maybeProposeChange(target, r.messages);
+    if (target.src === 'biz') loadAgenda(target, false); // 発言が増えたら「いまの用件」も裏で作り直す
   }).catch(function() { THREAD_POLLING = false; });
 }
 setInterval(function() { if (document.visibilityState === 'visible') pollThread(); }, 30000);
