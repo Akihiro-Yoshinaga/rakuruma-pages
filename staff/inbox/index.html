@@ -294,6 +294,7 @@
       <div class="bf"><span>備考</span><textarea id="bkNote" rows="3"></textarea></div>
       <div class="bf"><span>担当</span><div id="bkStaff" style="flex:1;display:flex;gap:6px;flex-wrap:wrap"></div></div>
       <div id="bkWash" style="display:none"></div>
+      <div class="bf" id="bkIidaP" style="display:none"><span>駐車場</span><select id="bkIidaPSel" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"><option value="">選択してください（飯田さん担当は必須）</option><option value="あり">あり（Pあり）</option><option value="なし">なし（Pなし）</option></select></div>
       <div class="bf"><span>料金</span><input id="bkPrice" inputmode="numeric" placeholder="円（空でも可）"></div>
       <div class="bf"><span>2台目以降</span><textarea id="bkExtra" rows="2" placeholder="1行に1台：車種｜作業｜料金（例：ホンダ フィット｜ドラレコ取付｜15000）"></textarea></div>
       <div id="bkSummary" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
@@ -334,6 +335,7 @@
       <div class="bf"><span>備考</span><textarea id="cbkNote" rows="4"></textarea></div>
       <div class="bf"><span>担当</span><div id="cbkStaff" style="flex:1;display:flex;gap:6px;flex-wrap:wrap"></div></div>
       <div id="cbkWash" style="display:none"></div>
+      <div class="bf" id="cbkIidaP" style="display:none"><span>駐車場</span><select id="cbkIidaPSel" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"><option value="">選択してください（飯田さん担当は必須）</option><option value="あり">あり（Pあり）</option><option value="なし">なし（Pなし）</option></select></div>
       <div id="cbkSummary" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
       <div id="cbkResult" style="display:none;margin-top:8px;padding:8px 10px;background:#F0FFF4;border:1px solid #38A169;border-radius:8px;font-size:13px;line-height:1.5"></div>
     </div>
@@ -1554,13 +1556,15 @@ document.getElementById('bookRegister').onclick = function() {
   var it = CUR; if (!it) return;
   var d = { uid: it.uid, partner: document.getElementById('bkPartner').value.trim(), visitDate: document.getElementById('bkDate').value, car: document.getElementById('bkCar').value.trim(), menu: document.getElementById('bkMenu').value.trim(), address: document.getElementById('bkAddr').value.trim(), note: document.getElementById('bkNote').value.trim(), price: document.getElementById('bkPrice').value.trim(), staff: bookStaffSelected(), extraCars: bookExtraCars() };
   Object.assign(d, washFieldsValue('bkStaff'));
+  d.iidaParking = iidaPValue('bkStaff');
+  if (d.staff.indexOf('飯田') >= 0 && !d.iidaParking) { alert('飯田さん担当なので、駐車場のあり/なしを選んでください'); return; }
   if (!d.partner) { alert('工場名を入れてください'); return; }
   if (!d.visitDate) { alert('訪問日時を入れてください（提携工場の依頼は日時が必須です）'); return; }
   if (!d.car) { alert('車種を入れてください'); return; }
   if (!d.menu) { alert('作業内容を入れてください'); return; }
   if (!washFieldsWarn('bkStaff', d.staff)) return;
   var when = d.visitDate.replace('T', ' ');
-  if (!confirm('この内容で予約登録します。カレンダー登録とChatwork通知も行われます。\n\n' + d.partner + '\n' + when + '\n' + d.car + '／' + d.menu + (d.extraCars.length ? '\n＋' + d.extraCars.length + '台' : '') + '\n担当：' + d.staff.join('・') + (d.price ? '\n料金：' + d.price + '円' : '') + washSummaryText('bkStaff'))) return;
+  if (!confirm('この内容で予約登録します。カレンダー登録とChatwork通知も行われます。\n\n' + d.partner + '\n' + when + '\n' + d.car + '／' + d.menu + (d.extraCars.length ? '\n＋' + d.extraCars.length + '台' : '') + '\n担当：' + d.staff.join('・') + (d.iidaParking ? '（P' + d.iidaParking + '）' : '') + (d.price ? '\n料金：' + d.price + '円' : '') + washSummaryText('bkStaff'))) return;
   if (!BOOK_REQ_ID) { try { BOOK_REQ_ID = crypto.randomUUID(); } catch (e) { BOOK_REQ_ID = 'ib' + Date.now() + Math.random().toString(16).slice(2); } }
   d.requestId = BOOK_REQ_ID;
   var btn = document.getElementById('bookRegister'); btn.textContent = '登録中…'; btn.style.pointerEvents = 'none';
@@ -2288,10 +2292,25 @@ function renderStaffChipsIn(boxId, sel) {
   var box = document.getElementById(boxId); box.innerHTML = '';
   BOOK_STAFF.forEach(function(n) {
     var c = document.createElement('span'); c.className = 'schip' + (sel.indexOf(n) >= 0 ? ' on' : ''); c.textContent = n;
-    c.onclick = function() { var on = c.classList.contains('on'); if (on && box.querySelectorAll('.schip.on').length === 1) return; c.classList.toggle('on'); updateWashFields(boxId); };
+    c.onclick = function() { var on = c.classList.contains('on'); if (on && box.querySelectorAll('.schip.on').length === 1) return; c.classList.toggle('on'); updateWashFields(boxId); updateIidaP(boxId); };
     box.appendChild(c);
   });
+  var ps = document.getElementById(IIDA_P[boxId] + 'Sel'); if (ps) ps.value = '';
   updateWashFields(boxId);
+  updateIidaP(boxId);
+}
+// ---- 飯田さん担当の駐車場あり/なし（2026-10-22 平川さん依頼）----
+// 予約登録ページと同じく、担当に飯田さんを選ぶと出して必須にする。カレンダーの題名の頭に「Pあり」「Pなし」が付く
+var IIDA_P = { bkStaff: 'bkIidaP', cbkStaff: 'cbkIidaP' };
+function updateIidaP(boxId) {
+  var w = document.getElementById(IIDA_P[boxId]); if (!w) return;
+  var on = staffSelectedIn(boxId).indexOf('飯田') >= 0;
+  w.style.display = on ? 'flex' : 'none';
+  if (!on) document.getElementById(IIDA_P[boxId] + 'Sel').value = '';
+}
+function iidaPValue(boxId) {
+  if (staffSelectedIn(boxId).indexOf('飯田') < 0) return '';
+  return document.getElementById(IIDA_P[boxId] + 'Sel').value;
 }
 function staffSelectedIn(boxId) { return Array.prototype.map.call(document.querySelectorAll('#' + boxId + ' .schip.on'), function(c) { return c.textContent; }); }
 var CBOOK_REQ_ID = null;
@@ -2337,6 +2356,8 @@ function curamaBookingRegister(again) {
   var g = function(id) { return document.getElementById(id).value.trim(); };
   var d = { name: g('cbkName'), phone: g('cbkPhone'), address: g('cbkAddr'), visitDate: g('cbkDate'), car: g('cbkCar'), parts: g('cbkParts'), menu: g('cbkMenu'), price: g('cbkPrice'), payment: g('cbkPay'), note: g('cbkNote'), staff: staffSelectedIn('cbkStaff'), durationMin: g('cbkDur') };
   Object.assign(d, washFieldsValue('cbkStaff'));
+  d.iidaParking = iidaPValue('cbkStaff');
+  if (d.staff.indexOf('飯田') >= 0 && !d.iidaParking) { alert('飯田さん担当なので、駐車場のあり/なしを選んでください'); return; }
   if (!d.name) { alert('お客様名を入れてください'); return; }
   if (!d.visitDate) { alert('訪問日時を入れてください'); return; }
   if (!d.car) { alert('車種を入れてください'); return; }
@@ -2344,7 +2365,7 @@ function curamaBookingRegister(again) {
   if (!d.durationMin) { alert('作業時間を選んでください。決められないときは吉永さんに確認してください'); return; }
   if (!washFieldsWarn('cbkStaff', d.staff)) return;
   var when = d.visitDate.replace('T', ' ');
-  if (!confirm((again ? '【登録済みの件をもう一度登録します】\n' : '') + 'この内容で予約登録します。予約一覧・カレンダー・顧客管理に入り、Chatwork通知も行われます。\n\n' + d.name + '\n' + when + '〜（' + durLabel(d.durationMin) + '）\n' + d.car + '／' + d.menu + (d.price ? '\n料金：' + d.price + '円' : '') + '\n担当：' + d.staff.join('・') + washSummaryText('cbkStaff'))) return;
+  if (!confirm((again ? '【登録済みの件をもう一度登録します】\n' : '') + 'この内容で予約登録します。予約一覧・カレンダー・顧客管理に入り、Chatwork通知も行われます。\n\n' + d.name + '\n' + when + '〜（' + durLabel(d.durationMin) + '）\n' + d.car + '／' + d.menu + (d.price ? '\n料金：' + d.price + '円' : '') + '\n担当：' + d.staff.join('・') + (d.iidaParking ? '（P' + d.iidaParking + '）' : '') + washSummaryText('cbkStaff'))) return;
   if (!CBOOK_REQ_ID) { try { CBOOK_REQ_ID = crypto.randomUUID(); } catch (e) { CBOOK_REQ_ID = 'cb' + Date.now() + Math.random().toString(16).slice(2); } }
   var btn = document.getElementById(again ? 'cbkAgain' : 'cbkRegister'); var label = btn.textContent; btn.textContent = '登録中…'; btn.style.pointerEvents = 'none';
   api({ op: 'curamaBookingRegister', id: it.id, data: d, requestId: CBOOK_REQ_ID, again: again ? 1 : 0 }).then(function(r) {
