@@ -258,7 +258,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div><div class="sub" id="tOwn" style="display:none;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnCChange" style="display:none">訪問日時を変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -301,6 +301,19 @@
       <div id="bkResult" style="display:none;margin-top:8px;padding:8px 10px;background:#F0FFF4;border:1px solid #38A169;border-radius:8px;font-size:13px;line-height:1.5"></div>
     </div>
     <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="bookRegister" style="display:none">この内容で予約登録する</span><span class="abtn" id="bookOpen" style="display:none">登録ページで直す</span><span class="abtn" id="bookClose">閉じる</span></div>
+  </div>
+  <div id="cchgbox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
+    <b>くらマの訪問日時を変更する</b> <span id="cchStatus" style="color:#718096"></span>
+    <div style="font-size:12px;color:#718096;margin-top:2px">お客様とやりとりで日時を合意してから押してください。くらマの予約の訪問日時と、Googleカレンダーの予定（共有とスタッフのカレンダーの両方）を同じ日時に動かします</div>
+    <div id="cchGuide" style="font-size:13px;color:#2D3748;margin-top:4px;line-height:1.6"></div>
+    <div id="cchForm" style="display:none;margin-top:8px">
+      <div id="cchInfo" style="font-size:13px;color:#2D3748;line-height:1.6"></div>
+      <div class="bf"><span>訪問日</span><input id="cchDate" type="date"></div>
+      <div class="bf"><span>開始時刻</span><select id="cchTime" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"></select></div>
+      <div class="bf"><span>所要</span><select id="cchHours" style="flex:1;font-size:15px;padding:8px;border:1px solid #CBD5E0;border-radius:8px"></select></div>
+      <div id="cchNote" style="font-size:12px;color:#4A5568;margin-top:4px"></div>
+    </div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span class="abtn ok" id="cchGo" style="display:none;background:#DD6B20;border-color:#DD6B20;color:#fff">この日時に変更する</span><a class="abtn" id="cchOpen" href="#" target="_blank" rel="noopener" style="display:none">くらマの予約詳細を開く</a><span class="abtn" id="cchClose">閉じる</span></div>
   </div>
   <div id="cconfbox" class="linkbox" style="display:none;background:#FFF7E6;border-color:#DD6B20">
     <b>くらマで予約を確定する</b> <span id="ccfStatus" style="color:#718096"></span>
@@ -2052,7 +2065,7 @@ function openCurama(it, refresh) {
     document.body.classList.remove('nocur');
     document.getElementById('list').style.display = 'none';
     document.getElementById('thread').style.display = 'block';
-    ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox', 'cconfbox'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
+    ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox', 'cconfbox', 'cchgbox'].forEach(function(id) { var e = document.getElementById(id); if (e) e.style.display = 'none'; });
     document.querySelector('.compose').style.display = '';
     document.getElementById('tName').textContent = it.name;
     curamaBookShow(it);
@@ -2166,6 +2179,7 @@ document.getElementById('btnCopyOpen').onclick = function(e) {
 };
 // くらマ予約 → 予約登録（2026-10-03）。確定済みの件だけ。くらマの予約情報＋AIの抜き出しを入力済みにし、直してから予約管理GASへ登録（工場トークの「予約登録」と同じ入口・経路は「くらしのマーケット」）
 function curamaBookShow(it) {
+  var cb = document.getElementById('btnCChange'); cb.style.display = (it && !it.official && !it.cancelled && it.resId === 1) ? '' : 'none';
   var b = document.getElementById('btnCBook');
   if (!it || it.official || it.cancelled || !(it.resId === 0 || it.resId === 1)) { b.style.display = 'none'; return; }
   b.style.display = ''; b.textContent = it.resId === 0 ? 'くらマ予約を確定' : (it.booked ? '予約登録済み' : '予約登録');
@@ -2287,6 +2301,64 @@ function curamaConfirmUI(it) {
       }).catch(function(e) { go.textContent = 'くらマで予約を確定する'; go.style.pointerEvents = ''; showFallback('通信エラーで、確定できたか分かりません（' + ((e && e.message) || e) + '）。くらマの予約詳細ページで確認してください'); });
     };
   }).catch(function(e) { curamaBookShow(it); st.textContent = ''; showFallback('通信エラー: ' + ((e && e.message) || e)); });
+}
+// くらマの訪問日時を変更（2026-10-24 平川さん「くらマに日程変更ボタンがない」）：確定済みの件だけ。
+// 中継（VPS）がくらマの予約詳細ページで「訪問日時 → 変更する」を画面操作し、変わったら予約管理GASで共有＋スタッフの予定も同じ日時へ動かす。1〜3分かかる
+document.getElementById('cchClose').onclick = function() { document.getElementById('cchgbox').style.display = 'none'; };
+document.getElementById('btnCChange').onclick = function() { if (CURC) curamaChangeUI(CURC); };
+function curamaChangeUI(it) {
+  var box = document.getElementById('cchgbox'), st = document.getElementById('cchStatus'), form = document.getElementById('cchForm'), go = document.getElementById('cchGo'), guide = document.getElementById('cchGuide'), openA = document.getElementById('cchOpen');
+  var url = it.resCode ? 'https://curama.jp/shop/reservations/detail/' + encodeURIComponent(it.resCode) + '/' : 'https://curama.jp/shop/reservations/';
+  box.style.display = 'block'; form.style.display = 'none'; go.style.display = 'none'; openA.style.display = 'none'; openA.href = url; guide.innerHTML = '';
+  st.textContent = '（くらマの予約とカレンダーを読んでいます…）';
+  function fail(msg) { form.style.display = 'none'; go.style.display = 'none'; openA.style.display = ''; st.textContent = ''; guide.innerHTML = '<span style="color:#C53030;font-weight:700">' + esc(msg || '変更できませんでした') + '</span>'; revealBox(box); }
+  revealBox(box);
+  api({ op: 'curamaChangeInfo', id: it.id }).then(function(r) {
+    if (CURC !== it) return;
+    st.textContent = '';
+    if (!r.ok) { fail(r.error || '読めませんでした'); return; }
+    if (r.sameDay) { fail('訪問日の当日以降は、くらマの予約詳細に「変更する」が出ません（お会計に切り替わるため）。この件は吉永さんに相談してください'); return; }
+    var evs = (r.events || []).map(function(e) { return esc(e.cal) + '：' + esc(e.start.slice(5)) + '〜' + esc(e.end.slice(11)); });
+    document.getElementById('cchInfo').innerHTML = '<b>' + esc(r.name) + 'さん</b>　今のくらマの訪問日時：' + esc(r.visitLabel || '') + '<br>動かすカレンダーの予定：' + (evs.length ? evs.join('／') : '<span style="color:#C53030">見つかりません（くらマだけ変わります）</span>');
+    var dateIn = document.getElementById('cchDate'), timeSel = document.getElementById('cchTime'), hs = document.getElementById('cchHours');
+    var times = []; for (var h = 7; h <= 21; h++) { times.push((h < 10 ? '0' : '') + h + ':00'); times.push((h < 10 ? '0' : '') + h + ':30'); }
+    var cur = String(r.visitDate || ''), curT = cur.length >= 16 ? cur.slice(11, 16) : '10:00';
+    timeSel.innerHTML = times.map(function(t) { return '<option value="' + t + '"' + (t === curT ? ' selected' : '') + '>' + t + '</option>'; }).join('');
+    dateIn.value = cur.slice(0, 10);
+    fillDurSelect(hs, r.minutes || null, true);
+    document.getElementById('cchNote').innerHTML = '新しい訪問日と開始時刻を選んでください。所要時間はカレンダーの予定の長さです（くらマの画面は最短1時間・30分刻みなので、くらマ側は切り上げます）。くらマのカレンダー1の他の予定と重なる時間には変更できません';
+    form.style.display = 'block'; go.style.display = '';
+    go.onclick = function() {
+      var date = dateIn.value, time = timeSel.value, hours = hs.value;
+      if (!date || !time || !hours) { alert('訪問日・開始時刻・所要を選んでください'); return; }
+      if (!confirm('くらマの訪問日時を変更し、カレンダーの予定も動かします。お客様と合意済みの日時ですか？\n\n' + r.name + 'さん\n' + date.replace(/-/g, '/') + ' ' + time + '〜（' + durLabel(Math.round(hours * 60)) + '）\n\nよろしいですか？')) return;
+      go.textContent = '変更中…'; go.style.pointerEvents = 'none';
+      var started = Date.now();
+      function done(msg, ok) { go.textContent = 'この日時に変更する'; go.style.pointerEvents = ''; st.textContent = ''; if (ok) { box.style.display = 'none'; toast(msg); loadCurama(true); } else fail(msg); }
+      function view(c) {
+        if (!(c && c.ok && c.changed)) return done((c && c.error) || '変更できませんでした。くらマの予約詳細ページで訪問日時を確認してください', false);
+        var cal = c.calendar || {}, calMsg = cal.error ? '（カレンダーは動かせませんでした：' + cal.error + '）' : cal.none ? '（カレンダーに予定が見つからず、くらマだけ変わりました）' : '（カレンダー：' + (cal.moved || []).concat(cal.kept || []).join('・') + '）';
+        if (cal.error || cal.none) { done('くらマの訪問日時は変わりました' + calMsg, false); return; }
+        done('くらマの訪問日時を変更しました ' + date.replace(/-/g, '/') + ' ' + time + calMsg, true);
+      }
+      api({ op: 'curamaChange', id: it.id, date: date, time: time, hours: hours }).then(function(c) {
+        if (!c.ok) { go.textContent = 'この日時に変更する'; go.style.pointerEvents = ''; if (c.forbidden || c.overlap) { alert(c.error); return; } fail(c.error); return; }
+        if (!c.pending) { view(c.result); return; }
+        var tick = 0;
+        (function poll() {
+          tick++; if (tick > 140) { done('時間切れです。変わったか分からないので、くらマの予約詳細ページで確認してください', false); return; }
+          st.textContent = '（変更中… くらマの画面を操作しています。1〜3分かかります　' + Math.round((Date.now() - started) / 1000) + '秒）';
+          setTimeout(function() {
+            api({ op: 'curamaChangeStatus', id: it.id }).then(function(j) {
+              if (j && j.pending) { poll(); return; }
+              if (j && j.ok) { view(j.result); return; }
+              done((j && j.error) || '変更できたか分かりません', false);
+            }).catch(function() { poll(); });
+          }, 3000);
+        })();
+      }).catch(function(e) { done('通信エラーで、変わったか分かりません（' + ((e && e.message) || e) + '）。くらマの予約詳細ページで確認してください', false); });
+    };
+  }).catch(function(e) { fail('通信エラー: ' + ((e && e.message) || e)); });
 }
 function renderStaffChipsIn(boxId, sel) {
   var box = document.getElementById(boxId); box.innerHTML = '';
@@ -2428,7 +2500,7 @@ setTimeout(loadMe, 2500);
   function busy() {
     var t = document.getElementById('text'), it = document.getElementById('intent');
     if ((t && t.value.trim()) || (it && it.value.trim())) return true;
-    var boxes = ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox', 'cconfbox'];
+    var boxes = ['linkbox', 'pickbox', 'paybox', 'schedbox', 'memobox', 'changebox', 'bookbox', 'cbookbox', 'cconfbox', 'cchgbox'];
     for (var i = 0; i < boxes.length; i++) { var e = document.getElementById(boxes[i]); if (e && e.style.display && e.style.display !== 'none') return true; }
     var a = document.activeElement; if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && String(a.value || '').trim()) return true;
     return false;
