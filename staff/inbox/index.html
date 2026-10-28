@@ -60,6 +60,7 @@
   .t-hidden { background:#FDE8E8; color:#B42318; font-weight:700; }
   /* 誰の番か（2026-10-16）：平川さん＝青・吉永さん＝赤のベタ塗り。手で回した件は「↩」付き */
   .t-own-h { background:#2B6CB0; color:#fff; font-weight:800; } .t-own-y { background:#C53030; color:#fff; font-weight:800; }
+  .t-own-done { background:#E2E8F0; color:#2D3748; font-weight:700; } /* 吉永さんが返信済み（お客様の次の発言までの札・2026-10-28） */
   .ownbar { display:none; gap:6px; padding:8px 16px; background:#fff; border-bottom:1px solid var(--line); align-items:center; }
   .ownbar span { font-size:13px; font-weight:700; color:#4A5568; border:1.5px solid #CBD5E0; border-radius:16px; padding:5px 14px; cursor:pointer; }
   .ownbar span.on { background:var(--navy); color:#fff; border-color:var(--navy); }
@@ -467,7 +468,7 @@ function loadMe() {
 }
 function ownOther() { return ME === '吉永' ? '平川' : ME === '平川' ? '吉永' : ''; }
 function ownFilterOn() { return !!ME && OWN_FILTER === 'me' && (TAB === 'biz' || TAB === 'curama'); }
-function ownerTag(it) { if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
+function ownerTag(it) { if (it && !it.owner && it.repliedBy) return '<span class="tag t-own-done">✅ ' + esc(it.repliedBy) + 'さん返信済み</span>'; if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
 function ownbarUpdate() {
   var bar = document.getElementById('ownbar'); if (!bar) return;
   var show = !!ME && (TAB === 'biz' || TAB === 'curama') && !normQ(document.getElementById('search').value);
@@ -478,9 +479,11 @@ function ownbarUpdate() {
   document.getElementById('ownCnt').textContent = '自分 ' + mine + '件・' + (ownOther() || '相手') + 'さん ' + theirs + '件';
 }
 Array.prototype.forEach.call(document.querySelectorAll('#ownbar span[data-f]'), function(el) { el.onclick = function() { OWN_FILTER = el.getAttribute('data-f'); try { localStorage.setItem('rakuruma_inbox_ownfilter', OWN_FILTER); } catch (e) {} renderList(); }; });
+function fmtRepliedAt(ms) { var d = new Date(ms); return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + ('0' + d.getMinutes()).slice(-2); }
 // 開いている件の見出しと「回す」ボタン
 function ownShow(it, kind) {
   var line = document.getElementById('tOwn'), btn = document.getElementById('btnHand');
+  if (it && !it.owner && it.repliedBy) { line.style.display = ''; line.textContent = '✅ ' + it.repliedBy + 'さんが' + (it.repliedAt ? fmtRepliedAt(it.repliedAt) + 'に' : '') + '返信済み（次の手があれば' + (it.repliedBy === '吉永' ? '平川' : '吉永') + 'さんの番）'; btn.style.display = 'none'; return; }
   if (!it || !it.owner) { line.style.display = 'none'; btn.style.display = 'none'; return; }
   line.style.display = ''; line.textContent = '👤 ' + it.owner + 'さんの番' + (it.ownerBy ? '（' + it.ownerBy + 'さんが回した' + (it.ownerNote ? '：' + it.ownerNote : '') + '）' : '');
   if (!ME) { btn.style.display = 'none'; return; }
