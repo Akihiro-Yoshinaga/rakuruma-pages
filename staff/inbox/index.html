@@ -259,7 +259,7 @@
 <div id="thread">
   <div class="hdrwrap">
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div><div class="sub" id="tOwn" style="display:none;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
-  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnCChange" style="display:none">訪問日時を変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span></div>
+  <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnCChange" style="display:none">訪問日時を変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span><span class="abtn" id="btnOwnDone" style="display:none">済みにする</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -468,7 +468,7 @@ function loadMe() {
 }
 function ownOther() { return ME === '吉永' ? '平川' : ME === '平川' ? '吉永' : ''; }
 function ownFilterOn() { return !!ME && OWN_FILTER === 'me' && (TAB === 'biz' || TAB === 'curama'); }
-function ownerTag(it) { if (it && !it.owner && it.repliedBy) return '<span class="tag t-own-done">✅ ' + esc(it.repliedBy) + 'さん返信済み</span>'; if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
+function ownerTag(it) { if (it && !it.owner && it.repliedBy) return '<span class="tag t-own-done">✅ ' + esc(it.repliedBy) + 'さん返信済み</span>'; if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerInstr ? '📝 ' : it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
 function ownbarUpdate() {
   var bar = document.getElementById('ownbar'); if (!bar) return;
   var show = !!ME && (TAB === 'biz' || TAB === 'curama') && !normQ(document.getElementById('search').value);
@@ -482,11 +482,26 @@ Array.prototype.forEach.call(document.querySelectorAll('#ownbar span[data-f]'), 
 function fmtRepliedAt(ms) { var d = new Date(ms); return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + ('0' + d.getMinutes()).slice(-2); }
 // 開いている件の見出しと「回す」ボタン
 function ownShow(it, kind) {
-  var line = document.getElementById('tOwn'), btn = document.getElementById('btnHand');
+  var line = document.getElementById('tOwn'), btn = document.getElementById('btnHand'), doneBtn = document.getElementById('btnOwnDone');
+  doneBtn.style.display = 'none';
   if (it && !it.owner && it.repliedBy) { line.style.display = ''; line.textContent = '✅ ' + it.repliedBy + 'さんが' + (it.repliedAt ? fmtRepliedAt(it.repliedAt) + 'に' : '') + '返信済み（次の手があれば' + (it.repliedBy === '吉永' ? '平川' : '吉永') + 'さんの番）'; btn.style.display = 'none'; return; }
   if (!it || !it.owner) { line.style.display = 'none'; btn.style.display = 'none'; return; }
-  line.style.display = ''; line.textContent = '👤 ' + it.owner + 'さんの番' + (it.ownerBy ? '（' + it.ownerBy + 'さんが回した' + (it.ownerNote ? '：' + it.ownerNote : '') + '）' : '');
+  line.style.display = '';
+  if (it.ownerInstr) line.textContent = '📝 ' + it.ownerBy + 'さんの指示' + (it.ownerAt ? '（' + fmtRepliedAt(it.ownerAt) + '）' : '') + '：' + (it.ownerNote || '') + '　→ ' + it.owner + 'さんの番';
+  else line.textContent = '👤 ' + it.owner + 'さんの番' + (it.ownerBy ? '（' + it.ownerBy + 'さんが回した' + (it.ownerNote ? '：' + it.ownerNote : '') + '）' : '');
   if (!ME) { btn.style.display = 'none'; return; }
+  if (it.ownerBy && it.owner === ME) { // 回された・指示された件は「済みにする」で上書きを消せる（番は色の自動判定に戻る・2026-10-28）
+    doneBtn.style.display = '';
+    doneBtn.onclick = function() {
+      if (!confirm((it.ownerInstr ? '指示' : '回された件') + 'を済みにします。札は自動判定に戻ります。よろしいですか？')) return;
+      doneBtn.textContent = '戻しています…';
+      api({ op: 'assignClear', kind: kind, id: kind === 'curama' ? it.id : it.uid }).then(function(r) {
+        doneBtn.textContent = '済みにする';
+        if (!r || !r.ok) { toast((r && r.error) || '戻せませんでした'); return; }
+        it.owner = ''; it.ownerBy = ''; it.ownerNote = ''; it.ownerInstr = false; ownShow(it, kind); toast('済みにしました'); renderList();
+      }).catch(function() { doneBtn.textContent = '済みにする'; toast('通信できませんでした'); });
+    };
+  }
   var to = it.owner === ME ? ownOther() : ME; if (!to) { btn.style.display = 'none'; return; }
   btn.style.display = ''; btn.textContent = it.owner === ME ? to + 'さんに回す' : '自分の番にする';
   btn.onclick = function() {
