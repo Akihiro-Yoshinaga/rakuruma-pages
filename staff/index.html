@@ -161,6 +161,15 @@
       <div class="arrow">›</div>
     </a>
 
+    <a class="tool" data-tool="kentei" data-gas="rsv" data-q="?action=kenteiHome" style="display:none">
+      <div class="icon green">📋</div>
+      <div class="txt">
+        <div class="name">単独検定</div>
+        <div class="desc">検定にする案件を選ぶ・採点・手直しの記録</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
     <div class="group-title">発信・記事</div>
 
     <a class="tool" data-tool="blogTodo" data-gas="rsv" data-q="?page=blogTodo">
@@ -250,7 +259,7 @@ document.getElementById('loginBtn').href =
   fetch(RSV_GAS + '?action=staffCheck&token=' + encodeURIComponent(token))
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      if (d && d.valid) { saveTools(d.tools); applyTools(d.tools === undefined ? null : d.tools); return; } // 有効。使えるページだけ表示
+      if (d && d.valid) { saveKentei(d.kentei); saveTools(d.tools); applyTools(d.tools === undefined ? null : d.tools); return; } // 有効。使えるページだけ表示
       clearToken();
       showGate('ログインの有効期限が切れました。もう一度ログインしてください。');
     })
@@ -286,9 +295,12 @@ function showTools(token) {
 // スタッフごとに使えるページ（予約管理GASの staffCheck が返す。null＝全部）。前回の結果を先に当てて、ちらつきを防ぐ
 function savedTools() { try { var v = localStorage.getItem('rakuruma_staff_tools'); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
 function saveTools(t) { try { if (Array.isArray(t)) localStorage.setItem('rakuruma_staff_tools', JSON.stringify(t)); else localStorage.removeItem('rakuruma_staff_tools'); } catch (e) {} }
+// 単独検定は吉永さんだけに出す（staffCheck の kentei）
+function savedKentei() { try { return localStorage.getItem('rakuruma_staff_kentei') === '1'; } catch (e) { return false; } }
+function saveKentei(v) { try { if (v) localStorage.setItem('rakuruma_staff_kentei', '1'); else localStorage.removeItem('rakuruma_staff_kentei'); } catch (e) {} }
 function applyTools(tools) {
   var all = document.querySelectorAll('a.tool[data-tool]');
-  for (var i = 0; i < all.length; i++) all[i].style.display = (!Array.isArray(tools) || tools.indexOf(all[i].getAttribute('data-tool')) !== -1) ? '' : 'none';
+  for (var i = 0; i < all.length; i++) all[i].style.display = (all[i].getAttribute('data-tool') === 'kentei' ? savedKentei() : (!Array.isArray(tools) || tools.indexOf(all[i].getAttribute('data-tool')) !== -1)) ? '' : 'none';
   // 中身が全部隠れた見出しは隠す
   var secs = document.querySelectorAll('#tools .group-title');
   for (var j = 0; j < secs.length; j++) {
@@ -299,6 +311,7 @@ function applyTools(tools) {
 }
 function clearToken() {
   try { localStorage.removeItem('rakuruma_staff_tools'); } catch (e) {}
+  try { localStorage.removeItem('rakuruma_staff_kentei'); } catch (e) {}
   try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 }
 
