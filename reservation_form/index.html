@@ -849,6 +849,14 @@
         <label for="note">その他補足・ご要望</label>
         <textarea id="note" name="note" rows="3" placeholder="気になること・ご要望などご自由にお書きください"></textarea>
       </div>
+      <div class="field" style="margin:16px 0 0;">
+        <label for="arrival_contact">到着前のご連絡</label>
+        <select id="arrival_contact" name="arrival_contact">
+          <option value="">不要</option>
+          <option value="電話">お電話でほしい</option>
+          <option value="メッセージ">LINEのメッセージでほしい</option>
+        </select>
+      </div>
     </div>
 
     <!-- 送信ボタン -->
@@ -1537,6 +1545,7 @@
       anshin_check:    document.getElementById('anshin_check')?.checked ? '希望する' : '',
       options:         selectedOptions,
       note:            document.getElementById('note')?.value.trim() || '',
+      arrival_contact: document.getElementById('arrival_contact')?.value || '',
       // 導線の記録：src=リッチメニュー等の導線キー／参照元URL（どちらも無ければ「直接」扱い）
       src:             (typeof RM_SRC !== 'undefined' ? RM_SRC : '') || '',
       ref:             (document.referrer || '').slice(0, 120),
