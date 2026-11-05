@@ -749,7 +749,7 @@ function itemMatches(it, q) {
 // 車ごとのタグ：複数台なら「車名 車検 日付」を車ごとに。1台なら従来どおり
 // 表示名：LINE連絡先名（このLINEの相手）があればそれを優先。顧客本人は補足に出す
 // 工場・取引先の表示：「取引先名（担当者名）」。取引先名が未設定ならLINEの表示名だけ
-function bizLabel(it) { var p = it.partner || '', c = it.contact || '', d = it.displayName || ''; if (it.isGroup) return '👥 ' + (p ? p + ' ' : '') + 'グループ' + (d && d !== 'グループ' ? '（' + d + '）' : ''); var head = p + (c ? (p ? ' ' : '') + c : ''); if (head && d && head !== d) return head + '（' + d + '）'; return head || d || '（表示名なし）'; }
+function bizLabel(it) { var p = it.partner || '', c = it.contact || '', d = it.displayName || ''; if (it.isMail) return '✉️ ' + (p || 'メール') + '（メール）'; /* 取引先とのメール（2026-11-05・読むだけ） */ if (it.isGroup) return '👥 ' + (p ? p + ' ' : '') + 'グループ' + (d && d !== 'グループ' ? '（' + d + '）' : ''); var head = p + (c ? (p ? ' ' : '') + c : ''); if (head && d && head !== d) return head + '（' + d + '）'; return head || d || '（表示名なし）'; }
 // グループの発言者の呼び名：個人の連絡先に担当者名があればそれ（後藤さん）、無ければLINE表示名
 function groupSenderLabel(m) { var b = (BIZ || []).filter(function(x) { return x.uid === m.senderUid; })[0]; return (b && bizWho(b)) || m.sender || ''; }
 function bizWho(it) { var c = String((it && it.contact) || '').replace(/(さん|様|さま)$/, '').trim().split(/[\s\u3000]+/)[0]; return c ? c + 'さん' : ''; }
@@ -981,7 +981,7 @@ function openThread(it) {
   document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
   loadNextEvent(it);
   loadFormResFor(it);
-  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
+  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.isMail ? 'メールのやりとり（support@rakuruma.com）。ここからは送れません。返信はGmailから' : it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = '#'; } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
