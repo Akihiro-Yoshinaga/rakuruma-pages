@@ -722,7 +722,7 @@ function loadList(manual, force) {
     ITEMS = r.items; OTHERS = r.others || []; STAFF = r.staff || STAFF;
     try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
     renderList();
-    loadFormRes(manual || force);
+    loadFormRes(manual || force); loadEve(manual || force);
     if (PENDING_OPEN) { var po = ITEMS.concat(OTHERS).filter(function(x) { return x.uid === PENDING_OPEN; })[0]; PENDING_OPEN = ''; if (po) openThread(po); }
     listDone_('お客様を更新しました（' + new Date().toTimeString().slice(0, 5) + '・未対応 ' + ITEMS.filter(function(x) { return x.needsReply; }).length + '件）', manual);
     if (!manual && !force) loadBiz(true); // 工場・取引先のバッジを出すため常に裏で読む（手動更新・開いた直後は同時に読んでいる）
@@ -837,6 +837,86 @@ function loadFormResFor(it) {
   var pre = FORMRES.filter(function(x) { return x.uid === it.uid; }); if (pre.length) show(pre);
   api({ op:'formRes', uid: it.uid }).then(function(r) { if (r && r.ok && Array.isArray(r.items)) show(r.items); }).catch(function() {});
 }
+// 明日の前日連絡（2026-11-05・承認制）：下書きは予約管理GAS（雛形E）、くらマの件の照合はVPS。文面を見て「送る」を押したときだけ送る。
+// 18:00に送っていない件が残っていればChatworkで知らせる。今日すでに「明日」を含む文を送った件は畳んで出す
+var EVE = null, EVE_AT = 0;
+function loadEve(force) {
+  if (!force && Date.now() - EVE_AT < 300000) return;
+  EVE_AT = Date.now();
+  api({ op:'eveList' }).then(function(r) {
+    if (!r || !r.ok || !Array.isArray(r.items)) { EVE_AT = 0; return; }
+    if (EVE && EVE.date === r.date) r.items.forEach(function(x) { var o = EVE.items.filter(function(y) { return y.key === x.key; })[0]; if (o && o.edited) x.edited = o.edited; if (o && o.mark && !x.mark) x.mark = o.mark; });
+    EVE = r;
+    if (document.getElementById('list').style.display !== 'none' && (TAB === 'all' || TAB === 'need')) renderList();
+  }).catch(function() { EVE_AT = 0; });
+}
+function eveOpen(x) { return !(x.mark && x.mark.state !== '戻す'); }
+function eveBoxHtml() {
+  if (!EVE || !EVE.items) return '';
+  var items = EVE.items.filter(eveOpen);
+  if (!items.length) return '';
+  var dd = EVE.date.split('-'), dw = '日月火水木金土'.charAt(new Date(+dd[0], +dd[1] - 1, +dd[2]).getDay());
+  var todo = items.filter(function(x) { return !x.sentToday; }).length;
+  return '<div class="frbox evebox"><div class="frh">明日 ' + (+dd[1]) + '/' + (+dd[2]) + '(' + dw + ') の前日連絡　' + (todo ? 'まだ ' + todo + '件' : '残りは送信済みの確認だけ') + '</div>'
+    + items.map(function(x, i) {
+      var ch = x.channel === 'curama' ? 'くらマ' : x.channel === 'line' ? 'LINE' : '送り先なし';
+      var head = '<b>' + esc(String(x.start).slice(11, 16)) + '　' + esc(x.name) + ' さん</b>　<span class="tag ' + (x.channel === 'none' ? 't-new' : 't-biz') + '">' + ch + '</span> <span class="frs">担当：' + esc((x.staff || []).join('・')) + '</span>';
+      var warn = (x.warn || []).map(function(w) { return '<div class="frs" style="color:#C05621">⚠ ' + esc(w) + '</div>'; }).join('');
+      var sent = x.sentToday ? '<div class="frs" style="color:#2F855A">今日すでに「明日」を含む文を送っています。前日連絡なら「送らない」で閉じてください</div>' : '';
+      var note = x.note ? '<details style="margin-top:4px"><summary class="frs" style="cursor:pointer">予定の説明欄を見る</summary><div class="frs" style="white-space:pre-wrap">' + esc(x.note) + '</div></details>' : '';
+      var body = (x.channel === 'none' || x.sentToday)
+        ? '<details style="margin-top:4px"><summary class="frs" style="cursor:pointer">文面を見る</summary><textarea data-evetext="' + i + '" rows="12" style="width:100%;font-size:14px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;margin-top:4px">' + esc(x.edited || x.draft) + '</textarea></details>'
+        : '<textarea data-evetext="' + i + '" rows="12" style="width:100%;font-size:14px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;margin-top:6px">' + esc(x.edited || x.draft) + '</textarea>';
+      var btns = '<div class="frb">'
+        + (x.channel !== 'none' ? '<span class="abtn ok" data-evesend="' + i + '">' + ch + 'で送る</span>' : '')
+        + '<span class="abtn" data-eveskip="' + i + '">' + (x.channel === 'none' ? '電話などで連絡した／不要' : '送らない') + '</span></div>';
+      return '<div class="fr" data-evekey="' + esc(x.key) + '">' + head + warn + sent + note + body + btns + '</div>';
+    }).join('') + '</div>';
+}
+function eveBind(root) {
+  if (!EVE) return;
+  var items = EVE.items.filter(eveOpen);
+  Array.prototype.forEach.call(root.querySelectorAll('[data-evesend]'), function(el) { el.onclick = function(e) { e.stopPropagation(); eveSend(items[+el.getAttribute('data-evesend')], el); }; });
+  Array.prototype.forEach.call(root.querySelectorAll('[data-evetext]'), function(el) { el.oninput = function() { var x = items[+el.getAttribute('data-evetext')]; if (x) x.edited = el.value; }; el.onclick = function(e) { e.stopPropagation(); }; });
+  Array.prototype.forEach.call(root.querySelectorAll('[data-eveskip]'), function(el) { el.onclick = function(e) { e.stopPropagation(); eveMarkUI(items[+el.getAttribute('data-eveskip')], '送らない', ''); }; });
+}
+function eveTextOf(x) {
+  var i = EVE.items.filter(eveOpen).indexOf(x);
+  var ta = document.querySelector('[data-evetext="' + i + '"]');
+  return String(ta ? ta.value : (x.edited || x.draft)).trim();
+}
+function eveMarkUI(x, state, text) {
+  try { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); } catch (e) {}
+  x.mark = { state: state }; renderList();
+  api({ op:'eveMark', date: EVE.date, key: x.key, state: state, name: x.name, channel: x.channel, text: text || '' }).then(function(r) {
+    if (!r || !r.ok) { x.mark = null; renderList(); alert((r && r.error) || '記録できませんでした'); return; }
+    toast(state === '送った' ? '送って記録しました' : '送らないで閉じました');
+  }).catch(function() { x.mark = null; renderList(); toast('通信に失敗したので戻しました'); });
+}
+function eveSend(x, btn) {
+  var text = eveTextOf(x);
+  if (!text) { alert('本文が空です'); return; }
+  if (!confirm(x.name + ' さんに' + (x.channel === 'curama' ? 'くらマ' : 'LINE') + 'で送ります。\n\n' + text)) return;
+  btn.textContent = '送信中…'; btn.style.pointerEvents = 'none';
+  function fail(msg) { btn.textContent = (x.channel === 'curama' ? 'くらマ' : 'LINE') + 'で送る'; btn.style.pointerEvents = ''; alert(msg); }
+  if (x.channel === 'curama') {
+    api({ op:'curamaSend', id: x.threadId, text: text, force: 1 }).then(function(r) {
+      if (r && r.ok) return eveMarkUI(x, '送った', text);
+      fail('送信できませんでした：' + ((r && r.error) || '') + (r && r.uncertain ? '\nくらマで届いたか確かめてください' : ''));
+    }).catch(function() { fail('通信に失敗しました。くらマで届いたか確かめてから、もう一度押してください'); });
+    return;
+  }
+  var sendId = (function() { try { return crypto.randomUUID(); } catch (e) { return 's' + Date.now() + Math.random().toString(16).slice(2); } })();
+  api({ op:'send', uid: x.target, src: 'cust', text: text, sendId: sendId }).then(function(r) {
+    if (r && r.ok) return eveMarkUI(x, '送った', text);
+    setTimeout(function() {
+      api({ op:'sendStatus', uid: x.target, src: 'cust', text: text }).then(function(st) {
+        if (st && st.ok && st.delivered) return eveMarkUI(x, '送った', text);
+        fail('送信を確認できませんでした：' + ((r && r.error) || '') + '\n相手のトークを開いて、届いていなければもう一度押してください');
+      }).catch(function() { fail('送信を確認できませんでした。相手のトークを開いて確かめてください'); });
+    }, 4000);
+  }).catch(function() { fail('通信に失敗しました。相手のトークを開いて、届いていなければもう一度押してください'); });
+}
 function custLabel(it) { var c = it.customer; if (!c) return null; return (c.contact ? c.contact : c.name) + ' さん'; }
 function custNote(c) { return (c && c.contact && c.name) ? '名義：' + c.name + ' さん' + (c.company ? '（' + c.company + '）' : '') : ''; }
 function vehicleLine(c) {
@@ -855,6 +935,7 @@ function vehicleTags(c) {
   return t;
 }
 function renderList() {
+  var ae = document.activeElement; if (ae && ae.getAttribute && ae.getAttribute('data-evetext') !== null) return; // 前日連絡の文面を直している間は描き直さない（入力が途切れるため）
   var q = normQ(document.getElementById('search').value);
   if (TAB === 'curama' && !q) { document.getElementById('searchClear').style.display = 'none'; renderCurama(); return; }
   if (TAB === 'mitsumoa' && !q) { document.getElementById('searchClear').style.display = 'none'; renderMitsumoa(); return; }
@@ -876,8 +957,8 @@ function renderList() {
   if (tabAll) tabAll.innerHTML = 'お客様' + (needCust ? '<span class="tabbadge">' + needCust + '</span>' : '');
   if (tabBiz) tabBiz.innerHTML = '工場・取引先' + (needBiz ? '<span class="tabbadge">' + needBiz + '</span>' : '');
   var frOpen = !q && (TAB === 'all' || TAB === 'need') ? FORMRES.filter(function(x) { return x.state === 'open'; }) : [];
-  var fbox = frOpen.length ? '<div class="frbox"><div class="frh">予約フォームの未処理 ' + frOpen.length + '件</div>' + frOpen.map(function(x) { return formResItemHtml(x, true); }).join('') + '</div>' : '';
-  if (!items.length) { document.getElementById('rows').innerHTML = fbox + '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : ownFilterOn() ? 'あなたの番の件はありません 🎉<br><span style="font-size:12px">他の件は上の「全部」で見られます</span>' : 'まだ記録がありません')) + '</div>'; formResBind(document.getElementById('rows')); return; }
+  var fbox = (!q && (TAB === 'all' || TAB === 'need') ? eveBoxHtml() : '') + (frOpen.length ? '<div class="frbox"><div class="frh">予約フォームの未処理 ' + frOpen.length + '件</div>' + frOpen.map(function(x) { return formResItemHtml(x, true); }).join('') + '</div>' : '');
+  if (!items.length) { document.getElementById('rows').innerHTML = fbox + '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : ownFilterOn() ? 'あなたの番の件はありません 🎉<br><span style="font-size:12px">他の件は上の「全部」で見られます</span>' : 'まだ記録がありません')) + '</div>'; formResBind(document.getElementById('rows')); eveBind(document.getElementById('rows')); return; }
   document.getElementById('rows').innerHTML = fbox + items.map(function(it, i) {
     var name = (it.customer && it.customer.name) ? custLabel(it) : bizLabel(it);
     var tags = '';
@@ -897,7 +978,7 @@ function renderList() {
   }).join('');
   Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ if (SWIPE_JUST) return; if (SWIPE_OPEN) { swipeClose(); return; } openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
   Array.prototype.forEach.call(document.querySelectorAll('.hideBtn'), function(el) { el.onclick = function(e){ e.stopPropagation(); hideItem(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
-  formResBind(document.getElementById('rows'));
+  formResBind(document.getElementById('rows')); eveBind(document.getElementById('rows'));
   SWIPE_OPEN = null;
 }
 // 一覧の行を右→左にスワイプすると「非表示」ボタンが出る。ボタンを押すと一覧から消える（サーバーに印を残すのでiPhoneとPCで揃う）
