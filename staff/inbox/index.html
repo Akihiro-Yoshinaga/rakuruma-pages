@@ -485,7 +485,7 @@ function loadMe() {
 function ownOther() { return ME === '吉永' ? '平川' : ME === '平川' ? '吉永' : ''; }
 function ownFilterOn() { return !!ME && OWN_FILTER === 'me' && (TAB === 'biz' || TAB === 'curama' || TAB === 'mitsumoa'); }
 // 対応中の印（2026-11-05）：Claudeのチャットが下書き中の件。中継が it.working = {by, at} を付ける。3時間で消える
-function workTag(it) { if (!it || !it.working) return ''; var m = Math.max(0, Math.round((Date.now() - Number(it.working.at || 0)) / 60000)); return '<span class="tag t-working" title="' + esc(it.working.by || '') + 'が下書き中（' + m + '分前から）。二重に返さないよう、送る前にトークを読み直してください">💬 ' + esc(it.working.by || 'Claude') + 'で対応中</span>'; }
+function workTag(it) { if (!it || !it.working) return ''; var d = new Date(Number(it.working.at || 0)); var hm = d.getHours() + ':' + ('0' + d.getMinutes()).slice(-2); var who = String(it.working.by || 'Claude').replace(/\s*\d{1,2}:\d{2}$/, ''); return '<span class="tag t-working" title="' + esc(it.working.by || '') + 'が下書き中。二重に返さないよう、送る前にトークを読み直してください">💬 ' + esc(who) + 'で対応中（' + hm + '〜）</span>'; }
 function ownerTag(it) { return workTag(it) + ownerTag0(it); }
 function ownerTag0(it) { if (it && !it.owner && it.repliedBy) return '<span class="tag t-own-done">✅ ' + esc(it.repliedBy) + 'さん返信済み</span>'; if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerInstr ? '📝 ' : it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
 function ownbarUpdate() {
