@@ -66,6 +66,7 @@
   .t-hidden { background:#FDE8E8; color:#B42318; font-weight:700; }
   /* 誰の番か（2026-10-16）：平川さん＝青・吉永さん＝赤のベタ塗り。手で回した件は「↩」付き */
   .t-own-h { background:#2B6CB0; color:#fff; font-weight:800; } .t-own-y { background:#C53030; color:#fff; font-weight:800; }
+  .t-working { background:#FEF3C7; color:#92400E; font-weight:700; } /* Claudeのチャットで対応中（2026-11-05） */
   .t-own-done { background:#E2E8F0; color:#2D3748; font-weight:700; } /* 吉永さんが返信済み（お客様の次の発言までの札・2026-10-28） */
   .ownbar { display:none; gap:6px; padding:8px 16px; background:#fff; border-bottom:1px solid var(--line); align-items:center; }
   .ownbar span { font-size:13px; font-weight:700; color:#4A5568; border:1.5px solid #CBD5E0; border-radius:16px; padding:5px 14px; cursor:pointer; }
@@ -483,7 +484,10 @@ function loadMe() {
 }
 function ownOther() { return ME === '吉永' ? '平川' : ME === '平川' ? '吉永' : ''; }
 function ownFilterOn() { return !!ME && OWN_FILTER === 'me' && (TAB === 'biz' || TAB === 'curama' || TAB === 'mitsumoa'); }
-function ownerTag(it) { if (it && !it.owner && it.repliedBy) return '<span class="tag t-own-done">✅ ' + esc(it.repliedBy) + 'さん返信済み</span>'; if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerInstr ? '📝 ' : it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
+// 対応中の印（2026-11-05）：Claudeのチャットが下書き中の件。中継が it.working = {by, at} を付ける。3時間で消える
+function workTag(it) { if (!it || !it.working) return ''; var m = Math.max(0, Math.round((Date.now() - Number(it.working.at || 0)) / 60000)); return '<span class="tag t-working" title="' + esc(it.working.by || '') + 'が下書き中（' + m + '分前から）。二重に返さないよう、送る前にトークを読み直してください">💬 ' + esc(it.working.by || 'Claude') + 'で対応中</span>'; }
+function ownerTag(it) { return workTag(it) + ownerTag0(it); }
+function ownerTag0(it) { if (it && !it.owner && it.repliedBy) return '<span class="tag t-own-done">✅ ' + esc(it.repliedBy) + 'さん返信済み</span>'; if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerInstr ? '📝 ' : it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
 function ownbarUpdate() {
   var bar = document.getElementById('ownbar'); if (!bar) return;
   var show = !!ME && (TAB === 'biz' || TAB === 'curama' || TAB === 'mitsumoa') && !normQ(document.getElementById('search').value);
@@ -964,6 +968,7 @@ function renderList() {
     var tags = '';
     if (it.customer && it.customer.contact) tags += '<span class="tag t-done">' + esc(custNote(it.customer)) + '</span>';
     if (it.sched && it.sched.length) tags += '<span class="tag t-sched">⏰ ' + esc(String(it.sched[0].at).slice(5).replace(/^0/, '').replace('/0', '/')) + ' 送信予約' + (it.sched.length > 1 ? '×' + it.sched.length : '') + '</span>';
+    if (it.src !== 'biz') tags += workTag(it);
     if (it.src === 'biz') tags += ownerTag(it) + '<span class="tag t-biz">工場・取引先</span>';
     else if (it.customer) tags += vehicleTags(it.customer); else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
     if (it.hidden) tags += '<span class="tag t-hidden">非表示中（開くと戻ります）</span>';
