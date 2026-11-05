@@ -41,6 +41,12 @@
   .m { font-size:13px; color:#8E95A0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:3px; line-height:1.4; }
   .tag { display:inline-block; font-size:10.5px; font-weight:600; border-radius:4px; padding:1px 6px; margin-top:5px; margin-right:4px; background:#F1F3F5; color:#5A6472; line-height:1.5; }
   .t-sched { background:#E5EEFA; color:#1F4E9C; font-weight:700; }
+  .frbox { margin:8px 12px 0; padding:8px 12px; background:#FFF7E6; border:1px solid #DD6B20; border-radius:10px; font-size:13px; line-height:1.5; }
+  .frbox .frh { font-weight:800; color:#B05A00; }
+  .frbox .fr { border-top:1px solid #F6D3A8; padding:6px 0 2px; margin-top:6px; }
+  .frbox .fr:first-of-type { border-top:0; margin-top:2px; }
+  .frbox .frs { font-size:12px; color:#7A5A2E; }
+  .frbox .frb { display:flex; gap:8px; flex-wrap:wrap; margin-top:5px; }
   .t-new { background:#FFF1DB; color:#B06A00; } .t-cust { background:#E6F5EC; color:#1F7A45; } .t-biz { background:#E5EEFA; color:#2B5FA6; } .t-done { background:#F1F3F5; color:#6B7480; } .t-shaken { background:#EFE8FA; color:#6A3FB5; } .t-teiki { background:#E1F3F2; color:#1F6F6A; }
   .badge { background:#E53E3E; color:#fff; font-size:12px; font-weight:700; border-radius:10px; padding:1px 7px; margin-left:6px; vertical-align:1px; }
   .empty { padding:40px 20px; text-align:center; color:var(--mute); font-size:14px; }
@@ -269,6 +275,7 @@
   <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><span class="abtn" id="btnCArrive" style="display:none">到着前の連絡</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnCChange" style="display:none">訪問日時を変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span><span class="abtn" id="btnOwnDone" style="display:none">済みにする</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
+  <div id="formResBox" class="frbox" style="display:none"></div>
   <div id="schedlist" style="padding:0 12px"></div>
   <div id="schedbox" class="linkbox" style="display:none;background:#EEF4FF;border-color:#2B6CB0">
     <b>予約送信</b>（決めた日時に自動で送ります。前日リマインドなどに）
@@ -715,6 +722,7 @@ function loadList(manual, force) {
     ITEMS = r.items; OTHERS = r.others || []; STAFF = r.staff || STAFF;
     try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
     renderList();
+    loadFormRes(manual || force);
     if (PENDING_OPEN) { var po = ITEMS.concat(OTHERS).filter(function(x) { return x.uid === PENDING_OPEN; })[0]; PENDING_OPEN = ''; if (po) openThread(po); }
     listDone_('お客様を更新しました（' + new Date().toTimeString().slice(0, 5) + '・未対応 ' + ITEMS.filter(function(x) { return x.needsReply; }).length + '件）', manual);
     if (!manual && !force) loadBiz(true); // 工場・取引先のバッジを出すため常に裏で読む（手動更新・開いた直後は同時に読んでいる）
@@ -777,6 +785,58 @@ function loadNextEvent(it) {
     if (m && (m[1] + '-' + m[2] + '-' + m[3]) === jstToday()) showConfirmBar(target, '本日の施工：' + when + (title ? '　' + title : '') + '。終わったら施工確定を', jstToday());
   }).catch(function() {});
 }
+// 予約フォームの予約（2026-11-05）：フォームの新規はChatworkにしか届かず、時刻なし（「午後」など）は【仮】の予定も作られないため、受信箱に出す。
+// 一覧の上＝未処理（カレンダー未登録・送信ステータス空）、トーク＝そのLINE IDの予約。見送りは予約一覧の送信ステータスに書く
+var FORMRES = [], FORMRES_AT = 0;
+function loadFormRes(force) {
+  if (!force && Date.now() - FORMRES_AT < 300000) return;
+  FORMRES_AT = Date.now();
+  api({ op:'formRes' }).then(function(r) {
+    if (!r || !r.ok || !Array.isArray(r.items)) { FORMRES_AT = 0; return; }
+    FORMRES = r.items;
+    if (document.getElementById('list').style.display !== 'none' && (TAB === 'all' || TAB === 'need')) renderList();
+  }).catch(function() { FORMRES_AT = 0; });
+}
+function formResItemHtml(x, inList) {
+  var when = x.s1 + (x.s2 ? '／第2希望 ' + x.s2 : '');
+  var what = [x.menu, x.car].filter(String).join('・');
+  var state = x.state === 'open' ? '未処理（カレンダー未登録）' : x.status;
+  var line = x.uid && ITEMS.concat(OTHERS).some(function(y) { return y.uid === x.uid; });
+  return '<div class="fr">' + (inList ? '<b>' + esc(x.name) + ' さん</b>　' : '') + '<b>' + esc(when) + '</b>' + (what ? '　' + esc(what) : '')
+    + '<div class="frs">' + esc(String(x.at).slice(5, 16)) + ' 受付・' + esc(state) + (x.arrival ? '・到着前連絡：' + esc(x.arrival) : '') + '</div>'
+    + (x.note ? '<div class="frs">' + esc(x.note) + '</div>' : '')
+    + (x.state === 'open' ? '<div class="frb">' + (inList && line ? '<span class="abtn" data-fopen="' + esc(x.uid) + '">LINEを開く</span>' : '') + '<span class="abtn" data-fclose="' + esc(x.id) + '">見送り</span></div>' : '')
+    + '</div>';
+}
+function formResBind(root) {
+  Array.prototype.forEach.call(root.querySelectorAll('[data-fopen]'), function(el) { el.onclick = function(e) { e.stopPropagation(); var u = el.getAttribute('data-fopen'); var it = ITEMS.concat(OTHERS).filter(function(y) { return y.uid === u; })[0]; if (it) openThread(it); }; });
+  Array.prototype.forEach.call(root.querySelectorAll('[data-fclose]'), function(el) { el.onclick = function(e) { e.stopPropagation(); formResClose(el.getAttribute('data-fclose')); }; });
+}
+function formResClose(id) {
+  var reason = prompt('見送りにする理由（例：他店で検討・日程が合わない・LINEで対応済み）');
+  if (reason === null) return;
+  api({ op:'formResClose', id: id, reason: reason }).then(function(r) {
+    if (!r || !r.ok) { alert((r && r.error) || '見送りにできませんでした'); return; }
+    FORMRES = FORMRES.filter(function(y) { return y.id !== id; });
+    toast('見送りにしました');
+    if (CUR && document.getElementById('thread').style.display !== 'none') loadFormResFor(CUR);
+    renderList();
+  }).catch(function() { alert('通信に失敗しました。もう一度押してください'); });
+}
+function loadFormResFor(it) {
+  var el = document.getElementById('formResBox'); if (!el) return;
+  el.style.display = 'none'; el.innerHTML = '';
+  if (!it || it.src !== 'cust' || !it.uid) return;
+  var target = it;
+  function show(items) {
+    if (CUR !== target) return;
+    if (!items.length) { el.style.display = 'none'; return; }
+    el.innerHTML = '<div class="frh">予約フォームからの予約</div>' + items.map(function(x) { return formResItemHtml(x, false); }).join('');
+    el.style.display = 'block'; formResBind(el);
+  }
+  var pre = FORMRES.filter(function(x) { return x.uid === it.uid; }); if (pre.length) show(pre);
+  api({ op:'formRes', uid: it.uid }).then(function(r) { if (r && r.ok && Array.isArray(r.items)) show(r.items); }).catch(function() {});
+}
 function custLabel(it) { var c = it.customer; if (!c) return null; return (c.contact ? c.contact : c.name) + ' さん'; }
 function custNote(c) { return (c && c.contact && c.name) ? '名義：' + c.name + ' さん' + (c.company ? '（' + c.company + '）' : '') : ''; }
 function vehicleLine(c) {
@@ -815,8 +875,10 @@ function renderList() {
   var tabAll = document.querySelector('.tabs [data-tab="all"]'), tabBiz = document.querySelector('.tabs [data-tab="biz"]');
   if (tabAll) tabAll.innerHTML = 'お客様' + (needCust ? '<span class="tabbadge">' + needCust + '</span>' : '');
   if (tabBiz) tabBiz.innerHTML = '工場・取引先' + (needBiz ? '<span class="tabbadge">' + needBiz + '</span>' : '');
-  if (!items.length) { document.getElementById('rows').innerHTML = '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : ownFilterOn() ? 'あなたの番の件はありません 🎉<br><span style="font-size:12px">他の件は上の「全部」で見られます</span>' : 'まだ記録がありません')) + '</div>'; return; }
-  document.getElementById('rows').innerHTML = items.map(function(it, i) {
+  var frOpen = !q && (TAB === 'all' || TAB === 'need') ? FORMRES.filter(function(x) { return x.state === 'open'; }) : [];
+  var fbox = frOpen.length ? '<div class="frbox"><div class="frh">予約フォームの未処理 ' + frOpen.length + '件</div>' + frOpen.map(function(x) { return formResItemHtml(x, true); }).join('') + '</div>' : '';
+  if (!items.length) { document.getElementById('rows').innerHTML = fbox + '<div class="empty">' + (q ? '「' + esc(document.getElementById('search').value.trim()) + '」に一致する人はいません' : (TAB === 'need' ? '未対応はありません 🎉' : ownFilterOn() ? 'あなたの番の件はありません 🎉<br><span style="font-size:12px">他の件は上の「全部」で見られます</span>' : 'まだ記録がありません')) + '</div>'; formResBind(document.getElementById('rows')); return; }
+  document.getElementById('rows').innerHTML = fbox + items.map(function(it, i) {
     var name = (it.customer && it.customer.name) ? custLabel(it) : bizLabel(it);
     var tags = '';
     if (it.customer && it.customer.contact) tags += '<span class="tag t-done">' + esc(custNote(it.customer)) + '</span>';
@@ -835,6 +897,7 @@ function renderList() {
   }).join('');
   Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ if (SWIPE_JUST) return; if (SWIPE_OPEN) { swipeClose(); return; } openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
   Array.prototype.forEach.call(document.querySelectorAll('.hideBtn'), function(el) { el.onclick = function(e){ e.stopPropagation(); hideItem(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
+  formResBind(document.getElementById('rows'));
   SWIPE_OPEN = null;
 }
 // 一覧の行を右→左にスワイプすると「非表示」ボタンが出る。ボタンを押すと一覧から消える（サーバーに印を残すのでiPhoneとPCで揃う）
@@ -904,6 +967,7 @@ function openThread(it) {
     document.getElementById('btnMemo').style.display = 'none'; document.getElementById('btnChange').style.display = 'none';
     document.getElementById('memobox').style.display = 'none'; document.getElementById('changebox').style.display = 'none';
     showMemoLine(''); showSchedLine(null); ownShow(null, 'biz'); document.getElementById('agendabox').style.display = 'none'; AG_FOR = '';
+    document.getElementById('formResBox').style.display = 'none';
     document.getElementById('note').textContent = '';
     document.getElementById('schedlist').innerHTML = '';
     document.getElementById('msgs').innerHTML = '<div class="sys">LINEがまだ紐付いていません。上の候補から本人を選ぶと、やりとりと送信ができるようになります</div>';
@@ -916,6 +980,7 @@ function openThread(it) {
   var name = (it.customer && it.customer.name) ? custLabel(it) : bizLabel(it);
   document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
   loadNextEvent(it);
+  loadFormResFor(it);
   document.getElementById('tSub').textContent = it.src === 'biz' ? (it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = '#'; } else cust.style.display = 'none';
