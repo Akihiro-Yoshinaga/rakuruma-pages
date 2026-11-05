@@ -857,12 +857,12 @@ function eveBoxHtml() {
   if (!items.length) return '';
   var dd = EVE.date.split('-'), dw = '日月火水木金土'.charAt(new Date(+dd[0], +dd[1] - 1, +dd[2]).getDay());
   var todo = items.filter(function(x) { return !x.sentToday; }).length;
-  return '<div class="frbox evebox"><div class="frh">明日 ' + (+dd[1]) + '/' + (+dd[2]) + '(' + dw + ') の前日連絡　' + (todo ? 'まだ ' + todo + '件' : '残りは送信済みの確認だけ') + '</div>'
+  return '<div class="frbox evebox"><div class="frh">今日送る予約確認（明日 ' + (+dd[1]) + '/' + (+dd[2]) + '(' + dw + ') のお客様へ）　' + (todo ? 'まだ ' + todo + '件' : '残りは送信済みの確認だけ') + '</div>'
     + items.map(function(x, i) {
       var ch = x.channel === 'curama' ? 'くらマ' : x.channel === 'line' ? 'LINE' : '送り先なし';
       var head = '<b>' + esc(String(x.start).slice(11, 16)) + '　' + esc(x.name) + ' さん</b>　<span class="tag ' + (x.channel === 'none' ? 't-new' : 't-biz') + '">' + ch + '</span> <span class="frs">担当：' + esc((x.staff || []).join('・')) + '</span>';
       var warn = (x.warn || []).map(function(w) { return '<div class="frs" style="color:#C05621">⚠ ' + esc(w) + '</div>'; }).join('');
-      var sent = x.sentToday ? '<div class="frs" style="color:#2F855A">今日すでに「明日」を含む文を送っています。前日連絡なら「送らない」で閉じてください</div>' : '';
+      var sent = x.sentToday ? '<div class="frs" style="color:#2F855A">今日すでに「明日」を含む文を送っています。予約確認を送った件なら「送らない」で閉じてください</div>' : '';
       var note = x.note ? '<details style="margin-top:4px"><summary class="frs" style="cursor:pointer">予定の説明欄を見る</summary><div class="frs" style="white-space:pre-wrap">' + esc(x.note) + '</div></details>' : '';
       var body = (x.channel === 'none' || x.sentToday)
         ? '<details style="margin-top:4px"><summary class="frs" style="cursor:pointer">文面を見る</summary><textarea data-evetext="' + i + '" rows="12" style="width:100%;font-size:14px;padding:8px;border:1px solid #CBD5E0;border-radius:8px;margin-top:4px">' + esc(x.edited || x.draft) + '</textarea></details>'
