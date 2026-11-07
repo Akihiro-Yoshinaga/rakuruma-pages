@@ -272,7 +272,7 @@
 
 <div id="thread">
   <div class="hdrwrap">
-  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div><div class="sub" id="tOwn" style="display:none;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
+  <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tNextArr" title="到着前の連絡の答えを記録（予定の題名に印が付き、作業報告にボタンが出ます）" style="display:none;margin-left:6px;color:#fff;background:rgba(255,255,255,.28);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;cursor:pointer"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div><div class="sub" id="tOwn" style="display:none;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
   <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><span class="abtn" id="btnCArrive" style="display:none">到着前の連絡</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnCChange" style="display:none">訪問日時を変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span><span class="abtn" id="btnOwnDone" style="display:none">済みにする</span></div>
   </div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
@@ -775,6 +775,7 @@ document.getElementById('confirmBarClose').onclick = function() { document.getEl
 function loadNextEvent(it) {
   var el = document.getElementById('tNext'); if (!el) return;
   el.textContent = ''; el.style.display = 'none';
+  var ea = document.getElementById('tNextArr'); if (ea) { ea.style.display = 'none'; ea.onclick = null; }
   var cb = document.getElementById('confirmBar'); if (cb) cb.style.display = 'none';
   if (!it || it.src === 'biz' || !it.customer || !it.customer.name) return;
   var target = it;
@@ -786,8 +787,28 @@ function loadNextEvent(it) {
     if (m) { var d = new Date(+m[1], +m[2] - 1, +m[3]); when = (+m[2]) + '/' + (+m[3]) + '(' + '日月火水木金土'.charAt(d.getDay()) + ') ' + m[4]; }
     var title = String(r.ev.title || '').replace(/^\S+\s*(さん|様)?\s*/, '').slice(0, 24);
     el.textContent = '次回 ' + when + (title ? '　' + title : ''); el.style.display = 'block';
+    // 到着前の連絡の答え（2026-11-07）：LINEで受けた予約にも記録できるように
+    var arr = (String(r.ev.title || '').match(/【要到着前の連絡：(電話|メッセージ)】/) || [])[1] || r.ev.arrival || '';
+    if (ea) {
+      ea.textContent = arr ? '到着前の連絡：' + arr : '到着前の連絡：未記録（押して記録）';
+      ea.style.display = 'inline-block';
+      ea.onclick = function() { lineArrivalSet(target, arr); };
+    }
     if (m && (m[1] + '-' + m[2] + '-' + m[3]) === jstToday()) showConfirmBar(target, '本日の施工：' + when + (title ? '　' + title : '') + '。終わったら施工確定を', jstToday());
   }).catch(function() {});
+}
+// LINEのお客様の次回の予定に到着前の連絡の答えを記録（2026-11-07）。題名の印・説明欄・予約一覧に入る
+function lineArrivalSet(it, cur) {
+  var a = window.prompt('次回の予定の「到着前の連絡」を番号で入れてください' + (cur ? '\n（いまの記録：' + cur + '）' : '') + '\n1：電話\n2：メッセージ\n3：不要（連絡しない・前日連絡で聞き直さない）\n0：取り消す（未記録に戻す）', cur === '電話' ? '1' : cur === 'メッセージ' ? '2' : cur === '不要' ? '3' : '1');
+  if (a === null) return;
+  var how = { '1': '電話', '2': 'メッセージ', '3': '不要', '0': '' }[String(a).trim()];
+  if (how === undefined) { alert('1、2、3、0のどれかを入れてください'); return; }
+  api({ op: 'lineArrivalSet', uid: it.uid, name: it.customer.name, how: how }).then(function(r) {
+    if (!r || !r.ok) { alert((r && r.error) || '記録できませんでした'); return; }
+    if (r.none) { alert('この予約の予定がカレンダーに見つかりません'); return; }
+    toast(how ? '到着前の連絡：' + how + 'で記録しました' : '到着前の連絡の記録を取り消しました');
+    if (CUR === it) loadNextEvent(it);
+  }).catch(function(e) { alert('通信エラー: ' + ((e && e.message) || e)); });
 }
 // 予約フォームの予約（2026-11-05）：フォームの新規はChatworkにしか届かず、時刻なし（「午後」など）は【仮】の予定も作られないため、受信箱に出す。
 // 一覧の上＝未処理（カレンダー未登録・送信ステータス空）、トーク＝そのLINE IDの予約。見送りは予約一覧の送信ステータスに書く
@@ -2253,7 +2274,13 @@ function openCurama(it, refresh) {
     document.getElementById('note').textContent = (it.level === '赤' && it.point ? '要判断：' + it.point + (it.deep ? '（Macの深掘りチャットあり）' : '') + '　' : '') + '「くらマに送信」でくらマに届きます（誰かが先に返信していたら止まります）';
     document.getElementById('text').placeholder = 'くらマに送る文（AI生成の下書きを直してから送信）';
     document.getElementById('btnCDone').textContent = it.needsReply ? '対応済みにする' : '未対応に戻す';
-    document.getElementById('btnCArrive').style.display = (it.resId === 1 && it.resCode) ? 'inline-block' : 'none';
+    var cab = document.getElementById('btnCArrive');
+    cab.style.display = (it.resId === 1 && it.resCode) ? 'inline-block' : 'none';
+    // 到着前の連絡：記録済みはその答え、お客様の答えを読めたら候補を出す（2026-11-07）
+    var cah = it.arrivalHint;
+    cab.textContent = it.arrivalSet ? '到着前の連絡：' + it.arrivalSet : (cah && cah.quote ? '到着前の連絡：答えあり（' + (cah.how || '要確認') + '）を記録' : '到着前の連絡');
+    cab.style.background = (!it.arrivalSet && cah && cah.quote) ? '#fff3cd' : '';
+    var tna = document.getElementById('tNextArr'); if (tna) tna.style.display = 'none';
     var dl = document.getElementById('btnCDeep'); if (it.deepLink && IS_MAC) { dl.href = it.deepLink; dl.style.display = 'inline-block'; dl.title = it.deepTitle || ''; } else dl.style.display = 'none';
     ownShow(it, 'curama'); document.getElementById('agendabox').style.display = 'none'; AG_FOR = '';
     document.getElementById('msgs').innerHTML = '<div class="sys">読み込み中…</div>';
@@ -2639,14 +2666,17 @@ document.getElementById('cbkAgain').onclick = function() { curamaBookingRegister
 // 到着前の連絡の希望を記録（2026-10-31）。予定の題名の印と作業報告のボタンに反映される
 document.getElementById('btnCArrive').onclick = function() {
   var it = CURC; if (!it) return;
-  var a = window.prompt('到着前の連絡の希望を番号で入れてください\n1：電話\n2：メッセージ\n0：不要（印を外す）', '1');
+  var h = it.arrivalHint, cur = it.arrivalSet || (h && h.how) || '';
+  var a = window.prompt((h && h.quote ? 'お客様の答え（' + (h.at || '') + '）：\n「' + h.quote + '」\n\n' : '') + '到着前の連絡を番号で入れてください\n1：電話\n2：メッセージ\n3：不要（連絡しない・前日連絡で聞き直さない）\n0：取り消す（未記録に戻す）', cur === '電話' ? '1' : cur === 'メッセージ' ? '2' : cur === '不要' ? '3' : '1');
   if (a === null) return;
-  var how = { '1': '電話', '2': 'メッセージ', '0': '' }[String(a).trim()];
-  if (how === undefined) { alert('1、2、0のどれかを入れてください'); return; }
+  var how = { '1': '電話', '2': 'メッセージ', '3': '不要', '0': '' }[String(a).trim()];
+  if (how === undefined) { alert('1、2、3、0のどれかを入れてください'); return; }
   api({ op: 'curamaArrivalSet', id: it.id, how: how }).then(function(r) {
     if (!r || !r.ok) { alert((r && r.error) || '記録できませんでした'); return; }
     if (r.none) { alert('この予約の予定がカレンダーに見つかりません。予約登録のあとにもう一度お願いします'); return; }
-    toast(how ? '到着前の連絡：' + how + 'で記録しました' : '到着前の連絡の印を外しました');
+    toast(how ? '到着前の連絡：' + how + 'で記録しました' : '到着前の連絡の記録を取り消しました');
+    it.arrivalSet = how || null; if (!how) it.arrivalHint = null;
+    var cb2 = document.getElementById('btnCArrive'); cb2.textContent = how ? '到着前の連絡：' + how : '到着前の連絡'; cb2.style.background = '';
   }).catch(function(e) { alert('通信エラー: ' + ((e && e.message) || e)); });
 };
 document.getElementById('btnCDone').onclick = function() {
