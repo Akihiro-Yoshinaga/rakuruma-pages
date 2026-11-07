@@ -103,13 +103,15 @@
 
   function saveLineId(lineUserId, phone) {
     document.getElementById('card').innerHTML = '<div class="spinner"></div><p class="status-text">連携中...</p>';
-    fetch(GAS_URL + '?action=saveLiffId&lineUserId=' + encodeURIComponent(lineUserId) + '&phone=' + encodeURIComponent(phone))
+    fetch(GAS_URL + '?action=linkByAccessToken&accessToken=' + encodeURIComponent(liff.getAccessToken() || '') + '&phone=' + encodeURIComponent(phone))
       .then(function(r) { return r.text(); })
       .then(function(t) {
         var res;
         try { res = JSON.parse(t); } catch(e) { res = { ok: false }; }
         if (res.ok) {
           showComplete();
+        } else if (res.conflict) {
+          showError(res.error);
         } else {
           showPhoneForm(lineUserId);
         }
@@ -132,7 +134,7 @@
     if (!phone) { document.getElementById('err').textContent = '電話番号を入力してください'; return; }
     var btn = document.getElementById('btn');
     btn.disabled = true; btn.textContent = '送信中...';
-    fetch(GAS_URL + '?action=saveLiffId&lineUserId=' + encodeURIComponent(lineUserId) + '&phone=' + encodeURIComponent(phone))
+    fetch(GAS_URL + '?action=linkByAccessToken&accessToken=' + encodeURIComponent(liff.getAccessToken() || '') + '&phone=' + encodeURIComponent(phone))
       .then(function(r) { return r.text(); })
       .then(function(t) {
         var res;
@@ -140,7 +142,7 @@
         if (res.ok) {
           showComplete();
         } else {
-          document.getElementById('err').textContent = '一致する電話番号が見つかりませんでした';
+          document.getElementById('err').textContent = res.error || '一致する電話番号が見つかりませんでした';
           btn.disabled = false; btn.textContent = '連携を完了する';
         }
       })
