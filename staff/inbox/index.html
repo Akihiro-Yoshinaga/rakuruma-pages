@@ -60,6 +60,9 @@
   /* 一覧の右→左スワイプで「非表示」ボタンが出る（LINEと同じ。新着が来ると戻る） */
   .rowwrap { position:relative; overflow:hidden; }
   .rowwrap .row { position:relative; z-index:1; background:#fff; transition:transform .15s ease-out; }
+  /* くらマ：予約前の問い合わせ＝オレンジ／予約＝青（2026-11-11 吉永さん。問い合わせと予約のスレッドをつないだので見分けられるように） */
+  .row.cinq { background:#FFF8F0; box-shadow:inset 5px 0 0 #ED8936; }
+  .row.cres { background:#F3F8FE; box-shadow:inset 5px 0 0 #3182CE; }
   .rowwrap .row.swiping { transition:none; }
   .hideBtn { position:absolute; top:0; right:0; bottom:0; width:96px; background:#E53E3E; color:#fff; font-size:14px; font-weight:800; display:none; align-items:center; justify-content:center; cursor:pointer; }
   .rowwrap.swiping .hideBtn, .rowwrap.open .hideBtn { display:flex; } /* スワイプ中と開いた行だけ描く（対応済み行は半透明なので常時描くと赤が透ける） */
@@ -118,6 +121,11 @@
   .bub.stk { background:none; padding:2px 0; }
   .bub.stk img { width:130px; height:130px; object-fit:contain; display:block; }
   .bub.out { background:#D6DEEE; color:#1A202C; align-self:flex-end; }
+  .bub.in.inq { background:#FFF1E0; } .bub.out.inq { background:#FBD3A5; }
+  .bub.in.res { background:#E6F0FB; } .bub.out.res { background:#BFD6F4; }
+  .sys.cdiv { background:#EBF4FF; color:#2C5282; font-weight:700; border:1px dashed #90CDF4; }
+  .sys.clegend { background:#fff; color:#4A5568; border:1px solid #E2E8F0; text-align:left; line-height:1.6; }
+  .sys.clegend b.o { color:#C05621; } .sys.clegend b.b { color:#2B6CB0; }
   /* Flex Message（送ったカード）はLINEに近い見た目で描く（2026-10-07） */
   .bub.flx { background:none; padding:0; white-space:normal; line-height:1.35; max-width:calc(100% - 36px); }
   .bub.flx .fxbub { background:#fff; border:1px solid #E2E8F0; border-radius:14px; overflow:hidden; max-width:100%; color:#111; font-size:16px; box-sizing:border-box; }
@@ -1285,7 +1293,9 @@ function renderMsgs(it, msgs, fromCache, keepPos) {
     (msgs || []).forEach(function(m) {
       var day = String(m.at || '').slice(0, 10);
       if (day !== lastDay) { html += '<div class="sys">' + esc(dayLabel(day)) + '</div>'; lastDay = day; lastSnd = ''; }
+      if (m.dir === '区切り') { html += '<div class="sys cdiv">' + esc(m.text || '') + '</div>'; return; } // くらマ：予約が入った時刻（2026-11-11）
       var isIn = m.dir === '受信';
+      var tkc = m.tk === 'inq' ? ' inq' : m.tk === 'res' ? ' res' : '';
       var av = ((it.customer && it.customer.name) || it.partner || it.displayName || '？').charAt(0);
       var snd = (it.isGroup && isIn) ? groupSenderLabel(m) : '';
       if (snd) { av = snd.charAt(0); html += '<div class="msnd">' + esc(snd) + '</div>'; } // グループは毎回名前を出す（丸の1文字だけだと誰か分かりにくい・2026-10-02 吉永さん指摘）
@@ -1300,8 +1310,8 @@ function renderMsgs(it, msgs, fromCache, keepPos) {
       else if (m.kind === 'スタンプ' && stickerId(m.text)) { isStk = true; inner = '<img src="https://stickershop.line-scdn.net/stickershop/v1/sticker/' + stickerId(m.text) + '/android/sticker.png" alt="スタンプ" loading="lazy" referrerpolicy="no-referrer" onerror="var b=this.parentNode;b.className=b.className.replace(\' stk\',\'\');b.textContent=\'（スタンプ）\';">'; }
       else inner = linkify(body);
       var mt = '<div class="mt">' + esc(String(m.at || '').slice(11, 16)) + (isIn ? '' : '<br>' + esc(String(m.kind || '').replace(/（.*）$/, '').replace(/^返信$/, '返信'))) + '</div>';
-      if (isIn) html += '<div class="mrow in"><div class="mav">' + esc(av) + '</div><div class="bub in' + (isStk ? ' stk' : '') + (isFlx ? ' flx' : '') + '">' + inner + '</div>' + mt + '</div>';
-      else html += '<div class="mrow out">' + mt + '<div class="bub out' + (isStk ? ' stk' : '') + (isFlx ? ' flx' : '') + '">' + inner + '</div></div>';
+      if (isIn) html += '<div class="mrow in"><div class="mav">' + esc(av) + '</div><div class="bub in' + tkc + (isStk ? ' stk' : '') + (isFlx ? ' flx' : '') + '">' + inner + '</div>' + mt + '</div>';
+      else html += '<div class="mrow out">' + mt + '<div class="bub out' + tkc + (isStk ? ' stk' : '') + (isFlx ? ' flx' : '') + '">' + inner + '</div></div>';
     });
     var pend = (CUR === it && graceTimer) ? document.getElementById('pending') : null;
     document.getElementById('tRefresh').style.display = fromCache ? 'inline-block' : 'none';
@@ -2247,7 +2257,7 @@ function renderCurama() {
     if (it.booked) tags += '<span class="tag t-done">予約登録済み</span>'; else if (it.resId === 1 && !it.cancelled) tags += '<span class="tag t-yellow">予約登録まだ</span>';
     if (it.unopened) tags += '<span class="tag t-unopened">くらマで未開封</span>';
     var badge = it.needsReply ? '<span class="badge" title="返信していない">!</span>' : '';
-    return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (CURC && CURC.id === it.id ? ' sel' : '') + '" data-ci="' + i + '">'
+    return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (it.official ? '' : it.isRes ? ' cres' : ' cinq') + (CURC && CURC.id === it.id ? ' sel' : '') + '" data-ci="' + i + '">'
       + '<div class="av" style="' + (it.needsReply ? 'background:#DD6B20' : '') + '">' + esc(String(it.name || '？').charAt(0)) + '</div><div class="b"><div class="n"><div>' + esc(it.name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
       + (it.point ? '<div class="m" style="color:' + (it.level === '赤' ? '#C53030' : '#4A5568') + ';font-weight:700">' + (it.level === '赤' ? '判断：' : '') + esc(it.point) + '</div>' : '')
       + '<div class="m">' + (it.lastDir === '送信' ? '↩ ' : '') + esc(stickerLabel(it.lastText)) + '</div>' + tags + badge + '</div></div></div>';
@@ -2294,9 +2304,15 @@ function openCurama(it, refresh) {
     curamaDeepBox(r.thread && r.thread.deepResult ? r.thread : it);
     showPriceHist(r.priceHistory || null);
     // 写真・PDFの添付も渡す（2026-10-13。VPSが署名付きURLを返しているのに、ここで落としていて「（受信）」の空の吹き出しになっていた）
-    var msgs = (r.messages || []).map(function(m) { return { dir: m.dir, at: m.at, text: m.text, kind: m.kind, img: m.img || null, file: m.file || null }; });
+    var msgs = (r.messages || []).map(function(m) { return { dir: m.dir, at: m.at, text: m.text, kind: m.kind, tk: m.tk || '', img: m.img || null, file: m.file || null }; });
     var fake = { uid: '', displayName: it.name };
     renderMsgs(fake, msgs, false, !!refresh);
+    // 問い合わせと予約がつながっている件は、色の意味を一番上に（2026-11-11）
+    if (r.linked && r.linked.length) {
+      var lg = document.createElement('div'); lg.className = 'sys clegend';
+      lg.innerHTML = '🔗 同じお客様の<b class="o">予約前の問い合わせ（オレンジ）</b>と<b class="b">予約（青）</b>のやりとりを、時刻順にまとめています。<br>送信は、いま開いている' + (it.isRes ? '<b class="b">予約</b>' : '<b class="o">問い合わせ</b>') + 'のほうに届きます';
+      var mm = document.getElementById('msgs'); mm.insertBefore(lg, mm.firstChild);
+    }
     if (r.partial) { var n = document.createElement('div'); n.className = 'sys'; n.style.cssText = 'background:#FDE8E8;color:#B42318'; n.textContent = 'くらマでまだ開いていないため、最新の1通だけ表示しています（開くと既読になるので、こちらからは開きません）'; document.getElementById('msgs').appendChild(n); }
   }).catch(function(e) { if (CURC === it) document.getElementById('msgs').innerHTML = '<div class="sys">' + esc((e && e.message) || '通信エラー') + '</div>'; });
 }
