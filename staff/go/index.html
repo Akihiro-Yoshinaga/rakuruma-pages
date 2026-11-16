@@ -45,7 +45,17 @@
     return StaffTicket.linkTicket().then(function (r) {
       if (!r || !r.ok || !r.ticket) { if (r && r.relogin) login(); else { msg.innerHTML = '<span class="err">' + ((r && r.error) || '通信できませんでした') + '</span>'; act.innerHTML = '<a class="btn" href="" onclick="location.reload();return false;">もう一度</a>'; } return; }
       try { sessionStorage.setItem('staffGoAt', String(Date.now())); } catch (e) {}
-      window.location.replace(StaffTicket.RSV_GAS + q + '&token=' + encodeURIComponent(r.ticket));
+      var dest = StaffTicket.RSV_GAS + q + '&token=' + encodeURIComponent(r.ticket);
+      // 見るだけのボードは rakuruma.com の中に枠で出す（GASの「Apps Scriptのユーザーによって作成」の帯が出ない・2026-11-16）
+      var FRAME = { factoryBoard: '工場の案件', washBoard: '洗車の空き状況' };
+      var m = q.match(/^\?action=(\w+)/);
+      if (m && FRAME[m[1]]) {
+        document.title = 'ラクルマ｜' + FRAME[m[1]];
+        document.body.style.cssText = 'margin:0;padding:0;display:block;min-height:0;background:#fff';
+        document.body.innerHTML = '<iframe src="' + dest.replace(/"/g, '&quot;') + '" title="' + FRAME[m[1]] + '" style="position:fixed;inset:0;width:100%;height:100%;border:0;display:block"></iframe>';
+        return;
+      }
+      window.location.replace(dest);
     });
   }).catch(function () { msg.innerHTML = '<span class="err">通信できませんでした</span>'; act.innerHTML = '<a class="btn" href="" onclick="location.reload();return false;">もう一度</a>'; });
 })();
