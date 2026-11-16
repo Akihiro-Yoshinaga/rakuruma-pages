@@ -1920,7 +1920,19 @@ document.getElementById('memoSave').onclick = function() {
 };
 document.getElementById('btnDone').onclick = function() {
   if (!CUR) return;
-  api({ op:'done', uid: CUR.uid }).then(function(r) { if (r.ok) { toast('対応済みにしました'); CUR.needsReply = false; CUR.unread = 0; } else alert(r.error || '失敗'); });
+  // 画面で最後に見た発言の時刻まで対応済みにする。押す前に届いた発言は未対応のまま残る（2026-11-16 芝尾さんの解約の連絡が4秒差で消えた）
+  var tm = threadCacheGet(CUR.uid) || [], seenAt = '';
+  for (var si = tm.length - 1; si >= 0; si--) { if (tm[si] && tm[si].at) { seenAt = String(tm[si].at); break; } }
+  var target = CUR;
+  api({ op:'done', uid: target.uid, seenAt: seenAt }).then(function(r) {
+    if (!r.ok) { alert(r.error || '失敗'); return; }
+    if (r.newer && r.newer.length) {
+      alert('読んだあとに新しいメッセージが届いています。未対応のまま残しました。\n\n' + r.newer.map(function(x) { return x.at + '　' + (x.text || ('（' + (x.kind || '') + '）')); }).join('\n\n'));
+      if (CUR === target) openThread(target);
+      return;
+    }
+    toast('対応済みにしました'); target.needsReply = false; target.unread = 0;
+  });
 };
 
 function showList() {
