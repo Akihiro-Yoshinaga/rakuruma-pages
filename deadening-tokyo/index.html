@@ -158,6 +158,14 @@ header{
 .member img{width:88px;height:88px;border-radius:50%;object-fit:cover;flex-shrink:0}
 .member .nm{font-size:18px;font-weight:700;color:var(--fg);line-height:1.5}
 .member .rl{font-size:13px;color:var(--fg-dim);line-height:1.7}
+.rv-sum{font-size:15px;color:var(--fg-dim);margin-bottom:28px}
+.rv-sum b{color:var(--fg);font-size:22px;margin:0 2px}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.review{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:26px 24px;display:flex;flex-direction:column;gap:14px}
+.review .stars{color:var(--accent);letter-spacing:.12em;font-size:15px}
+.review p{color:var(--fg);font-size:15px;line-height:1.9}
+.review .meta{margin-top:auto;font-size:12px;color:var(--fg-dim);line-height:1.7}
+@media (max-width:860px){.reviews{grid-template-columns:1fr}}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .panel{border:1px solid var(--line);border-radius:14px;padding:34px 30px;background:var(--bg-2)}
 .panel.on{
@@ -491,6 +499,33 @@ header.scrolled{box-shadow:0 10px 32px rgba(0,0,0,.45)}
       <img src="images/delica-3.jpg" alt="インナーバッフルに取り付けたスピーカーと配線" loading="lazy">
       <img src="images/delica-4.jpg" alt="ドア上部に取り付けたカロッツェリアのトゥイーター" loading="lazy">
     </div>
+  </div>
+</section>
+
+<!-- ══ 口コミ ══ -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">Reviews</p>
+    <h2>お客様の声</h2>
+    <p class="rv-sum">くらしのマーケットの口コミ<b data-curama-count>626</b>件・平均<b>★<span data-curama-rating>4.92</span></b>（ラクルマ全体）<br>そのうち、スピーカー・オーディオ・電装の取付でいただいた声です。</p>
+    <div class="reviews">
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>前回に続き今回も今日は面倒は作業、デッドニングまでスピーカー取り付けありがとうございます！早速聴きまくっております。丁寧な作業と正確な時間と設置場所変更にも対応いただきありがとうございます。</p>
+        <div class="meta">2026年10月｜三菱 デリカD:5<br>スピーカー交換＋デッドニング</div>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>当初違う方で検討していたのですが、ラクルマさんに決めて本当に良かったです。作業がとても丁寧で見えない部分にもこだわりを感じます。</p>
+        <div class="meta">2025年5月｜スズキ ジムニー<br>Androidナビ・ドラレコ・バックカメラ取付</div>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>配線処理などさすがプロの仕上がりです。また、作業工程で判断が必要になった場合は、適宜画像付きで確認いただきましたし、安心して作業をお任せ出来ました。</p>
+        <div class="meta">2024年7月｜輸入車<br>ドライブレコーダー（前後）取付</div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:18px;font-size:13px">※ くらしのマーケット「ラクルマ」の口コミから抜粋しています。<a href="https://curama.jp/852811569/review/" target="_blank" rel="noopener" style="color:var(--fg-dim)">すべての口コミを見る</a></p>
   </div>
 </section>
 
