@@ -60,4 +60,8 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url><loc>https://rakuruma.com/deadening-tokyo/blog/</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
+  <url><loc>https://rakuruma.com/deadening-tokyo/blog/delica-d5-speaker-deadening/</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
+  <url><loc>https://rakuruma.com/deadening-tokyo/blog/copen-gr-speaker-deadening/</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
+  <url><loc>https://rakuruma.com/deadening-tokyo/blog/freed-deadening/</loc><lastmod>2026-11-19</lastmod><priority>0.6</priority></url>
 </urlset>
