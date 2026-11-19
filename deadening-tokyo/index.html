@@ -184,6 +184,22 @@ header{
 .panel.off li::before{content:"×";color:#6b7178}
 
 /* ── 料金 ───────────────────────── */
+.pstep{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:28px 26px;margin-bottom:18px}
+.pstep.reco{border-color:var(--accent)}
+.pstep h3{font-size:18px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.pstep h3 .no{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:14px;flex-shrink:0}
+.pstep .desc{font-size:14px;color:var(--fg-dim);margin-bottom:10px}
+.prow{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:none}
+.prow .what{font-size:16px;font-weight:700;color:var(--fg);line-height:1.6}
+.prow .what small{display:block;font-size:13px;font-weight:400;color:var(--fg-dim);margin-top:2px}
+.prow .amt{text-align:right;white-space:nowrap;font-size:28px;font-weight:700;line-height:1.3}
+.prow .amt small{font-size:13px;font-weight:400;color:var(--fg-dim);margin-left:2px}
+.prow .amt .tm{display:block;font-size:13px;font-weight:400;color:var(--fg-dim)}
+.pinc{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px}
+.pinc div{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:16px 12px;text-align:center;font-size:13px;color:var(--fg-dim);line-height:1.6}
+.pinc b{display:block;font-size:17px;color:var(--fg)}
+@media (max-width:860px){.pinc{grid-template-columns:repeat(2,1fr)}.prow .amt{font-size:24px}}
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .plan{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:34px 26px;display:flex;flex-direction:column}
 .plan.reco{border-color:var(--accent)}
@@ -320,7 +336,7 @@ header.scrolled{box-shadow:0 10px 32px rgba(0,0,0,.45)}
   <div class="wrap">
     <p class="eyebrow">Deadening Tokyo</p>
     <h1><span class="h1-pre">元ホンダ・トヨタディーラー<wbr><span style="white-space:nowrap">1級整備士による</span></span>出張デッドニング</h1>
-    <p class="sub">探しても都内に数えるほど。1ヶ月待ち。持ち込みは断られる。<br><strong>私たちが、ご自宅に伺います。約3時間で終わります。</strong></p>
+    <p class="sub">探しても都内に数えるほど。1ヶ月待ち。持ち込みは断られる。<br><strong>私たちが、ご自宅に伺います。ドア2枚なら約3時間で終わります。</strong></p>
     <p class="sub2">持ち込み歓迎｜東京都内・川崎の一部へ出張<br>デッドニング（車の静音化・ドアの防振）・スピーカー交換</p>
     <a class="btn" href="https://lin.ee/r0BAZkR0">LINEで相談する</a>
     <p class="runby">運営：ラクルマ（出張洗車・出張整備／クチコミ<span data-curama-count>560</span>件）</p>
@@ -556,49 +572,37 @@ header.scrolled{box-shadow:0 10px 32px rgba(0,0,0,.45)}
   <div class="wrap">
     <p class="eyebrow">Price</p>
     <h2>料金</h2>
-    <div class="plans">
-      <div class="plan reco">
-        <span class="tag">持ち込み歓迎</span>
-        <div class="name">持ち込みプラン</div>
-        <div class="price">55,000<small>円（税込）</small></div>
-        <div class="time">約3.5〜4時間</div>
-        <ul>
-          <li>お持ちのスピーカーの取付工賃</li>
-          <li>フロントドア2枚のデッドニング一式</li>
-          <li>ネット購入品・他店購入品OK</li>
-          <li>ディーラー・用品店で断られた方へ</li>
-        </ul>
-      </div>
-      <div class="plan">
-        <div class="name">スタンダード</div>
-        <div class="price">7万円台<small>〜</small></div>
-        <div class="time">約3.5〜4時間</div>
-        <ul>
-          <li>国産定番スピーカー（本体込み）</li>
-          <li>フロントドア2枚のデッドニング一式</li>
-          <li>基準機種：カロッツェリア TS-F1750S（17cmセパレート）</li>
-          <li>ワンランク上のケンウッド KFC-XS175S（ハイレゾ対応）などもご提案できます</li>
-        </ul>
-      </div>
-      <div class="plan">
-        <div class="name">デッドニングのみ</div>
-        <div class="price">44,000<small>円（税込）</small></div>
-        <div class="time">約2.5〜3時間</div>
-        <ul>
-          <li>フロントドア2枚</li>
-          <li>制振材の貼付（外板・内板）</li>
-          <li>吸音材・拡散処理</li>
-          <li>防水シートの復旧</li>
-        </ul>
-      </div>
+    <p class="lead" style="margin-bottom:28px">ドアの枚数と、スピーカーをどうするかで決まります。</p>
+
+    <div class="pstep">
+      <h3><span class="no">1</span>デッドニング（材料込み）</h3>
+      <p class="desc">制振材（外板・内板）・吸音材・防水シートの復旧まで一式。</p>
+      <div class="prow"><div class="what">フロントドア2枚<small>いちばん効果を感じやすい場所です</small></div><div class="amt">44,000<small>円</small><span class="tm">約2.5〜3時間</span></div></div>
+      <div class="prow"><div class="what">ドア4枚（フロント＋リア）<small>後席の会話の聞こえ方も変わります</small></div><div class="amt">79,800<small>円</small><span class="tm">約4.5〜5時間</span></div></div>
     </div>
-    <p class="note">
-      <strong>ドア4枚（フロント＋リア）79,800円</strong>（約4.5〜5時間）／後席の会話の聞こえ方が変わります。<br>
-      オプション：ラゲッジ／リアフェンダー 16,500円〜（+1〜2時間）<br>
-      天井・フロアの施工は、屋外で1日では完了しないため出張では承っておりません。<br>
-      全プランに、<strong>施工写真の記録と、施工前後の騒音実測レポート</strong>が付きます。<br>
-      出張費0円（東京都内・川崎市の一部）。お支払いは現金・クレジットカード・PayPayに対応しています。<br>
-      施工箇所に起因する不具合は<strong>6ヶ月間</strong>無償で対応します。
+
+    <div class="pstep reco">
+      <h3><span class="no">2</span>スピーカーも替えるなら</h3>
+      <p class="desc">フロントドア2枚のデッドニングとセットの合計金額です。</p>
+      <div class="prow"><div class="what">お持ちのスピーカーを取付<small>ネット購入品・他店購入品OK。用品店で断られた方も</small></div><div class="amt">55,000<small>円</small><span class="tm">約3.5〜4時間</span></div></div>
+      <div class="prow"><div class="what">スピーカー本体もおまかせ<small>基準：カロッツェリア TS-F1750S／上位：ケンウッド KFC-XS175S など</small></div><div class="amt">7万円台<small>〜</small><span class="tm">約3.5〜4時間</span></div></div>
+      <p class="desc" style="margin:12px 0 0">ドア4枚＋スピーカー交換は、車種を伺ってお見積もりします。</p>
+    </div>
+
+    <div class="pstep">
+      <h3><span class="no">3</span>追加</h3>
+      <div class="prow"><div class="what">ラゲッジ／リアフェンダー<small>荷室まわりの響きを抑えます</small></div><div class="amt">16,500<small>円〜</small><span class="tm">+1〜2時間</span></div></div>
+    </div>
+
+    <div class="pinc">
+      <div><b>0円</b>出張費<br>（都内・川崎の一部）</div>
+      <div><b>測定</b>施工前後の<br>騒音測定</div>
+      <div><b>写真</b>作業写真を<br>お渡し</div>
+      <div><b>6ヶ月</b>施工箇所の<br>無償対応</div>
+    </div>
+    <p class="note" style="margin-top:20px">
+      金額はすべて税込です。お支払いは現金・クレジットカード・PayPayに対応しています。<br>
+      天井・フロアの施工は、屋外で1日では完了しないため出張では承っておりません。
     </p>
   </div>
 </section>
