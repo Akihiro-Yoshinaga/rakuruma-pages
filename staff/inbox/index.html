@@ -756,12 +756,12 @@ function loadBiz(silent, force) {
 function normQ(t) { return String(t || '').toLowerCase().replace(/[\s\u3000]+/g, '').replace(/[\u30a1-\u30f6]/g, function(c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); }); }
 function itemMatches(it, q) {
   var c = it.customer || {};
-  return [c.name, c.contact, c.kana, c.car, c.phone, it.displayName, it.partner, it.lastText].some(function(v) { return normQ(v).indexOf(q) >= 0; });
+  return [c.name, c.contact, c.kana, c.car, c.phone, it.displayName, it.nick, it.partner, it.lastText].some(function(v) { return normQ(v).indexOf(q) >= 0; });
 }
 // 車ごとのタグ：複数台なら「車名 車検 日付」を車ごとに。1台なら従来どおり
 // 表示名：LINE連絡先名（このLINEの相手）があればそれを優先。顧客本人は補足に出す
 // 工場・取引先の表示：「取引先名（担当者名）」。取引先名が未設定ならLINEの表示名だけ
-function bizLabel(it) { var p = it.partner || '', c = it.contact || '', d = it.displayName || ''; if (it.isMail) return '✉️ ' + (p || 'メール') + '（メール）'; /* 取引先とのメール（2026-11-05・読むだけ） */ if (it.isGroup) return '👥 ' + (p ? p + ' ' : '') + 'グループ' + (d && d !== 'グループ' ? '（' + d + '）' : ''); var head = p + (c ? (p ? ' ' : '') + c : ''); if (head && d && head !== d) return head + '（' + d + '）'; return head || d || '（表示名なし）'; }
+function bizLabel(it) { if (it.src !== 'biz' && it.nick) return it.nick; /* 公式LINEで付けた名前（2026-11-20） */ var p = it.partner || '', c = it.contact || '', d = it.displayName || ''; if (it.isMail) return '✉️ ' + (p || 'メール') + '（メール）'; /* 取引先とのメール（2026-11-05・読むだけ） */ if (it.isGroup) return '👥 ' + (p ? p + ' ' : '') + 'グループ' + (d && d !== 'グループ' ? '（' + d + '）' : ''); var head = p + (c ? (p ? ' ' : '') + c : ''); if (head && d && head !== d) return head + '（' + d + '）'; return head || d || '（表示名なし）'; }
 // グループの発言者の呼び名：個人の連絡先に担当者名があればそれ（後藤さん）、無ければLINE表示名
 function groupSenderLabel(m) { var b = (BIZ || []).filter(function(x) { return x.uid === m.senderUid; })[0]; return (b && bizWho(b)) || m.sender || ''; }
 function bizWho(it) { var c = String((it && it.contact) || '').replace(/(さん|様|さま)$/, '').trim().split(/[\s\u3000]+/)[0]; return c ? c + 'さん' : ''; }
@@ -999,15 +999,16 @@ function renderList() {
     if (it.sched && it.sched.length) tags += '<span class="tag t-sched">⏰ ' + esc(String(it.sched[0].at).slice(5).replace(/^0/, '').replace('/0', '/')) + ' 送信予約' + (it.sched.length > 1 ? '×' + it.sched.length : '') + '</span>';
     if (it.src !== 'biz') tags += workTag(it);
     if (it.src === 'biz') tags += ownerTag(it) + '<span class="tag t-biz">工場・取引先</span>';
-    else if (it.customer) tags += vehicleTags(it.customer); else if (!it.noLog) tags += '<span class="tag t-new">新規・未登録</span>';
+    else if (it.customer) tags += vehicleTags(it.customer); else if (!it.noLog) tags += it.nick ? '<span class="tag t-done">顧客リスト未登録（名前を付けた方）</span>' : '<span class="tag t-new">新規・未登録</span>';
+    if (it.src !== 'biz' && it.customer && it.nick) tags += '<span class="tag t-done" title="公式LINEで付けた名前">' + esc(it.nick) + '</span>';
     if (it.hidden) tags += '<span class="tag t-hidden">非表示中（開くと戻ります）</span>';
     if (it.noLine) tags += '<span class="tag t-new">LINE未連携</span>';
-    else if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
+    else if (it.noLog) tags += '<span class="tag t-done">' + (it.customer ? 'やりとりの記録なし' : it.nick ? '受信箱に記録なし' + (it.notFriend ? '・友だちではない' : '') : 'LINE友だち・未登録' + (it.firstSeen ? '（' + esc(it.firstSeen) + '〜）' : '')) + '</span>';
     // 「対応済み」のタグは出さない（要対応は赤丸で分かる・2026-09-11 吉永さん指示）
     var badge = it.needsReply ? '<span class="badge" title="返信していない受信の件数">' + it.unread + '</span>' : '';
     return '<div class="rowwrap"><div class="row ' + (it.needsReply ? 'need' : 'done') + (CUR && CUR.uid === it.uid ? ' sel' : '') + '" data-i="' + source.indexOf(it) + '" data-uid="' + esc(it.uid) + '">'
       + '<div class="av">' + esc(name.charAt(0)) + '</div><div class="b"><div class="n"><div>' + (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name) + '</div><span>' + esc(shortAt(it.lastAt)) + '</span></div>'
-      + '<div class="m">' + (it.noLine ? '顧客リストにLINEが未登録。開いてLINE側の名前を選ぶと送れます' : it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : '顧客リスト未登録。開いて紐付けてから送れます') : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>'
+      + '<div class="m">' + (it.noLine ? '顧客リストにLINEが未登録。開いてLINE側の名前を選ぶと送れます' : it.noLog ? (it.customer ? '受信箱に記録がまだありません（開いて送れます）' : (it.nick ? 'LINE表示名「' + esc(it.displayName || '') + '」・受信箱にやりとりの記録なし' : '顧客リスト未登録。開いて紐付けてから送れます')) : (it.lastDir === '送信' ? '↩ ' : '') + esc(it.lastText)) + '</div>' + tags + badge + '</div></div>'
       + (it.hidden || it.noLog || it.noLine ? '' : '<div class="hideBtn" data-i="' + source.indexOf(it) + '">非表示</div>') + '</div>';
   }).join('');
   Array.prototype.forEach.call(document.querySelectorAll('.row'), function(el) { el.onclick = function(){ if (SWIPE_JUST) return; if (SWIPE_OPEN) { swipeClose(); return; } openThread(source[parseInt(el.getAttribute('data-i'), 10)]); }; });
@@ -1096,7 +1097,7 @@ function openThread(it) {
   document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
   loadNextEvent(it);
   loadFormResFor(it);
-  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.isMail ? 'メールのやりとり（support@rakuruma.com）。ここからは送れません。返信はGmailから' : it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明'));
+  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.isMail ? 'メールのやりとり（support@rakuruma.com）。ここからは送れません。返信はGmailから' : it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明') + (it.nick ? '（公式LINEで付けた名前で表示）' : ''));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = '#'; } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
@@ -1296,7 +1297,7 @@ function renderMsgs(it, msgs, fromCache, keepPos) {
       if (m.dir === '区切り') { html += '<div class="sys cdiv">' + esc(m.text || '') + '</div>'; return; } // くらマ：予約が入った時刻（2026-11-11）
       var isIn = m.dir === '受信';
       var tkc = m.tk === 'inq' ? ' inq' : m.tk === 'res' ? ' res' : '';
-      var av = ((it.customer && it.customer.name) || it.partner || it.displayName || '？').charAt(0);
+      var av = ((it.customer && it.customer.name) || it.partner || it.displayName || it.nick || '？').charAt(0);
       var snd = (it.isGroup && isIn) ? groupSenderLabel(m) : '';
       if (snd) { av = snd.charAt(0); html += '<div class="msnd">' + esc(snd) + '</div>'; } // グループは毎回名前を出す（丸の1文字だけだと誰か分かりにくい・2026-10-02 吉永さん指摘）
       lastSnd = isIn ? snd : '';
