@@ -1097,7 +1097,7 @@ function openThread(it) {
   document.getElementById('tName').innerHTML = (it.customer && it.customer.teiki ? '<span class="teiki" title="定期利用プラン">定</span>' : '') + esc(name);
   loadNextEvent(it);
   loadFormResFor(it);
-  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.isMail ? 'メールのやりとり（support@rakuruma.com）。送ると、相手から最後に届いたメールへ「全員に返信」します（CCの人にも届きます）。写真・添付はGmailから' : it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明') + (it.nick ? '（公式LINEで付けた名前で表示）' : ''));
+  document.getElementById('tSub').textContent = it.src === 'biz' ? (it.isMail ? 'メールのやりとり（support@rakuruma.com）。送ると、相手から最後に届いたメールの差出人だけに返信します（CCの人には届きません）。写真・添付はGmailから' : it.pendingGroup ? 'グループのトーク（まだここからは送れません。相手が次に発言するとつながります。返信はLINE公式アカウントのアプリから）' : it.isGroup ? 'グループのトーク（返信はグループ全員に届きます）' : '工場・取引先（ラクルマ ご依頼・相談）') : (it.customer ? [custNote(it.customer), vehicleLine(it.customer)].filter(String).join('・') : 'LINE表示名: ' + (it.displayName || '不明') + (it.nick ? '（公式LINEで付けた名前で表示）' : ''));
   var cust = document.getElementById('tCust');
   if (it.customer) { cust.style.display = 'inline-block'; cust.href = '#'; } else cust.style.display = 'none';
   document.getElementById('btnLink').style.display = (it.src === 'cust' && !it.customer) ? 'inline-block' : 'none';
