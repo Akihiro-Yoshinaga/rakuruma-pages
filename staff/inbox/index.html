@@ -69,7 +69,8 @@
   .t-hidden { background:#FDE8E8; color:#B42318; font-weight:700; }
   /* 誰の番か（2026-10-16）：平川さん＝青・吉永さん＝赤のベタ塗り。手で回した件は「↩」付き */
   .t-own-h { background:#2B6CB0; color:#fff; font-weight:800; } .t-own-y { background:#C53030; color:#fff; font-weight:800; }
-  .t-working { background:#FEF3C7; color:#92400E; font-weight:700; } /* Claudeのチャットで対応中（2026-11-05） */
+  .t-working { background:#6B46C1; color:#fff; font-weight:800; } /* 吉永さんがClaudeで対応中（2026-11-05・11-25 平川さんが一目で分かるよう紫のベタ塗りに） */
+  #workBar { display:none; margin:8px 12px 0; padding:10px 12px; background:#6B46C1; color:#fff; border-radius:10px; font-size:14px; font-weight:700; line-height:1.5; }
   .t-own-done { background:#E2E8F0; color:#2D3748; font-weight:700; } /* 吉永さんが返信済み（お客様の次の発言までの札・2026-10-28） */
   .ownbar { display:none; gap:6px; padding:8px 16px; background:#fff; border-bottom:1px solid var(--line); align-items:center; }
   .ownbar span { font-size:13px; font-weight:700; color:#4A5568; border:1.5px solid #CBD5E0; border-radius:16px; padding:5px 14px; cursor:pointer; }
@@ -283,6 +284,7 @@
   <div class="hdr"><div class="back" id="back">‹</div><div><div class="nm" id="tName" title="タップで名前を変更（顧客リストに保存）" style="cursor:pointer">—</div><div class="sub"><span id="tSub"></span><span id="tNext" style="display:none;margin-left:0;color:#fff;background:rgba(255,255,255,.15);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;display:none"></span><span id="tNextArr" title="到着前の連絡の答えを記録（予定の題名に印が付き、作業報告にボタンが出ます）" style="display:none;margin-left:6px;color:#fff;background:rgba(255,255,255,.28);padding:1px 8px;border-radius:10px;font-size:12px;margin-top:3px;cursor:pointer"></span><span id="tRefresh" style="display:none;margin-left:8px;color:#fff;background:rgba(255,255,255,.18);border-radius:8px;padding:1px 7px;font-size:11px">更新中…</span></div><div class="sub" id="tSched" style="display:none;color:#FFE9B0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div><div class="sub" id="tMemo" style="display:none;color:#fff;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:500"></div><div class="sub" id="tOwn" style="display:none;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70vw;font-weight:700"></div></div><a class="lnk" id="tCust" href="#" target="_blank" style="display:none">顧客管理</a></div>
   <div class="actions"><span class="abtn ok" id="btnDone">対応済み</span><span class="abtn ok" id="btnCDone">対応済みにする</span><span class="abtn" id="btnCArrive" style="display:none">到着前の連絡</span><a class="abtn" id="btnCDeep" href="#" style="display:none">深掘りチャットを開く</a><span class="abtn" id="btnSched">予約送信</span><span class="abtn" id="btnPay" style="display:none">決済リンク</span><span class="abtn" id="btnMemo" style="display:none">メモ</span><span class="abtn" id="btnChange" style="display:none">予定変更・作成</span><span class="abtn" id="btnBook" style="display:none">予約登録</span><span class="abtn ok" id="btnCBook" style="display:none">予約登録</span><span class="abtn" id="btnCChange" style="display:none">訪問日時を変更</span><span class="abtn" id="btnLink" style="display:none">顧客リストに紐付け</span><span class="abtn" id="btnHand" style="display:none">回す</span><span class="abtn" id="btnOwnDone" style="display:none">済みにする</span></div>
   </div>
+  <div id="workBar"></div>
   <div id="confirmBar" style="display:none;margin:8px 12px 0;padding:10px 12px;background:#F0FFF4;border:1px solid #38A169;border-radius:10px;font-size:13px;line-height:1.5;align-items:center;gap:10px;flex-wrap:wrap"><span id="confirmBarText" style="flex:1;min-width:160px"></span><a id="confirmBarLink" class="abtn ok" href="#" target="_blank" rel="noopener" style="text-decoration:none">施工確定する</a><span class="abtn" id="confirmBarClose">閉じる</span></div>
   <div id="formResBox" class="frbox" style="display:none"></div>
   <div id="schedlist" style="padding:0 12px"></div>
@@ -492,8 +494,12 @@ function loadMe() {
 }
 function ownOther() { return ME === '吉永' ? '平川' : ME === '平川' ? '吉永' : ''; }
 function ownFilterOn() { return !!ME && OWN_FILTER === 'me' && (TAB === 'biz' || TAB === 'curama' || TAB === 'mitsumoa'); }
-// 対応中の印（2026-11-05）：Claudeのチャットが下書き中の件。中継が it.working = {by, at} を付ける。3時間で消える
-function workTag(it) { if (!it || !it.working) return ''; var d = new Date(Number(it.working.at || 0)); var hm = d.getHours() + ':' + ('0' + d.getMinutes()).slice(-2); var by = String(it.working.by || 'Claude'); var ai = /^(Claude|返信確認)/.test(by); var who = ai ? 'Claude' : by.replace(/\s*\d{1,2}:\d{2}$/, ''); return '<span class="tag t-working" title="' + esc(by) + ' のチャットが対応中。二重に返さないよう、送る前にトークを読み直してください">' + (ai ? '🤖 ' : '💬 ') + esc(who) + 'が対応中（' + hm + '〜）</span>'; } // 2026-11-06：どのチャットでも自動で付くようになったので「🤖 Claudeが対応中」に統一
+// 対応中の印（2026-11-05）：Claudeのチャットが下書き中の件。中継が it.working = {by, at} を付ける。30分で消える（2026-11-25 3時間→30分）
+function workWho_(it) { var by = String(it.working.by || 'Claude'); var ai = /^(Claude|返信確認)/.test(by); return ai ? '吉永さんがClaudeで' : by.replace(/\s*\d{1,2}:\d{2}$/, '') + 'さんが'; } // Claudeのチャットを使うのは吉永さんだけ（2026-11-25 MTGで平川さんに「印＝吉永さんがClaudeで対応中」と伝えた）
+function workHm_(it) { var d = new Date(Number(it.working.at || 0)); return d.getHours() + ':' + ('0' + d.getMinutes()).slice(-2); }
+function workTag(it) { if (!it || !it.working) return ''; return '<span class="tag t-working" title="この件は返信・確定をしないでください。30分で自動で外れます">🤖 ' + esc(workWho_(it)) + '対応中（' + workHm_(it) + '〜）</span>'; }
+// トークを開いたときの帯（2026-11-25）：印がある件は、平川さんが返信・確定しないで済むよう上に大きく出す
+function workBar(it) { var el = document.getElementById('workBar'); if (!el) return; if (!it || !it.working) { el.style.display = 'none'; el.innerHTML = ''; return; } el.innerHTML = '🤖 ' + esc(workWho_(it)) + '対応中です（' + workHm_(it) + '〜）<br><span style="font-weight:600;font-size:13px">この件は返信・確定をしないでください。印は吉永さんが送ると消え、送らなくても30分で自動で外れます。</span>'; el.style.display = 'block'; }
 function ownerTag(it) { return workTag(it) + ownerTag0(it); }
 function ownerTag0(it) { if (it && !it.owner && it.repliedBy) return '<span class="tag t-own-done">✅ ' + esc(it.repliedBy) + 'さん返信済み</span>'; if (!it || !it.owner) return ''; return '<span class="tag ' + (it.owner === '吉永' ? 't-own-y' : 't-own-h') + '">' + (it.ownerInstr ? '📝 ' : it.ownerBy ? '↩ ' : '') + esc(it.owner) + 'さんの番</span>'; }
 function ownbarUpdate() {
@@ -1057,7 +1063,7 @@ function hideItem(it) {
 function openThread(it) {
   setCMode(false);
   if (!CUR || CUR.uid !== it.uid) { var intent0 = document.getElementById('intent'); if (intent0) intent0.value = ''; } // 別の人を開いたらAI生成の指示文をリセット（2026-09-15 吉永さん指摘）
-  CUR = it;
+  CUR = it; workBar(it);
   if (it.hidden && it.uid) { it.hidden = false; api({ op:'unhide', uid: it.uid, src: it.src }).catch(function(){}); }
   // スマホ：トークを開いたら履歴を1つ積む → iPhoneの端からのスワイプ（ブラウザの「戻る」）で一覧に戻れる
   if (!isDesktop() && !(history.state && history.state.inboxThread)) { try { history.pushState({ inboxThread: 1 }, ''); } catch (e) {} }
@@ -2281,7 +2287,7 @@ function openCurama(it, refresh) {
   if (!refresh) showPriceHist(null); // 別の件の帯を残さない
   if (!it) return;
   var same = CURC && CURC.id === it.id;
-  CUR = null; CURC = it; setCMode(true); CURC = it;
+  CUR = null; CURC = it; setCMode(true); CURC = it; workBar(it);
   if (!refresh) {
     if (!same) { document.getElementById('intent').value = ''; document.getElementById('text').value = ''; document.getElementById('cwarn').style.display = 'none'; }
     if (!isDesktop() && !(history.state && history.state.inboxThread)) { try { history.pushState({ inboxThread: 1 }, ''); } catch (e) {} }
@@ -2770,7 +2776,7 @@ function renderMitsumoa() {
 function openMitsumoa(it, refresh) {
   if (!it) return;
   var same = CURM && CURM.id === it.id;
-  CUR = null; CURC = null; setCMode('m'); CURM = it;
+  CUR = null; CURC = null; setCMode('m'); CURM = it; workBar(it);
   if (!refresh) {
     if (!same) { document.getElementById('intent').value = ''; document.getElementById('text').value = ''; document.getElementById('cwarn').style.display = 'none'; }
     if (!isDesktop() && !(history.state && history.state.inboxThread)) { try { history.pushState({ inboxThread: 1 }, ''); } catch (e) {} }
