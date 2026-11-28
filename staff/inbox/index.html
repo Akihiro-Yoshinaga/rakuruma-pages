@@ -738,6 +738,8 @@ function loadList(manual, force) {
     }
     if (!Array.isArray(r.items)) { if (!ITEMS.length) document.getElementById('rows').innerHTML = '<div class="empty">一覧を取れませんでした。右上の「更新」を押してください</div>'; listDone_('更新できませんでした。もう一度お試しください', manual); return; } // GASの応答が別物に化けたときは前回の一覧を保つ
     ITEMS = r.items; OTHERS = r.others || []; STAFF = r.staff || STAFF;
+    // 担当の件だけ見える人（高橋さん・2026-11-28）には、見えている範囲と返してよい内容を一番上に出す
+    if (r.scoped && !document.getElementById('scopeNote')) { var sn = document.createElement('div'); sn.id = 'scopeNote'; sn.style.cssText = 'background:#fff7e6;border:1px solid #f6ad55;color:#7b341e;font-size:14px;line-height:1.6;padding:8px 12px;margin:8px;border-radius:8px'; sn.textContent = '担当の件（前日・当日・翌日）だけ表示しています。返すのは当日の連絡（到着時刻・待ち合わせ場所・到着しました）だけにしてください。金額・追加作業・日程の変更は吉永へ。'; var rw = document.getElementById('rows'); rw.parentNode.insertBefore(sn, rw); }
     try { localStorage.setItem('rakuruma_inbox_cache', JSON.stringify({ at: Date.now(), items: ITEMS, others: OTHERS })); } catch(e) {}
     renderList();
     loadFormRes(manual || force); loadEve(manual || force);
